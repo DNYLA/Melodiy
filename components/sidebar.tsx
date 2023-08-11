@@ -57,7 +57,7 @@ const Sidebar = ({ children }: SidebarProps) => {
   return (
     <div
       className={twMerge(
-        `flex h-full`
+        `flex h-full select-none`
         // player.activeId && 'h-[calc(100%-80px)]'
       )}
     >

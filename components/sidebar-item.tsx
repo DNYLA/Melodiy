@@ -13,6 +13,7 @@ interface SidebarItemProps {
 function SidebarItem({ icon: Icon, label, active, href }: SidebarItemProps) {
   return (
     <Link
+      draggable={false}
       href={href}
       className={twMerge(
         `
