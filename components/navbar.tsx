@@ -1,5 +1,6 @@
 'use client';
 import Input from '@/components/input';
+import UserPanel from '@/components/user-panel';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
@@ -28,30 +29,32 @@ function Navbar() {
   };
 
   return (
-    <div className="flex flex-row items-center my-2 gap-x-3">
-      <div className="flex flex-row gap-x-3 text-inactive">
-        <AiOutlineLeft
-          onClick={handleBackward}
-          size={20}
-          className={twMerge(
-            'cursor-not-allowed',
-            canGoBack && 'cursor-pointer text-white'
-          )}
-        />
-        <AiOutlineRight
-          onClick={handleForward}
-          size={20}
-          className={twMerge(
-            'cursor-not-allowed',
-            canGoForward && 'cursor-pointer text-white'
-          )}
-        />
+    <div className="flex flex-row justify-between my-1">
+      <div className="flex flex-row items-center gap-x-3">
+        <div className="flex flex-row gap-x-3 text-inactive">
+          <AiOutlineLeft
+            onClick={handleBackward}
+            size={20}
+            className={twMerge(
+              'cursor-not-allowed',
+              canGoBack && 'cursor-pointer text-white'
+            )}
+          />
+          <AiOutlineRight
+            onClick={handleForward}
+            size={20}
+            className={twMerge(
+              'cursor-not-allowed',
+              canGoForward && 'cursor-pointer text-white'
+            )}
+          />
+        </div>
+        <div>
+          <Input placeholder="Search" />
+        </div>
       </div>
-      <div>
-        <Input placeholder="Search" />
-      </div>
-      <div className="absolute right-0 flex">
-        <p>User Stuff </p>
+      <div className="">
+        <UserPanel />
       </div>
     </div>
   );
