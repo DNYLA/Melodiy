@@ -7,11 +7,7 @@ interface BoxProps {
 }
 
 const Box: React.FC<BoxProps> = ({ children, className }) => {
-  return (
-    <div className={twMerge(`bg-neutral-700 h-fit w-full`, className)}>
-      {children}
-    </div>
-  );
+  return <div className={twMerge(`h-fit w-full`, className)}>{children}</div>;
 };
 
 export default Box;

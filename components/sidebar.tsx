@@ -57,17 +57,17 @@ const Sidebar = ({ children }: SidebarProps) => {
   return (
     <div
       className={twMerge(
-        `flex h-full select-none`
+        `flex h-full`
         // player.activeId && 'h-[calc(100%-80px)]'
       )}
     >
-      <div className="hidden md:flex flex-col gap-y-2 h-full w-[250px] px-4 py-2 bg-[#131111]">
-        <div className="flex flex-col font-bold text-center gap-y-4">
-          <div className="relative flex flex-row items-center justify-center">
-            <p className="">Melodiy</p>
-            <div className="cursor-pointer hover:text-neutral-400 absolute top-0 right-0 py-[3px]">
-              <BiArrowBack size={16} />
-            </div>
+      <div className="hidden md:flex flex-col gap-y-2 h-full w-[250px] px-4 py-2 bg-black select-none">
+        {/* <div className="hidden md:flex flex-col gap-y-2 bg-black h-full w-[300px] p-2"> */}
+
+        <div className="relative flex flex-row items-center justify-center">
+          <p className="">Melodiy</p>
+          <div className="cursor-pointer hover:text-neutral-400 absolute top-0 right-0 py-[3px]">
+            <BiArrowBack size={16} />
           </div>
         </div>
 
