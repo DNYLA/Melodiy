@@ -30,10 +30,10 @@ function SidebarItem({ icon: Icon, label, active, href }: SidebarItemProps) {
         cursor-pointer
         hover:text-white
         transition
-        text-neutral-400
+        text-inactive
 				border-[#272525]
 				`,
-        active && 'text-white bg-[#131111] border  rounded-md'
+        active && 'text-white bg-[#131111] border rounded-md'
       )}
     >
       <Icon size={22} />

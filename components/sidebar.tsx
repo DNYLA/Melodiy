@@ -61,12 +61,12 @@ const Sidebar = ({ children }: SidebarProps) => {
         // player.activeId && 'h-[calc(100%-80px)]'
       )}
     >
-      <div className="hidden md:flex flex-col gap-y-2 h-full w-[250px] px-4 py-2 bg-black select-none">
+      <div className="hidden md:flex flex-col gap-y-2 h-full w-[250px] px-4 py-2 bg-sidebar-background select-none">
         {/* <div className="hidden md:flex flex-col gap-y-2 bg-black h-full w-[300px] p-2"> */}
 
         <div className="relative flex flex-row items-center justify-center">
           <p className="">Melodiy</p>
-          <div className="cursor-pointer hover:text-neutral-400 absolute top-0 right-0 py-[3px]">
+          <div className="cursor-pointer hover:text-inactive absolute top-0 right-0 py-[3px]">
             <BiArrowBack size={16} />
           </div>
         </div>
@@ -82,7 +82,7 @@ const Sidebar = ({ children }: SidebarProps) => {
 
         <div className="flex flex-col py-0 gap-y-1">
           <p className="text-lg font-semibold">Playlists</p>
-          <div className="flex flex-col mx-2 overflow-hidden text-sm font-light gap-y-1 text-[#a3a3a3]">
+          <div className="flex flex-col mx-2 overflow-hidden text-sm font-light gap-y-1 text-inactive">
             {tempPlaylists.map((playlist) => (
               <p
                 key={playlist.name}
