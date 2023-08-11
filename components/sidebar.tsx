@@ -9,6 +9,7 @@ import { MdOutlineAudioFile, MdOutlineFavorite } from 'react-icons/md';
 import { BiArrowBack } from 'react-icons/bi';
 
 import SidebarItem from '@/components/sidebar-item';
+import Navbar from '@/components/navbar';
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -97,7 +98,10 @@ const Sidebar = ({ children }: SidebarProps) => {
           </div>
         </div>
       </div>
-      <main className="flex-1 h-full py-2 overflow-y-auto">{children}</main>
+      <main className="flex-1 h-full px-4 py-2 overflow-y-auto">
+        <Navbar />
+        {children}
+      </main>
     </div>
   );
 };
