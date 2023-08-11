@@ -98,7 +98,7 @@ const Sidebar = ({ children }: SidebarProps) => {
           </div>
         </div>
       </div>
-      <main className="flex-1 h-full px-4 py-2 overflow-y-auto">
+      <main className="flex-1 h-full px-4 py-2 pr-5 overflow-y-auto">
         <Navbar />
         {children}
       </main>

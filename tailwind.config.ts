@@ -9,6 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        primary: '#ec3454',
         inactive: '#a3a3a3',
         sidebar: {
           // background: '#131111',
