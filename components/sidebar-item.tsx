@@ -10,12 +10,7 @@ interface SidebarItemProps {
   href: string;
 }
 
-const SidebarItem: React.FC<SidebarItemProps> = ({
-  icon: Icon,
-  label,
-  active,
-  href,
-}) => {
+function SidebarItem({ icon: Icon, label, active, href }: SidebarItemProps) {
   return (
     <Link
       href={href}
@@ -35,14 +30,15 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
         hover:text-white
         transition
         text-neutral-400
+				border-[#272525]
 				`,
-        active && 'text-white bg-[#131111] border border-[#272525]  rounded-md'
+        active && 'text-white bg-[#131111] border  rounded-md'
       )}
     >
       <Icon size={22} />
       <p className="w-full truncate">{label}</p>
     </Link>
   );
-};
+}
 
 export default SidebarItem;

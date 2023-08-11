@@ -61,7 +61,7 @@ const Sidebar = ({ children }: SidebarProps) => {
         // player.activeId && 'h-[calc(100%-80px)]'
       )}
     >
-      <div className="hidden md:flex flex-col gap-y-2 h-full w-[250px] px-4 py-2 bg-neutral-900">
+      <div className="hidden md:flex flex-col gap-y-2 h-full w-[250px] px-4 py-2 bg-[#131111]">
         <div className="flex flex-col font-bold text-center gap-y-4">
           <div className="relative flex flex-row items-center justify-center">
             <p className="">Melodiy</p>
@@ -86,9 +86,10 @@ const Sidebar = ({ children }: SidebarProps) => {
             {tempPlaylists.map((playlist) => (
               <p
                 key={playlist.name}
-                className={`cursor-pointer truncate ... hover:text-white ${
-                  playlist.active ? 'text-white' : ''
-                }`}
+                className={twMerge(
+                  `cursor-pointer truncate ... hover:text-white`,
+                  playlist.active && 'text-white'
+                )}
               >
                 {playlist.name}
               </p>
