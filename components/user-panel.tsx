@@ -2,18 +2,16 @@
 import Button from './button';
 import Avatar from './avatar';
 import React from 'react';
+import { useSession } from 'next-auth/react';
+import UserSettings from '@/components/user-settings';
 
 function UserPanel() {
-  const user = false;
+  const { data: session } = useSession();
   return (
     <div className="flex items-center justify-between gap-x-1">
-      {user ? (
+      {session?.user ? (
         <div>
-          <Avatar
-            src={'./images/test-avatar.jpg'}
-            fallback="J"
-            className="cursor-pointer"
-          />
+          <UserSettings />
         </div>
       ) : (
         <>
