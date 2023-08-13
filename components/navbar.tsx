@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { twMerge } from 'tailwind-merge';
+
 function Navbar() {
   const canGoBack = true;
   const canGoForward = true;

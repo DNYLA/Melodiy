@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import * as Form from '@radix-ui/react-form';
 import { toast } from 'react-hot-toast';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 
 const LoginModal = () => {
   const router = useRouter();
@@ -15,6 +15,7 @@ const LoginModal = () => {
     username: '',
     password: '',
   });
+  const { data: session } = useSession();
 
   useEffect(() => {
     // if (session) {
@@ -22,7 +23,10 @@ const LoginModal = () => {
     //   onClose();
     // }
     // if (loggedIn) refershRouter; onClose();
-  }, [router, onClose]); //Add auth session
+    if (session?.user && isOpen) {
+      onClose();
+    }
+  }, [router, onClose, session, isOpen]); //Add auth session
 
   const onChange = (open: boolean) => {
     if (!open) {
@@ -41,7 +45,8 @@ const LoginModal = () => {
     if (res?.error === 'CredentialsSignin') {
       toast.error('Invalid Credentials Provided');
     } else {
-      toast.success('Login Succesfull');
+      toast.success(`Welcome back`);
+      // onClose();
     }
   };
 

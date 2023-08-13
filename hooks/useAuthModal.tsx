@@ -8,7 +8,7 @@ interface AuthModalStore {
 }
 
 const useAuthModal = create<AuthModalStore>((set) => ({
-  isOpen: true,
+  isOpen: false,
   isLogin: true,
   toggleMode: (state: AuthModalStore) => set({ isLogin: state.isLogin }),
   onOpen: () => set({ isOpen: true }),
