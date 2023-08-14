@@ -1,6 +1,6 @@
 'use client';
 
-import LoginModal from '@/components/login-modal';
+import LoginModal from '@/components/Modals/login-modal';
 // import AuthModal from '@/components/AuthModal';
 // import UploadModal from '@/components/UploadModal';
 import React, { useEffect, useState } from 'react';

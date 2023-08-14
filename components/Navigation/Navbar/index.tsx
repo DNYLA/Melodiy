@@ -1,6 +1,6 @@
 'use client';
-import Input from '@/components/input';
-import UserPanel from '@/components/user-panel';
+import Input from '../../input';
+import AuthSection from './auth-section';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
@@ -55,7 +55,7 @@ function Navbar() {
         </div>
       </div>
       <div className="">
-        <UserPanel />
+        <AuthSection />
       </div>
     </div>
   );

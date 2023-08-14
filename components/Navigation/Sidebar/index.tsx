@@ -1,15 +1,14 @@
 'use client';
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { twMerge } from 'tailwind-merge';
-import Box from './box';
 import { usePathname } from 'next/navigation';
 import { AiOutlineHome, AiOutlineCompass } from 'react-icons/ai';
 import { MdOutlineAudioFile, MdOutlineFavorite } from 'react-icons/md';
 import { BiArrowBack } from 'react-icons/bi';
 
-import SidebarItem from '@/components/sidebar-item';
-import Navbar from '@/components/navbar';
+import SidebarItem from './sidebar-item';
+import Playlists from './playlists';
+import Navbar from '../Navbar';
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -47,14 +46,6 @@ const Sidebar = ({ children }: SidebarProps) => {
     [pathname]
   );
 
-  const tempPlaylists = [
-    { name: 'Please Excuse Me for Being Antisocial', active: false },
-    { name: "90's rap", active: false },
-    { name: 'Rippity Rap', active: false },
-    { name: 'Feed tha streets II', active: true },
-    { name: 'West Bay', active: false },
-    { name: 'Man On The Moon III: The Chosen', active: false },
-  ];
   return (
     <div
       className={twMerge(
@@ -81,23 +72,9 @@ const Sidebar = ({ children }: SidebarProps) => {
           </div>
         </div>
 
-        <div className="flex flex-col py-0 gap-y-1">
-          <p className="text-lg font-semibold">Playlists</p>
-          <div className="flex flex-col mx-2 overflow-hidden text-sm font-light gap-y-1 text-inactive">
-            {tempPlaylists.map((playlist) => (
-              <p
-                key={playlist.name}
-                className={twMerge(
-                  `cursor-pointer truncate ... hover:text-white`,
-                  playlist.active && 'text-white'
-                )}
-              >
-                {playlist.name}
-              </p>
-            ))}
-          </div>
-        </div>
+        <Playlists />
       </div>
+
       <main className="flex-1 h-full px-4 py-2 pr-5 overflow-y-auto">
         <Navbar />
         {children}

@@ -1,19 +1,18 @@
 'use client';
-import Button from './button';
-import Avatar from './avatar';
+import Button from '../../button';
 import React from 'react';
 import { useSession } from 'next-auth/react';
-import UserSettings from '@/components/user-settings';
+import UserMenu from './user-menu';
 import useAuthModal from '@/hooks/useAuthModal';
 
-function UserPanel() {
+function AuthSection() {
   const { onOpen } = useAuthModal();
   const { data: session } = useSession();
   return (
     <div className="flex items-center justify-between gap-x-1">
       {session?.user ? (
         <div>
-          <UserSettings />
+          <UserMenu />
         </div>
       ) : (
         <>
@@ -33,4 +32,4 @@ function UserPanel() {
   );
 }
 
-export default UserPanel;
+export default AuthSection;

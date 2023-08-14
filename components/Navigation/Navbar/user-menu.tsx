@@ -1,15 +1,8 @@
 import React from 'react';
 import * as HoverCard from '@radix-ui/react-hover-card';
-import Image from 'next/image';
-import Avatar from '@/components/avatar';
-import * as Menubar from '@radix-ui/react-menubar';
-import {
-  CheckIcon,
-  ChevronRightIcon,
-  DotFilledIcon,
-} from '@radix-ui/react-icons';
+
 import { signOut } from 'next-auth/react';
-function UserSettings() {
+function UserMenu() {
   return (
     <HoverCard.Root openDelay={200}>
       <HoverCard.Trigger asChild className="cursor-pointer">
@@ -45,4 +38,4 @@ function UserSettings() {
   );
 }
 
-export default UserSettings;
+export default UserMenu;
