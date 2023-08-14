@@ -25,8 +25,10 @@ export default function RootLayout({
       <body className={font.className}>
         <ToasterProvider />
         <SessionProvider>
+          {/* <SWRProvider> */}
           <ModalProvider />
           <Sidebar>{children}</Sidebar>
+          {/* </SWRProvider> */}
         </SessionProvider>
       </body>
     </html>

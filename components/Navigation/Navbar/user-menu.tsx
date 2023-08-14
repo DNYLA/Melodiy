@@ -2,14 +2,17 @@ import React from 'react';
 import * as HoverCard from '@radix-ui/react-hover-card';
 
 import { signOut } from 'next-auth/react';
+import Image from 'next/image';
 function UserMenu() {
   return (
     <HoverCard.Root openDelay={200}>
       <HoverCard.Trigger asChild className="cursor-pointer">
-        <img
+        <Image
           className="block h-[45px] w-[45px] rounded-full"
-          src="./images/test-avatar.jpg"
-          alt="Radix UI"
+          src={'/images/test-avatar.jpg'}
+          alt="Avatar"
+          width={45}
+          height={45}
         />
         {/* <Avatar src={'./images/test-avatar.jpg'} fallback="J" className="" /> */}
       </HoverCard.Trigger>

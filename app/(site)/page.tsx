@@ -1,5 +1,4 @@
 import AuthTest from '@/app/(site)/components/AuthTest';
-import Navbar from '@/components/Navigation/Navbar';
 import React from 'react';
 
 export default async function Home() {

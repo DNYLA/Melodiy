@@ -41,7 +41,6 @@ const LoginModal = () => {
       redirect: false,
       // callbackUrl: '/',
     });
-    console.log(res);
     if (res?.error === 'CredentialsSignin') {
       toast.error('Invalid Credentials Provided');
     } else {
