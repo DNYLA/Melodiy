@@ -1,5 +1,5 @@
 'use client';
-import Input from '../../input';
+import Input from '../input';
 import AuthSection from './auth-section';
 import { useRouter } from 'next/navigation';
 import React from 'react';

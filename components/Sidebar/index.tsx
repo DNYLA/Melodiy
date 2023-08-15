@@ -7,15 +7,17 @@ import { MdOutlineAudioFile, MdOutlineFavorite } from 'react-icons/md';
 import { BiArrowBack } from 'react-icons/bi';
 
 import SidebarItem from './sidebar-item';
-import Playlists from './playlists';
+import PlaylistHeader from './playlists';
 import Navbar from '../Navbar';
+import Playlist from '@/app/playlist/[id]/page';
+import PlaylistBody from '@/components/Sidebar/playlist-body';
+import { useSession } from 'next-auth/react';
 
 interface SidebarProps {
   children: React.ReactNode;
 }
 const Sidebar = ({ children }: SidebarProps) => {
   const pathname = usePathname();
-
   const routes = useMemo(
     () => [
       {
@@ -72,7 +74,10 @@ const Sidebar = ({ children }: SidebarProps) => {
           </div>
         </div>
 
-        <Playlists />
+        <PlaylistHeader>
+          {/* Nested as <PlaylistBody> will become a server component. */}
+          <PlaylistBody />
+        </PlaylistHeader>
       </div>
 
       <main className="flex-1 h-full px-4 py-2 pr-5 overflow-y-auto">

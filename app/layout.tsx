@@ -1,10 +1,11 @@
-import Sidebar from '@/components/Navigation/Sidebar';
+import Sidebar from '@/components/Sidebar';
 import './globals.css';
 import type { Metadata } from 'next';
 import { Figtree } from 'next/font/google';
 import ModalProvider from '@/providers/ModalProvider';
 import ToasterProvider from '@/providers/ToasterProvider';
 import SessionProvider from '@/providers/SessionProvider';
+import { SWRProvider } from '@/providers/SWRProvider';
 
 const font = Figtree({ subsets: ['latin'] });
 
@@ -25,10 +26,10 @@ export default function RootLayout({
       <body className={font.className}>
         <ToasterProvider />
         <SessionProvider>
-          {/* <SWRProvider> */}
-          <ModalProvider />
-          <Sidebar>{children}</Sidebar>
-          {/* </SWRProvider> */}
+          <SWRProvider>
+            <ModalProvider />
+            <Sidebar>{children}</Sidebar>
+          </SWRProvider>
         </SessionProvider>
       </body>
     </html>
