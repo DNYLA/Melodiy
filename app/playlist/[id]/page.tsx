@@ -1,16 +1,19 @@
 import { getPlaylist } from '@/app/action';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import { getServerSession } from 'next-auth';
+import RedirectSync from './components/RedirectSync';
 import React from 'react';
+import PlaylistHeader from './components/header';
 
 export default async function Playlist({ params }: { params: { id: string } }) {
-  const data = await getPlaylist(params.id);
-  console.log(data);
+  const playlist = await getPlaylist(params.id);
+
+  //Probably a betterr way to handle all of this.
+  const { data } = playlist;
+  if (playlist && playlist.success == false) return <RedirectSync />;
+  if (!data) return <></>;
+
   return (
-    <div className="">
-      <p>{data.title}</p>
-      <p>{data.user.username}</p>
-      <p>{data.shareId}</p>
+    <div className="px-2 py-3">
+      <PlaylistHeader data={data} />
     </div>
   );
 }

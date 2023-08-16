@@ -34,8 +34,7 @@ export const SWRProvider = ({ children }: SWRProviderProps) => {
   }, [session?.user]);
 
   return (
-    <SWRConfig value={{ provider: localStorageProvider as any, fetcher }}>
-      {children}
-    </SWRConfig>
+    // <SWRConfig value={{ provider: localStorageProvider as any, fetcher }}>
+    <SWRConfig value={{ fetcher }}>{children}</SWRConfig>
   );
 };
