@@ -1,31 +1,32 @@
+import ImageOverlay from '@/app/playlist/[id]/components/ImageOverlay';
 import { Playlist } from '@/types/playlist';
 import { getImageUrl } from '@/utils';
 import Image from 'next/image';
-import React from 'react';
+import React, { useState } from 'react';
 import { BsFillPlayFill } from 'react-icons/bs';
-
+import { FiEdit2 } from 'react-icons/fi';
+import { twMerge } from 'tailwind-merge';
 interface Props {
   data: Playlist;
 }
 
-export default async function PlaylistHeader({ data }: Props) {
+export default function PlaylistHeader({ data }: Props) {
   return (
     <div className="flex gap-x-4">
-      <div className="group relative">
-        <BsFillPlayFill
-          size={90}
-          className="absolute hidden group-hover:block cursor-pointer text-black backdrop-blur-sm bg-blend-color top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-        />
-        <Image
-          className="rounded-md"
+      <div className="group relative cursor-pointer">
+        <div className="absolute z-10 hidden group-hover:flex flex-col cursor-pointer text-white top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 place-items-center ">
+          <FiEdit2
+            size={30}
+            className="flex justify-center content-center snap-center center object-center place-items-center align-middle"
+          />
+          <span className="text-md">Select Photo</span>
+        </div>
+        <ImageOverlay
           src={
             data.imagePath
               ? getImageUrl(data.imagePath)
               : '/images/antisocial.jpg'
           }
-          width={300}
-          height={300}
-          alt="Playlist Cover"
         />
       </div>
       <div className="">

@@ -5,6 +5,7 @@
 html,
 body,
 :root {
+  user-select: none;
   height: 100%;
   background-color: #131111;
   color: white;

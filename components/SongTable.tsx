@@ -352,9 +352,9 @@ export default function SongTable() {
           </tr>
         ))}
       </thead>
-      <tbody className="p-2">
+      <tbody className="">
         {table.getRowModel().rows.map((row) => (
-          <tr key={row.id} className="p-2 hover:bg-[#1f1c1c] group">
+          <tr key={row.id} className="hover:bg-[#1f1c1c] group">
             {row.getVisibleCells().map((cell) => (
               <td
                 key={cell.id}
