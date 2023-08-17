@@ -4,7 +4,7 @@ const nextConfig = {
     serverActions: true,
   },
   images: {
-    domains: ['upload.wikimedia.org'],
+    domains: ['upload.wikimedia.org', 'dmzuqlhabiwwcasbtoem.supabase.co'],
   },
 };
 
