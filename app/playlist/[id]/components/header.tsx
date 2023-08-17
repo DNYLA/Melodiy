@@ -8,7 +8,7 @@ interface Props {
   data: Playlist;
 }
 
-export default function PlaylistHeader({ data }: Props) {
+export default async function PlaylistHeader({ data }: Props) {
   return (
     <div className="flex gap-x-4">
       <div className="group relative">
@@ -25,17 +25,17 @@ export default function PlaylistHeader({ data }: Props) {
           }
           width={300}
           height={300}
-          alt="Album Cover"
+          alt="Playlist Cover"
         />
       </div>
       <div className="">
         <div>
-          <p className="text-inactive">Album</p>
+          <p className="text-inactive">Private Playlist</p>
           <p className="text-xl md:text-2xl lg:text-3xl font-bold">
             {data.title}
           </p>
           <p className="text-inactive cursor-pointer hover:underline">
-            Roddy Ricch
+            {data.user.username}
           </p>
           <p className="font-light">16 SONGS • 43 MINUTES • 2019</p>
         </div>

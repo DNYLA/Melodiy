@@ -10,3 +10,12 @@ body,
   color: white;
   color-scheme: dark;
 }
+
+table {
+  border-collapse: collapse;
+}
+
+tr {
+  border-radius: 25px;
+  /* background-color: red; */
+}

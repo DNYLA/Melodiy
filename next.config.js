@@ -4,7 +4,11 @@ const nextConfig = {
     serverActions: true,
   },
   images: {
-    domains: ['upload.wikimedia.org', 'dmzuqlhabiwwcasbtoem.supabase.co'],
+    domains: [
+      'upload.wikimedia.org', //Can Be Removed Soon
+      'dmzuqlhabiwwcasbtoem.supabase.co', //Host Upload
+      'robohash.org', //Sample Data
+    ],
   },
 };
 
