@@ -1,16 +1,12 @@
 'use client';
 
-import Modal from '@/components/Modals/modal';
-import useCreatePlaylistModal from '@/hooks/modals/useCreatePlaylistModal';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react';
-import * as Form from '@radix-ui/react-form';
-import { createPlaylist } from '@/utils/network/playlist';
 import { toast } from 'react-hot-toast';
 import { useSWRConfig } from 'swr';
 import Input from '@/components/input';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import Image from 'next/image';
 import { AXIOS } from '@/utils/network/axios';
 import { getImageUrl } from '@/utils';
