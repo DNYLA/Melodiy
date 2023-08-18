@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface Props {
@@ -8,7 +8,11 @@ interface Props {
 }
 
 export default function ImageOverlay({ src }: Props) {
-  const [filter, setFilter] = useState(randomImageFilter());
+  const [filter, setFilter] = useState('');
+
+  useEffect(() => {
+    setFilter(randomImageFilter(''));
+  }, []);
 
   const changeFilter = () => {
     setFilter(randomImageFilter(filter));
@@ -21,6 +25,7 @@ export default function ImageOverlay({ src }: Props) {
         'rounded-md group-hover:saturate-150 group-hover:brightness-[0.85] z-5',
         filter
       )}
+      // onMouseLeave={() => setFilter(randomImageFilter())} //Looks good but looks weird if u spam or enter/exit quickly
       onClick={changeFilter}
       src={src}
       width={300}
@@ -30,7 +35,7 @@ export default function ImageOverlay({ src }: Props) {
   );
 }
 
-function randomImageFilter(ignore: string) {
+function randomImageFilter(ignore?: string) {
   let filters = [
     'group-hover:sepia',
     'group-hover:brightness-[0.35]',

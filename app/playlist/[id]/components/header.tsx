@@ -29,7 +29,7 @@ export default function PlaylistHeader({ data }: Props) {
           }
         />
       </div>
-      <div className="">
+      <div>
         <div>
           <p className="text-inactive">Private Playlist</p>
           <p className="text-xl md:text-2xl lg:text-3xl font-bold">

@@ -1,6 +1,6 @@
 import { getPlaylist } from '@/app/action';
 import RedirectSync from './components/RedirectSync';
-import React from 'react';
+import React, { Suspense } from 'react';
 import PlaylistHeader from './components/header';
 import { Song } from '@/types/playlist';
 import SongList from '@/app/playlist/[id]/components/song-list';
@@ -189,7 +189,9 @@ export default async function Playlist({ params }: { params: { id: string } }) {
 
   return (
     <div className="px-2 py-3">
-      <PlaylistHeader data={data} />
+      <Suspense fallback={<p>Loading Playlist...</p>}>
+        <PlaylistHeader data={data} />
+      </Suspense>
       <div className="flex justify-center">
         <SongTable />
       </div>
