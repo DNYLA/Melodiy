@@ -11,8 +11,8 @@ export default function ImageOverlay({ src }: Props) {
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    setFilter(randomImageFilter(''));
-  }, []);
+    setFilter(randomImageFilter());
+  }, [setFilter]);
 
   const changeFilter = () => {
     setFilter(randomImageFilter(filter));
@@ -21,10 +21,8 @@ export default function ImageOverlay({ src }: Props) {
   return (
     <Image
       draggable={false}
-      className={twMerge(
-        'rounded-md group-hover:saturate-150 group-hover:brightness-[0.85] z-5',
-        filter
-      )}
+      className={twMerge('rounded-md z-5', filter)}
+      priority={true}
       // onMouseLeave={() => setFilter(randomImageFilter())} //Looks good but looks weird if u spam or enter/exit quickly
       onClick={changeFilter}
       src={src}
@@ -42,6 +40,7 @@ function randomImageFilter(ignore?: string) {
     'group-hover:contrast-125 group-hover:brightness-[0.55]',
     'group-hover:grayscale group-hover:brightness-[0.85]',
     'group-hover:hue-rotate-[25deg] group-hover:brightness-[0.85]',
+    'group-hover:saturate-150 group-hover:brightness-[0.85]',
   ];
   filters = filters.filter((curFilter) => ignore !== curFilter);
 

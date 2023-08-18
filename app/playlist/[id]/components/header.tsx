@@ -1,4 +1,4 @@
-import ImageOverlay from '@/app/playlist/[id]/components/ImageOverlay';
+import ImageOverlay from '@/app/playlist/[id]/components/image-overlay';
 import { Playlist } from '@/types/playlist';
 import { getImageUrl } from '@/utils';
 import Image from 'next/image';
