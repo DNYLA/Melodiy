@@ -3,7 +3,7 @@ import Button from '../button';
 import React from 'react';
 import { useSession } from 'next-auth/react';
 import UserMenu from './user-menu';
-import useAuthModal from '@/hooks/useAuthModal';
+import useAuthModal from '@/hooks/modals/useAuthModal';
 
 function AuthSection() {
   const { onOpen } = useAuthModal();

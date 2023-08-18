@@ -1,7 +1,7 @@
 'use client';
 
 import Modal from '@/components/Modals/modal';
-import useCreatePlaylistModal from '@/hooks/useCreatePlaylistModal';
+import useCreatePlaylistModal from '@/hooks/modals/useCreatePlaylistModal';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react';
@@ -18,16 +18,18 @@ import { RxCross2 } from 'react-icons/rx';
 import { twMerge } from 'tailwind-merge';
 import { Playlist } from '@/types/playlist';
 import { FaSpinner } from 'react-icons/fa';
+import useUploadModal from '@/hooks/modals/useUploadModal';
+import * as Dialog from '@radix-ui/react-dialog';
 
 interface IFormInput {
   title: string;
   image?: FileList;
 }
 
-export default function CreatePlaylistModal() {
+export default function UploadSong() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { onClose, isOpen } = useCreatePlaylistModal();
+  const { onClose } = useUploadModal();
   const { data: session } = useSession();
   const [tempFile, setTempFile] = useState('');
   const { mutate } = useSWRConfig();
@@ -37,12 +39,6 @@ export default function CreatePlaylistModal() {
       title: '',
     },
   });
-
-  const onChange = (open: boolean) => {
-    if (!open) {
-      onClose();
-    }
-  };
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     if (!session?.user) return;
@@ -106,12 +102,14 @@ export default function CreatePlaylistModal() {
   };
 
   return (
-    <Modal
-      title="New Playlist"
-      description="Enter the details for the new playlist."
-      isOpen={isOpen}
-      onChange={onChange}
-    >
+    <>
+      <Dialog.Title className="text-xl text-center font-bold mb-4">
+        Upload Song
+      </Dialog.Title>
+
+      <Dialog.Description className="mb-5 text-sm leading-normal text-center">
+        Enter the details for the new song.
+      </Dialog.Description>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
         <div>
           <span>Cover</span>
@@ -130,8 +128,8 @@ export default function CreatePlaylistModal() {
               )}
             />
             {/* <span className="absolute px-2 py-2 right-0 group-hover:text-red-400">
-              x
-            </span> */}
+        x
+      </span> */}
             <Image
               className="rounded w-[150px] h-[150px]"
               onError={(e) =>
@@ -177,6 +175,6 @@ export default function CreatePlaylistModal() {
           Create
         </button>
       </form>
-    </Modal>
+    </>
   );
 }

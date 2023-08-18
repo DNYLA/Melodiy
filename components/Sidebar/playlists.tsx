@@ -2,7 +2,7 @@ import React from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import PlaylistBody from './playlist-body';
 import { useSession } from 'next-auth/react';
-import useCreatePlaylistModal from '@/hooks/useCreatePlaylistModal';
+import useUploadModal from '@/hooks/modals/useUploadModal';
 
 interface PlaylistHeaderProps {
   children: React.ReactNode;
@@ -11,7 +11,7 @@ interface PlaylistHeaderProps {
 // TODO: Convert to server component once data fetching is correctly setup.
 function PlaylistHeader({ children }: PlaylistHeaderProps) {
   const { data: session } = useSession();
-  const { onOpen } = useCreatePlaylistModal();
+  const { onOpen } = useUploadModal();
   return (
     <div className="flex flex-col py-0 gap-y-1">
       <div className="flex justify-between items-center">

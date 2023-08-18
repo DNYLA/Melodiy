@@ -1,7 +1,7 @@
 'use client';
 
 import Modal from './modal';
-import useAuthModal from '@/hooks/useAuthModal';
+import useAuthModal from '@/hooks/modals/useAuthModal';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import * as Form from '@radix-ui/react-form';

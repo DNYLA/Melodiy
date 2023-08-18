@@ -1,6 +1,6 @@
 'use client';
 
-import CreatePlaylistModal from '@/components/Modals/create-playlist-modal';
+import MultiUploadModal from '@/components/Modals/MultiUploadModal';
 import LoginModal from '@/components/Modals/login-modal';
 // import AuthModal from '@/components/AuthModal';
 // import UploadModal from '@/components/UploadModal';
@@ -25,7 +25,7 @@ const ModalProvider = () => {
   return (
     <>
       <LoginModal />
-      <CreatePlaylistModal />
+      <MultiUploadModal />
     </>
   );
 };
