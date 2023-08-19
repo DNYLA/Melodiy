@@ -17,7 +17,7 @@ export type Song = {
   albumArtist?: string;
   coverPath: string;
   songPath: string;
-  length: number;
+  duration: number;
   createdAt: string;
   user?: PublicUser;
 };

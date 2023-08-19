@@ -71,11 +71,9 @@ export default function PlaylistTable({ data }: PlaylistTableProps) {
       header: 'Date Added',
       cell: ({ getValue }) => <span>{dayjs(getValue()).fromNow()}</span>,
     }),
-    columnHelper.accessor('length', {
+    columnHelper.accessor('duration', {
       header: () => <BsClock size={18} className="" />,
-      cell: ({ getValue }) => (
-        <span>{msToMinuteSeconds(getValue() * 1000)}</span>
-      ),
+      cell: ({ getValue }) => <span>{msToMinuteSeconds(getValue())}</span>,
     }),
   ];
 
