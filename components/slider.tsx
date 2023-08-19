@@ -8,9 +8,16 @@ interface SliderProps {
   step?: number;
   onChange?: (value: number) => void;
   className?: string;
+  size?: number;
 }
 
-function Slider({ value = 1, step = 0.1, onChange, className }: SliderProps) {
+function Slider({
+  value = 1,
+  step = 0.1,
+  size = 3,
+  onChange,
+  className,
+}: SliderProps) {
   const handleChange = (newValue: number[]) => {
     onChange?.(newValue[0]);
   };
@@ -28,7 +35,9 @@ function Slider({ value = 1, step = 0.1, onChange, className }: SliderProps) {
       step={step}
       aria-label="Volume"
     >
-      <RadixSlider.Track className="bg-neutral-600 relative grow rounded-full h-[3px]">
+      <RadixSlider.Track
+        className={`bg-neutral-600 relative grow rounded-full h-[${size}px]`}
+      >
         <RadixSlider.Range className="absolute bg-white rounded-full h-full" />
       </RadixSlider.Track>
     </RadixSlider.Root>

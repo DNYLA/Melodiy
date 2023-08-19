@@ -96,8 +96,8 @@ function PlayerContent({ song, songUrl }: PlayerContentProps) {
   };
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 h-full">
-      <div className="flex w-full justify-start">
+    <div className="grid grid-cols-2 grid-rows-2 md:grid-cols-3 h-full">
+      <div className="flex w-full justify-start row-span-full">
         <div className="flex items-center gap-x-4">
           <SongMedia data={song} />
           {/* <LikeButton songId={song.id} /> */}
@@ -113,36 +113,40 @@ function PlayerContent({ song, songUrl }: PlayerContentProps) {
         </div>
       </div>
 
-      <div className="hidden h-full md:flex justify-center items-center w-full max-w-[722px] gap-x-6">
-        {/* <div className="flex flex-row">
+      <div className="h-full row-span-full">
+        <div className="hidden md:flex justify-center items-center max-w-[722px] gap-x-6">
+          <AiFillStepBackward
+            size={25}
+            className="text-neutral-400 cursor-pointer hover:text-white transition"
+            onClick={onPlayPrevious}
+          />
+          <div
+            onClick={handlePlay}
+            className="flex items-center justify-center h-9 w-9 rounded-full bg-white p-1 cursor-pointer"
+          >
+            <Icon size={25} className="text-black" />
+          </div>
+          <AiFillStepForward
+            size={25}
+            className="text-neutral-400 cursor-pointer hover:text-white transition"
+            onClick={onPlayNext}
+          />
+        </div>
+        <div className="flex flex-row items-center gap-x-2 text-sm font-light text-neutral-200">
+          {/* <p>{sound?.seek()}</p> */}
+          <span>{sound?.seek() ?? 0}</span>
           <Slider
+            size={5}
             value={getTime(sound?.seek())}
             onChange={(value) => setDuration(value)}
             step={0.01}
           />
-          <p>{sound.seek()}</p>
-          <p>{sound.duration() / 60}</p>
-        </div> */}
-
-        <AiFillStepBackward
-          size={30}
-          className="text-neutral-400 cursor-pointer hover:text-white transition"
-          onClick={onPlayPrevious}
-        />
-        <div
-          onClick={handlePlay}
-          className="flex items-center justify-center h-10 w-10 rounded-full bg-white p-1 cursor-pointer"
-        >
-          <Icon size={30} className="text-black" />
+          <span>3:14</span>
+          <p>{sound?.duration()}</p>
         </div>
-        <AiFillStepForward
-          size={30}
-          className="text-neutral-400 cursor-pointer hover:text-white transition"
-          onClick={onPlayNext}
-        />
       </div>
 
-      <div className="hidden md:flex w-full justify-end pr-2">
+      <div className="hidden md:flex w-full justify-end pr-2 row-span-full">
         <div className="flex items-center gap-x-2 w-[120px]">
           <VolumeIcon
             onClick={toggleMute}
