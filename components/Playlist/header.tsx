@@ -1,11 +1,9 @@
 import ImageOverlay from '@/app/playlist/[id]/components/image-overlay';
 import { Playlist } from '@/types/playlist';
 import { getImageUrl } from '@/utils';
-import Image from 'next/image';
 import React, { useState } from 'react';
 import { BsFillPlayFill } from 'react-icons/bs';
 import { FiEdit2 } from 'react-icons/fi';
-import { twMerge } from 'tailwind-merge';
 interface Props {
   data: Playlist;
 }

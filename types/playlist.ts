@@ -10,10 +10,14 @@ export type Playlist = {
 
 export type Song = {
   id: number;
+  uid: string;
   title: string;
   artist: string;
-  album: string;
-  dateAdded: string;
+  album?: string;
+  albumArtist?: string;
+  coverPath: string;
+  songPath: string;
   length: number;
-  cover: string;
+  dateAdded: string;
+  user?: PublicUser;
 };

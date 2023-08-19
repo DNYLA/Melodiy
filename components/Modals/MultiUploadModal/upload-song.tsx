@@ -38,55 +38,62 @@ export default function UploadSong() {
   const imageFileRef = useRef<HTMLInputElement>(null);
   const songFileRef = useRef<HTMLInputElement>(null);
   const [songFile, setSongFile] = useState<FileWithPath | undefined>();
-  const { register, handleSubmit, reset, getValues, setValue } =
-    useForm<IFormInput>({
-      defaultValues: {
-        title: '',
-        artist: '',
-        album: '',
-        albumArtist: '',
-      },
-    });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    getValues,
+    setValue,
+    formState: { errors },
+  } = useForm<IFormInput>({
+    defaultValues: {
+      title: 'Test',
+      artist: 'Test',
+      album: '',
+      albumArtist: '',
+    },
+  });
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    if (!session?.user) return;
-    if (!imageFileRef.current?.files || imageFileRef.current.files.length === 0)
-      return;
-
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      const formData = new FormData();
-      const file = imageFileRef.current?.files[0];
-      formData.append('image', file);
+      await uploadSong();
 
-      const { data: res } = await AXIOS.post<ServiceResponse<Playlist>>(
-        `playlist?title=${data.title}`,
-        formData
-      );
-      mutate('/playlist');
-      toast.success('Created new playlist');
-      router.push(`/playlist/${res.data?.shareId}`);
-      reset();
-      resetFile();
-      onClose();
+      setIsLoading(false);
     } catch (err) {
       toast.error(err as string);
     }
+    // if (!session?.user) return;
+    // if (!imageFileRef.current?.files || imageFileRef.current.files.length === 0)
+    //   return;
   };
 
-  const uploadImageTest = () => {
+  const uploadSong = async () => {
+    // if (!imageFileRef.current?.files || imageFileRef.current.files.length === 0)
+    //   return;
+    if (!songFile) return;
+    const { title, artist, album, albumArtist } = getValues();
+    const formData = new FormData();
+    const imageFile = getImageFile();
+
+    if (imageFile) formData.append('image', imageFile);
+    formData.append('audio', songFile);
+    formData.append('title', title);
+    formData.append('artist', artist);
+    if (album) formData.append('album', album);
+    if (albumArtist) formData.append('albumArtist', albumArtist);
+
+    await AXIOS.post(`song`, formData);
+    toast.success('Uploaded Song!');
+
+    return '';
+  };
+
+  const getImageFile = () => {
     if (!imageFileRef.current?.files || imageFileRef.current.files.length === 0)
       return;
 
-    const { title } = getValues();
-    const formData = new FormData();
-    const file = imageFileRef.current?.files[0];
-    formData.append('image', file);
-
-    AXIOS.post(`playlist/imagetest?title=${title}`, formData).then((data) => {
-      console.log(data);
-    });
-    return '';
+    return imageFileRef.current.files[0];
   };
 
   const onImageChange = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
@@ -109,12 +116,9 @@ export default function UploadSong() {
 
   const readTags = useCallback(
     (file?: FileWithPath) => {
-      console.log('re-running');
       if (!songFile && !file) return;
 
-      console.log('Inside stack');
-
-      const mp3File = songFile ? songFile : file;
+      const mp3File = file ?? songFile;
 
       read(mp3File, {
         onSuccess: (values) => {
@@ -145,15 +149,12 @@ export default function UploadSong() {
     [setValue, songFile]
   );
 
-  const onDrop = useCallback(
-    (acceptedFiles: FileWithPath[]) => {
-      const mp3File = acceptedFiles[0];
-      setSongFile(mp3File);
-      readTags(mp3File);
-      // Do something with the files
-    },
-    [readTags]
-  );
+  const onDrop = (acceptedFiles: FileWithPath[]) => {
+    const mp3File = acceptedFiles[0];
+    setSongFile(mp3File);
+    readTags(mp3File);
+    // Do something with the files
+  };
 
   const resetInputs = () => {
     // setTempFile(undefined);
@@ -171,16 +172,6 @@ export default function UploadSong() {
     imageFileRef.current.files = null;
     imageFileRef.current.value = '';
     setTempFile(undefined);
-  };
-
-  const arrayBufferToBase64 = (buffer: ArrayBuffer) => {
-    let binary = '';
-    const bytes = new Uint8Array(buffer);
-    const len = bytes.byteLength;
-    for (let i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return window.btoa(binary);
   };
 
   return (
@@ -227,26 +218,33 @@ export default function UploadSong() {
               />
             </div>
           </div>
-          <input
-            {...register('title', { required: true })}
-            disabled={isLoading}
-            className="box-border w-full placeholder:font-extralight placeholder:text-neutral-500 placeholder:text-sm bg-neutral-700 disabled:bg-neutral-400 disabled:cursor-not-allowed outline-none shadow-blackA9 inline-flex h-[35px] appearance-none items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none text-white"
-            placeholder="Title"
-          />
+          <div>
+            {errors.title?.type === 'required' && (
+              <p role="alert">Title is required</p>
+            )}
+            <input
+              {...register('title', { required: true })}
+              disabled={isLoading}
+              className="box-border w-full placeholder:font-extralight  placeholder:text-neutral-500 placeholder:text-sm bg-neutral-700 disabled:bg-neutral-400 disabled:cursor-not-allowed outline-none shadow-blackA9 inline-flex h-[35px] appearance-none items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none text-white"
+              placeholder="Title"
+              aria-invalid={errors.title ? 'true' : 'false'}
+            />
+          </div>
           <input
             {...register('artist', { required: true })}
             disabled={isLoading}
-            className="box-border w-full placeholder:font-extralight placeholder:text-neutral-500 placeholder:text-sm bg-neutral-700 disabled:bg-neutral-400 disabled:cursor-not-allowed outline-none shadow-blackA9 inline-flex h-[35px] appearance-none items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none text-white"
+            className="box-border w-full placeholder:font-extralight invalid:bg-red-500 placeholder:text-neutral-500 placeholder:text-sm bg-neutral-700 disabled:bg-neutral-400 disabled:cursor-not-allowed outline-none shadow-blackA9 inline-flex h-[35px] appearance-none items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none text-white"
             placeholder="Artist"
+            aria-invalid={errors.title ? true : false}
           />
           <input
-            {...register('album', { required: true })}
+            {...register('album', { required: false })}
             disabled={isLoading}
             className="box-border w-full placeholder:font-extralight placeholder:text-neutral-500 placeholder:text-sm bg-neutral-700 disabled:bg-neutral-400 disabled:cursor-not-allowed outline-none shadow-blackA9 inline-flex h-[35px] appearance-none items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none text-white"
             placeholder="Album"
           />
           <input
-            {...register('albumArtist', { required: true })}
+            {...register('albumArtist', { required: false })}
             disabled={isLoading}
             className="box-border w-full placeholder:font-extralight placeholder:text-neutral-500 placeholder:text-sm bg-neutral-700 disabled:bg-neutral-400 disabled:cursor-not-allowed outline-none shadow-blackA9 inline-flex h-[35px] appearance-none items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none text-white"
             placeholder="Album Artist"
@@ -285,38 +283,20 @@ export default function UploadSong() {
               ref={imageFileRef}
             />
           </div>
-          {/* <div>
-            <div className="pb-1">Song File</div>
-            <Input
-              className="disabled:bg-neutral-400 disabled:cursor-not-allowed"
-              id="song"
-              type="file"
-              disabled={isLoading}
-              accept=".mp3"
-              {...register('song', {
-                onChange: onSongChange,
-                required: false,
-              })}
-              ref={songFileRef}
-            />
-          </div> */}
+
           <div className="flex gap-x-4">
             <button
               disabled={isLoading || !songFile}
               onClick={() => readTags()}
               className="box-border gap-x-3 text-black w-full text-violet11 shadow-blackA7 disabled:cursor-not-allowed hover:bg-mauve3 inline-flex h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none mt-[10px] disabled:bg-neutral-400"
             >
-              {isLoading && <FaSpinner className="animate-spin" />}
-              {/* {isLoading && <FaSpinner />} */}
               Read Tags
             </button>
             <button
-              disabled={isLoading || !songFile}
+              disabled={isLoading}
               onClick={resetInputs}
               className="box-border gap-x-3 text-black w-full text-violet11 shadow-blackA7 disabled:cursor-not-allowed hover:bg-mauve3 inline-flex h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none mt-[10px] disabled:bg-neutral-400"
             >
-              {isLoading && <FaSpinner className="animate-spin" />}
-              {/* {isLoading && <FaSpinner />} */}
               Clear
             </button>
           </div>

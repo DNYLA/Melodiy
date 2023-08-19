@@ -6,6 +6,9 @@ import {
   flexRender,
   ColumnDef,
 } from '@tanstack/react-table';
+import useOnPlay from '@/hooks/useOnPlay';
+import { Song } from '@/types/playlist';
+import usePlayer from '@/hooks/usePlayer';
 
 interface Props<T> {
   data: T[];
@@ -19,6 +22,24 @@ export default function SongTable<T>({ columns: cl, data }: Props<T>) {
     getCoreRowModel: getCoreRowModel(),
     enableRowSelection: true,
   });
+
+  const player = usePlayer();
+  const onPlay = useOnPlay();
+
+  const onRowClick = (song: Song) => {
+    const isActiveTrack = song.uid === player.activeId;
+    console.log(isActiveTrack);
+    if (!player.activeId) {
+      onPlay(song.uid);
+      return;
+    }
+
+    if (isActiveTrack && player.isPlaying) player.setIsPlaying(false);
+    else if (isActiveTrack && !player.isPlaying) player.setIsPlaying(true);
+    else onPlay(song.uid);
+
+    // onPlay(song.uid);
+  };
 
   return (
     <table className="m-6 text-white w-full">
@@ -43,7 +64,11 @@ export default function SongTable<T>({ columns: cl, data }: Props<T>) {
       </thead>
       <tbody className="">
         {table.getRowModel().rows.map((row) => (
-          <tr key={row.id} className="hover:bg-[#1f1c1c] group">
+          <tr
+            key={row.id}
+            className="hover:bg-[#1f1c1c] group"
+            onClick={() => onRowClick(row.original as Song)}
+          >
             {row.getVisibleCells().map((cell) => (
               <td
                 key={cell.id}

@@ -36,7 +36,7 @@ const MultiUploadModal: React.FC<TabModalProps> = () => {
                 Create Playlist
               </Tabs.Trigger>
               <Tabs.Trigger
-                className="py-[20px] h-[45px] flex-1 flex items-center justify-center text-sm text-mauve11 hover:text-inactive active:text-primary focus:text-primary"
+                className="py-[20px] h-[45px] flex-1 flex items-center justify-center text-sm text-mauve11 hover:text-inactive data-[state=active]:text-primary"
                 value="tab2"
               >
                 Upload Song

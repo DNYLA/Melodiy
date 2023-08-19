@@ -8,7 +8,7 @@ interface UploadModalStore {
 }
 
 const useUploadModal = create<UploadModalStore>((set) => ({
-  isOpen: true,
+  isOpen: false,
   isUploadTab: false,
   onOpen: (uploadTab?: boolean) =>
     set({ isOpen: true, isUploadTab: uploadTab }),

@@ -6,6 +6,7 @@ import ModalProvider from '@/providers/ModalProvider';
 import ToasterProvider from '@/providers/ToasterProvider';
 import SessionProvider from '@/providers/SessionProvider';
 import { SWRProvider } from '@/providers/SWRProvider';
+import Player from '@/components/Player';
 
 const font = Figtree({ subsets: ['latin'] });
 
@@ -29,6 +30,7 @@ export default function RootLayout({
           <SWRProvider>
             <ModalProvider />
             <Sidebar>{children}</Sidebar>
+            <Player />
           </SWRProvider>
         </SessionProvider>
       </body>
