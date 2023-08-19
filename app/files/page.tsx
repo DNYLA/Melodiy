@@ -20,8 +20,8 @@ export default async function Files() {
     <div className="px-2 py-3">
       <Suspense fallback={<p>Loading Playlist...</p>}>
         {/* <PlaylistHeader data={data} /> */}
+        <PlaylistTable data={data} />
       </Suspense>
-      <PlaylistTable data={data} />
     </div>
   );
 }

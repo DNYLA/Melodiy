@@ -1,7 +1,8 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as RadixSlider from '@radix-ui/react-slider';
 import { twMerge } from 'tailwind-merge';
+import clsx from 'clsx';
 
 interface SliderProps {
   value?: number;
@@ -28,6 +29,12 @@ function Slider({
     onCommit?.(newValue[0]);
   };
 
+  const sanitiseValue = () => {
+    if (isNaN(value)) return [0];
+
+    return [value];
+  };
+
   return (
     <RadixSlider.Root
       className={twMerge(
@@ -35,7 +42,7 @@ function Slider({
         className
       )}
       defaultValue={[1]}
-      value={[value]}
+      value={sanitiseValue()}
       onValueChange={handleChange}
       onValueCommit={handleCommit}
       max={1}
@@ -43,7 +50,8 @@ function Slider({
       aria-label="Volume"
     >
       <RadixSlider.Track
-        className={`bg-neutral-600 relative grow rounded-full h-[${size}px]`}
+        className="bg-neutral-600 relative grow rounded-full"
+        style={{ height: `${size}px` }}
       >
         <RadixSlider.Range className="absolute bg-white rounded-full h-full" />
       </RadixSlider.Track>
