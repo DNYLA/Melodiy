@@ -251,7 +251,7 @@ export default function UploadSong() {
           />
           <Dropzone
             onDrop={onDrop}
-            accept={{ 'audio/mp3': ['.mp3'] }}
+            accept={{ 'audio/mp3': ['.mp3', '.wav'] }}
             // maxFiles={1}
             multiple={false}
           >
