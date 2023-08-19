@@ -12,3 +12,9 @@ export function getImageUrl(fileName: string) {
     throw new Error('NEXT_PUBLIC_MEDIA_HOST environment variable not set');
   return host + fileName;
 }
+
+export function msToMinuteSeconds(duration: number) {
+  var minutes = Math.floor(duration / 60000);
+  var seconds = Number.parseInt(((duration % 60000) / 1000).toFixed(0));
+  return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+}

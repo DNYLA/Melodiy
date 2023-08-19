@@ -11,6 +11,7 @@ import usePlayer from '@/hooks/usePlayer';
 import useSound from 'use-sound';
 import SongMedia from '@/components/Player/song-media';
 import Slider from '@/components/slider';
+import { msToMinuteSeconds } from '@/utils';
 interface PlayerContentProps {
   song: Song;
   songUrl: string;
@@ -19,7 +20,8 @@ interface PlayerContentProps {
 function PlayerContent({ song, songUrl }: PlayerContentProps) {
   const player = usePlayer();
   const [volume, setVolume] = useState(1);
-  const [duration, setDuration] = useState(0);
+  const [curSecond, setCurSecond] = useState(0);
+  // const [duration, setDuration] = useState(0);
   const { isPlaying, setIsPlaying } = player;
 
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
@@ -55,7 +57,7 @@ function PlayerContent({ song, songUrl }: PlayerContentProps) {
     player.setId(prevSong);
   };
 
-  const [play, { pause, sound }] = useSound(songUrl, {
+  const [play, { pause, sound, duration }] = useSound(songUrl, {
     volume,
     onplay: () => setIsPlaying(true),
     onend: () => {
@@ -69,7 +71,14 @@ function PlayerContent({ song, songUrl }: PlayerContentProps) {
   useEffect(() => {
     sound?.play();
 
+    const interval = setInterval(() => {
+      if (sound) {
+        setCurSecond(sound.seek([])); // setting the seconds state with the current state
+      }
+    }, 1000);
+
     return () => {
+      clearInterval(interval);
       sound?.unload();
     };
   }, [sound]);
@@ -90,9 +99,17 @@ function PlayerContent({ song, songUrl }: PlayerContentProps) {
     }
   };
 
-  const getTime = (time: number) => {
-    console.log(time);
-    return time / 100;
+  const onTrackSeek = (value: number) => {
+    if (!duration) return;
+    let newValue = (duration * value) / 1000; //value is a % of what the actual should be
+    newValue = newValue < duration ? newValue : duration;
+    setCurSecond(newValue);
+
+    return newValue;
+  };
+
+  const onTrackCommit = (value: number) => {
+    sound?.seek([onTrackSeek(value)]);
   };
 
   return (
@@ -134,15 +151,16 @@ function PlayerContent({ song, songUrl }: PlayerContentProps) {
         </div>
         <div className="flex flex-row items-center gap-x-2 text-sm font-light text-neutral-200">
           {/* <p>{sound?.seek()}</p> */}
-          <span>{sound?.seek() ?? 0}</span>
+          {/* <span>{sound?.seek() ?? 0}</span> */}
+          <span>{msToMinuteSeconds(curSecond * 1000)}</span>
           <Slider
             size={5}
-            value={getTime(sound?.seek())}
-            onChange={(value) => setDuration(value)}
+            value={(curSecond * 1000) / (duration ?? 0)}
+            onChange={onTrackSeek}
+            onCommit={onTrackCommit}
             step={0.01}
           />
-          <span>3:14</span>
-          <p>{sound?.duration()}</p>
+          <span>{msToMinuteSeconds(duration ?? 0)}</span>
         </div>
       </div>
 

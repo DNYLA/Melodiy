@@ -15,7 +15,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import TitleCell from '@/app/playlist/[id]/components/Playlist/title';
 import CounterCell from '@/app/playlist/[id]/components/Playlist/counter';
-import { getImageUrl } from '@/utils';
+import { getImageUrl, msToMinuteSeconds } from '@/utils';
 import usePlayer from '@/hooks/usePlayer';
 dayjs.extend(relativeTime);
 
@@ -67,7 +67,7 @@ export default function PlaylistTable({ data }: PlaylistTableProps) {
         </span>
       ),
     }),
-    columnHelper.accessor('dateAdded', {
+    columnHelper.accessor('createdAt', {
       header: 'Date Added',
       cell: ({ getValue }) => <span>{dayjs(getValue()).fromNow()}</span>,
     }),
@@ -80,10 +80,4 @@ export default function PlaylistTable({ data }: PlaylistTableProps) {
   ];
 
   return <SongTable data={data} columns={columns} />;
-}
-
-function msToMinuteSeconds(duration: number) {
-  var minutes = Math.floor(duration / 60000);
-  var seconds = Number.parseInt(((duration % 60000) / 1000).toFixed(0));
-  return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
 }

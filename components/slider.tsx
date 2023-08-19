@@ -7,6 +7,7 @@ interface SliderProps {
   value?: number;
   step?: number;
   onChange?: (value: number) => void;
+  onCommit?: (value: number) => void;
   className?: string;
   size?: number;
 }
@@ -16,10 +17,15 @@ function Slider({
   step = 0.1,
   size = 3,
   onChange,
+  onCommit,
   className,
 }: SliderProps) {
   const handleChange = (newValue: number[]) => {
     onChange?.(newValue[0]);
+  };
+
+  const handleCommit = (newValue: number[]) => {
+    onCommit?.(newValue[0]);
   };
 
   return (
@@ -31,6 +37,7 @@ function Slider({
       defaultValue={[1]}
       value={[value]}
       onValueChange={handleChange}
+      onValueCommit={handleCommit}
       max={1}
       step={step}
       aria-label="Volume"

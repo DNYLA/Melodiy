@@ -18,6 +18,6 @@ export type Song = {
   coverPath: string;
   songPath: string;
   length: number;
-  dateAdded: string;
+  createdAt: string;
   user?: PublicUser;
 };
