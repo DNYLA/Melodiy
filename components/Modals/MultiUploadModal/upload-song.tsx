@@ -288,14 +288,14 @@ export default function UploadSong() {
             <button
               disabled={isLoading || !songFile}
               onClick={() => readTags()}
-              className="box-border gap-x-3 text-black w-full text-violet11 shadow-blackA7 disabled:cursor-not-allowed hover:bg-mauve3 inline-flex h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none mt-[10px] disabled:bg-neutral-400"
+              className="box-border gap-x-3 text-black w-full shadow-blackA7 disabled:cursor-not-allowed hover:bg-mauve3 inline-flex h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none mt-[10px] disabled:bg-neutral-400"
             >
               Read Tags
             </button>
             <button
               disabled={isLoading}
               onClick={resetInputs}
-              className="box-border gap-x-3 text-black w-full text-violet11 shadow-blackA7 disabled:cursor-not-allowed hover:bg-mauve3 inline-flex h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none mt-[10px] disabled:bg-neutral-400"
+              className="box-border gap-x-3 text-black w-full shadow-blackA7 disabled:cursor-not-allowed hover:bg-mauve3 inline-flex h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none mt-[10px] disabled:bg-neutral-400"
             >
               Clear
             </button>
@@ -303,7 +303,7 @@ export default function UploadSong() {
           <button
             disabled={isLoading}
             type="submit"
-            className="box-border gap-x-3 text-black w-full text-violet11 shadow-blackA7 disabled:cursor-not-allowed hover:bg-mauve3 inline-flex h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none mt-[10px] disabled:bg-neutral-400"
+            className="box-border gap-x-3 text-black w-full shadow-blackA7 disabled:cursor-not-allowed hover:bg-mauve3 inline-flex h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none mt-[10px] disabled:bg-neutral-400"
           >
             {isLoading && <FaSpinner className="animate-spin" />}
             {/* {isLoading && <FaSpinner />} */}

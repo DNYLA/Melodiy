@@ -19,7 +19,15 @@ export default async function Files() {
   return (
     <div className="px-2 py-3">
       <Suspense fallback={<p>Loading Playlist...</p>}>
-        {/* <PlaylistHeader data={data} /> */}
+        <PlaylistHeader
+          data={{
+            id: -1,
+            shareId: '@me',
+            title: 'Your Files',
+            imagePath: 'images/default_playlist.png',
+            user: { id: session.user.id, username: session.user.username },
+          }}
+        />
         <PlaylistTable data={data} />
       </Suspense>
     </div>

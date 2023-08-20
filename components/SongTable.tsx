@@ -9,6 +9,7 @@ import {
 import useOnPlay from '@/hooks/useOnPlay';
 import { Song } from '@/types/playlist';
 import usePlayer from '@/hooks/usePlayer';
+import SongContextMenu from '@/components/song-context';
 
 interface Props<T> {
   data: T[];
@@ -64,20 +65,22 @@ export default function SongTable<T>({ columns: cl, data }: Props<T>) {
       </thead>
       <tbody className="">
         {table.getRowModel().rows.map((row) => (
-          <tr
-            key={row.id}
-            className="hover:bg-[#1f1c1c] group"
-            onClick={() => onRowClick(row.original as Song)}
-          >
-            {row.getVisibleCells().map((cell) => (
-              <td
-                key={cell.id}
-                className="text-left px-3 py-2 first:rounded-l-lg last:rounded-r-lg"
-              >
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
-            ))}
-          </tr>
+          <SongContextMenu trackId={(row.original as Song).uid} key={row.id}>
+            <tr
+              key={row.id}
+              className="hover:bg-[#1f1c1c] group"
+              onClick={() => onRowClick(row.original as Song)}
+            >
+              {row.getVisibleCells().map((cell) => (
+                <td
+                  key={cell.id}
+                  className="text-left px-3 py-2 first:rounded-l-lg last:rounded-r-lg"
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          </SongContextMenu>
         ))}
       </tbody>
     </table>

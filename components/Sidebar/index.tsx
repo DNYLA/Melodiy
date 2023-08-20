@@ -12,11 +12,13 @@ import Navbar from '../Navbar';
 import Playlist from '@/app/playlist/[id]/page';
 import PlaylistBody from '@/components/Sidebar/playlist-body';
 import { useSession } from 'next-auth/react';
+import usePlayer from '@/hooks/usePlayer';
 
 interface SidebarProps {
   children: React.ReactNode;
 }
 const Sidebar = ({ children }: SidebarProps) => {
+  const player = usePlayer();
   const pathname = usePathname();
   const routes = useMemo(
     () => [
@@ -51,8 +53,8 @@ const Sidebar = ({ children }: SidebarProps) => {
   return (
     <div
       className={twMerge(
-        `flex h-full`
-        // player.activeId && 'h-[calc(100%-80px)]'
+        `flex h-full`,
+        player.activeId && 'h-[calc(100%-80px)]'
       )}
     >
       <div className="hidden md:flex flex-col gap-y-2 h-full w-[250px] px-4 py-2 bg-sidebar-background select-none">

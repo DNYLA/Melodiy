@@ -12,6 +12,7 @@ import useSound from 'use-sound';
 import SongMedia from '@/components/Player/song-media';
 import Slider from '@/components/slider';
 import { msToMinuteSeconds } from '@/utils';
+import useVolume from '@/hooks/useVolume';
 interface PlayerContentProps {
   song: Song;
   songUrl: string;
@@ -19,7 +20,8 @@ interface PlayerContentProps {
 
 function PlayerContent({ song, songUrl }: PlayerContentProps) {
   const player = usePlayer();
-  const [volume, setVolume] = useState(1);
+  // const [volume, setVolume] = useState(1);
+  const { volume, update: updateVolume, toggleMute } = useVolume();
   const [curSecond, setCurSecond] = useState(0);
   // const [duration, setDuration] = useState(0);
   const { isPlaying, setIsPlaying } = player;
@@ -88,14 +90,6 @@ function PlayerContent({ song, songUrl }: PlayerContentProps) {
       play();
     } else {
       pause();
-    }
-  };
-
-  const toggleMute = () => {
-    if (volume === 0) {
-      setVolume(1);
-    } else {
-      setVolume(0);
     }
   };
 
@@ -173,7 +167,8 @@ function PlayerContent({ song, songUrl }: PlayerContentProps) {
           />
           <Slider
             value={volume}
-            onChange={(value) => setVolume(value)}
+            onChange={(value) => updateVolume(value, false)}
+            onCommit={(value) => updateVolume(value, true)}
             step={0.01}
           />
         </div>
