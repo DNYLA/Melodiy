@@ -9,7 +9,7 @@ import {
 import useOnPlay from '@/hooks/useOnPlay';
 import { Song } from '@/types/playlist';
 import usePlayer from '@/hooks/usePlayer';
-import SongContextMenu from '@/components/song-context';
+import SongContextMenu from '@/components/ContextMenu';
 
 interface Props<T> {
   data: T[];

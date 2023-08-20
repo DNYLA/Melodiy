@@ -8,16 +8,13 @@ const useVolume = () => {
       setLocalStorage(1);
       return 1;
     }
-    console.log(value);
 
     const parsedVolume = parseFloat(value);
-    console.log(parsedVolume);
-
     if (isNaN(parsedVolume)) {
       setLocalStorage(1);
       return 1;
     }
-    console.log(parsedVolume);
+
     return parsedVolume;
   };
 
@@ -27,9 +24,16 @@ const useVolume = () => {
 
   const [volume, setVolume] = useState(getLocalStorage());
 
+  useEffect(() => {
+    if (volume >= 0) return; //Dont check above one as for now if someone wants to edit their local storage to hear above 100% then it isn't a problem or exploitable.
+
+    setVolume(1);
+    setLocalStorage(1);
+  }, [volume]);
+
   const toggleMute = () => {
     const storedValue = getLocalStorage();
-    console.log(storedValue);
+
     if (volume === 0) setVolume(storedValue);
     else {
       setLocalStorage(volume);
@@ -40,7 +44,6 @@ const useVolume = () => {
   const update = (value: number, commit: boolean) => {
     if (commit && value !== 0) {
       setLocalStorage(value);
-      console.log(getLocalStorage());
     }
 
     setVolume(value);

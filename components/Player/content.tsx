@@ -27,7 +27,14 @@ function PlayerContent({ song, songUrl }: PlayerContentProps) {
   const { isPlaying, setIsPlaying } = player;
 
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
-  const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
+
+  const getVolumeIcon = () => {
+    if (volume === 0) return HiSpeakerXMark;
+
+    return HiSpeakerWave;
+  };
+
+  const VolumeIcon = getVolumeIcon();
 
   const onPlayNext = () => {
     if (player.ids.length === 0) {
