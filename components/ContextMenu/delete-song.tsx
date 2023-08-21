@@ -6,6 +6,7 @@ import { AXIOS } from '@/utils/network/axios';
 import toast from 'react-hot-toast';
 import { revalidatePathClient } from '@/app/action';
 import { useRouter } from 'next/navigation';
+import usePlayer from '@/hooks/stores/usePlayer';
 
 interface DeleteSongContextProps {
   id: string;
@@ -14,14 +15,19 @@ interface DeleteSongContextProps {
 export default function DeleteSongContextItem({ id }: DeleteSongContextProps) {
   const [isOpen, setIsOpen] = useState(true);
   const router = useRouter();
+  const player = usePlayer();
   const handleDelete = async () => {
     try {
       //TODO: Return a list of playlistIds the song was in and then revalidate? would this be optimal or should playlists be client sided?
       await AXIOS.delete(`/song/${id}`);
       revalidatePathClient('/files');
+      // router.refresh();
       toast.success('Deleted track');
-      router.refresh();
+      if (player.activeId == id) {
+        setTimeout(() => player.reset(), 350);
+      }
     } catch (err) {
+      console.log(err);
       toast.error(err as string);
     }
   };

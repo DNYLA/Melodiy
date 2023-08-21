@@ -30,15 +30,6 @@ const SongContextMenu = ({ children, trackId }: SongContextProps) => {
     toast.success('Added to queue');
   };
 
-  const handleDelete = async (id: string) => {
-    try {
-      await AXIOS.delete(`/song/${id}`);
-      toast.success('Deleted track');
-    } catch (err: any) {
-      toast.error(err.message);
-    }
-  };
-
   const contextClass =
     'group text-sm leading-none rounded-[3px] flex items-center h-[25px] relative px-2 py-4 outline-none  data-[highlighted]:bg-neutral-700/80 data-[disabled]:text-inactive';
 
@@ -62,13 +53,7 @@ const SongContextMenu = ({ children, trackId }: SongContextProps) => {
             Add to Liked Songs
           </ContextMenu.Item>
 
-          {/* <DeleteSongContextItem id={trackId} /> */}
-          <ContextMenu.Item
-            onClick={() => handleDelete(trackId)}
-            className={twMerge(contextClass, 'text-red-500')}
-          >
-            Delete Song
-          </ContextMenu.Item>
+          <DeleteSongContextItem id={trackId} />
 
           <ContextMenu.Separator className="h-[1px] bg-neutral-700 m-[5px]" />
           <ContextMenu.Item disabled className={contextClass}>

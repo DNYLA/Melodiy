@@ -3,6 +3,7 @@
 import useLoadFile from '@/hooks/useLoadImage';
 import useLoadImage from '@/hooks/useLoadImage';
 import { Song } from '@/types/playlist';
+import { getImageUrl } from '@/utils';
 import Image from 'next/image';
 import React from 'react';
 
@@ -30,7 +31,7 @@ const SongMedia: React.FC<SongMediaProps> = ({ data, onClick }) => {
       <div className="relative rounded-md min-h-[48px] min-w-[48px] overflow-hidden">
         <Image
           fill
-          src={imageUrl || '/images/liked.png'}
+          src={imageUrl || getImageUrl('images/default_playlist.png')}
           alt="Media Item"
           className="object-cover"
         />
