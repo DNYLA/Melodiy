@@ -9,6 +9,13 @@ export type Playlist = {
   user: PublicUser;
 };
 
+export type TrendingPlaylist = {
+  uid: string;
+  title: string;
+  imagePath: string;
+  user: PublicUser;
+};
+
 export type Song = {
   uid: string;
   title: string;

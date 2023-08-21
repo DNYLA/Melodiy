@@ -1,7 +1,7 @@
 'use server';
 
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import { Playlist, Song } from '@/types/playlist';
+import { Playlist, Song, TrendingPlaylist } from '@/types/playlist';
 import axios from 'axios';
 import { getServerSession } from 'next-auth';
 import { revalidatePath } from 'next/cache';
@@ -11,6 +11,16 @@ export async function getPlaylist(
 ): Promise<ServiceResponse<Playlist>> {
   const session = await getServerSession(authOptions);
   const { data } = await axios.get(`http://localhost:5062/api/playlist/${uid}`);
+
+  return data;
+}
+
+export async function getTrending(): Promise<
+  ServiceResponse<TrendingPlaylist[]>
+> {
+  const { data } = await axios.get(
+    `http://localhost:5062/api/playlist/trending`
+  );
 
   return data;
 }

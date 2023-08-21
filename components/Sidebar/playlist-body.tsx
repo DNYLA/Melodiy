@@ -32,7 +32,9 @@ export default function PlaylistBody() {
 
   if (isLoading) return <>Loading...</>;
   if (error || !playlists?.data || !playlists?.success) {
-    toast.error(playlists?.message ?? 'Unexpected Error Occured');
+    // console.log(error);
+    // console.log()
+    // toast.error(playlists?.message ?? 'Unexpected Error Occured');
 
     return <></>;
   }
