@@ -3,3 +3,9 @@ class ServiceResponse<T> {
   success: boolean = true;
   message: string = '';
 }
+
+export enum PlaylistType {
+  Album = 1,
+  Playlist = 2,
+  Files = 3,
+}

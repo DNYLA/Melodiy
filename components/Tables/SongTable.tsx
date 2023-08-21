@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { ComponentType } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -10,13 +10,15 @@ import useOnPlay from '@/hooks/useOnPlay';
 import { Song } from '@/types/playlist';
 import usePlayer from '@/hooks/stores/usePlayer';
 import SongContextMenu from '@/components/ContextMenu';
+import { PlaylistType } from '@/types';
 
-interface Props<T> {
-  data: T[];
-  columns: ColumnDef<T, any>[];
+interface Props {
+  data: Song[];
+  columns: ColumnDef<Song, any>[];
+  type: PlaylistType;
 }
 
-export default function SongTable<T>({ columns: cl, data }: Props<T>) {
+export default function PlaylistTable({ columns: cl, data, type }: Props) {
   const table = useReactTable({
     data,
     columns: cl,
@@ -31,13 +33,14 @@ export default function SongTable<T>({ columns: cl, data }: Props<T>) {
     const isActiveTrack = song.uid === player.activeId;
     console.log(isActiveTrack);
     if (!player.activeId) {
-      onPlay(song.uid);
+      onPlay(song.uid, data);
       return;
     }
 
+    //Handles playling and pausing if same song is clicked currently bugged
     if (isActiveTrack && player.isPlaying) player.setIsPlaying(false);
     else if (isActiveTrack && !player.isPlaying) player.setIsPlaying(true);
-    else onPlay(song.uid);
+    else onPlay(song.uid, data);
 
     // onPlay(song.uid);
   };
@@ -65,11 +68,16 @@ export default function SongTable<T>({ columns: cl, data }: Props<T>) {
       </thead>
       <tbody className="">
         {table.getRowModel().rows.map((row) => (
-          <SongContextMenu trackId={(row.original as Song).uid} key={row.id}>
+          <SongContextMenu
+            trackId={row.original.uid}
+            ownerId={row.original.user?.id}
+            key={row.id}
+            type={type}
+          >
             <tr
               key={row.id}
               className="hover:bg-[#1f1c1c] group"
-              onClick={() => onRowClick(row.original as Song)}
+              onClick={() => onRowClick(row.original)}
             >
               {row.getVisibleCells().map((cell) => (
                 <td

@@ -1,11 +1,9 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import * as ContextMenu from '@radix-ui/react-context-menu';
-import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import { AXIOS } from '@/utils/network/axios';
 import toast from 'react-hot-toast';
 import { revalidatePathClient } from '@/app/action';
-import { useRouter } from 'next/navigation';
 import usePlayer from '@/hooks/stores/usePlayer';
 
 interface DeleteSongContextProps {
@@ -13,8 +11,6 @@ interface DeleteSongContextProps {
 }
 
 export default function DeleteSongContextItem({ id }: DeleteSongContextProps) {
-  const [isOpen, setIsOpen] = useState(true);
-  const router = useRouter();
   const player = usePlayer();
   const handleDelete = async () => {
     try {

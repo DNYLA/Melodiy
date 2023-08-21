@@ -1,5 +1,5 @@
 'use client';
-import SongTable from '@/components/SongTable';
+import SongTable from '@/components/Tables/SongTable';
 import { Playlist, Song } from '@/types/playlist';
 import { createColumnHelper } from '@tanstack/react-table';
 import Image from 'next/image';
@@ -13,17 +13,19 @@ import {
 import { twMerge } from 'tailwind-merge';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import TitleCell from '@/app/playlist/[id]/components/Playlist/title';
-import CounterCell from '@/app/playlist/[id]/components/Playlist/counter';
+import TitleCell from '@/components/Tables/title';
+import CounterCell from '@/components/Tables/counter';
 import { getImageUrl, msToMinuteSeconds } from '@/utils';
 import usePlayer from '@/hooks/stores/usePlayer';
+import { PlaylistType } from '@/types';
 dayjs.extend(relativeTime);
 
 interface PlaylistTableProps {
   data: Song[];
+  type: PlaylistType;
 }
 
-export default function PlaylistTable({ data }: PlaylistTableProps) {
+export default function PlaylistTable({ data, type }: PlaylistTableProps) {
   const { activeId } = usePlayer();
   const isActiveTrack = (id: string) => (activeId ?? '-1') === id;
 
@@ -79,5 +81,5 @@ export default function PlaylistTable({ data }: PlaylistTableProps) {
     }),
   ];
 
-  return <SongTable data={data} columns={columns} />;
+  return <SongTable data={data} columns={columns} type={type} />;
 }
