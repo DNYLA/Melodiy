@@ -10,6 +10,9 @@ export function getImageUrl(fileName: string) {
 
   if (!host)
     throw new Error('NEXT_PUBLIC_MEDIA_HOST environment variable not set');
+
+  if (!fileName) return host + 'images/default_playlist.png';
+
   return host + fileName;
 }
 

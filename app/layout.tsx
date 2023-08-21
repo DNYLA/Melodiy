@@ -7,6 +7,7 @@ import ToasterProvider from '@/providers/ToasterProvider';
 import SessionProvider from '@/providers/SessionProvider';
 import { SWRProvider } from '@/providers/SWRProvider';
 import Player from '@/components/Player';
+import { Suspense } from 'react';
 
 const font = Figtree({ subsets: ['latin'] });
 
@@ -25,7 +26,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={font.className}>
-        <ToasterProvider />
+        <Suspense>
+          <ToasterProvider />
+        </Suspense>
+
         <SessionProvider>
           <SWRProvider>
             <ModalProvider />

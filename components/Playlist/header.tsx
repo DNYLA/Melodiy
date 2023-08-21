@@ -44,7 +44,7 @@ export default function PlaylistHeader({ data }: Props) {
           src={
             data.imagePath
               ? getImageUrl(data.imagePath)
-              : '/images/antisocial.jpg'
+              : getImageUrl('images/default_playlist.png')
           }
         />
       </div>

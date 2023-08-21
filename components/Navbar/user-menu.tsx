@@ -10,6 +10,7 @@ function UserMenu() {
         <Image
           className="block h-[45px] w-[45px] rounded-full"
           src={'/images/test-avatar.jpg'}
+          priority={false}
           alt="Avatar"
           width={45}
           height={45}

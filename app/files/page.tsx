@@ -17,18 +17,20 @@ export default async function Files() {
   if (!data) return <></>;
 
   return (
-    <div className="px-2 py-3">
-      <Suspense fallback={<p>Loading Playlist...</p>}>
+    <Suspense fallback={<p>Loading Playlist...</p>}>
+      <div className="px-2 py-3">
         <PlaylistHeader
           data={{
             uid: '@me',
             title: 'Your Files',
             imagePath: 'images/default_playlist.png',
             user: { id: session.user.id, username: session.user.username },
+            createdAt: new Date().toISOString(),
+            tracks: [],
           }}
         />
         <PlaylistTable data={data} />
-      </Suspense>
-    </div>
+      </div>
+    </Suspense>
   );
 }

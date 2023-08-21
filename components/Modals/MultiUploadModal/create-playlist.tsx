@@ -135,7 +135,7 @@ export default function CreatePlaylist() {
               className="rounded w-[150px] h-[150px]"
               onError={(e) =>
                 (e.currentTarget.src = getImageUrl(
-                  '/images/default_playlist.png'
+                  'images/default_playlist.png'
                 ))
               }
               src={tempFile}
