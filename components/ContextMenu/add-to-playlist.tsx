@@ -3,8 +3,13 @@ import * as ContextMenu from '@radix-ui/react-context-menu';
 import { ChevronRightIcon } from '@radix-ui/react-icons';
 import usePlaylistStore from '@/hooks/stores/usePlaylistStore';
 import { AXIOS } from '@/utils/network/axios';
+import toast from 'react-hot-toast';
 
-export default function AddToPlaylistMenu() {
+interface Props {
+  trackId: string;
+}
+
+export default function AddToPlaylistMenu({ trackId }: Props) {
   const [filter, setFilter] = useState('');
   const { playlists } = usePlaylistStore();
 
@@ -22,7 +27,17 @@ export default function AddToPlaylistMenu() {
     );
   };
 
-  const handleAdd = (id: string) => {};
+  const handleAdd = async (id: string, name: string) => {
+    try {
+      const { data } = await AXIOS.post(
+        `playlist/song?playlistId=${id}&trackId=${trackId}`
+      );
+      if (!data.success) throw new Error('Playlist not created');
+      toast.success(`Added to ${name}`);
+    } catch {
+      toast.error('Unable to add to playlist');
+    }
+  };
 
   return (
     <ContextMenu.Sub>
@@ -62,7 +77,7 @@ export default function AddToPlaylistMenu() {
 
           {filterPlaylists().map((ply) => (
             <ContextMenu.Item
-              onClick={() => handleAdd(ply.uid)}
+              onClick={() => handleAdd(ply.uid, ply.title)}
               key={ply.title}
               className="group max-w-[250px] text-sm leading-none rounded-[3px] flex items-center h-[25px] relative px-2 py-4 outline-none  data-[highlighted]:bg-neutral-700/80"
             >

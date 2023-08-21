@@ -51,7 +51,7 @@ const SongContextMenu = ({ children, trackId }: SongContextProps) => {
           alignOffset={5}
           // align="end"
         >
-          <AddToPlaylistMenu />
+          <AddToPlaylistMenu trackId={trackId} />
           <ContextMenu.Item
             onClick={() => onQueue(trackId)}
             className={contextClass}
