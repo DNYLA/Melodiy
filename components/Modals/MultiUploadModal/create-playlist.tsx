@@ -37,14 +37,18 @@ export default function CreatePlaylist() {
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     if (!session?.user) return;
-    if (!imageFileRef.current?.files || imageFileRef.current.files.length === 0)
-      return;
 
     try {
       setIsLoading(true);
       const formData = new FormData();
-      const file = imageFileRef.current?.files[0];
-      formData.append('image', file);
+
+      if (
+        imageFileRef.current?.files &&
+        imageFileRef.current.files.length > 0
+      ) {
+        const file = imageFileRef.current?.files[0];
+        formData.append('image', file);
+      }
 
       const { data: res } = await AXIOS.post<ServiceResponse<Playlist>>(
         `playlist?title=${data.title}`,
@@ -52,12 +56,15 @@ export default function CreatePlaylist() {
       );
       mutate('/playlist');
       toast.success('Created new playlist');
-      router.push(`/playlist/${res.data?.shareId}`);
+      router.push(`/playlist/${res.data?.uid}`);
+      setIsLoading(false);
       reset();
       resetFile();
       onClose();
     } catch (err) {
-      toast.error(err as string);
+      console.log(err);
+      toast.error('Unable to create playlist');
+      setIsLoading(false);
     }
   };
 

@@ -12,7 +12,7 @@ import Navbar from '../Navbar';
 import Playlist from '@/app/playlist/[id]/page';
 import PlaylistBody from '@/components/Sidebar/playlist-body';
 import { useSession } from 'next-auth/react';
-import usePlayer from '@/hooks/usePlayer';
+import usePlayer from '@/hooks/stores/usePlayer';
 
 interface SidebarProps {
   children: React.ReactNode;

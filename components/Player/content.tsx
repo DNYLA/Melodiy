@@ -7,7 +7,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { AiFillStepBackward, AiFillStepForward } from 'react-icons/ai';
 import { BsPauseFill, BsPlayFill } from 'react-icons/bs';
 import { HiSpeakerWave, HiSpeakerXMark } from 'react-icons/hi2';
-import usePlayer from '@/hooks/usePlayer';
+import usePlayer from '@/hooks/stores/usePlayer';
 import useSound from 'use-sound';
 import SongMedia from '@/components/Player/song-media';
 import Slider from '@/components/slider';

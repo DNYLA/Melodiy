@@ -16,7 +16,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import TitleCell from '@/app/playlist/[id]/components/Playlist/title';
 import CounterCell from '@/app/playlist/[id]/components/Playlist/counter';
 import { getImageUrl, msToMinuteSeconds } from '@/utils';
-import usePlayer from '@/hooks/usePlayer';
+import usePlayer from '@/hooks/stores/usePlayer';
 dayjs.extend(relativeTime);
 
 interface PlaylistTableProps {

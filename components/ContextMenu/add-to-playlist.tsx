@@ -1,24 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import { ChevronRightIcon } from '@radix-ui/react-icons';
+import usePlaylistStore from '@/hooks/stores/usePlaylistStore';
+import { AXIOS } from '@/utils/network/axios';
 
 export default function AddToPlaylistMenu() {
   const [filter, setFilter] = useState('');
-
-  const playLists = [
-    { title: 'Man On The Moon II: The Chosen One' },
-    { title: 'West Bay' },
-    { title: 'Feed tha streets II' },
-    { title: 'Rippity Rap' },
-    { title: "90's rap" },
-    {
-      title: 'Please Excuse Me for Being Antisocial',
-    },
-    { title: 'Ricch Forever' },
-    { title: 'Test Playlist' },
-    { title: 'Wolo G' },
-    { title: 'Don Toliver' },
-  ];
+  const { playlists } = usePlaylistStore();
 
   const searchInput = useRef<HTMLInputElement>(null);
 
@@ -27,6 +15,14 @@ export default function AddToPlaylistMenu() {
       searchInput.current.focus();
     }
   }, [filter]);
+
+  const filterPlaylists = () => {
+    return playlists.filter((p) =>
+      p.title.toLowerCase().includes(filter.toLowerCase())
+    );
+  };
+
+  const handleAdd = (id: string) => {};
 
   return (
     <ContextMenu.Sub>
@@ -64,21 +60,16 @@ export default function AddToPlaylistMenu() {
 
           <ContextMenu.Separator className="h-[1px] bg-violet6 m-[5px]" />
 
-          {playLists
-            .filter((p) => p.title.toLowerCase().includes(filter.toLowerCase()))
-            .map((ply) => (
-              <ContextMenu.Item
-                key={ply.title}
-                className="group max-w-[250px] text-sm leading-none rounded-[3px] flex items-center h-[25px] relative px-2 py-4 outline-none  data-[highlighted]:bg-neutral-700/80"
-              >
-                {/* <div
-                  key={ply.title}
-                  className="group max-w-[250px] text-sm leading-none rounded-[3px] flex items-center h-[25px] relative px-2 py-4 outline-none data-[highlighted]:bg-neutral-700/80"
-                > */}
-                <span className="truncate">{ply.title}</span>
-                {/* </div> */}
-              </ContextMenu.Item>
-            ))}
+          {filterPlaylists().map((ply) => (
+            <ContextMenu.Item
+              onClick={() => handleAdd(ply.uid)}
+              key={ply.title}
+              className="group max-w-[250px] text-sm leading-none rounded-[3px] flex items-center h-[25px] relative px-2 py-4 outline-none  data-[highlighted]:bg-neutral-700/80"
+            >
+              <span className="truncate">{ply.title}</span>
+              {/* </div> */}
+            </ContextMenu.Item>
+          ))}
         </ContextMenu.SubContent>
       </ContextMenu.Portal>
     </ContextMenu.Sub>

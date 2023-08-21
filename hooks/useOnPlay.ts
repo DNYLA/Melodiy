@@ -1,4 +1,4 @@
-import usePlayer from './usePlayer';
+import usePlayer from './stores/usePlayer';
 import React from 'react';
 import { useSession } from 'next-auth/react';
 import { Song } from '@/types/playlist';

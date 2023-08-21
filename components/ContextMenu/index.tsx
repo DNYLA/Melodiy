@@ -5,7 +5,7 @@ import {
   CheckIcon,
   ChevronRightIcon,
 } from '@radix-ui/react-icons';
-import usePlayer from '@/hooks/usePlayer';
+import usePlayer from '@/hooks/stores/usePlayer';
 import DeleteSongContextItem from '@/components/ContextMenu/delete-song';
 import { AXIOS } from '@/utils/network/axios';
 import toast from 'react-hot-toast';

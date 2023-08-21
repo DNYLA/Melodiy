@@ -8,7 +8,7 @@ import {
 } from '@tanstack/react-table';
 import useOnPlay from '@/hooks/useOnPlay';
 import { Song } from '@/types/playlist';
-import usePlayer from '@/hooks/usePlayer';
+import usePlayer from '@/hooks/stores/usePlayer';
 import SongContextMenu from '@/components/ContextMenu';
 
 interface Props<T> {

@@ -4,7 +4,7 @@ import useGetSongById from '@/hooks/useGetSongById';
 import PlayerContent from './content';
 // import useGetSongById from '@/hooks/useGetSongById';
 // import useLoadSongUrl from '@/hooks/useLoadSongUrl';
-import usePlayer from '@/hooks/usePlayer';
+import usePlayer from '@/hooks/stores/usePlayer';
 import { Song } from '@/types/playlist';
 import React from 'react';
 import useLoadFile from '@/hooks/useLoadImage';

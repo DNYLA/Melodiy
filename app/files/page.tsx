@@ -21,8 +21,7 @@ export default async function Files() {
       <Suspense fallback={<p>Loading Playlist...</p>}>
         <PlaylistHeader
           data={{
-            id: -1,
-            shareId: '@me',
+            uid: '@me',
             title: 'Your Files',
             imagePath: 'images/default_playlist.png',
             user: { id: session.user.id, username: session.user.username },
