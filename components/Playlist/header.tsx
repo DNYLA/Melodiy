@@ -4,11 +4,32 @@ import { getImageUrl } from '@/utils';
 import React, { useState } from 'react';
 import { BsFillPlayFill } from 'react-icons/bs';
 import { FiEdit2 } from 'react-icons/fi';
+import dayjs from 'dayjs';
+
 interface Props {
   data: Playlist;
 }
 
 export default function PlaylistHeader({ data }: Props) {
+  const getTotalDuration = () => {
+    if (!data.tracks) return '0 MINUTES';
+    const totalDuration = data.tracks.reduce(
+      (total, { duration }) => total + duration,
+      0
+    );
+    const totalMins = totalDuration / 60000;
+
+    return `${Math.round(totalMins)} MINUTES`;
+  };
+
+  const getPlaylistDetails = () => {
+    const trackAmount = data.tracks?.length ?? 0;
+    const duration = getTotalDuration();
+    const date = dayjs(data.createdAt ?? new Date());
+
+    return `${trackAmount} SONGS • ${duration} • ${date.year()}`;
+  };
+
   return (
     <div className="flex gap-x-4">
       <div className="group relative cursor-pointer">
@@ -29,14 +50,14 @@ export default function PlaylistHeader({ data }: Props) {
       </div>
       <div>
         <div>
-          <p className="text-inactive">Private Playlist</p>
+          <p className="text-inactive">Public Playlist</p>
           <p className="text-xl md:text-2xl lg:text-3xl font-bold">
             {data.title}
           </p>
           <p className="text-inactive cursor-pointer hover:underline">
             {data.user.username}
           </p>
-          <p className="font-light">16 SONGS • 43 MINUTES • 2019</p>
+          <p className="font-light">{getPlaylistDetails()}</p>
         </div>
 
         <div className="mt-8">

@@ -18,6 +18,7 @@ import useUploadModal from '@/hooks/modals/useUploadModal';
 import Dropzone, { FileWithPath } from 'react-dropzone';
 import { read } from 'jsmediatags';
 import * as Dialog from '@radix-ui/react-dialog';
+import { revalidatePathClient } from '@/app/action';
 
 interface IFormInput {
   title: string;
@@ -84,6 +85,7 @@ export default function UploadSong() {
     if (albumArtist) formData.append('albumArtist', albumArtist);
 
     await AXIOS.post(`song`, formData);
+    revalidatePathClient('/files');
     toast.success('Uploaded Song!');
 
     return '';

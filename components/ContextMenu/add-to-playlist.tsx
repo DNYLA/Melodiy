@@ -4,6 +4,9 @@ import { ChevronRightIcon } from '@radix-ui/react-icons';
 import usePlaylistStore from '@/hooks/stores/usePlaylistStore';
 import { AXIOS } from '@/utils/network/axios';
 import toast from 'react-hot-toast';
+import { revalidatePath } from 'next/cache';
+import { useRouter } from 'next/navigation';
+import { revalidatePathClient } from '@/app/action';
 
 interface Props {
   trackId: string;
@@ -12,7 +15,7 @@ interface Props {
 export default function AddToPlaylistMenu({ trackId }: Props) {
   const [filter, setFilter] = useState('');
   const { playlists } = usePlaylistStore();
-
+  const router = useRouter();
   const searchInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -34,7 +37,9 @@ export default function AddToPlaylistMenu({ trackId }: Props) {
       );
       if (!data.success) throw new Error('Playlist not created');
       toast.success(`Added to ${name}`);
-    } catch {
+      await revalidatePathClient(`playlist/${id}`);
+    } catch (err) {
+      console.log(err);
       toast.error('Unable to add to playlist');
     }
   };

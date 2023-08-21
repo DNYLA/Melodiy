@@ -4,6 +4,7 @@ export type Playlist = {
   uid: string;
   title: string;
   imagePath: string;
+  createdAt: string;
   tracks: Song[];
   user: PublicUser;
 };

@@ -44,7 +44,7 @@ export default function PlaylistTable({ data }: PlaylistTableProps) {
           title: row.title,
           artist: row.artist,
           cover: getImageUrl(row.coverPath),
-          id: row.id, //We could pass isActive however we will need the id in future updates
+          id: row.uid, //We could pass isActive however we will need the id in future updates
         };
       },
       {

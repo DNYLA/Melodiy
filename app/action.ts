@@ -4,6 +4,7 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { Playlist, Song } from '@/types/playlist';
 import axios from 'axios';
 import { getServerSession } from 'next-auth';
+import { revalidatePath } from 'next/cache';
 
 export async function getPlaylist(
   uid: string
@@ -22,4 +23,9 @@ export async function getUserSongs(
   });
 
   return data;
+}
+
+export async function revalidatePathClient(path: string) {
+  'use server';
+  revalidatePath(path);
 }
