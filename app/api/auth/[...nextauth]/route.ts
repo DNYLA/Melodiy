@@ -43,7 +43,8 @@ export const authOptions: NextAuthOptions = {
       // console.log(user);
       return { ...token, ...user };
     },
-    async session({ session, token, user }) {
+    // async session({ session, token, user }) {
+    async session({ session, token }) {
       /* eslint-disable @typescript-eslint/no-explicit-any */
       session.user = token as any;
       // console.log(session.user);

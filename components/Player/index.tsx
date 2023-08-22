@@ -12,7 +12,8 @@ function Player() {
   const player = usePlayer();
   // const { song, isLoading } = useGetSongById(player.activeId);
   const { song } = useGetSongById(player.activeId);
-  const songUrl = useLoadFile(song?.songPath!);
+  //TODO: Fix
+  const songUrl = useLoadFile(song?.songPath ?? '');
 
   if (!song || !songUrl || !player.activeId) {
     return null;
