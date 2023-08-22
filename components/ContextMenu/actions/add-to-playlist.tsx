@@ -4,8 +4,6 @@ import { ChevronRightIcon } from '@radix-ui/react-icons';
 import usePlaylistStore from '@/hooks/stores/usePlaylistStore';
 import { AXIOS } from '@/utils/network/axios';
 import toast from 'react-hot-toast';
-import { revalidatePath } from 'next/cache';
-import { useRouter } from 'next/navigation';
 import { revalidatePathClient } from '@/app/action';
 
 interface Props {
@@ -15,7 +13,6 @@ interface Props {
 export default function AddToPlaylistMenu({ trackId }: Props) {
   const [filter, setFilter] = useState('');
   const { playlists } = usePlaylistStore();
-  const router = useRouter();
   const searchInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

@@ -15,6 +15,7 @@ import { Playlist } from '@/types/playlist';
 import { FaSpinner } from 'react-icons/fa';
 import useUploadModal from '@/hooks/modals/useUploadModal';
 import * as Dialog from '@radix-ui/react-dialog';
+import { ServiceResponse } from '@/types';
 
 interface IFormInput {
   title: string;
@@ -29,7 +30,7 @@ export default function CreatePlaylist() {
   const [tempFile, setTempFile] = useState('');
   const { mutate } = useSWRConfig();
   const imageFileRef = useRef<HTMLInputElement>(null);
-  const { register, handleSubmit, reset, getValues } = useForm<IFormInput>({
+  const { register, handleSubmit, reset } = useForm<IFormInput>({
     defaultValues: {
       title: '',
     },
@@ -68,22 +69,7 @@ export default function CreatePlaylist() {
     }
   };
 
-  const uploadImageTest = () => {
-    if (!imageFileRef.current?.files || imageFileRef.current.files.length === 0)
-      return;
-
-    const { title } = getValues();
-    const formData = new FormData();
-    const file = imageFileRef.current?.files[0];
-    formData.append('image', file);
-
-    AXIOS.post(`playlist/imagetest?title=${title}`, formData).then((data) => {
-      console.log(data);
-    });
-    return '';
-  };
-
-  const onFileChange = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+  const onFileChange = () => {
     console.log(imageFileRef.current?.value);
     if (!imageFileRef.current?.files || imageFileRef.current.files.length === 0)
       return;

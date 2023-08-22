@@ -10,7 +10,7 @@ export const authOptions: NextAuthOptions = {
         username: { label: 'Username', type: 'text', placeholder: 'username' },
         password: { label: 'Password', type: 'text' },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         //TODO: Move api url call to .env
         const res = await fetch('http://localhost:5062/api/auth/login', {
           method: 'POST',
@@ -44,6 +44,7 @@ export const authOptions: NextAuthOptions = {
       return { ...token, ...user };
     },
     async session({ session, token, user }) {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
       session.user = token as any;
       // console.log(session.user);
       return session;

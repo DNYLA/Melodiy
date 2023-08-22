@@ -1,12 +1,12 @@
 'use client';
 
 import usePlaylistStore from '@/hooks/stores/usePlaylistStore';
+import { ServiceResponse } from '@/types';
 import { Playlist } from '@/types/playlist';
-import { AXIOS, fetcher } from '@/utils/network/axios';
+import { fetcher } from '@/utils/network/axios';
 import { useSession } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
 import React, { useEffect } from 'react';
-import toast from 'react-hot-toast';
 import useSWR from 'swr';
 import { twMerge } from 'tailwind-merge';
 
@@ -41,7 +41,7 @@ export default function PlaylistBody() {
 
   return (
     <div className="flex flex-col mx-2 overflow-hidden text-sm font-light gap-y-1 text-inactive">
-      {playlists.data.map((playlist) => (
+      {playlists.data.map((playlist: Playlist) => (
         <p
           key={playlist.uid}
           className={twMerge(

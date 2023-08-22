@@ -1,7 +1,6 @@
 'use client';
 
 import useLoadFile from '@/hooks/useLoadImage';
-import useLoadImage from '@/hooks/useLoadImage';
 import { Song } from '@/types/playlist';
 import { getImageUrl } from '@/utils';
 import Image from 'next/image';

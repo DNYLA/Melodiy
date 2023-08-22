@@ -4,7 +4,6 @@ import * as ContextMenu from '@radix-ui/react-context-menu';
 import { AXIOS } from '@/utils/network/axios';
 import toast from 'react-hot-toast';
 import { revalidatePathClient } from '@/app/action';
-import usePlayer from '@/hooks/stores/usePlayer';
 import { useParams } from 'next/navigation';
 
 interface RemoveSongContextProps {
@@ -14,7 +13,6 @@ interface RemoveSongContextProps {
 
 export default function RemoveSongContextItem({
   trackId,
-  ownerId,
 }: RemoveSongContextProps) {
   const { id: playlistId } = useParams();
 

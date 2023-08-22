@@ -1,7 +1,6 @@
 import { getTrending } from '@/app/action';
 import PlaylistCard from '@/components/Cards/playlist-card';
 import { getImageUrl } from '@/utils';
-import Image from 'next/image';
 import React from 'react';
 
 export default async function Trending() {

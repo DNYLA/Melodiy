@@ -1,10 +1,7 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import React, { useCallback, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { useSWRConfig } from 'swr';
 import Input from '@/components/input';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Image from 'next/image';
@@ -12,9 +9,7 @@ import { AXIOS } from '@/utils/network/axios';
 import { getImageUrl } from '@/utils';
 import { RxCross2 } from 'react-icons/rx';
 import { twMerge } from 'tailwind-merge';
-import { Playlist } from '@/types/playlist';
 import { FaSpinner } from 'react-icons/fa';
-import useUploadModal from '@/hooks/modals/useUploadModal';
 import Dropzone, { FileWithPath } from 'react-dropzone';
 import { read } from 'jsmediatags';
 import * as Dialog from '@radix-ui/react-dialog';
@@ -31,13 +26,12 @@ interface IFormInput {
 
 export default function UploadSong() {
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
-  const { onClose } = useUploadModal();
-  const { data: session } = useSession();
+  // const { onClose } = useUploadModal();
+  // const { data: session } = useSession();
   const [tempFile, setTempFile] = useState<string | undefined>(undefined);
-  const { mutate } = useSWRConfig();
+  // const { mutate } = useSWRConfig();
   const imageFileRef = useRef<HTMLInputElement>(null);
-  const songFileRef = useRef<HTMLInputElement>(null);
+  // const songFileRef = useRef<HTMLInputElement>(null);
   const [songFile, setSongFile] = useState<FileWithPath | undefined>();
   const {
     register,
@@ -55,7 +49,7 @@ export default function UploadSong() {
     },
   });
 
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+  const onSubmit: SubmitHandler<IFormInput> = async () => {
     setIsLoading(true);
     try {
       await uploadSong();
@@ -98,7 +92,8 @@ export default function UploadSong() {
     return imageFileRef.current.files[0];
   };
 
-  const onImageChange = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+  // const onImageChange = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+  const onImageChange = () => {
     console.log(imageFileRef.current?.value);
     if (!imageFileRef.current?.files || imageFileRef.current.files.length === 0)
       return;
@@ -142,6 +137,7 @@ export default function UploadSong() {
           toast.success('Sucessfully Read Tags');
         },
         onError: (error) => {
+          console.log(error);
           toast('No Tags Found', {
             icon: '⚠️',
           });

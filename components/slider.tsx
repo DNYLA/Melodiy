@@ -1,8 +1,7 @@
 'use client';
-import React, { useEffect } from 'react';
+import React from 'react';
 import * as RadixSlider from '@radix-ui/react-slider';
 import { twMerge } from 'tailwind-merge';
-import clsx from 'clsx';
 
 interface SliderProps {
   value?: number;

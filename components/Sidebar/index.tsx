@@ -9,9 +9,7 @@ import { BiArrowBack } from 'react-icons/bi';
 import SidebarItem from './sidebar-item';
 import PlaylistHeader from './playlists';
 import Navbar from '../Navbar';
-import Playlist from '@/app/playlist/[id]/page';
 import PlaylistBody from '@/components/Sidebar/playlist-body';
-import { useSession } from 'next-auth/react';
 import usePlayer from '@/hooks/stores/usePlayer';
 
 interface SidebarProps {

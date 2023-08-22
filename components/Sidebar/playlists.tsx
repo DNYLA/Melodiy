@@ -1,6 +1,5 @@
 import React from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
-import PlaylistBody from './playlist-body';
 import { useSession } from 'next-auth/react';
 import useUploadModal from '@/hooks/modals/useUploadModal';
 
@@ -18,7 +17,7 @@ function PlaylistHeader({ children }: PlaylistHeaderProps) {
         <p className="text-lg font-semibold">Playlists</p>
         {session && (
           <AiOutlinePlus
-            onClick={onOpen}
+            onClick={() => onOpen}
             size={18}
             className="text-neutral-400 cursor-pointer hover:text-white"
           />

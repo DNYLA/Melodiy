@@ -1,4 +1,4 @@
-import { getPlaylist, getUserSongs } from '@/app/action';
+import { getUserSongs } from '@/app/action';
 import React, { Suspense } from 'react';
 import PlaylistTable from '@/components/Tables/table';
 import RedirectSync from '@/components/RedirectSync';

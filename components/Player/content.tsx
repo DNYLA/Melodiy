@@ -3,7 +3,7 @@
 // import LikeButton from './LikeButton';
 // import MediaItem from './MediaItem';
 import { Song } from '@/types/playlist';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AiFillStepBackward, AiFillStepForward } from 'react-icons/ai';
 import { BsPauseFill, BsPlayFill } from 'react-icons/bs';
 import { HiSpeakerWave, HiSpeakerXMark } from 'react-icons/hi2';

@@ -1,7 +1,7 @@
 import ImageOverlay from '@/app/playlist/[id]/components/image-overlay';
 import { Playlist } from '@/types/playlist';
 import { getImageUrl } from '@/utils';
-import React, { useState } from 'react';
+import React from 'react';
 import { BsFillPlayFill } from 'react-icons/bs';
 import { FiEdit2 } from 'react-icons/fi';
 import dayjs from 'dayjs';

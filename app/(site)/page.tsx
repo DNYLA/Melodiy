@@ -1,4 +1,3 @@
-import AuthTest from '@/app/(site)/components/AuthTest';
 import Trending from '@/app/(site)/components/trending';
 import React from 'react';
 

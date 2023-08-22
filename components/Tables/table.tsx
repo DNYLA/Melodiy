@@ -1,16 +1,9 @@
 'use client';
 import SongTable from '@/components/Tables/SongTable';
-import { Playlist, Song } from '@/types/playlist';
+import { Song } from '@/types/playlist';
 import { createColumnHelper } from '@tanstack/react-table';
-import Image from 'next/image';
 import React from 'react';
-import {
-  BsClock,
-  BsFillPauseFill,
-  BsFillPlayFill,
-  BsMusicNoteBeamed,
-} from 'react-icons/bs';
-import { twMerge } from 'tailwind-merge';
+import { BsClock } from 'react-icons/bs';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import TitleCell from '@/components/Tables/title';

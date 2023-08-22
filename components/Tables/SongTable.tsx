@@ -1,10 +1,13 @@
 'use client';
-import React, { ComponentType } from 'react';
+import React from 'react';
 import {
   useReactTable,
   getCoreRowModel,
   flexRender,
   ColumnDef,
+  Row,
+  Cell,
+  HeaderGroup,
 } from '@tanstack/react-table';
 import useOnPlay from '@/hooks/useOnPlay';
 import { Song } from '@/types/playlist';
@@ -14,7 +17,7 @@ import { PlaylistType } from '@/types';
 
 interface Props {
   data: Song[];
-  columns: ColumnDef<Song, any>[];
+  columns: ColumnDef<Song, unknown>[];
   type: PlaylistType;
 }
 
@@ -48,26 +51,29 @@ export default function PlaylistTable({ columns: cl, data, type }: Props) {
   return (
     <table className="m-6 text-white w-full">
       <thead className="">
-        {table.getHeaderGroups().map((headerGroup) => (
+        {table.getHeaderGroups().map((headerGroup: HeaderGroup<Song>) => (
           <tr key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <th
-                key={header.id}
-                className="text-left px-3 py-2 border-b border-inactive"
-              >
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-              </th>
-            ))}
+            {
+              /* eslint-disable @typescript-eslint/no-explicit-any */
+              headerGroup.headers.map((header) => (
+                <th
+                  key={header.id}
+                  className="text-left px-3 py-2 border-b border-inactive"
+                >
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                </th>
+              ))
+            }
           </tr>
         ))}
       </thead>
       <tbody className="">
-        {table.getRowModel().rows.map((row) => (
+        {table.getRowModel().rows.map((row: Row<Song>) => (
           <SongContextMenu
             trackId={row.original.uid}
             ownerId={row.original.user?.id}
@@ -79,7 +85,7 @@ export default function PlaylistTable({ columns: cl, data, type }: Props) {
               className="hover:bg-[#1f1c1c] group"
               onClick={() => onRowClick(row.original)}
             >
-              {row.getVisibleCells().map((cell) => (
+              {row.getVisibleCells().map((cell: Cell<Song, unknown>) => (
                 <td
                   key={cell.id}
                   className="text-left px-3 py-2 first:rounded-l-lg last:rounded-r-lg"

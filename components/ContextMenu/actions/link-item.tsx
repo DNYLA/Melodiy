@@ -1,7 +1,5 @@
 import React from 'react';
 import * as ContextMenu from '@radix-ui/react-context-menu';
-import toast from 'react-hot-toast';
-import usePlayer from '@/hooks/stores/usePlayer';
 import { useRouter } from 'next/navigation';
 
 interface LinkContextProps {
