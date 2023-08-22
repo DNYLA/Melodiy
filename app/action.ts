@@ -9,7 +9,9 @@ export async function getPlaylist(
   uid: string
 ): Promise<ServiceResponse<Playlist>> {
   // const session = await getServerSession(authOptions);
-  const { data } = await axios.get(`http://localhost:5062/api/playlist/${uid}`);
+  const { data } = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}playlist/${uid}`
+  );
 
   return data;
 }
@@ -18,7 +20,7 @@ export async function getTrending(): Promise<
   ServiceResponse<TrendingPlaylist[]>
 > {
   const { data } = await axios.get(
-    `http://localhost:5062/api/playlist/trending`
+    `${process.env.NEXT_PUBLIC_API_URL}playlist/trending`
   );
 
   return data;
@@ -27,7 +29,7 @@ export async function getTrending(): Promise<
 export async function getUserSongs(
   token: string
 ): Promise<ServiceResponse<Song[]> | null> {
-  const { data } = await axios.get(`http://localhost:5062/api/song/`, {
+  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}song/`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
