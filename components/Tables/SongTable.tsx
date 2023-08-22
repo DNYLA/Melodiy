@@ -5,9 +5,6 @@ import {
   getCoreRowModel,
   flexRender,
   ColumnDef,
-  Row,
-  Cell,
-  HeaderGroup,
 } from '@tanstack/react-table';
 import useOnPlay from '@/hooks/useOnPlay';
 import { Song } from '@/types/playlist';
@@ -17,7 +14,8 @@ import { PlaylistType } from '@/types';
 
 interface Props {
   data: Song[];
-  columns: ColumnDef<Song, unknown>[];
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  columns: ColumnDef<Song, any>[];
   type: PlaylistType;
 }
 
@@ -51,7 +49,7 @@ export default function PlaylistTable({ columns: cl, data, type }: Props) {
   return (
     <table className="m-6 text-white w-full">
       <thead className="">
-        {table.getHeaderGroups().map((headerGroup: HeaderGroup<Song>) => (
+        {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
             {
               /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -73,7 +71,7 @@ export default function PlaylistTable({ columns: cl, data, type }: Props) {
         ))}
       </thead>
       <tbody className="">
-        {table.getRowModel().rows.map((row: Row<Song>) => (
+        {table.getRowModel().rows.map((row) => (
           <SongContextMenu
             trackId={row.original.uid}
             ownerId={row.original.user?.id}
@@ -85,7 +83,7 @@ export default function PlaylistTable({ columns: cl, data, type }: Props) {
               className="hover:bg-[#1f1c1c] group"
               onClick={() => onRowClick(row.original)}
             >
-              {row.getVisibleCells().map((cell: Cell<Song, unknown>) => (
+              {row.getVisibleCells().map((cell) => (
                 <td
                   key={cell.id}
                   className="text-left px-3 py-2 first:rounded-l-lg last:rounded-r-lg"

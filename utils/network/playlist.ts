@@ -1,4 +1,4 @@
-import { toast } from 'react-hot-toast';
+import { ServiceResponse } from '@/types';
 import { AXIOS } from './axios';
 import { Playlist } from '@/types/playlist';
 

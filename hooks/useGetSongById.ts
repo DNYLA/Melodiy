@@ -1,3 +1,4 @@
+import { ServiceResponse } from '@/types';
 import { Song } from '@/types/playlist';
 import { AXIOS } from '@/utils/network/axios';
 import React, { useEffect, useMemo, useState } from 'react';
