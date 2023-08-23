@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Release Melodiy Server Container
 
 on:
   workflow_dispatch:
