@@ -19,13 +19,13 @@ using melodiy.server.Services.SongService;
 var builder = WebApplication.CreateBuilder(args);
 var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+// builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-if (builder.Environment.IsProduction())
-{
-    builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+// if (builder.Environment.IsProduction())
+// {
+//     builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
     
-}
+// }
 
 var url = builder.Configuration.GetSection("AppSettings:SupabaseURL").Value!;
 var key = builder.Configuration.GetSection("AppSettings:SupabaseKey").Value!;

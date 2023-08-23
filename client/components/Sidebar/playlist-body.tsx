@@ -34,7 +34,6 @@ export default function PlaylistBody() {
   if (error || !playlists?.data || !playlists?.success) {
     // console.log(error);
     // console.log()
-    // toast.error(playlists?.message ?? 'Unexpected Error Occured');
 
     return <></>;
   }

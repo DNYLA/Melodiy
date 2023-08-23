@@ -12,7 +12,8 @@ export default async function Files() {
   if (!session || !session.user) return null;
   const songs = await getUserSongs(session.user.accessToken);
 
-  if (!songs || !songs.success) return <RedirectSync />;
+  if (!songs || !songs.success)
+    return <RedirectSync message="Server unavailable" />;
 
   const { data } = songs;
   if (!data) return <></>;

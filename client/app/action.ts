@@ -9,31 +9,52 @@ export async function getPlaylist(
   uid: string
 ): Promise<ServiceResponse<Playlist>> {
   // const session = await getServerSession(authOptions);
-  const { data } = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}playlist/${uid}`
-  );
+  try {
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}playlist/${uid}`
+    );
 
-  return data;
+    return data;
+  } catch (err) {
+    const sr = new ServiceResponse<Playlist>();
+    sr.success = false;
+    return sr;
+  }
 }
 
 export async function getTrending(): Promise<
   ServiceResponse<TrendingPlaylist[]>
 > {
-  const { data } = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}playlist/trending`
-  );
+  try {
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}playlist/trending`
+    );
 
-  return data;
+    return data;
+  } catch (err) {
+    const sr = new ServiceResponse<TrendingPlaylist[]>();
+    sr.success = false;
+    return sr;
+  }
 }
 
 export async function getUserSongs(
   token: string
 ): Promise<ServiceResponse<Song[]> | null> {
-  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}song/`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  try {
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}song/`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
 
-  return data;
+    return data;
+  } catch (err) {
+    const sr = new ServiceResponse<Song[]>();
+    sr.success = false;
+    return sr;
+  }
 }
 
 export async function revalidatePathClient(path: string) {
