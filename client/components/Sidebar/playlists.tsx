@@ -11,13 +11,14 @@ interface PlaylistHeaderProps {
 function PlaylistHeader({ children }: PlaylistHeaderProps) {
   const { data: session } = useSession();
   const { onOpen } = useUploadModal();
+
   return (
     <div className="flex flex-col py-0 gap-y-1">
       <div className="flex justify-between items-center">
-        <p className="text-lg font-semibold">Playlists</p>
+        <p className="text-lg font-semibold">Playlists2</p>
         {session && (
           <AiOutlinePlus
-            onClick={() => onOpen}
+            onClick={() => onOpen()}
             size={18}
             className="text-neutral-400 cursor-pointer hover:text-white"
           />

@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  env: {
+    NEXT_PUBLIC_API_URL: 'http://localhost:5062/api/',
+    NEXT_PUBLIC_MEDIA_HOST:
+      'https://dmzuqlhabiwwcasbtoem.supabase.co/storage/v1/object/public/',
+  },
   experimental: {
     serverActions: true,
   },

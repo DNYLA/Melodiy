@@ -1,10 +1,21 @@
-version: '3'
+version: '3.4'
 
 services:
-  app:
-    image: docker-melodiy-nextjs
+  web:
+    image: melodiy-web
     build:
       context: ./client
       dockerfile: Dockerfile
     ports:
       - 3000:3000
+    volumes:
+      - ./client/.env.production:/app/.env
+  server:
+    image: melodiy-server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - 5062:5062
+    volumes:
+      - ./server/appsettings.production.json:/app/appsettings.json

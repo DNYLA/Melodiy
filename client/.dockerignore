@@ -1,0 +1,9 @@
+*/.gitignore
+*/README.md
+*/.next-env.d.ts
+*/.env.local
+*/.env
+
+
+client/.next
+client/node_modules
