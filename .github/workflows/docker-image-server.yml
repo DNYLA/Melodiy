@@ -19,8 +19,10 @@ jobs:
         include:
           - dockerfile: ./server/Dockerfile
             image: ghcr.io/dnyla/melodiy-server
+            context: ./server
           - dockerfile: ./client/Dockerfile
             image: ghcr.io/username/melodiy-web
+            context: ./client
     permissions:
       contents: read
       packages: write
