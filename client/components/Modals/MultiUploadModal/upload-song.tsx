@@ -13,6 +13,7 @@ import Dropzone, { FileWithPath } from 'react-dropzone';
 import { read } from 'jsmediatags';
 import * as Dialog from '@radix-ui/react-dialog';
 import { revalidatePathClient } from '@/app/action';
+import { getDefaultImage } from '@/utils';
 
 interface IFormInput {
   title: string;
@@ -203,10 +204,8 @@ export default function UploadSong() {
       </span> */}
               <Image
                 className="rounded w-[150px] h-[150px]"
-                onError={(e) =>
-                  (e.currentTarget.src = '/images/default_playlist.png')
-                }
-                src={tempFile ?? '/images/default_playlist.png'}
+                onError={(e) => (e.currentTarget.src = getDefaultImage())}
+                src={tempFile ?? getDefaultImage()}
                 width={150}
                 height={150}
                 alt="Playlist Cover"

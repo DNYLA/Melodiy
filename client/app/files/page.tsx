@@ -6,6 +6,7 @@ import PlaylistHeader from '@/components/Playlist/header';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { PlaylistType } from '@/types';
+import { getDefaultImage } from '@/utils';
 
 export default async function Files() {
   const session = await getServerSession(authOptions);
@@ -25,7 +26,7 @@ export default async function Files() {
           data={{
             uid: '@me',
             title: 'Your Files',
-            imagePath: 'images/default_playlist.png',
+            imagePath: getDefaultImage(),
             user: { id: session.user.id, username: session.user.username },
             createdAt: new Date().toISOString(),
             tracks: [],

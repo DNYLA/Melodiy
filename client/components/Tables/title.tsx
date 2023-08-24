@@ -1,4 +1,4 @@
-import { getImageUrl } from '@/utils';
+import { getDefaultImage } from '@/utils';
 import Image from 'next/image';
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -21,7 +21,7 @@ export default function TitleCell({
       <Image
         draggable={false}
         className="rounded-md"
-        src={cover ?? getImageUrl('images/default_playlist.png')}
+        src={cover ?? getDefaultImage()}
         width={45}
         height={45}
         alt="Song Cover"

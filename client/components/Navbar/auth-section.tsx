@@ -17,12 +17,15 @@ function AuthSection() {
       ) : (
         <>
           <div>
-            <Button className="font-medium text-white bg-transparent">
+            <Button
+              className="font-medium text-white bg-transparent"
+              onClick={() => onOpen(false)}
+            >
               Sign Up
             </Button>
           </div>
           <div>
-            <Button className="px-6 py-2" onClick={onOpen}>
+            <Button className="px-6 py-2" onClick={() => onOpen()}>
               Login
             </Button>
           </div>

@@ -4,6 +4,7 @@ import React from 'react';
 import { BsFillPlayFill } from 'react-icons/bs';
 import { FiEdit2 } from 'react-icons/fi';
 import dayjs from 'dayjs';
+import { getDefaultImage } from '@/utils';
 
 interface Props {
   data: Playlist;
@@ -40,7 +41,7 @@ export default function PlaylistHeader({ data }: Props) {
           <span className="text-md">Select Photo</span>
         </div>
         <ImageOverlay
-          src={data.imagePath ? data.imagePath : 'images/default_playlist.png'}
+          src={data.imagePath ? data.imagePath : getDefaultImage()}
         />
       </div>
       <div>

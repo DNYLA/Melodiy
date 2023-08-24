@@ -15,6 +15,7 @@ import { FaSpinner } from 'react-icons/fa';
 import useUploadModal from '@/hooks/modals/useUploadModal';
 import * as Dialog from '@radix-ui/react-dialog';
 import { ServiceResponse } from '@/types';
+import { getDefaultImage } from '@/utils';
 
 interface IFormInput {
   title: string;
@@ -118,9 +119,7 @@ export default function CreatePlaylist() {
       </span> */}
             <Image
               className="rounded w-[150px] h-[150px]"
-              onError={(e) =>
-                (e.currentTarget.src = 'images/default_playlist.png')
-              }
+              onError={(e) => (e.currentTarget.src = getDefaultImage())}
               src={tempFile}
               width={150}
               height={150}

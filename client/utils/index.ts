@@ -16,6 +16,10 @@ export function cn(...inputs: ClassValue[]) {
 //   return host + fileName;
 // }
 
+export const getDefaultImage = () => {
+  return '/images/default_playlist.png';
+};
+
 export function msToMinuteSeconds(duration: number) {
   var minutes = Math.floor(duration / 60000);
   var seconds = Number.parseInt(((duration % 60000) / 1000).toFixed(0));

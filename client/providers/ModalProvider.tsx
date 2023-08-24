@@ -2,6 +2,7 @@
 
 import MultiUploadModal from '@/components/Modals/MultiUploadModal';
 import LoginModal from '@/components/Modals/login-modal';
+import RegisterModal from '@/components/Modals/register-modal';
 // import AuthModal from '@/components/AuthModal';
 // import UploadModal from '@/components/UploadModal';
 import React, { useEffect, useState } from 'react';
@@ -25,6 +26,7 @@ const ModalProvider = () => {
   return (
     <>
       <LoginModal />
+      <RegisterModal />
       <MultiUploadModal />
     </>
   );

@@ -3,16 +3,15 @@ import { create } from 'zustand';
 interface AuthModalStore {
   isOpen: boolean;
   isLogin: boolean; //If false user selected registration
-  onOpen: () => void;
+  onOpen: (loginModal?: boolean) => void;
   onClose: () => void;
 }
 
 const useAuthModal = create<AuthModalStore>((set) => ({
   isOpen: false,
   isLogin: true,
-  toggleMode: (state: AuthModalStore) => set({ isLogin: state.isLogin }),
-  onOpen: () => set({ isOpen: true }),
-  onClose: () => set({ isOpen: false }),
+  onOpen: (loginModal = true) => set({ isOpen: true, isLogin: loginModal }),
+  onClose: () => set({ isOpen: false, isLogin: true }),
 }));
 
 export default useAuthModal;
