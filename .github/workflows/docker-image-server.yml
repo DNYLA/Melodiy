@@ -21,7 +21,7 @@ jobs:
             image: ghcr.io/dnyla/melodiy-server
             context: ./server
           - dockerfile: ./client/Dockerfile
-            image: ghcr.io/username/melodiy-web
+            image: ghcr.io/dnyla/melodiy-web
             context: ./client
     permissions:
       contents: read
