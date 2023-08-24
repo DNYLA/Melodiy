@@ -6,15 +6,13 @@ import PlayerContent from './content';
 // import useLoadSongUrl from '@/hooks/useLoadSongUrl';
 import usePlayer from '@/hooks/stores/usePlayer';
 import React from 'react';
-import useLoadFile from '@/hooks/useLoadImage';
 
 function Player() {
   const player = usePlayer();
   // const { song, isLoading } = useGetSongById(player.activeId);
   const { song } = useGetSongById(player.activeId);
   //TODO: Fix
-  const songUrl = useLoadFile(song?.songPath ?? '');
-
+  const songUrl = song?.songPath;
   if (!song || !songUrl || !player.activeId) {
     return null;
   }

@@ -36,7 +36,8 @@ namespace melodiy.server.Data.File
                 .Upload(memoryStream.ToArray(), fileName);
             Console.WriteLine(res);
             var url = _configuration.GetSection("AppSettings:SupabaseURL").Value! ?? throw new InvalidOperationException("SupabaseURL AppSetting not set!");
-            return $"{url}/{res}";
+            //TODO: Grab From CLient?
+            return $"{url}/storage/v1/object/public/{res}";
         }
 
         public bool IsValidType(string contentType, FileType type)

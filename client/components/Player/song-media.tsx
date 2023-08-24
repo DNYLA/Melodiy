@@ -1,6 +1,5 @@
 'use client';
 
-import useLoadFile from '@/hooks/useLoadImage';
 import { Song } from '@/types/playlist';
 import { getDefaultImage } from '@/utils';
 import Image from 'next/image';
@@ -12,8 +11,6 @@ interface SongMediaProps {
 }
 
 const SongMedia: React.FC<SongMediaProps> = ({ data, onClick }) => {
-  const imageUrl = useLoadFile(data.coverPath);
-
   const handleClick = () => {
     if (onClick) {
       return onClick(data.uid);
@@ -30,7 +27,7 @@ const SongMedia: React.FC<SongMediaProps> = ({ data, onClick }) => {
       <div className="relative rounded-md min-h-[48px] min-w-[48px] overflow-hidden">
         <Image
           fill
-          src={imageUrl || getDefaultImage()}
+          src={data.coverPath || getDefaultImage()}
           alt="Media Item"
           className="object-cover"
         />
