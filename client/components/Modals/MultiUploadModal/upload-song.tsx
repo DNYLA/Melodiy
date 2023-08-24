@@ -6,7 +6,6 @@ import Input from '@/components/input';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Image from 'next/image';
 import { AXIOS } from '@/utils/network/axios';
-import { getImageUrl } from '@/utils';
 import { RxCross2 } from 'react-icons/rx';
 import { twMerge } from 'tailwind-merge';
 import { FaSpinner } from 'react-icons/fa';
@@ -205,11 +204,9 @@ export default function UploadSong() {
               <Image
                 className="rounded w-[150px] h-[150px]"
                 onError={(e) =>
-                  (e.currentTarget.src = getImageUrl(
-                    '/images/default_playlist.png'
-                  ))
+                  (e.currentTarget.src = '/images/default_playlist.png')
                 }
-                src={tempFile ?? getImageUrl('/images/default_playlist.png')}
+                src={tempFile ?? '/images/default_playlist.png'}
                 width={150}
                 height={150}
                 alt="Playlist Cover"

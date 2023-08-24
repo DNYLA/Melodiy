@@ -5,16 +5,16 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getImageUrl(fileName: string) {
-  const host = process.env.NEXT_PUBLIC_MEDIA_HOST;
+// export function getImageUrl(fileName: string) {
+//   const host = process.env.NEXT_PUBLIC_MEDIA_HOST;
 
-  if (!host)
-    throw new Error('NEXT_PUBLIC_MEDIA_HOST environment variable not set');
+//   if (!host)
+//     throw new Error('NEXT_PUBLIC_MEDIA_HOST environment variable not set');
 
-  if (!fileName) return host + 'images/default_playlist.png';
+//   if (!fileName) return host + 'images/default_playlist.png';
 
-  return host + fileName;
-}
+//   return host + fileName;
+// }
 
 export function msToMinuteSeconds(duration: number) {
   var minutes = Math.floor(duration / 60000);

@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import TitleCell from '@/components/Tables/title';
 import CounterCell from '@/components/Tables/counter';
-import { getImageUrl, msToMinuteSeconds } from '@/utils';
+import { msToMinuteSeconds } from '@/utils';
 import usePlayer from '@/hooks/stores/usePlayer';
 import { PlaylistType } from '@/types';
 dayjs.extend(relativeTime);
@@ -38,9 +38,7 @@ export default function PlaylistTable({ data, type }: PlaylistTableProps) {
         return {
           title: row.title,
           artist: row.artist,
-          cover:
-            getImageUrl(row.coverPath) ??
-            getImageUrl('images/default_playlist.png'),
+          cover: row.coverPath ?? getDefaultImage(),
           id: row.uid, //We could pass isActive however we will need the id in future updates
         };
       },

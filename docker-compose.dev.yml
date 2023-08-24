@@ -2,13 +2,19 @@ version: '3.4'
 
 services:
   web:
-    image: ghcr.io/dnyla/melodiy-web:latest
+    image: melodiy-web
+    build:
+      context: ./client
+      dockerfile: Dockerfile
     ports:
       - 3000:3000
     volumes:
       - ./client/.env.production:/app/.env
   server:
-    image: ghcr.io/dnyla/melodiy-server:latest
+    image: melodiy-server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
     ports:
       - 5062:5062
     volumes:

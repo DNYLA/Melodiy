@@ -1,6 +1,5 @@
 import ImageOverlay from '@/app/playlist/[id]/components/image-overlay';
 import { Playlist } from '@/types/playlist';
-import { getImageUrl } from '@/utils';
 import React from 'react';
 import { BsFillPlayFill } from 'react-icons/bs';
 import { FiEdit2 } from 'react-icons/fi';
@@ -41,11 +40,7 @@ export default function PlaylistHeader({ data }: Props) {
           <span className="text-md">Select Photo</span>
         </div>
         <ImageOverlay
-          src={
-            data.imagePath
-              ? getImageUrl(data.imagePath)
-              : getImageUrl('images/default_playlist.png')
-          }
+          src={data.imagePath ? data.imagePath : 'images/default_playlist.png'}
         />
       </div>
       <div>

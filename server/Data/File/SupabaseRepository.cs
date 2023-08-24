@@ -8,8 +8,10 @@ namespace melodiy.server.Data.File
     public class SupabaseRepository : IFileRepository
     {
         private readonly Supabase.Client _client;
-        public SupabaseRepository(Supabase.Client client)
+        private readonly IConfiguration _configuration;
+        public SupabaseRepository(Supabase.Client client, IConfiguration configuration)
         {
+            _configuration = configuration;
             _client = client;
         }
 
@@ -33,7 +35,8 @@ namespace melodiy.server.Data.File
                 .From(bucket)
                 .Upload(memoryStream.ToArray(), fileName);
             Console.WriteLine(res);
-            return res;
+            var url = _configuration.GetSection("AppSettings:SupabaseURL").Value! ?? throw new InvalidOperationException("SupabaseURL AppSetting not set!");
+            return $"{url}/{res}";
         }
 
         public bool IsValidType(string contentType, FileType type)
