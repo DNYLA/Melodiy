@@ -15,7 +15,7 @@ function PlaylistHeader({ children }: PlaylistHeaderProps) {
   return (
     <div className="flex flex-col py-0 gap-y-1">
       <div className="flex justify-between items-center">
-        <p className="text-lg font-semibold">Playlists2</p>
+        <p className="text-lg font-semibold">Playlists</p>
         {session && (
           <AiOutlinePlus
             onClick={() => onOpen()}

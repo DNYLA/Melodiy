@@ -1,7 +1,7 @@
+using ATL;
 using melodiy.server.Dtos.Song;
 using melodiy.server.Services.AuthService;
 using melodiy.server.Services.FileService;
-using NAudio.Wave;
 
 namespace melodiy.server.Services.SongService
 {
@@ -142,14 +142,14 @@ namespace melodiy.server.Services.SongService
           
         }
 
-        private async Task<double> GetMediaDuration(IFormFile file)
+        private static async Task<double> GetMediaDuration(IFormFile file)
         {
             using var memoryStream = new MemoryStream();
             await file.CopyToAsync(memoryStream);
             memoryStream.Position = 0; //Doesn't work without this here dk why
             
-            StreamMediaFoundationReader reader = new StreamMediaFoundationReader(memoryStream);
-            return reader.TotalTime.TotalMilliseconds;
+            Track track = new(memoryStream);
+            return track.DurationMs;
         }
 
         public async Task<ServiceResponse<GetSongResponse>> DeleteSong(string songId, int userId)
