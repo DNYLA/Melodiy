@@ -6,10 +6,12 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile
+      args:
+        - API_HOST=http://192.168.1.43:5062/api/
     ports:
       - 3000:3000
     volumes:
-      - ./client/.env.production:/app/.env
+      - ./client/.env.local:/app/.env
   server:
     image: melodiy-server
     build:
@@ -18,4 +20,4 @@ services:
     ports:
       - 5062:5062
     volumes:
-      - ./server/appsettings.production.json:/app/appsettings.json
+      - ./server/appsettings.development.json:/app/appsettings.json

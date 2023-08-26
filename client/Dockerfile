@@ -4,6 +4,9 @@ WORKDIR /app
 COPY package*.json tsconfig.json ./
 RUN npm install
 
+ARG API_HOST
+ENV NEXT_PUBLIC_API_URL=$API_HOST
+
 COPY .eslintrc.json next.config.js ./
 COPY tailwind.config.ts postcss.config.js ./
 

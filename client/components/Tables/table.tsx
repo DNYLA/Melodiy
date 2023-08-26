@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import TitleCell from '@/components/Tables/title';
 import CounterCell from '@/components/Tables/counter';
-import { msToMinuteSeconds } from '@/utils';
+import { getDefaultImage, msToMinuteSeconds } from '@/utils';
 import usePlayer from '@/hooks/stores/usePlayer';
 import { PlaylistType } from '@/types';
 dayjs.extend(relativeTime);
