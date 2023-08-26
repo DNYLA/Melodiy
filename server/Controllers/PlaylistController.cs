@@ -9,7 +9,7 @@ namespace melodiy.server.Controllers
 {
     [CheckStatusCode]
 	[ApiController]
-	[Route("api/[controller]")]
+	[Route("[controller]")]
     public class PlaylistController : ControllerBase
     {
 		private readonly IPlaylistService _playlistService;

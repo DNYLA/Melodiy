@@ -7,7 +7,7 @@ using melodiy.server.Services.UserService;
 namespace melodiy.server.Controllers
 {
 	[ApiController]
-	[Route("api/[controller]")]
+	[Route("[controller]")]
     public class AuthController : ControllerBase
     {
 		private readonly IAuthRepository _authRepo;
