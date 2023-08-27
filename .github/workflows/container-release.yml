@@ -50,7 +50,7 @@ jobs:
           context: ${{ matrix.context}}
           file: ${{ matrix.dockerfile }}
           build-args:
-            API_HOST="https://api.melodiy.net"
+            API_HOST="https://api.melodiy.net/"
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
