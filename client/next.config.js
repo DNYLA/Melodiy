@@ -6,6 +6,7 @@ const nextConfig = {
   images: {
     domains: [
       'dmzuqlhabiwwcasbtoem.supabase.co', //Host Upload
+      'svmigokmzkjddcixdmzh.supabase.co', //Host Upload
     ],
   },
   webpack: (config) => {
