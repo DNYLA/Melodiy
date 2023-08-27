@@ -19,14 +19,6 @@ using melodiy.server.Services.SongService;
 var builder = WebApplication.CreateBuilder(args);
 var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-// builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-// if (builder.Environment.IsProduction())
-// {
-//     builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
-    
-// }
-
 var url = builder.Configuration.GetSection("AppSettings:SupabaseURL").Value!;
 var key = builder.Configuration.GetSection("AppSettings:SupabaseKey").Value!;
 var options = new Supabase.SupabaseOptions
@@ -45,7 +37,7 @@ builder.Services.AddCors(options =>
 		policy  =>
 		{
 			policy
-				.WithOrigins("http://localhost:3000", "https://melodiy.net", "https://www.melodiy.net/", "45.76.130.6", "https://45.76.130.6", "http://45.76.130.6:3000", "https://45.76.130.6:3000", "https://melodiy.vercel.app")
+				.WithOrigins("http://localhost:3000", "https://melodiy.net")
 				.WithHeaders(HeaderNames.ContentType, "Access-Control-Allow-Headers")
 				.AllowCredentials()
 				.AllowAnyHeader()

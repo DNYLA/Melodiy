@@ -1,12 +1,12 @@
 import { getUserSongs } from '@/app/action';
 import React, { Suspense } from 'react';
-import PlaylistTable from '@/components/Tables/table';
 import RedirectSync from '@/components/RedirectSync';
 import PlaylistHeader from '@/components/Playlist/header';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { PlaylistType } from '@/types';
 import { getDefaultImage } from '@/utils';
+import FilesTable from '@/app/files/components/table';
 
 export default async function Files() {
   const session = await getServerSession(authOptions);
@@ -32,7 +32,7 @@ export default async function Files() {
             tracks: [],
           }}
         />
-        <PlaylistTable data={data} type={PlaylistType.Files} />
+        <FilesTable data={data} type={PlaylistType.Files} />
       </div>
     </Suspense>
   );
