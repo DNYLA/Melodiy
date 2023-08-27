@@ -8,6 +8,7 @@ import { revalidatePath } from 'next/cache';
 export async function getPlaylist(
   uid: string
 ): Promise<ServiceResponse<Playlist>> {
+  console.log(`${process.env.NEXT_PUBLIC_API_URL}playlist/${uid}`);
   // const session = await getServerSession(authOptions);
   try {
     const { data } = await axios.get(
@@ -25,6 +26,7 @@ export async function getPlaylist(
 export async function getTrending(): Promise<
   ServiceResponse<TrendingPlaylist[]>
 > {
+  console.log(`${process.env.NEXT_PUBLIC_API_URL}playlist/trending`);
   try {
     const { data } = await axios.get(
       `${process.env.NEXT_PUBLIC_API_URL}playlist/trending`
@@ -42,6 +44,7 @@ export async function getUserSongs(
   token: string
 ): Promise<ServiceResponse<Song[]> | null> {
   try {
+    console.log(`${process.env.NEXT_PUBLIC_API_URL}song/`);
     const { data } = await axios.get(
       `${process.env.NEXT_PUBLIC_API_URL}song/`,
       {
