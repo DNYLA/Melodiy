@@ -7,7 +7,7 @@ services:
       context: ./client
       dockerfile: Dockerfile
       args:
-        - API_HOST=http://api.melodiy.net/
+        - API_HOST=https://api.melodiy.net/
     ports:
       - 3000:3000
     volumes:
