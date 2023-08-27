@@ -7,7 +7,7 @@ services:
       context: ./client
       dockerfile: Dockerfile
       args:
-        - API_HOST=http://192.168.1.43:5062/api/
+        - API_HOST=https://localhost:5062/
     ports:
       - 3000:3000
     volumes:

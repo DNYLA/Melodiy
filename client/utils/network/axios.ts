@@ -6,6 +6,7 @@ const CONFIG: AxiosRequestConfig = {
   withCredentials: true,
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 };
+
 export const AXIOS = axios.create(CONFIG); //Axios Uses .defaults.baseURL to set/call the API this way we can change the API URL outside the library.
 let ACCESS_TOKEN = '';
 
