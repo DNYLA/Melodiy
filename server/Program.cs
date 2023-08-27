@@ -45,7 +45,7 @@ builder.Services.AddCors(options =>
 		policy  =>
 		{
 			policy
-				.WithOrigins("http://localhost:3000", "https://melodiy.vercel.app")
+				.WithOrigins("http://localhost:3000", "https://melodiy.net")
 				.WithHeaders(HeaderNames.ContentType, "Access-Control-Allow-Headers")
 				.AllowCredentials()
 				.AllowAnyHeader()
