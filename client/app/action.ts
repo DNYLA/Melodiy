@@ -14,9 +14,10 @@ export async function getPlaylist(
     const { data } = await axios.get(
       `${process.env.NEXT_PUBLIC_API_URL}playlist/${uid}`
     );
-
+    console.log('DONE');
     return data;
   } catch (err) {
+    console.log(err);
     const sr = new ServiceResponse<Playlist>();
     sr.success = false;
     return sr;
@@ -31,9 +32,11 @@ export async function getTrending(): Promise<
     const { data } = await axios.get(
       `${process.env.NEXT_PUBLIC_API_URL}playlist/trending`
     );
+    console.log('done');
 
     return data;
   } catch (err) {
+    console.log(err);
     const sr = new ServiceResponse<TrendingPlaylist[]>();
     sr.success = false;
     return sr;
@@ -51,9 +54,10 @@ export async function getUserSongs(
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-
+    console.log('done');
     return data;
   } catch (err) {
+    console.log(err);
     const sr = new ServiceResponse<Song[]>();
     sr.success = false;
     return sr;
