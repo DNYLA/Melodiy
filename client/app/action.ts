@@ -8,18 +8,15 @@ import { revalidatePath } from 'next/cache';
 export async function getPlaylist(
   uid: string
 ): Promise<ServiceResponse<Playlist>> {
-  console.log(`${process.env.NEXT_PUBLIC_API_URL}playlist/${uid}`);
   // const session = await getServerSession(authOptions);
   try {
     const { data } = await axios.get(
       `${process.env.NEXT_PUBLIC_API_URL}playlist/${uid}`
     );
-    console.log('DONE');
     return data;
   } catch (err) {
     console.log(err);
-    const sr = new ServiceResponse<Playlist>();
-    sr.success = false;
+    const sr: ServiceResponse<Playlist> = { message: '', success: false };
     return sr;
   }
 }
@@ -37,8 +34,10 @@ export async function getTrending(): Promise<
     return data;
   } catch (err) {
     console.log(err);
-    const sr = new ServiceResponse<TrendingPlaylist[]>();
-    sr.success = false;
+    const sr: ServiceResponse<TrendingPlaylist[]> = {
+      message: '',
+      success: false,
+    };
     return sr;
   }
 }
@@ -58,8 +57,7 @@ export async function getUserSongs(
     return data;
   } catch (err) {
     console.log(err);
-    const sr = new ServiceResponse<Song[]>();
-    sr.success = false;
+    const sr: ServiceResponse<Song[]> = { message: '', success: false };
     return sr;
   }
 }

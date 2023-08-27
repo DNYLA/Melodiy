@@ -10,14 +10,12 @@ import FilesTable from '@/app/files/components/table';
 
 export default async function Files() {
   const session = await getServerSession(authOptions);
-  if (!session || !session.user) return null;
+  if (!session || !session.user)
+    return <RedirectSync message="Server unavailable" />;
   const songs = await getUserSongs(session.user.accessToken);
 
   if (!songs || !songs.success)
     return <RedirectSync message="Server unavailable" />;
-
-  const { data } = songs;
-  if (!data) return <></>;
 
   return (
     <Suspense fallback={<p>Loading Playlist...</p>}>
@@ -32,7 +30,7 @@ export default async function Files() {
             tracks: [],
           }}
         />
-        <FilesTable data={data} type={PlaylistType.Files} />
+        <FilesTable data={songs.data} type={PlaylistType.Files} />
       </div>
     </Suspense>
   );
