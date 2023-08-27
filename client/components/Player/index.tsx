@@ -5,7 +5,6 @@ import PlayerContent from './content';
 // import useGetSongById from '@/hooks/useGetSongById';
 // import useLoadSongUrl from '@/hooks/useLoadSongUrl';
 import usePlayer from '@/hooks/stores/usePlayer';
-import React from 'react';
 
 function Player() {
   const player = usePlayer();

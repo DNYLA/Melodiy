@@ -1,7 +1,6 @@
-import React from 'react';
+import usePlayer from '@/hooks/stores/usePlayer';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import toast from 'react-hot-toast';
-import usePlayer from '@/hooks/stores/usePlayer';
 
 interface QueueContextProps {
   trackId: string;

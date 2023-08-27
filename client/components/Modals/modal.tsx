@@ -1,5 +1,5 @@
-import React from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
+import React from 'react';
 import { IoMdClose } from 'react-icons/io';
 
 interface ModalProps {

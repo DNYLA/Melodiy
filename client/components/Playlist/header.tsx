@@ -1,10 +1,9 @@
 import ImageOverlay from '@/app/playlist/[id]/components/image-overlay';
 import { Playlist } from '@/types/playlist';
-import React from 'react';
+import { getDefaultImage } from '@/utils';
+import dayjs from 'dayjs';
 import { BsFillPlayFill } from 'react-icons/bs';
 import { FiEdit2 } from 'react-icons/fi';
-import dayjs from 'dayjs';
-import { getDefaultImage } from '@/utils';
 
 interface Props {
   data: Playlist;

@@ -1,12 +1,12 @@
 'use client';
 
-import Modal from './modal';
 import useAuthModal from '@/hooks/modals/useAuthModal';
+import * as Form from '@radix-ui/react-form';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import * as Form from '@radix-ui/react-form';
 import { toast } from 'react-hot-toast';
-import { signIn, useSession } from 'next-auth/react';
+import Modal from './modal';
 
 const LoginModal = () => {
   const router = useRouter();

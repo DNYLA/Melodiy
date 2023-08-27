@@ -1,5 +1,4 @@
 import * as AvatarBase from '@radix-ui/react-avatar';
-import React from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface AvatarProps {

@@ -1,12 +1,12 @@
 import { getUserSongs } from '@/app/action';
-import React, { Suspense } from 'react';
-import RedirectSync from '@/components/RedirectSync';
-import PlaylistHeader from '@/components/Playlist/header';
-import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import FilesTable from '@/app/files/components/table';
+import PlaylistHeader from '@/components/Playlist/header';
+import RedirectSync from '@/components/RedirectSync';
 import { PlaylistType } from '@/types';
 import { getDefaultImage } from '@/utils';
-import FilesTable from '@/app/files/components/table';
+import { getServerSession } from 'next-auth';
+import { Suspense } from 'react';
 
 export default async function Files() {
   const session = await getServerSession(authOptions);

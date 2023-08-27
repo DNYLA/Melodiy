@@ -1,14 +1,14 @@
 'use client';
 
-import Modal from './modal';
 import useAuthModal from '@/hooks/modals/useAuthModal';
+import { ServiceResponse } from '@/types';
+import { AXIOS } from '@/utils/network/axios';
+import * as Form from '@radix-ui/react-form';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import * as Form from '@radix-ui/react-form';
 import { toast } from 'react-hot-toast';
-import { useSession } from 'next-auth/react';
-import { AXIOS } from '@/utils/network/axios';
-import { ServiceResponse } from '@/types';
+import Modal from './modal';
 
 const RegisterModal = () => {
   const router = useRouter();

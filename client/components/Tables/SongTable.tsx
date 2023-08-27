@@ -1,16 +1,15 @@
 'use client';
-import React from 'react';
-import {
-  useReactTable,
-  getCoreRowModel,
-  flexRender,
-  ColumnDef,
-} from '@tanstack/react-table';
-import useOnPlay from '@/hooks/useOnPlay';
-import { Song } from '@/types/playlist';
-import usePlayer from '@/hooks/stores/usePlayer';
 import SongContextMenu from '@/components/ContextMenu';
+import usePlayer from '@/hooks/stores/usePlayer';
+import useOnPlay from '@/hooks/useOnPlay';
 import { PlaylistType } from '@/types';
+import { Song } from '@/types/playlist';
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 
 interface Props {
   data: Song[];

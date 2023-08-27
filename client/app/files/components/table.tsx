@@ -1,10 +1,9 @@
 'use client';
 import SongTable from '@/components/Tables/SongTable';
-import { Song } from '@/types/playlist';
-import React from 'react';
+import { ColumnBuilder } from '@/components/Tables/column-builder';
 import usePlayer from '@/hooks/stores/usePlayer';
 import { PlaylistType } from '@/types';
-import { ColumnBuilder } from '@/components/Tables/column-builder';
+import { Song } from '@/types/playlist';
 
 interface FilesTableProps {
   data: Song[];

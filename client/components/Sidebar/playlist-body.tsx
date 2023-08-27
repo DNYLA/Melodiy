@@ -5,8 +5,8 @@ import { ServiceResponse } from '@/types';
 import { Playlist } from '@/types/playlist';
 import { fetcher } from '@/utils/network/axios';
 import { useSession } from 'next-auth/react';
-import { useRouter, usePathname } from 'next/navigation';
-import React, { useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import useSWR from 'swr';
 import { twMerge } from 'tailwind-merge';
 

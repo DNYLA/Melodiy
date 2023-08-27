@@ -5,7 +5,7 @@ import LoginModal from '@/components/Modals/login-modal';
 import RegisterModal from '@/components/Modals/register-modal';
 // import AuthModal from '@/components/AuthModal';
 // import UploadModal from '@/components/UploadModal';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /*
 	This component should NOT be used for every modal used on the site it is only for modals

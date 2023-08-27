@@ -1,8 +1,8 @@
-import React from 'react';
-import * as ContextMenu from '@radix-ui/react-context-menu';
+import FileContextMenu from '@/components/ContextMenu/files-context-menu';
 import PlaylistContextMenu from '@/components/ContextMenu/playlist-context-menu';
 import { PlaylistType } from '@/types';
-import FileContextMenu from '@/components/ContextMenu/files-context-menu';
+import * as ContextMenu from '@radix-ui/react-context-menu';
+import React from 'react';
 
 interface SongContextProps {
   trackId: string;

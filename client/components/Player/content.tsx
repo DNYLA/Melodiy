@@ -2,17 +2,17 @@
 // import Slider from './Slider';
 // import LikeButton from './LikeButton';
 // import MediaItem from './MediaItem';
+import SongMedia from '@/components/Player/song-media';
+import Slider from '@/components/slider';
+import usePlayer from '@/hooks/stores/usePlayer';
+import useVolume from '@/hooks/useVolume';
 import { Song } from '@/types/playlist';
-import React, { useEffect, useState } from 'react';
+import { msToMinuteSeconds } from '@/utils';
+import { useEffect, useState } from 'react';
 import { AiFillStepBackward, AiFillStepForward } from 'react-icons/ai';
 import { BsPauseFill, BsPlayFill } from 'react-icons/bs';
 import { HiSpeakerWave, HiSpeakerXMark } from 'react-icons/hi2';
-import usePlayer from '@/hooks/stores/usePlayer';
 import useSound from 'use-sound';
-import SongMedia from '@/components/Player/song-media';
-import Slider from '@/components/slider';
-import { msToMinuteSeconds } from '@/utils';
-import useVolume from '@/hooks/useVolume';
 interface PlayerContentProps {
   song: Song;
   songUrl: string;

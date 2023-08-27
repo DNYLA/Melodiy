@@ -1,6 +1,6 @@
 import { getTrending } from '@/app/action';
 import PlaylistCard from '@/components/Cards/playlist-card';
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 
 export default async function Trending() {
   const trending = await getTrending();

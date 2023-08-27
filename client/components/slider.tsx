@@ -1,5 +1,4 @@
 'use client';
-import React from 'react';
 import * as RadixSlider from '@radix-ui/react-slider';
 import { twMerge } from 'tailwind-merge';
 

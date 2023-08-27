@@ -1,10 +1,9 @@
 'use client';
-import Input from '../input';
-import AuthSection from './auth-section';
 import { useRouter } from 'next/navigation';
-import React from 'react';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { twMerge } from 'tailwind-merge';
+import Input from '../input';
+import AuthSection from './auth-section';
 
 function Navbar() {
   const canGoBack = true;

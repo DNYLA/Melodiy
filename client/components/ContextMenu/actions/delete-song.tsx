@@ -1,10 +1,9 @@
 'use client';
-import React from 'react';
-import * as ContextMenu from '@radix-ui/react-context-menu';
-import { AXIOS } from '@/utils/network/axios';
-import toast from 'react-hot-toast';
 import { revalidatePathClient } from '@/app/action';
 import usePlayer from '@/hooks/stores/usePlayer';
+import { AXIOS } from '@/utils/network/axios';
+import * as ContextMenu from '@radix-ui/react-context-menu';
+import toast from 'react-hot-toast';
 
 interface DeleteSongContextProps {
   id: string;

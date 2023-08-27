@@ -1,7 +1,6 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
 // import { Toaster } from 'react-hot-toast';
 //Fixes Hydration error. dont really understand or know why hydration is caused.
 const Toaster = dynamic(

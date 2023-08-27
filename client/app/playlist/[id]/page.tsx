@@ -1,8 +1,8 @@
 import { getPlaylist } from '@/app/action';
-import React, { Suspense } from 'react';
 import PlaylistTable from '@/app/playlist/[id]/components/table';
 import PlaylistHeader from '@/components/Playlist/header';
 import { PlaylistType } from '@/types';
+import { Suspense } from 'react';
 
 export default async function Playlist({ params }: { params: { id: string } }) {
   const playlist = await getPlaylist(params.id);

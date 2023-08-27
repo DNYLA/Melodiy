@@ -1,16 +1,16 @@
 'use client';
-import React, { useMemo } from 'react';
-import { twMerge } from 'tailwind-merge';
 import { usePathname } from 'next/navigation';
-import { AiOutlineHome, AiOutlineCompass } from 'react-icons/ai';
-import { MdOutlineAudioFile, MdOutlineFavorite } from 'react-icons/md';
+import React, { useMemo } from 'react';
+import { AiOutlineCompass, AiOutlineHome } from 'react-icons/ai';
 import { BiArrowBack } from 'react-icons/bi';
+import { MdOutlineAudioFile, MdOutlineFavorite } from 'react-icons/md';
+import { twMerge } from 'tailwind-merge';
 
-import SidebarItem from './sidebar-item';
-import PlaylistHeader from './playlists';
-import Navbar from '../Navbar';
 import PlaylistBody from '@/components/Sidebar/playlist-body';
 import usePlayer from '@/hooks/stores/usePlayer';
+import Navbar from '../Navbar';
+import PlaylistHeader from './playlists';
+import SidebarItem from './sidebar-item';
 
 interface SidebarProps {
   children: React.ReactNode;

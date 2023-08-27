@@ -1,10 +1,10 @@
-import React from 'react';
-import * as Dialog from '@radix-ui/react-dialog';
-import * as Tabs from '@radix-ui/react-tabs';
-import { IoMdClose } from 'react-icons/io';
-import useUploadModal from '@/hooks/modals/useUploadModal';
 import CreatePlaylistModal from '@/components/Modals/MultiUploadModal/create-playlist';
 import UploadSong from '@/components/Modals/MultiUploadModal/upload-song';
+import useUploadModal from '@/hooks/modals/useUploadModal';
+import * as Dialog from '@radix-ui/react-dialog';
+import * as Tabs from '@radix-ui/react-tabs';
+import React from 'react';
+import { IoMdClose } from 'react-icons/io';
 
 interface TabModalProps {}
 

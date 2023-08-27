@@ -1,11 +1,9 @@
-import usePlayer from './stores/usePlayer';
-import React from 'react';
-import { useSession } from 'next-auth/react';
 import { Song } from '@/types/playlist';
+import usePlayer from './stores/usePlayer';
 
 const useOnPlay = () => {
   const player = usePlayer();
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
 
   const onPlay = (id: string, songs: Song[]) => {
     // if (!session?.user) {
@@ -18,7 +16,7 @@ const useOnPlay = () => {
     else player.setIds(songs.map((song) => song.uid));
   };
 
-  const onPlayPause = (id: string) => {};
+  // const onPlayPause = (id: string) => {};
 
   return onPlay;
 };

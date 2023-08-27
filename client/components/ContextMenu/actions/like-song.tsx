@@ -1,4 +1,3 @@
-import React from 'react';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 
 export default function LikeSongContextItem() {
