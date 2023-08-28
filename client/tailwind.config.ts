@@ -1,5 +1,5 @@
-import type { Config } from 'tailwindcss';
 import { mauve, violet } from '@radix-ui/colors';
+import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: [
