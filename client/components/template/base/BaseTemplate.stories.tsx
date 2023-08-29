@@ -5,7 +5,12 @@ import BaseTemplate from './BaseTemplate';
 const meta = {
   title: 'Templates/BaseTemplate',
   component: BaseTemplate,
-  parameters: {},
+  parameters: {
+    layout: 'centered',
+    // nextjs: {
+    //   appDirectory: true,
+    // },
+  },
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/react/writing-docs/autodocs
   tags: ['autodocs'],
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes

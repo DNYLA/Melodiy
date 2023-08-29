@@ -1,5 +1,5 @@
 import { getTrending } from '@/app/action';
-import PlaylistCard from '@/components/Cards/playlist-card';
+import PlaylistCard from '@/components/Cards/Playlist/PlaylistCard';
 import { Suspense } from 'react';
 
 export default async function Trending() {
@@ -17,7 +17,7 @@ export default async function Trending() {
           {trending.data.map((playlist) => (
             <PlaylistCard
               key={playlist.uid}
-              uid={playlist.uid}
+              redirect={`/playlist/${playlist.uid}`}
               title={playlist.title}
               imageUrl={playlist.imagePath}
               owner={playlist.user.username}

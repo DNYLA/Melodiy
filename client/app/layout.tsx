@@ -1,5 +1,5 @@
-import Player from '@/components/Player';
-import Sidebar from '@/components/Sidebar';
+import Sidebar from '@/components/Navigation/Sidebar';
+import Player from '@/components/Utils/Player';
 import ModalProvider from '@/providers/ModalProvider';
 import { SWRProvider } from '@/providers/SWRProvider';
 import SessionProvider from '@/providers/SessionProvider';

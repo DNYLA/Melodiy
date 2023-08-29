@@ -1,5 +1,5 @@
 'use client';
-import Input from '@/components/input';
+import Input from '@/components/Inputs/Input/input';
 import useUploadModal from '@/hooks/modals/useUploadModal';
 import { ServiceResponse } from '@/types';
 import { Playlist } from '@/types/playlist';

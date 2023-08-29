@@ -1,6 +1,6 @@
 import { getPlaylist } from '@/app/action';
 import PlaylistTable from '@/app/playlist/[id]/components/table';
-import PlaylistHeader from '@/components/Playlist/header';
+import PlaylistHeader from '@/components/Data/Playlist/header';
 import { PlaylistType } from '@/types';
 import { Suspense } from 'react';
 

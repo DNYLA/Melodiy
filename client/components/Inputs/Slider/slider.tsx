@@ -48,7 +48,7 @@ function Slider({
       aria-label="Volume"
     >
       <RadixSlider.Track
-        className="relative  grow rounded-full bg-neutral-600"
+        className="relative grow rounded-full bg-neutral-600"
         style={{ height: `${size}px` }}
       >
         <RadixSlider.Range className="absolute h-full rounded-full bg-white" />

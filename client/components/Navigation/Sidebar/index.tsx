@@ -6,7 +6,7 @@ import { BiArrowBack } from 'react-icons/bi';
 import { MdOutlineAudioFile, MdOutlineFavorite } from 'react-icons/md';
 import { twMerge } from 'tailwind-merge';
 
-import PlaylistBody from '@/components/Sidebar/playlist-body';
+import PlaylistBody from '@/components/Navigation/Sidebar/playlist-body';
 import usePlayer from '@/hooks/stores/usePlayer';
 import Navbar from '../Navbar';
 import PlaylistHeader from './playlists';

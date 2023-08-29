@@ -1,21 +1,32 @@
+'use client';
+
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export interface IPlaylistCard {
   title: string;
   owner: string;
   imageUrl: string;
-  onClick?: () => void;
+  redirect?: string;
 }
 
 const PlaylistCard: React.FC<IPlaylistCard> = ({
   title,
   owner,
   imageUrl,
-  onClick,
+  redirect,
 }) => {
+  const router = useRouter();
+
+  const handleRedirect = () => {
+    if (!redirect) return;
+
+    router.push(redirect);
+  };
+
   return (
     <div
-      onClick={onClick}
+      onClick={handleRedirect}
       className="group min-w-[200px] cursor-pointer duration-300 ease-in-out hover:scale-110"
     >
       <Image

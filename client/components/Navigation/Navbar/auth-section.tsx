@@ -1,7 +1,7 @@
 'use client';
 import useAuthModal from '@/hooks/modals/useAuthModal';
 import { useSession } from 'next-auth/react';
-import Button from '../button';
+import Button from '../../Inputs/Buttons/Button/Button';
 import UserMenu from './user-menu';
 
 function AuthSection() {

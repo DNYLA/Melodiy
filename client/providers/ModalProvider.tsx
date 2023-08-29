@@ -1,8 +1,8 @@
 'use client';
 
-import MultiUploadModal from '@/components/Modals/MultiUploadModal';
-import LoginModal from '@/components/Modals/login-modal';
-import RegisterModal from '@/components/Modals/register-modal';
+import LoginModal from '@/components/Overlay/Modals/Auth/login-modal';
+import RegisterModal from '@/components/Overlay/Modals/Auth/register-modal';
+import MultiUploadModal from '@/components/Overlay/Modals/MultiUploadModal';
 // import AuthModal from '@/components/AuthModal';
 // import UploadModal from '@/components/UploadModal';
 import { useEffect, useState } from 'react';

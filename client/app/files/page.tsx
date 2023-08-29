@@ -1,8 +1,8 @@
 import { getUserSongs } from '@/app/action';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import FilesTable from '@/app/files/components/table';
-import PlaylistHeader from '@/components/Playlist/header';
-import RedirectSync from '@/components/RedirectSync';
+import PlaylistHeader from '@/components/Data/Playlist/header';
+import RedirectSync from '@/components/Utils/RedirectSync.tsx/RedirectSync';
 import { PlaylistType } from '@/types';
 import { getDefaultImage } from '@/utils';
 import { getServerSession } from 'next-auth';

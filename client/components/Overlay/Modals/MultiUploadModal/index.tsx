@@ -1,5 +1,5 @@
-import CreatePlaylistModal from '@/components/Modals/MultiUploadModal/create-playlist';
-import UploadSong from '@/components/Modals/MultiUploadModal/upload-song';
+import CreatePlaylistModal from '@/components/Overlay/Modals/MultiUploadModal/create-playlist';
+import UploadSong from '@/components/Overlay/Modals/MultiUploadModal/upload-song';
 import useUploadModal from '@/hooks/modals/useUploadModal';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Tabs from '@radix-ui/react-tabs';

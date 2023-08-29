@@ -1,5 +1,5 @@
 'use client';
-import SongContextMenu from '@/components/ContextMenu';
+import SongContextMenu from '@/components/Utils/ContextMenu';
 import usePlayer from '@/hooks/stores/usePlayer';
 import useOnPlay from '@/hooks/useOnPlay';
 import { PlaylistType } from '@/types';

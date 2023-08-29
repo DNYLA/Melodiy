@@ -1,8 +1,8 @@
-import AddToPlaylistMenu from '@/components/ContextMenu/actions/add-to-playlist';
-import DeleteSongContextItem from '@/components/ContextMenu/actions/delete-song';
-import LikeSongContextItem from '@/components/ContextMenu/actions/like-song';
-import LinkContextItem from '@/components/ContextMenu/actions/link-item';
-import QueueContextItem from '@/components/ContextMenu/actions/queue-song';
+import AddToPlaylistMenu from '@/components/Utils/ContextMenu/actions/add-to-playlist';
+import DeleteSongContextItem from '@/components/Utils/ContextMenu/actions/delete-song';
+import LikeSongContextItem from '@/components/Utils/ContextMenu/actions/like-song';
+import LinkContextItem from '@/components/Utils/ContextMenu/actions/link-item';
+import QueueContextItem from '@/components/Utils/ContextMenu/actions/queue-song';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 
 interface ContextProps {

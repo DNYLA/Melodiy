@@ -1,5 +1,5 @@
-import CounterCell from '@/components/Tables/Cells/counter';
-import TitleCell from '@/components/Tables/Cells/title';
+import CounterCell from '@/components/Data/Tables/Cells/counter';
+import TitleCell from '@/components/Data/Tables/Cells/title';
 import { Song } from '@/types/playlist';
 import { getDefaultImage, msToMinuteSeconds } from '@/utils';
 import { ColumnHelper, createColumnHelper } from '@tanstack/react-table';
