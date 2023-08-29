@@ -91,10 +91,10 @@ export default function CreatePlaylist() {
 
   return (
     <>
-      <Dialog.Title className="text-xl text-center font-bold mb-4">
+      <Dialog.Title className="mb-4 text-center text-xl font-bold">
         New Playlist
       </Dialog.Title>
-      <Dialog.Description className="mb-5 text-sm leading-normal text-center">
+      <Dialog.Description className="mb-5 text-center text-sm leading-normal">
         Enter the details for the new playlist.
       </Dialog.Description>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
@@ -102,7 +102,7 @@ export default function CreatePlaylist() {
           <span>Cover</span>
           <div
             className={twMerge(
-              'flex relative w-[150px] group',
+              'group relative flex w-[150px]',
               tempFile && 'cursor-pointer'
             )}
             onClick={resetFile}
@@ -110,7 +110,7 @@ export default function CreatePlaylist() {
             <RxCross2
               size={35}
               className={twMerge(
-                'hidden absolute px-2 py-2 right-0 group-hover:text-red-400',
+                'absolute right-0 hidden px-2 py-2 group-hover:text-red-400',
                 tempFile && 'group-hover:block'
               )}
             />
@@ -118,7 +118,7 @@ export default function CreatePlaylist() {
         x
       </span> */}
             <Image
-              className="rounded w-[150px] h-[150px]"
+              className="h-[150px] w-[150px] rounded"
               onError={(e) => (e.currentTarget.src = getDefaultImage())}
               src={tempFile}
               width={150}
@@ -130,13 +130,13 @@ export default function CreatePlaylist() {
         <input
           {...register('title', { required: true })}
           disabled={isLoading}
-          className="box-border w-full placeholder:font-extralight placeholder:text-neutral-500 placeholder:text-sm bg-neutral-700 disabled:bg-neutral-400 disabled:cursor-not-allowed outline-none shadow-blackA9 inline-flex h-[35px] appearance-none items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none text-white"
+          className="shadow-blackA9 box-border inline-flex h-[35px] w-full appearance-none items-center justify-center rounded-[4px] bg-neutral-700 px-[10px] text-[15px] leading-none text-white outline-none placeholder:text-sm placeholder:font-extralight placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:bg-neutral-400"
           placeholder="New playlist name"
         />
         <div>
           <div className="pb-1">Select an image</div>
           <Input
-            className="disabled:bg-neutral-400 disabled:cursor-not-allowed"
+            className="disabled:cursor-not-allowed disabled:bg-neutral-400"
             id="song"
             type="file"
             disabled={isLoading}
@@ -151,7 +151,7 @@ export default function CreatePlaylist() {
         <button
           disabled={isLoading}
           type="submit"
-          className="box-border gap-x-3 text-black w-full shadow-blackA7 disabled:cursor-not-allowed hover:bg-mauve3 inline-flex h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none mt-[10px] disabled:bg-neutral-400"
+          className="shadow-blackA7 mt-[10px] box-border inline-flex h-[35px] w-full items-center justify-center gap-x-3 rounded-[4px] bg-white px-[15px] font-medium leading-none text-black shadow-[0_2px_10px] hover:bg-mauve3 focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none disabled:cursor-not-allowed disabled:bg-neutral-400"
         >
           {isLoading && <FaSpinner className="animate-spin" />}
           {/* {isLoading && <FaSpinner />} */}

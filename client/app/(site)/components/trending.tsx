@@ -13,7 +13,7 @@ export default async function Trending() {
     <div className="">
       <Suspense fallback={<p>Loading..</p>}>
         <p className="text-3xl font-bold ">Recently Created</p>
-        <div className="flex flex-row mt-3 gap-x-5 overflow-x-auto overflow-y-hidden p-3">
+        <div className="mt-3 flex flex-row gap-x-5 overflow-x-auto overflow-y-hidden p-3">
           {trending.data.map((playlist) => (
             <PlaylistCard
               key={playlist.uid}

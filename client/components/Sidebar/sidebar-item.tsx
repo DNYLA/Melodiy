@@ -16,23 +16,23 @@ function SidebarItem({ icon: Icon, label, active, href }: SidebarItemProps) {
       href={href}
       className={twMerge(
         `
-				px-2
-				py-1
-        flex
-        flex-row
-        h-auto
-        items-center
+				flex
+				h-auto
         w-full
+        cursor-pointer
+        flex-row
+        items-center
         gap-x-2
+        border-[#272525]
+        px-2
+        py-1
         text-sm
         font-medium
-        cursor-pointer
-        hover:text-white
-        transition
         text-inactive
-				border-[#272525]
+        transition
+				hover:text-white
 				`,
-        active && 'text-white bg-[#131111] border rounded-md'
+        active && 'rounded-md border bg-[#131111] text-white'
       )}
     >
       <Icon size={22} />

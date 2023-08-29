@@ -30,7 +30,7 @@ export default function RemoveSongContextItem({
   return (
     <ContextMenu.Item
       onClick={handleRemove}
-      className="group text-sm text-red-500 leading-none rounded-[3px] flex items-center h-[25px] relative px-2 py-4 outline-none data-[highlighted]:bg-neutral-700/80"
+      className="group relative flex h-[25px] items-center rounded-[3px] px-2 py-4 text-sm leading-none text-red-500 outline-none data-[highlighted]:bg-neutral-700/80"
     >
       Remove from playlist
     </ContextMenu.Item>

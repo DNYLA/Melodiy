@@ -25,7 +25,7 @@ export default function LinkContextItem({
       disabled={disabled}
       onClick={handleClick}
       className={
-        'group text-sm leading-none rounded-[3px] flex items-center h-[25px] relative px-2 py-4 outline-none  data-[highlighted]:bg-neutral-700/80 data-[disabled]:text-inactive'
+        'group relative flex h-[25px] items-center rounded-[3px] px-2 py-4 text-sm leading-none outline-none  data-[highlighted]:bg-neutral-700/80 data-[disabled]:text-inactive'
       }
     >
       {children}

@@ -17,7 +17,7 @@ function AuthSection() {
         <>
           <div>
             <Button
-              className="font-medium text-white bg-transparent"
+              className="bg-transparent font-medium text-white"
               onClick={() => onOpen(false)}
             >
               Sign Up

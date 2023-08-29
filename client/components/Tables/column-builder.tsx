@@ -68,7 +68,7 @@ export class ColumnBuilder {
     const col = this.columnHelper.accessor('album', {
       header: 'Album',
       cell: ({ getValue }) => (
-        <span className="text-[15px] hover:underline cursor-pointer">
+        <span className="cursor-pointer text-[15px] hover:underline">
           {getValue()}
         </span>
       ),

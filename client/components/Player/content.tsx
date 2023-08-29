@@ -114,39 +114,39 @@ function PlayerContent({ song, songUrl }: PlayerContentProps) {
   };
 
   return (
-    <div className="grid grid-cols-2 grid-rows-2 md:grid-cols-3 h-full">
-      <div className="flex w-full justify-start row-span-full">
+    <div className="grid h-full grid-cols-2 grid-rows-2 md:grid-cols-3">
+      <div className="row-span-full flex w-full justify-start">
         <div className="flex items-center gap-x-4">
           <SongMedia data={song} />
           {/* <LikeButton songId={song.id} /> */}
         </div>
       </div>
 
-      <div className="flex md:hidden col-auto w-full justify-end items-center">
+      <div className="col-auto flex w-full items-center justify-end md:hidden">
         <div
           onClick={handlePlay}
-          className="h-10 w-10 flex items-center justify-center rounded-full bg-white p-1 cursor-pointer"
+          className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white p-1"
         >
           <Icon size={30} className="text-black" />
         </div>
       </div>
 
-      <div className="h-full row-span-full">
-        <div className="hidden md:flex justify-center items-center max-w-[722px] gap-x-6">
+      <div className="row-span-full h-full">
+        <div className="hidden max-w-[722px] items-center justify-center gap-x-6 md:flex">
           <AiFillStepBackward
             size={25}
-            className="text-neutral-400 cursor-pointer hover:text-white transition"
+            className="cursor-pointer text-neutral-400 transition hover:text-white"
             onClick={onPlayPrevious}
           />
           <div
             onClick={handlePlay}
-            className="flex items-center justify-center h-9 w-9 rounded-full bg-white p-1 cursor-pointer"
+            className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-white p-1"
           >
             <Icon size={25} className="text-black" />
           </div>
           <AiFillStepForward
             size={25}
-            className="text-neutral-400 cursor-pointer hover:text-white transition"
+            className="cursor-pointer text-neutral-400 transition hover:text-white"
             onClick={onPlayNext}
           />
         </div>
@@ -165,8 +165,8 @@ function PlayerContent({ song, songUrl }: PlayerContentProps) {
         </div>
       </div>
 
-      <div className="hidden md:flex w-full justify-end pr-2 row-span-full">
-        <div className="flex items-center gap-x-2 w-[120px]">
+      <div className="row-span-full hidden w-full justify-end pr-2 md:flex">
+        <div className="flex w-[120px] items-center gap-x-2">
           <VolumeIcon
             onClick={toggleMute}
             className="cursor-pointer"

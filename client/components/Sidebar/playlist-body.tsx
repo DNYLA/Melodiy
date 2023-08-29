@@ -39,12 +39,12 @@ export default function PlaylistBody() {
   }
 
   return (
-    <div className="flex flex-col mx-2 overflow-hidden text-sm font-light gap-y-1 text-inactive">
+    <div className="mx-2 flex flex-col gap-y-1 overflow-hidden text-sm font-light text-inactive">
       {playlists.data.map((playlist: Playlist) => (
         <p
           key={playlist.uid}
           className={twMerge(
-            `cursor-pointer truncate ... hover:text-white`,
+            `... cursor-pointer truncate hover:text-white`,
             path === `/playlist/${playlist.uid}` && 'text-white'
           )}
           onClick={() => router.push(`/playlist/${playlist.uid}`)}

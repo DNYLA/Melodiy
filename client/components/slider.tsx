@@ -36,7 +36,7 @@ function Slider({
   return (
     <RadixSlider.Root
       className={twMerge(
-        'relative flex items-center select-none touch-none w-full h-10',
+        'relative flex h-10 w-full touch-none select-none items-center',
         className
       )}
       defaultValue={[1]}
@@ -48,10 +48,10 @@ function Slider({
       aria-label="Volume"
     >
       <RadixSlider.Track
-        className="bg-neutral-600 relative grow rounded-full"
+        className="relative  grow rounded-full bg-neutral-600"
         style={{ height: `${size}px` }}
       >
-        <RadixSlider.Range className="absolute bg-white rounded-full h-full" />
+        <RadixSlider.Range className="absolute h-full rounded-full bg-white" />
       </RadixSlider.Track>
     </RadixSlider.Root>
   );

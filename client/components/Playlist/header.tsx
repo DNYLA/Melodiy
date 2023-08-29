@@ -32,10 +32,10 @@ export default function PlaylistHeader({ data }: Props) {
   return (
     <div className="flex gap-x-4">
       <div className="group relative cursor-pointer">
-        <div className="absolute z-10 hidden group-hover:flex flex-col cursor-pointer text-white top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 place-items-center ">
+        <div className="absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 transform cursor-pointer flex-col place-items-center text-white group-hover:flex ">
           <FiEdit2
             size={30}
-            className="flex justify-center content-center snap-center center object-center place-items-center align-middle"
+            className="center flex snap-center place-items-center content-center justify-center object-center align-middle"
           />
           <span className="text-md">Select Photo</span>
         </div>
@@ -46,10 +46,10 @@ export default function PlaylistHeader({ data }: Props) {
       <div>
         <div>
           <p className="text-inactive">Public Playlist</p>
-          <p className="text-xl md:text-2xl lg:text-3xl font-bold">
+          <p className="text-xl font-bold md:text-2xl lg:text-3xl">
             {data.title}
           </p>
-          <p className="text-inactive cursor-pointer hover:underline">
+          <p className="cursor-pointer text-inactive hover:underline">
             {data.user.username}
           </p>
           <p className="font-light">{getPlaylistDetails()}</p>
@@ -57,7 +57,7 @@ export default function PlaylistHeader({ data }: Props) {
 
         <div className="mt-8">
           {/* TODO: Update Button Hover Effect */}
-          <button className="flex items-center bg-primary px-3 py-[2px] gap-x-1 rounded text-cneter group">
+          <button className="text-cneter group flex items-center gap-x-1 rounded bg-primary px-3 py-[2px]">
             <BsFillPlayFill size={25} className="" />
             <p className="group-hover:text-inactive">PLAY</p>
           </button>

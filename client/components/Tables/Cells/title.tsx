@@ -29,14 +29,14 @@ export default function TitleCell({
       <div className="flex flex-col">
         <span
           className={twMerge(
-            'text-[15px] hover:underline cursor-pointer',
+            'cursor-pointer text-[15px] hover:underline',
             isActive && 'text-primary'
           )}
         >
           {title}
         </span>
 
-        <span className="text-sm text-inactive hover:underline cursor-pointer">
+        <span className="cursor-pointer text-sm text-inactive hover:underline">
           {artist}
         </span>
       </div>

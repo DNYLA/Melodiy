@@ -10,7 +10,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       <input
         type={type}
         className={twMerge(
-          `flex w-full rounded-md focus:outline-none bg-white px-2 py-1 border border-transparent text-black text-sm placeholder:text-inactive`,
+          `flex w-full rounded-md border border-transparent bg-white px-2 py-1 text-sm text-black placeholder:text-inactive focus:outline-none`,
           className
         )}
         disabled={disabled}

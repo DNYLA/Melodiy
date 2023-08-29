@@ -29,7 +29,7 @@ function Navbar() {
   };
 
   return (
-    <div className="flex flex-row justify-between my-1">
+    <div className="my-1 flex flex-row justify-between">
       <div className="flex flex-row items-center gap-x-3">
         <div className="flex flex-row gap-x-3 text-inactive">
           <AiOutlineLeft

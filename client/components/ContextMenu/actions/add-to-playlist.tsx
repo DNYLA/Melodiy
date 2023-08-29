@@ -48,10 +48,10 @@ export default function AddToPlaylistMenu({ trackId }: Props) {
         onKeyDownCapture={(e) => e.preventDefault()}
         onKeyUp={(e) => e.preventDefault()}
         onKeyUpCapture={(e) => e.preventDefault()}
-        className="group text-sm leading-none rounded-[3px] flex items-center h-[25px] relative px-2 py-4 outline-none data-[state=open]:bg-neutral-700/80 data-[highlighted]:bg-neutral-700/80"
+        className="group relative flex h-[25px] items-center rounded-[3px] px-2 py-4 text-sm leading-none outline-none data-[highlighted]:bg-neutral-700/80 data-[state=open]:bg-neutral-700/80"
       >
         Add to playlist
-        <div className="ml-auto pl-5 group-data-[highlighted]:text-white group-data-[disabled]:text-mauve8">
+        <div className="ml-auto pl-5 group-data-[disabled]:text-mauve8 group-data-[highlighted]:text-white">
           <ChevronRightIcon />
         </div>
       </ContextMenu.SubTrigger>
@@ -61,12 +61,12 @@ export default function AddToPlaylistMenu({ trackId }: Props) {
           onKeyDownCapture={(e) => e.stopPropagation()}
           onKeyUp={(e) => e.stopPropagation()}
           onKeyUpCapture={(e) => e.stopPropagation()}
-          className="min-w-[220px] bg-[#1b1818] text-white rounded-md overflow-hidden p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
+          className="min-w-[220px] overflow-hidden rounded-md bg-[#1b1818] p-[5px] text-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
           sideOffset={2}
           alignOffset={-5}
         >
           <input
-            className="bg-blackA5 shadow-blackA9 inline-flex h-[35px] w-full appearance-none items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none text-white shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px_black] selection:color-white selection:bg-blackA9"
+            className="bg-blackA5 shadow-blackA9 selection:color-white selection:bg-blackA9 inline-flex h-[35px] w-full appearance-none items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none text-white shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px_black]"
             type="text"
             id="search"
             value={filter}
@@ -75,13 +75,13 @@ export default function AddToPlaylistMenu({ trackId }: Props) {
             autoFocus
           />
 
-          <ContextMenu.Separator className="h-[1px] bg-violet6 m-[5px]" />
+          <ContextMenu.Separator className="m-[5px] h-[1px] bg-violet6" />
 
           {filterPlaylists().map((ply) => (
             <ContextMenu.Item
               onClick={() => handleAdd(ply.uid, ply.title)}
               key={ply.title}
-              className="group max-w-[250px] text-sm leading-none rounded-[3px] flex items-center h-[25px] relative px-2 py-4 outline-none  data-[highlighted]:bg-neutral-700/80"
+              className="group relative flex h-[25px] max-w-[250px] items-center rounded-[3px] px-2 py-4 text-sm leading-none outline-none  data-[highlighted]:bg-neutral-700/80"
             >
               <span className="truncate">{ply.title}</span>
               {/* </div> */}

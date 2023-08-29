@@ -22,7 +22,7 @@ function Avatar({ src, alt, fallback, className }: AvatarProps) {
         alt={alt}
       />
       <AvatarBase.Fallback
-        className="text-black flex h-full w-full items-center justify-center bg-white text-[15px] font-medium"
+        className="flex h-full w-full items-center justify-center bg-white text-[15px] font-medium text-black"
         delayMs={600}
       >
         {fallback}

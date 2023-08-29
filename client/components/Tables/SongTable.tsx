@@ -46,7 +46,7 @@ export default function PlaylistTable({ columns: cl, data, type }: Props) {
   };
 
   return (
-    <table className="m-6 text-white w-full">
+    <table className="m-6 w-full text-white">
       <thead className="">
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
@@ -55,7 +55,7 @@ export default function PlaylistTable({ columns: cl, data, type }: Props) {
               headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
-                  className="text-left px-3 py-2 border-b border-inactive"
+                  className="border-b border-inactive px-3 py-2 text-left"
                 >
                   {header.isPlaceholder
                     ? null
@@ -79,13 +79,13 @@ export default function PlaylistTable({ columns: cl, data, type }: Props) {
           >
             <tr
               key={row.id}
-              className="hover:bg-[#1f1c1c] group"
+              className="group hover:bg-[#1f1c1c]"
               onClick={() => onRowClick(row.original)}
             >
               {row.getVisibleCells().map((cell) => (
                 <td
                   key={cell.id}
-                  className="text-left px-3 py-2 first:rounded-l-lg last:rounded-r-lg"
+                  className="px-3 py-2 text-left first:rounded-l-lg last:rounded-r-lg"
                 >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>

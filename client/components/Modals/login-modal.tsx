@@ -57,7 +57,7 @@ const LoginModal = () => {
       onChange={onChange}
     >
       <Form.Root onSubmit={handleSubmit} className="">
-        <Form.Field className="grid mb-[10px]" name="username">
+        <Form.Field className="mb-[10px] grid" name="username">
           <div className="flex items-baseline justify-between">
             <Form.Label className="text-[15px] font-medium leading-[35px] text-white">
               Username
@@ -72,7 +72,7 @@ const LoginModal = () => {
           <Form.Control asChild>
             <input
               placeholder="Your Username"
-              className="box-border w-full placeholder:font-extralight placeholder:text-neutral-500 placeholder:text-sm bg-neutral-700 outline-none shadow-blackA9 inline-flex h-[35px] appearance-none items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none text-white"
+              className="shadow-blackA9 box-border inline-flex h-[35px] w-full appearance-none items-center justify-center rounded-[4px] bg-neutral-700 px-[10px] text-[15px] leading-none text-white outline-none placeholder:text-sm placeholder:font-extralight placeholder:text-neutral-500"
               type="username"
               value={data.username}
               onChange={(e) => setData({ ...data, username: e.target.value })}
@@ -80,7 +80,7 @@ const LoginModal = () => {
             />
           </Form.Control>
         </Form.Field>
-        <Form.Field className="grid mb-[10px]" name="password">
+        <Form.Field className="mb-[10px] grid" name="password">
           <div className="flex items-baseline justify-between">
             <Form.Label className="text-[15px] font-medium leading-[35px] text-white">
               Password
@@ -97,14 +97,14 @@ const LoginModal = () => {
               placeholder="Your Password"
               value={data.password}
               onChange={(e) => setData({ ...data, password: e.target.value })}
-              className="box-border w-full placeholder:font-extralight placeholder:text-neutral-500 placeholder:text-sm bg-neutral-700 outline-none shadow-blackA9 inline-flex h-[35px] appearance-none items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none text-white"
+              className="shadow-blackA9 box-border inline-flex h-[35px] w-full appearance-none items-center justify-center rounded-[4px] bg-neutral-700 px-[10px] text-[15px] leading-none text-white outline-none placeholder:text-sm placeholder:font-extralight placeholder:text-neutral-500"
               required
               type="password"
             />
           </Form.Control>
         </Form.Field>
         <Form.Submit asChild>
-          <button className="box-border text-black w-full text-violet11 shadow-blackA7 hover:bg-mauve3 inline-flex h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none mt-[10px]">
+          <button className="shadow-blackA7 mt-[10px] box-border inline-flex h-[35px] w-full items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none text-black text-violet11 shadow-[0_2px_10px] hover:bg-mauve3 focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none">
             Login
           </button>
         </Form.Submit>

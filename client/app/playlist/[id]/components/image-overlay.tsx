@@ -21,7 +21,7 @@ export default function ImageOverlay({ src }: Props) {
   return (
     <Image
       draggable={false}
-      className={twMerge('rounded-md z-5', filter)}
+      className={twMerge('z-5 rounded-md', filter)}
       priority={true}
       // onMouseLeave={() => setFilter(randomImageFilter())} //Looks good but looks weird if u spam or enter/exit quickly
       onClick={changeFilter}

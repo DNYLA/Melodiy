@@ -16,7 +16,7 @@ const PlaylistCard: React.FC<IPlaylistCard> = ({
   return (
     <div
       onClick={onClick}
-      className="group cursor-pointer hover:scale-110 ease-in-out duration-300 min-w-[200px]"
+      className="group min-w-[200px] cursor-pointer duration-300 ease-in-out hover:scale-110"
     >
       <Image
         className="rounded-lg"
@@ -26,10 +26,10 @@ const PlaylistCard: React.FC<IPlaylistCard> = ({
         alt="Playlist Cover"
       />
       <div className="mt-1">
-        <p className="text-lg font-bold hover:underline cursor-pointer truncate ">
+        <p className="cursor-pointer truncate text-lg font-bold hover:underline ">
           {title}
         </p>
-        <p className="text-inactive hover:underline text-sm">{owner}</p>
+        <p className="text-sm text-inactive hover:underline">{owner}</p>
       </div>
     </div>
   );

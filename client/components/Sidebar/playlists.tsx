@@ -13,14 +13,14 @@ function PlaylistHeader({ children }: PlaylistHeaderProps) {
   const { onOpen } = useUploadModal();
 
   return (
-    <div className="flex flex-col py-0 gap-y-1">
-      <div className="flex justify-between items-center">
+    <div className="flex flex-col gap-y-1 py-0">
+      <div className="flex items-center justify-between">
         <p className="text-lg font-semibold">Playlists</p>
         {session && (
           <AiOutlinePlus
             onClick={() => onOpen()}
             size={18}
-            className="text-neutral-400 cursor-pointer hover:text-white"
+            className="cursor-pointer text-neutral-400 hover:text-white"
           />
         )}
       </div>
