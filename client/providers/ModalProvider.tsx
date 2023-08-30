@@ -1,7 +1,7 @@
 'use client';
 
-import LoginModal from '@/components/Overlay/Modals/Auth/login-modal';
-import RegisterModal from '@/components/Overlay/Modals/Auth/register-modal';
+import LoginModal from '@/components/Overlay/Modals/Auth/LoginModal';
+import RegisterModal from '@/components/Overlay/Modals/Auth/RegisterModal';
 import MultiUploadModal from '@/components/Overlay/Modals/MultiUploadModal';
 // import AuthModal from '@/components/AuthModal';
 // import UploadModal from '@/components/UploadModal';

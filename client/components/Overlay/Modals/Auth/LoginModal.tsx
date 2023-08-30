@@ -6,7 +6,7 @@ import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import Modal from '../modal';
+import Modal from '../Modal';
 
 const LoginModal = () => {
   const router = useRouter();

@@ -15,7 +15,7 @@ import { FaSpinner } from 'react-icons/fa';
 import { RxCross2 } from 'react-icons/rx';
 import { twMerge } from 'tailwind-merge';
 
-interface IFormInput {
+export interface IUploadSongForm {
   title: string;
   artist: string;
   album: string;
@@ -24,7 +24,9 @@ interface IFormInput {
   song: FileList;
 }
 
-export default function UploadSong() {
+export interface IUploadSong {}
+
+const UploadSong: React.FC<IUploadSong> = () => {
   const [isLoading, setIsLoading] = useState(false);
   // const { onClose } = useUploadModal();
   // const { data: session } = useSession();
@@ -40,7 +42,7 @@ export default function UploadSong() {
     getValues,
     setValue,
     formState: { errors },
-  } = useForm<IFormInput>({
+  } = useForm<IUploadSongForm>({
     defaultValues: {
       title: 'Test',
       artist: 'Test',
@@ -49,7 +51,7 @@ export default function UploadSong() {
     },
   });
 
-  const onSubmit: SubmitHandler<IFormInput> = async () => {
+  const onSubmit: SubmitHandler<IUploadSongForm> = async () => {
     setIsLoading(true);
     try {
       await uploadSong();
@@ -307,4 +309,6 @@ export default function UploadSong() {
       </form>
     </>
   );
-}
+};
+
+export default UploadSong;

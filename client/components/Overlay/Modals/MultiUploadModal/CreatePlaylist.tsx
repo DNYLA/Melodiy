@@ -17,12 +17,14 @@ import { RxCross2 } from 'react-icons/rx';
 import { useSWRConfig } from 'swr';
 import { twMerge } from 'tailwind-merge';
 
-interface IFormInput {
+export interface ICreatePlaylistForm {
   title: string;
   image?: FileList;
 }
 
-export default function CreatePlaylist() {
+export interface ICreatePlaylist {}
+
+const CreatePlaylist: React.FC<ICreatePlaylist> = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { onClose } = useUploadModal();
@@ -30,13 +32,13 @@ export default function CreatePlaylist() {
   const [tempFile, setTempFile] = useState('');
   const { mutate } = useSWRConfig();
   const imageFileRef = useRef<HTMLInputElement>(null);
-  const { register, handleSubmit, reset } = useForm<IFormInput>({
+  const { register, handleSubmit, reset } = useForm<ICreatePlaylistForm>({
     defaultValues: {
       title: '',
     },
   });
 
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+  const onSubmit: SubmitHandler<ICreatePlaylistForm> = async (data) => {
     if (!session?.user) return;
 
     try {
@@ -160,4 +162,6 @@ export default function CreatePlaylist() {
       </form>
     </>
   );
-}
+};
+
+export default CreatePlaylist;
