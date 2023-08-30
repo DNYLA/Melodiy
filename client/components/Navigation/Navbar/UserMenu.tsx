@@ -2,7 +2,7 @@ import * as HoverCard from '@radix-ui/react-hover-card';
 
 import { signOut } from 'next-auth/react';
 import Image from 'next/image';
-function UserMenu() {
+const UserMenu = () => {
   return (
     <HoverCard.Root openDelay={200}>
       <HoverCard.Trigger asChild className="cursor-pointer">
@@ -39,6 +39,6 @@ function UserMenu() {
       </HoverCard.Portal>
     </HoverCard.Root>
   );
-}
+};
 
 export default UserMenu;

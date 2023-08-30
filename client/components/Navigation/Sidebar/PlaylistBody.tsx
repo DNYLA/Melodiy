@@ -11,7 +11,7 @@ import useSWR from 'swr';
 import { twMerge } from 'tailwind-merge';
 
 //TODO: Conver to Server component
-export default function PlaylistBody() {
+const PlaylistBody = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const path = usePathname();
@@ -54,4 +54,6 @@ export default function PlaylistBody() {
       ))}
     </div>
   );
-}
+};
+
+export default PlaylistBody;

@@ -6,11 +6,11 @@ import { BiArrowBack } from 'react-icons/bi';
 import { MdOutlineAudioFile, MdOutlineFavorite } from 'react-icons/md';
 import { twMerge } from 'tailwind-merge';
 
-import PlaylistBody from '@/components/Navigation/Sidebar/playlist-body';
+import PlaylistBody from '@/components/Navigation/Sidebar/PlaylistBody';
 import usePlayer from '@/hooks/stores/usePlayer';
 import Navbar from '../Navbar';
-import PlaylistHeader from './playlists';
-import SidebarItem from './sidebar-item';
+import PlaylistHeader from './PlaylistTitle';
+import SidebarItem from './SidebarNavItem';
 
 interface SidebarProps {
   children: React.ReactNode;

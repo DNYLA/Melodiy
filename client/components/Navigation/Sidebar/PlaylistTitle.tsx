@@ -3,12 +3,12 @@ import { useSession } from 'next-auth/react';
 import React from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 
-interface PlaylistHeaderProps {
+interface IPlaylistTitle {
   children: React.ReactNode;
 }
 
 // TODO: Convert to server component once data fetching is correctly setup.
-function PlaylistHeader({ children }: PlaylistHeaderProps) {
+const PlaylistTitle: React.FC<IPlaylistTitle> = ({ children }) => {
   const { data: session } = useSession();
   const { onOpen } = useUploadModal();
 
@@ -27,6 +27,6 @@ function PlaylistHeader({ children }: PlaylistHeaderProps) {
       {children}
     </div>
   );
-}
+};
 
-export default PlaylistHeader;
+export default PlaylistTitle;

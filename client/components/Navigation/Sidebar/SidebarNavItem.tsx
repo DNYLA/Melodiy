@@ -2,14 +2,19 @@ import Link from 'next/link';
 import { IconType } from 'react-icons';
 import { twMerge } from 'tailwind-merge';
 
-interface SidebarItemProps {
+interface ISidebarNavItem {
   icon: IconType;
   label: string;
   active?: boolean;
   href: string;
 }
 
-function SidebarItem({ icon: Icon, label, active, href }: SidebarItemProps) {
+const SidebarNavItem: React.FC<ISidebarNavItem> = ({
+  icon: Icon,
+  label,
+  active,
+  href,
+}) => {
   return (
     <Link
       draggable={false}
@@ -39,6 +44,6 @@ function SidebarItem({ icon: Icon, label, active, href }: SidebarItemProps) {
       <p className="w-full truncate">{label}</p>
     </Link>
   );
-}
+};
 
-export default SidebarItem;
+export default SidebarNavItem;

@@ -3,9 +3,9 @@ import { useRouter } from 'next/navigation';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { twMerge } from 'tailwind-merge';
 import Input from '../../Inputs/Input/Input';
-import AuthSection from './auth-section';
+import AuthSection from './AuthSection';
 
-function Navbar() {
+const Navbar = () => {
   const canGoBack = true;
   const canGoForward = true;
   const router = useRouter();
@@ -58,6 +58,6 @@ function Navbar() {
       </div>
     </div>
   );
-}
+};
 
 export default Navbar;

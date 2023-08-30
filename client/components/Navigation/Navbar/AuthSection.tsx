@@ -2,9 +2,9 @@
 import useAuthModal from '@/hooks/modals/useAuthModal';
 import { useSession } from 'next-auth/react';
 import Button from '../../Inputs/Buttons/Button/Button';
-import UserMenu from './user-menu';
+import UserMenu from './UserMenu';
 
-function AuthSection() {
+const AuthSection = () => {
   const { onOpen } = useAuthModal();
   const { data: session } = useSession();
   return (
@@ -32,6 +32,6 @@ function AuthSection() {
       )}
     </div>
   );
-}
+};
 
 export default AuthSection;
