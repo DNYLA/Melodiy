@@ -4,12 +4,12 @@ import {
   BsMusicNoteBeamed,
 } from 'react-icons/bs';
 
-interface CounterCellProps {
+export interface ICounterCell {
   position: number;
   isActive: boolean;
 }
 
-export default function CounterCell({ position, isActive }: CounterCellProps) {
+const CounterCell: React.FC<ICounterCell> = ({ position, isActive }) => {
   return (
     <span className="flex justify-center">
       {isActive ? (
@@ -27,4 +27,6 @@ export default function CounterCell({ position, isActive }: CounterCellProps) {
       )}
     </span>
   );
-}
+};
+
+export default CounterCell;

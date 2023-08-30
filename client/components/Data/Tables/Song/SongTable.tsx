@@ -11,14 +11,14 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
-interface Props {
+export interface ISongTable {
   data: Song[];
   /* eslint-disable @typescript-eslint/no-explicit-any */
   columns: ColumnDef<Song, any>[];
   type: PlaylistType;
 }
 
-export default function PlaylistTable({ columns: cl, data, type }: Props) {
+const SongTable: React.FC<ISongTable> = ({ columns: cl, data, type }) => {
   const table = useReactTable({
     data,
     columns: cl,
@@ -37,6 +37,7 @@ export default function PlaylistTable({ columns: cl, data, type }: Props) {
       return;
     }
 
+    //TODO: Fix Song Playback
     //Handles playling and pausing if same song is clicked currently bugged
     if (isActiveTrack && player.isPlaying) player.setIsPlaying(false);
     else if (isActiveTrack && !player.isPlaying) player.setIsPlaying(true);
@@ -96,4 +97,6 @@ export default function PlaylistTable({ columns: cl, data, type }: Props) {
       </tbody>
     </table>
   );
-}
+};
+
+export default SongTable;

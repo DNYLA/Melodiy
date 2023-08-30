@@ -2,19 +2,19 @@ import { getDefaultImage } from '@/utils';
 import Image from 'next/image';
 import { twMerge } from 'tailwind-merge';
 
-interface TitleCellProps {
+interface ITitleCell {
   title: string;
   artist: string;
   cover: string;
   isActive: boolean;
 }
 
-export default function TitleCell({
+const TitleCell: React.FC<ITitleCell> = ({
   title,
   artist,
   cover,
   isActive,
-}: TitleCellProps) {
+}) => {
   return (
     <div className="flex gap-x-2">
       <Image
@@ -42,4 +42,6 @@ export default function TitleCell({
       </div>
     </div>
   );
-}
+};
+
+export default TitleCell;

@@ -5,13 +5,13 @@ import dayjs from 'dayjs';
 import { BsFillPlayFill } from 'react-icons/bs';
 import { FiEdit2 } from 'react-icons/fi';
 
-interface Props {
+export interface IPlaylistHeader {
   data: Playlist;
 }
 
-export default function PlaylistHeader({ data }: Props) {
-  const getTotalDuration = () => {
-    if (!data.tracks) return '0 MINUTES';
+const PlaylistHeader: React.FC<IPlaylistHeader> = ({ data }) => {
+  const calculateDuration = () => {
+    if (!data.tracks || data.tracks.length === 0) return '0 MINUTES';
     const totalDuration = data.tracks.reduce(
       (total, { duration }) => total + duration,
       0
@@ -23,7 +23,7 @@ export default function PlaylistHeader({ data }: Props) {
 
   const getPlaylistDetails = () => {
     const trackAmount = data.tracks?.length ?? 0;
-    const duration = getTotalDuration();
+    const duration = calculateDuration();
     const date = dayjs(data.createdAt ?? new Date());
 
     return `${trackAmount} SONGS • ${duration} • ${date.year()}`;
@@ -65,4 +65,6 @@ export default function PlaylistHeader({ data }: Props) {
       </div>
     </div>
   );
-}
+};
+
+export default PlaylistHeader;

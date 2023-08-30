@@ -1,13 +1,14 @@
-import CounterCell from '@/components/Data/Tables/Cells/counter';
-import TitleCell from '@/components/Data/Tables/Cells/title';
 import { Song } from '@/types/playlist';
 import { getDefaultImage, msToMinuteSeconds } from '@/utils';
 import { ColumnHelper, createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { BsClock } from 'react-icons/bs';
+import CounterCell from './Cells/Counter';
+import TitleCell from './Cells/Title';
 dayjs.extend(relativeTime);
 
+//TODO: Convert to Hook?
 export class ColumnBuilder {
   /**
    *

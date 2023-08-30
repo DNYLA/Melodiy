@@ -1,6 +1,6 @@
 'use client';
-import { ColumnBuilder } from '@/components/Data/Tables/column-builder';
-import SongTable from '@/components/Data/Tables/SongTable';
+import { ColumnBuilder } from '@/components/Data/Tables/ColumnBuilder';
+import SongTable from '@/components/Data/Tables/Song/SongTable';
 import usePlayer from '@/hooks/stores/usePlayer';
 import { PlaylistType } from '@/types';
 import { Song } from '@/types/playlist';

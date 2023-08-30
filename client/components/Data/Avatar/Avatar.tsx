@@ -1,14 +1,15 @@
 import * as AvatarBase from '@radix-ui/react-avatar';
 import { twMerge } from 'tailwind-merge';
 
-interface AvatarProps {
+export interface IAvatar {
   src?: string;
   alt?: string;
   fallback?: string;
   className?: string;
 }
 
-function Avatar({ src, alt, fallback, className }: AvatarProps) {
+//TODO: Use NextJS Image
+const Avatar: React.FC<IAvatar> = ({ src, alt, fallback, className }) => {
   return (
     <AvatarBase.Root
       className={twMerge(
@@ -29,6 +30,6 @@ function Avatar({ src, alt, fallback, className }: AvatarProps) {
       </AvatarBase.Fallback>
     </AvatarBase.Root>
   );
-}
+};
 
 export default Avatar;
