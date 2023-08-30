@@ -2,7 +2,7 @@
 // import Slider from './Slider';
 // import LikeButton from './LikeButton';
 // import MediaItem from './MediaItem';
-import Slider from '@/components/Inputs/Slider/slider';
+import Slider from '@/components/Inputs/Slider/Slider';
 import SongMedia from '@/components/Utils/Player/song-media';
 import usePlayer from '@/hooks/stores/usePlayer';
 import useVolume from '@/hooks/useVolume';

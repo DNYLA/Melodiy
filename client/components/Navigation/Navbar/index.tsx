@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { twMerge } from 'tailwind-merge';
-import Input from '../../Inputs/Input/input';
+import Input from '../../Inputs/Input/Input';
 import AuthSection from './auth-section';
 
 function Navbar() {

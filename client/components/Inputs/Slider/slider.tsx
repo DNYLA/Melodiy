@@ -2,7 +2,7 @@
 import * as RadixSlider from '@radix-ui/react-slider';
 import { twMerge } from 'tailwind-merge';
 
-interface SliderProps {
+interface ISlider {
   value?: number;
   step?: number;
   onChange?: (value: number) => void;
@@ -11,14 +11,14 @@ interface SliderProps {
   size?: number;
 }
 
-function Slider({
+const Slider: React.FC<ISlider> = ({
   value = 1,
   step = 0.1,
   size = 3,
   onChange,
   onCommit,
   className,
-}: SliderProps) {
+}) => {
   const handleChange = (newValue: number[]) => {
     onChange?.(newValue[0]);
   };
@@ -55,6 +55,6 @@ function Slider({
       </RadixSlider.Track>
     </RadixSlider.Root>
   );
-}
+};
 
 export default Slider;

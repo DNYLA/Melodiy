@@ -1,7 +1,7 @@
 'use client';
 
 import { revalidatePathClient } from '@/app/action';
-import Input from '@/components/Inputs/Input/input';
+import Input from '@/components/Inputs/Input/Input';
 import { getDefaultImage } from '@/utils';
 import { AXIOS } from '@/utils/network/axios';
 import * as Dialog from '@radix-ui/react-dialog';
