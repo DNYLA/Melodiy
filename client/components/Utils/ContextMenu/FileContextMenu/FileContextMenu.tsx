@@ -1,16 +1,16 @@
-import AddToPlaylistMenu from '@/components/Utils/ContextMenu/actions/add-to-playlist';
-import DeleteSongContextItem from '@/components/Utils/ContextMenu/actions/delete-song';
-import LikeSongContextItem from '@/components/Utils/ContextMenu/actions/like-song';
-import LinkContextItem from '@/components/Utils/ContextMenu/actions/link-item';
-import QueueContextItem from '@/components/Utils/ContextMenu/actions/queue-song';
+import AddToPlaylistMenu from '@/components/Utils/ContextMenu/actions/AddToPlaylist';
+import DeleteSongContextItem from '@/components/Utils/ContextMenu/actions/DeleteSong';
+import LikeSongContextItem from '@/components/Utils/ContextMenu/actions/Like';
+import LinkContextItem from '@/components/Utils/ContextMenu/actions/LinkItem';
+import QueueContextItem from '@/components/Utils/ContextMenu/actions/QueueSong';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 
-interface ContextProps {
+interface IFileContextMenu {
   trackId: string;
   ownerId?: number;
 }
 
-export default function FileContextMenu({ trackId }: ContextProps) {
+const FileContextMenu: React.FC<IFileContextMenu> = ({ trackId }) => {
   return (
     <ContextMenu.Content
       className="min-w-[220px] overflow-hidden rounded-md bg-[#1b1818] p-[5px] text-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
@@ -32,4 +32,6 @@ export default function FileContextMenu({ trackId }: ContextProps) {
       </LinkContextItem>
     </ContextMenu.Content>
   );
-}
+};
+
+export default FileContextMenu;

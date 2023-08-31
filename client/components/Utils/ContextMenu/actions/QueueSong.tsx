@@ -2,11 +2,11 @@ import usePlayer from '@/hooks/stores/usePlayer';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import toast from 'react-hot-toast';
 
-interface QueueContextProps {
+interface IQueueContextItem {
   trackId: string;
 }
 
-export default function QueueContextItem({ trackId }: QueueContextProps) {
+const QueueContextItem: React.FC<IQueueContextItem> = ({ trackId }) => {
   const player = usePlayer();
 
   const onQueue = () => {
@@ -25,4 +25,6 @@ export default function QueueContextItem({ trackId }: QueueContextProps) {
       Add to queue
     </ContextMenu.Item>
   );
-}
+};
+
+export default QueueContextItem;

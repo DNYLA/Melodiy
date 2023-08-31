@@ -5,11 +5,11 @@ import { AXIOS } from '@/utils/network/axios';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import toast from 'react-hot-toast';
 
-interface DeleteSongContextProps {
+interface IDeleteSongContext {
   id: string;
 }
 
-export default function DeleteSongContextItem({ id }: DeleteSongContextProps) {
+const DeleteSongContextItem: React.FC<IDeleteSongContext> = ({ id }) => {
   const player = usePlayer();
   const handleDelete = async () => {
     try {
@@ -35,4 +35,6 @@ export default function DeleteSongContextItem({ id }: DeleteSongContextProps) {
       Delete Song
     </ContextMenu.Item>
   );
-}
+};
+
+export default DeleteSongContextItem;

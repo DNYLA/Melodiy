@@ -2,17 +2,17 @@ import * as ContextMenu from '@radix-ui/react-context-menu';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-interface LinkContextProps {
+interface ILinkContextItem {
   path: string;
   disabled?: boolean;
   children: React.ReactNode;
 }
 
-export default function LinkContextItem({
+const LinkContextItem: React.FC<ILinkContextItem> = ({
   path,
   disabled,
   children,
-}: LinkContextProps) {
+}) => {
   const router = useRouter();
 
   const handleClick = () => {
@@ -31,4 +31,6 @@ export default function LinkContextItem({
       {children}
     </ContextMenu.Item>
   );
-}
+};
+
+export default LinkContextItem;

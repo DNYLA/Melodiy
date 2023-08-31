@@ -5,14 +5,14 @@ import * as ContextMenu from '@radix-ui/react-context-menu';
 import { useParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 
-interface RemoveSongContextProps {
+interface IRemoveSongContextItem {
   trackId: string;
   ownerId?: number;
 }
 
-export default function RemoveSongContextItem({
+const RemoveSongContextItem: React.FC<IRemoveSongContextItem> = ({
   trackId,
-}: RemoveSongContextProps) {
+}) => {
   const { id: playlistId } = useParams();
 
   const handleRemove = async () => {
@@ -35,4 +35,6 @@ export default function RemoveSongContextItem({
       Remove from playlist
     </ContextMenu.Item>
   );
-}
+};
+
+export default RemoveSongContextItem;

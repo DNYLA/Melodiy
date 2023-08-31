@@ -6,11 +6,13 @@ import { ChevronRightIcon } from '@radix-ui/react-icons';
 import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
-interface Props {
+interface IAddToPlaylistContextItem {
   trackId: string;
 }
 
-export default function AddToPlaylistMenu({ trackId }: Props) {
+const AddToPlaylistContextItem: React.FC<IAddToPlaylistContextItem> = ({
+  trackId,
+}) => {
   const [filter, setFilter] = useState('');
   const { playlists } = usePlaylistStore();
   const searchInput = useRef<HTMLInputElement>(null);
@@ -91,4 +93,6 @@ export default function AddToPlaylistMenu({ trackId }: Props) {
       </ContextMenu.Portal>
     </ContextMenu.Sub>
   );
-}
+};
+
+export default AddToPlaylistContextItem;

@@ -1,5 +1,5 @@
-import FileContextMenu from '@/components/Utils/ContextMenu/files-context-menu';
-import PlaylistContextMenu from '@/components/Utils/ContextMenu/playlist-context-menu';
+import FileContextMenu from '@/components/Utils/ContextMenu/FileContextMenu/FileContextMenu';
+import PlaylistContextMenu from '@/components/Utils/ContextMenu/PlaylistContextMenu/PlaylistContextMenu';
 import { PlaylistType } from '@/types';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import React from 'react';

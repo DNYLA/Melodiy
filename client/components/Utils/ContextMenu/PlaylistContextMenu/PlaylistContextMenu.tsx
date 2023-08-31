@@ -1,21 +1,21 @@
-import AddToPlaylistMenu from '@/components/Utils/ContextMenu/actions/add-to-playlist';
-import LikeSongContextItem from '@/components/Utils/ContextMenu/actions/like-song';
-import LinkContextItem from '@/components/Utils/ContextMenu/actions/link-item';
-import QueueContextItem from '@/components/Utils/ContextMenu/actions/queue-song';
-import RemoveSongContextItem from '@/components/Utils/ContextMenu/actions/remove-song';
+import AddToPlaylistMenu from '@/components/Utils/ContextMenu/actions/AddToPlaylist';
+import LikeSongContextItem from '@/components/Utils/ContextMenu/actions/Like';
+import LinkContextItem from '@/components/Utils/ContextMenu/actions/LinkItem';
+import QueueContextItem from '@/components/Utils/ContextMenu/actions/QueueSong';
+import RemoveSongContextItem from '@/components/Utils/ContextMenu/actions/RemoveSong';
 import usePlaylistStore from '@/hooks/stores/usePlaylistStore';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import { useParams } from 'next/navigation';
 
-interface ContextProps {
+interface IPlaylistContextMenu {
   trackId: string;
   ownerId?: number;
 }
 
-export default function PlaylistContextMenu({
+const PlaylistContextMenu: React.FC<IPlaylistContextMenu> = ({
   trackId,
   ownerId,
-}: ContextProps) {
+}) => {
   const { id } = useParams();
   const { playlists } = usePlaylistStore();
 
@@ -48,4 +48,6 @@ export default function PlaylistContextMenu({
       </LinkContextItem>
     </ContextMenu.Content>
   );
-}
+};
+
+export default PlaylistContextMenu;

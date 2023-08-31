@@ -1,6 +1,8 @@
 import * as ContextMenu from '@radix-ui/react-context-menu';
 
-export default function LikeSongContextItem() {
+interface IFavouriteSongContextItem {}
+
+const FavouriteContextItem: React.FC<IFavouriteSongContextItem> = () => {
   return (
     <ContextMenu.Item
       disabled
@@ -11,4 +13,6 @@ export default function LikeSongContextItem() {
       Add to Liked Songs
     </ContextMenu.Item>
   );
-}
+};
+
+export default FavouriteContextItem;
