@@ -1,11 +1,11 @@
 'use client';
 
-import MultiUploadModal from '@/components/Modals/MultiUploadModal';
-import LoginModal from '@/components/Modals/login-modal';
-import RegisterModal from '@/components/Modals/register-modal';
+import LoginModal from '@/components/Overlay/Modals/Auth/LoginModal';
+import RegisterModal from '@/components/Overlay/Modals/Auth/RegisterModal';
+import MultiUploadModal from '@/components/Overlay/Modals/MultiUploadModal';
 // import AuthModal from '@/components/AuthModal';
 // import UploadModal from '@/components/UploadModal';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /*
 	This component should NOT be used for every modal used on the site it is only for modals

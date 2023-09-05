@@ -1,5 +1,5 @@
 'use client';
-import { setAccessToken, fetcher, NetworkError } from '@/utils/network/axios';
+import { NetworkError, fetcher, setAccessToken } from '@/utils/network/axios';
 import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
 import { toast } from 'react-hot-toast';

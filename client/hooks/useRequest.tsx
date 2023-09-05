@@ -1,5 +1,5 @@
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import useSWR, { SWRConfiguration, SWRResponse } from 'swr';
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
 //FROM SWR github
 

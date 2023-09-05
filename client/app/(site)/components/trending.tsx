@@ -1,6 +1,6 @@
 import { getTrending } from '@/app/action';
-import PlaylistCard from '@/components/Cards/playlist-card';
-import React, { Suspense } from 'react';
+import PlaylistCard from '@/components/Cards/Playlist/PlaylistCard';
+import { Suspense } from 'react';
 
 export default async function Trending() {
   const trending = await getTrending();
@@ -13,11 +13,11 @@ export default async function Trending() {
     <div className="">
       <Suspense fallback={<p>Loading..</p>}>
         <p className="text-3xl font-bold ">Recently Created</p>
-        <div className="flex flex-row mt-3 gap-x-5 overflow-x-auto overflow-y-hidden p-3">
+        <div className="mt-3 flex flex-row gap-x-5 overflow-x-auto overflow-y-hidden p-3">
           {trending.data.map((playlist) => (
             <PlaylistCard
               key={playlist.uid}
-              uid={playlist.uid}
+              redirect={`/playlist/${playlist.uid}`}
               title={playlist.title}
               imageUrl={playlist.imagePath}
               owner={playlist.user.username}

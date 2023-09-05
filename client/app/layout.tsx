@@ -1,12 +1,12 @@
-import Sidebar from '@/components/Sidebar';
-import './globals.css';
+import Sidebar from '@/components/Navigation/Sidebar';
+import Player from '@/components/Utils/Player';
+import ModalProvider from '@/providers/ModalProvider';
+import { SWRProvider } from '@/providers/SWRProvider';
+import SessionProvider from '@/providers/SessionProvider';
+import ToasterProvider from '@/providers/ToasterProvider';
 import type { Metadata } from 'next';
 import { Figtree } from 'next/font/google';
-import ModalProvider from '@/providers/ModalProvider';
-import ToasterProvider from '@/providers/ToasterProvider';
-import SessionProvider from '@/providers/SessionProvider';
-import { SWRProvider } from '@/providers/SWRProvider';
-import Player from '@/components/Player';
+import './globals.css';
 
 const font = Figtree({ subsets: ['latin'] });
 

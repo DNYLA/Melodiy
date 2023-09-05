@@ -1,5 +1,4 @@
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 
 //When you are unable to call useRouter in an async function use this hook instead
 function useRedirect(value: unknown) {
