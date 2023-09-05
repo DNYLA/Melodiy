@@ -8,7 +8,7 @@ export default async function Playlist({ params }: { params: { id: string } }) {
   const playlist = await getPlaylist(params.id);
   const { data } = playlist;
 
-  // if (playlist && playlist.success == false) return <RedirectSync />;
+  // if (playlist && playlist.success == false) return redirect('/');
 
   return (
     <Suspense fallback={<p>Loading Playlist...</p>}>
