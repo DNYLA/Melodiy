@@ -27,7 +27,7 @@ namespace melodiy.server.Data.File
 
             if (await IsDuplicate(supabasePath, FileType.Image))
             {
-                response.Data = $"{url}/storage/v1/object/public/{bucket}/{supabasePath}";
+                response.Data = $"{bucket}/{supabasePath}";
                 return response;
             }
 
@@ -37,7 +37,7 @@ namespace melodiy.server.Data.File
             Console.WriteLine(res);
 
             //TODO: Grab From CLient?
-            response.Data = $"{url}/storage/v1/object/public/{res}";
+            response.Data = res;
             return response;
         }
 
@@ -68,7 +68,7 @@ namespace melodiy.server.Data.File
             string url = _configuration.GetSection("AppSettings:SupabaseURL").Value! ?? throw new InvalidOperationException("SupabaseURL AppSetting not set!");
 
             //TODO: Grab From CLient?
-            response.Data = $"{url}/storage/v1/object/public/{res}";
+            response.Data = supabasePath;
             return response;
         }
 
@@ -108,6 +108,19 @@ namespace melodiy.server.Data.File
             _ = await _client.Storage.From(bucket).Remove(new List<string> { path });
 
             return true;
+        }
+
+        public async Task<string> GetSignedUrl(string filePath, FileType type)
+        {
+            string bucket = GetBucketName(type);
+            try
+            {
+                return await _client.Storage.From(bucket).CreateSignedUrl(filePath, 60);
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
         }
     }
 }

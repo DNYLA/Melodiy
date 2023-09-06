@@ -25,7 +25,6 @@ namespace melodiy.server.Controllers
         public async Task<ActionResult<ServiceResponse<GetSongResponse>>> Create([FromForm] UploadSongRequest request)
         {
             ServiceResponse<GetSongResponse> response = await _songService.UploadSong(request);
-
             // var response = new ServiceResponse<GetSongResponse>();
 
             Console.WriteLine(request.Audio.FileName);
@@ -45,7 +44,7 @@ namespace melodiy.server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceResponse<GetSongResponse>>> GetUserSongs(string id)
+        public async Task<ActionResult<ServiceResponse<GetSongResponse>>> GetSong(string id)
         {
             //TODO: Add Authorsiation
             // var userId = _authService.GetUserId();

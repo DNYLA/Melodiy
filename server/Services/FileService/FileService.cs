@@ -8,9 +8,9 @@ namespace melodiy.server.Services.FileService
         private readonly IFileRepository _fileRepository;
         private readonly IAuthService _authService;
 
-        public FileService(IFileRepository imageRepository, IAuthService authService)
+        public FileService(IFileRepository fileRepository, IAuthService authService)
         {
-            _fileRepository = imageRepository;
+            _fileRepository = fileRepository;
             _authService = authService;
         }
 
@@ -93,5 +93,6 @@ namespace melodiy.server.Services.FileService
 
             return response;
         }
+
     }
 }

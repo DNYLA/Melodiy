@@ -1,4 +1,5 @@
 using ATL;
+using melodiy.server.Data.File;
 using melodiy.server.Dtos.Song;
 using melodiy.server.Services.AuthService;
 using melodiy.server.Services.FileService;
@@ -11,13 +12,15 @@ namespace melodiy.server.Services.SongService
         private readonly IMapper _mapper;
         private readonly IAuthService _authService;
         private readonly IFileService _fileService;
+        private readonly IFileRepository _fileRepo;
 
-        public SongService(DataContext context, IMapper mapper, IAuthService authService, IFileService fileService)
+        public SongService(DataContext context, IMapper mapper, IAuthService authService, IFileService fileService, IFileRepository fileRepo)
         {
             _mapper = mapper;
             _context = context;
             _authService = authService;
             _fileService = fileService;
+            _fileRepo = fileRepo;
         }
 
         public async Task<ServiceResponse<GetSongResponse>> UploadSong(UploadSongRequest request)
@@ -119,6 +122,18 @@ namespace melodiy.server.Services.SongService
                     response.Message = $"Song, {songId} not found";
                     return response;
                 }
+
+                string songUrl = await _fileRepo.GetSignedUrl(dbSong.SongPath, FileType.Audio);
+
+                if (songUrl == string.Empty)
+                {
+                    response.Success = false;
+                    response.StatusCode = 404;
+                    response.Message = $"Song, {songId} not found";
+                    return response;
+                }
+
+                dbSong.SongPath = songUrl;
                 response.Data = _mapper.Map<GetSongResponse>(dbSong);
                 return response;
             }
@@ -206,11 +221,6 @@ namespace melodiy.server.Services.SongService
             }
 
             return response;
-        }
-
-        public Task<ServiceResponse<GetSongResponse>> UploadSong(UploadSongRequest request, string username)
-        {
-            throw new NotImplementedException();
         }
     }
 }

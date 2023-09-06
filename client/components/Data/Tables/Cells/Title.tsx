@@ -1,3 +1,4 @@
+import { getImageUrl } from '@/lib/helpers';
 import { getDefaultImage } from '@/utils';
 import Image from 'next/image';
 import { twMerge } from 'tailwind-merge';
@@ -20,7 +21,7 @@ const TitleCell: React.FC<ITitleCell> = ({
       <Image
         draggable={false}
         className="rounded-md"
-        src={cover ?? getDefaultImage()}
+        src={cover ? getImageUrl(cover) : getDefaultImage()}
         width={45}
         height={45}
         alt="Song Cover"
