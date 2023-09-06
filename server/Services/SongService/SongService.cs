@@ -31,7 +31,8 @@ namespace melodiy.server.Services.SongService
                 {
                     response.Message = songPath.Message;
                     response.Success = false;
-                    response.StatusCode = 400;
+                    response.StatusCode = songPath.StatusCode;
+
                     return response;
                 }
 
@@ -85,7 +86,9 @@ namespace melodiy.server.Services.SongService
             {
                 List<Song> dbPlaylists = await _context.Songs
                                 .Include(s => s.User)
-                                .Where(s => s.UserId == userId).ToListAsync();
+                                .Where(s => s.UserId == userId)
+                                .OrderBy(s => s.Id)
+                                .ToListAsync();
                 response.Data = dbPlaylists.Select(_mapper.Map<GetSongResponse>).ToList();
                 return response;
             }
