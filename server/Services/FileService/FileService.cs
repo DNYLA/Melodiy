@@ -1,18 +1,23 @@
 using melodiy.server.Data.File;
+using melodiy.server.Services.AuthService;
 
 namespace melodiy.server.Services.FileService
 {
     public class FileService : IFileService
     {
         private readonly IFileRepository _fileRepository;
-        public FileService(IFileRepository imageRepository)
+        private readonly IAuthService _authService;
+        
+        public FileService(IFileRepository imageRepository, IAuthService authService)
         {
             _fileRepository = imageRepository;
+            _authService = authService;
         }
 
         public async Task<ServiceResponse<string>> UploadImage(IFormFile image)
         {
-            var response = new ServiceResponse<string>();
+            string username = _authService.GetUsername();
+            ServiceResponse<string> response = new ServiceResponse<string>();
 
             if (image == null || image.Length == 0 || !IsValidImageContentType(image.ContentType))
             {
@@ -22,12 +27,12 @@ namespace melodiy.server.Services.FileService
                 return response;
             }
 
-            try 
+            try
             {
-                string path = await _fileRepository.UploadImage(image);
+                string path = await _fileRepository.UploadImage(image, username);
                 response.Data = path;
-            } 
-            catch 
+            }
+            catch
             {
                 response.Success = false;
                 response.StatusCode = 500;
@@ -39,7 +44,8 @@ namespace melodiy.server.Services.FileService
 
         public async Task<ServiceResponse<string>> UploadSong(IFormFile file)
         {
-            var response = new ServiceResponse<string>();
+            string username = _authService.GetUsername();
+            ServiceResponse<string> response = new ServiceResponse<string>();
 
             if (file == null || file.Length == 0 || !IsValidAudioContentType(file.ContentType))
             {
@@ -49,12 +55,12 @@ namespace melodiy.server.Services.FileService
                 return response;
             }
 
-            try 
+            try
             {
-                string path = await _fileRepository.UploadSong(file);
+                string path = await _fileRepository.UploadSong(file, username);
                 response.Data = path;
-            } 
-            catch 
+            }
+            catch
             {
                 response.Success = false;
                 response.StatusCode = 500;
@@ -64,30 +70,30 @@ namespace melodiy.server.Services.FileService
             return response;
         }
 
-        private bool IsValidImageContentType(string contentType)
+        private static bool IsValidImageContentType(string contentType)
         {
             return contentType.StartsWith("image/");
         }
 
-        private bool IsValidAudioContentType(string contentType)
+        private static bool IsValidAudioContentType(string contentType)
         {
-            return contentType == "audio/wav" || contentType == "audio/mpeg";
+            return contentType is "audio/wav" or "audio/mpeg";
         }
 
         public async Task<ServiceResponse<bool>> DeleteFile(string bucket, string path)
         {
-            var response = new ServiceResponse<bool>();
-            try 
+            ServiceResponse<bool> response = new ServiceResponse<bool>();
+            try
             {
-                await _fileRepository.DeleteFile(bucket, path);
-            } 
+                _ = await _fileRepository.DeleteFile(bucket, path);
+            }
             catch (Exception ex)
             {
                 response.Success = false;
                 response.Message = ex.Message;
                 response.StatusCode = 500;
             }
-    
+
             return response;
         }
     }

@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace melodiy.server.Services.FileService
 {
     public interface IFileService
@@ -15,7 +10,7 @@ namespace melodiy.server.Services.FileService
         // Task<ServiceResponse<string>> GetImage();
         // Task<ServiceResponse<string>> GetFile();
         // string GetFileUrl();
-        
+
 
     }
 }
