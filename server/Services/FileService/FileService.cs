@@ -7,7 +7,7 @@ namespace melodiy.server.Services.FileService
     {
         private readonly IFileRepository _fileRepository;
         private readonly IAuthService _authService;
-        
+
         public FileService(IFileRepository imageRepository, IAuthService authService)
         {
             _fileRepository = imageRepository;
@@ -17,7 +17,7 @@ namespace melodiy.server.Services.FileService
         public async Task<ServiceResponse<string>> UploadImage(IFormFile image)
         {
             string username = _authService.GetUsername();
-            ServiceResponse<string> response = new ServiceResponse<string>();
+            ServiceResponse<string> response = new();
 
             if (image == null || image.Length == 0 || !IsValidImageContentType(image.ContentType))
             {
@@ -29,8 +29,7 @@ namespace melodiy.server.Services.FileService
 
             try
             {
-                string path = await _fileRepository.UploadImage(image, username);
-                response.Data = path;
+                response = await _fileRepository.UploadImage(image, username);
             }
             catch
             {
@@ -42,12 +41,12 @@ namespace melodiy.server.Services.FileService
             return response;
         }
 
-        public async Task<ServiceResponse<string>> UploadSong(IFormFile file)
+        public async Task<ServiceResponse<string>> UploadSong(IFormFile song)
         {
             string username = _authService.GetUsername();
-            ServiceResponse<string> response = new ServiceResponse<string>();
+            ServiceResponse<string> response = new();
 
-            if (file == null || file.Length == 0 || !IsValidAudioContentType(file.ContentType))
+            if (song == null || song.Length == 0 || !IsValidAudioContentType(song.ContentType))
             {
                 response.Success = false;
                 response.StatusCode = 400;
@@ -57,8 +56,7 @@ namespace melodiy.server.Services.FileService
 
             try
             {
-                string path = await _fileRepository.UploadSong(file, username);
-                response.Data = path;
+                response = await _fileRepository.UploadSong(song, username);
             }
             catch
             {
@@ -66,7 +64,6 @@ namespace melodiy.server.Services.FileService
                 response.StatusCode = 500;
                 response.Message = "Unexpected Server Error.";
             }
-
             return response;
         }
 
@@ -82,7 +79,7 @@ namespace melodiy.server.Services.FileService
 
         public async Task<ServiceResponse<bool>> DeleteFile(string bucket, string path)
         {
-            ServiceResponse<bool> response = new ServiceResponse<bool>();
+            ServiceResponse<bool> response = new();
             try
             {
                 _ = await _fileRepository.DeleteFile(bucket, path);

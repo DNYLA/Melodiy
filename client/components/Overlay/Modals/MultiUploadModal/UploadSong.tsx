@@ -5,6 +5,7 @@ import Input from '@/components/Inputs/Input/Input';
 import { getDefaultImage } from '@/utils';
 import { AXIOS } from '@/utils/network/axios';
 import * as Dialog from '@radix-ui/react-dialog';
+import axios from 'axios';
 import { read } from 'jsmediatags';
 import Image from 'next/image';
 import { useCallback, useRef, useState } from 'react';
@@ -80,9 +81,18 @@ const UploadSong: React.FC<IUploadSong> = () => {
     if (album) formData.append('album', album);
     if (albumArtist) formData.append('albumArtist', albumArtist);
 
-    await AXIOS.post(`song`, formData);
-    revalidatePathClient('/files');
-    toast.success('Uploaded Song!');
+    try {
+      await AXIOS.post(`song`, formData);
+      revalidatePathClient('/files');
+      toast.success('Uploaded Song!');
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.data.message) {
+        toast.error(err.response?.data.message);
+        return;
+      }
+
+      toast.error('Unexpected Server Error! Try again later.');
+    }
 
     return '';
   };

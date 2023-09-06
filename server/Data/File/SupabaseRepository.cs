@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+
 namespace melodiy.server.Data.File
 {
     public class SupabaseRepository : IFileRepository
@@ -10,36 +12,64 @@ namespace melodiy.server.Data.File
             _client = client;
         }
 
-        public async Task<string> UploadImage(IFormFile image, string owner)
+        public async Task<ServiceResponse<string>> UploadImage(IFormFile file, string owner)
         {
-            return await UploadFile(image, owner, FileType.Image);
-        }
-
-        public async Task<string> UploadSong(IFormFile song, string owner)
-        {
-            return await UploadFile(song, owner, FileType.Music);
-        }
-
-        private async Task<string> UploadFile(IFormFile file, string owner, FileType type)
-        {
-            string bucket = GetBucketName(type);
-            if (bucket == string.Empty)
-            {
-                return string.Empty;
-            }
-
-            string fileName = await GetFileName(Path.GetExtension(file.FileName), bucket);
-            string supabasePath = $"{owner}/{fileName}";
+            ServiceResponse<string> response = new();
+            string bucket = GetBucketName(FileType.Image);
 
             using MemoryStream memoryStream = new();
             await file.CopyToAsync(memoryStream);
+
+            string fileName = ComputeFileHash(memoryStream) + Path.GetExtension(file.FileName);
+            string supabasePath = $"{owner}/{fileName}";
+            string url = _configuration.GetSection("AppSettings:SupabaseURL").Value! ?? throw new InvalidOperationException("SupabaseURL AppSetting not set!");
+
+
+            if (await IsDuplicate(supabasePath, FileType.Image))
+            {
+                response.Data = $"{url}/storage/v1/object/public/{bucket}/{supabasePath}";
+                return response;
+            }
+
+            string res = await _client.Storage
+                .From(bucket)
+                .Upload(memoryStream.ToArray(), supabasePath);
+            Console.WriteLine(res);
+
+            //TODO: Grab From CLient?
+            response.Data = $"{url}/storage/v1/object/public/{res}";
+            return response;
+        }
+
+        public async Task<ServiceResponse<string>> UploadSong(IFormFile file, string owner)
+        {
+            ServiceResponse<string> response = new();
+            string bucket = GetBucketName(FileType.Audio);
+
+            using MemoryStream memoryStream = new();
+            await file.CopyToAsync(memoryStream);
+
+            string fileName = ComputeFileHash(memoryStream) + Path.GetExtension(file.FileName);
+            string supabasePath = $"{owner}/{fileName}";
+            Console.WriteLine(fileName);
+
+            if (await IsDuplicate(supabasePath, FileType.Audio))
+            {
+                response.Success = false;
+                response.Message = "You've already uploaded this file!";
+                response.StatusCode = 409;
+                return response;
+            }
+
             string res = await _client.Storage
                 .From(bucket)
                 .Upload(memoryStream.ToArray(), supabasePath);
             Console.WriteLine(res);
             string url = _configuration.GetSection("AppSettings:SupabaseURL").Value! ?? throw new InvalidOperationException("SupabaseURL AppSetting not set!");
+
             //TODO: Grab From CLient?
-            return $"{url}/storage/v1/object/public/{res}";
+            response.Data = $"{url}/storage/v1/object/public/{res}";
+            return response;
         }
 
         public bool IsValidType(string contentType, FileType type)
@@ -49,36 +79,22 @@ namespace melodiy.server.Data.File
 
         private static string GetBucketName(FileType type)
         {
-            if (type == FileType.Image)
-            {
-                return "images";
-            }
-            else if (type == FileType.Music)
-            {
-                return "songs";
-            };
-
-            return String.Empty;
+            return type == FileType.Image ? "images" : "songs"; ;
         }
 
-        private async Task<string> GetFileName(string extension, string bucket)
+        private async Task<bool> IsDuplicate(string filePath, FileType type)
         {
-            bool isValid = false;
+            string bucket = GetBucketName(type);
 
-            while (!isValid)
-            {
-                string randomId = Guid.NewGuid().ToString("N");
-                string newFileName = randomId + extension;
-                Postgrest.Responses.BaseResponse response = await _client.Rpc("storage_file_exists", new Dictionary<string, object> { { "path", newFileName }, { "bucket", bucket } });
+            Postgrest.Responses.BaseResponse response = await _client.Rpc("storage_file_exists", new Dictionary<string, object> { { "path", filePath }, { "bucket", bucket } });
 
-                if (response.Content == "false")
-                {
-                    // Console.WriteLine("Does not exist");
-                    return newFileName;
-                }
-            }
+            return response.Content != "false";
+        }
 
-            return Guid.NewGuid().ToString("N") + extension; //This will never get hit? fallsafe
+        private static string ComputeFileHash(MemoryStream stream)
+        {
+            byte[] hash = MD5.HashData(stream.ToArray());
+            return BitConverter.ToString(hash).Replace("-", "").ToLower(System.Globalization.CultureInfo.CurrentCulture);
         }
 
         public async Task<bool> DeleteFile(string bucket, string path)
@@ -92,16 +108,6 @@ namespace melodiy.server.Data.File
             _ = await _client.Storage.From(bucket).Remove(new List<string> { path });
 
             return true;
-        }
-
-        public Task<string> UploadImage(IFormFile file)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> UploadSong(IFormFile file)
-        {
-            throw new NotImplementedException();
         }
     }
 }
