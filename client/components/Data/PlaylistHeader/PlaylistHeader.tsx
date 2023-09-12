@@ -1,6 +1,6 @@
 import ImageOverlay from '@/app/playlist/[id]/components/image-overlay';
+import { getImageUrl } from '@/lib/helpers';
 import { Playlist } from '@/types/playlist';
-import { getDefaultImage } from '@/utils';
 import dayjs from 'dayjs';
 import { BsFillPlayFill } from 'react-icons/bs';
 import { FiEdit2 } from 'react-icons/fi';
@@ -39,9 +39,7 @@ const PlaylistHeader: React.FC<IPlaylistHeader> = ({ data }) => {
           />
           <span className="text-md">Select Photo</span>
         </div>
-        <ImageOverlay
-          src={data.imagePath ? data.imagePath : getDefaultImage()}
-        />
+        <ImageOverlay src={getImageUrl(data.imagePath)} />
       </div>
       <div>
         <div>

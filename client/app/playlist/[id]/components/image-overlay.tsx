@@ -1,6 +1,4 @@
 'use client';
-import { getImageUrl } from '@/lib/helpers';
-import { getDefaultImage } from '@/utils';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -27,7 +25,7 @@ export default function ImageOverlay({ src }: Props) {
       priority={true}
       // onMouseLeave={() => setFilter(randomImageFilter())} //Looks good but looks weird if u spam or enter/exit quickly
       onClick={changeFilter}
-      src={src ? getImageUrl(src) : getDefaultImage()}
+      src={src}
       width={300}
       height={300}
       alt="Playlist Cover"
