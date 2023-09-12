@@ -3,7 +3,6 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import FilesTable from '@/app/files/components/table';
 import PlaylistHeader from '@/components/Data/PlaylistHeader/PlaylistHeader';
 import { PlaylistType } from '@/types';
-import { getDefaultImage } from '@/utils';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
@@ -22,10 +21,10 @@ export default async function Files() {
           data={{
             uid: '@me',
             title: 'Your Files',
-            imagePath: getDefaultImage(),
+            imagePath: undefined,
             user: { id: session.user.id, username: session.user.username },
             createdAt: new Date().toISOString(),
-            tracks: [],
+            tracks: songs.data,
           }}
         />
         <FilesTable data={songs.data} type={PlaylistType.Files} />

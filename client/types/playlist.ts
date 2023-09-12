@@ -3,7 +3,7 @@ import { PublicUser } from './user';
 export type Playlist = {
   uid: string;
   title: string;
-  imagePath: string;
+  imagePath?: string;
   createdAt: string;
   tracks: Song[];
   user: PublicUser;
