@@ -18,7 +18,7 @@ const TopResult: React.FC<ITopResult> = ({ song }) => {
   };
   return (
     <div
-      className="group flex cursor-pointer justify-between rounded-md bg-[#1d1b1b] p-3 hover:bg-[#313030]"
+      className="group flex cursor-pointer justify-between rounded-md bg-[#1d1b1b] p-3 transition-all duration-200 ease-in-out hover:scale-105 hover:bg-[#313030] "
       onClick={handlePlay}
     >
       <div className="flex">
@@ -37,7 +37,8 @@ const TopResult: React.FC<ITopResult> = ({ song }) => {
         </div>
       </div>
 
-      <div className="hidden h-[55px] w-[55px] self-center rounded-full bg-primary p-3 hover:scale-110 group-hover:flex">
+      {/* h-0.5 bg-red scale-x-0 group-hover:scale-100 transition-transform origin-left rounded-full duration-300 ease-out */}
+      <div className="flex h-[55px] w-[55px] scale-0 self-center rounded-full bg-primary p-3 transition-all duration-200 ease-in-out hover:scale-110 group-hover:flex group-hover:scale-100">
         <BsFillPlayFill className="flex self-center" size={40} />
       </div>
     </div>
