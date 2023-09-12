@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Security.Cryptography;
 
 namespace melodiy.server.Data.File
 {
@@ -15,70 +12,115 @@ namespace melodiy.server.Data.File
             _client = client;
         }
 
-        public async Task<string> UploadImage(IFormFile image)
+        public async Task<ServiceResponse<string>> UploadImage(IFormFile file, string owner)
         {
-            return await UploadFile(image, "images");
-        }
+            ServiceResponse<string> response = new();
+            string bucket = GetBucketName(FileType.Image);
 
-        public async Task<string> UploadSong(IFormFile song)
-        {
-            return await UploadFile(song, "songs");
-
-        }
-
-        private async Task<string> UploadFile(IFormFile file, string bucket)
-        {
-            var fileName = await GetFileName(Path.GetExtension(file.FileName), bucket);
-            using var memoryStream = new MemoryStream();
+            using MemoryStream memoryStream = new();
             await file.CopyToAsync(memoryStream);
-            var res = await _client.Storage
+
+            string fileName = ComputeFileHash(memoryStream) + Path.GetExtension(file.FileName);
+            string supabasePath = $"{owner}/{fileName}";
+            string url = _configuration.GetSection("AppSettings:SupabaseURL").Value! ?? throw new InvalidOperationException("SupabaseURL AppSetting not set!");
+
+
+            if (await IsDuplicate(supabasePath, FileType.Image))
+            {
+                response.Data = $"{bucket}/{supabasePath}";
+                return response;
+            }
+
+            string res = await _client.Storage
                 .From(bucket)
-                .Upload(memoryStream.ToArray(), fileName);
+                .Upload(memoryStream.ToArray(), supabasePath);
             Console.WriteLine(res);
-            var url = _configuration.GetSection("AppSettings:SupabaseURL").Value! ?? throw new InvalidOperationException("SupabaseURL AppSetting not set!");
+
             //TODO: Grab From CLient?
-            return $"{url}/storage/v1/object/public/{res}";
+            response.Data = res;
+            return response;
+        }
+
+        public async Task<ServiceResponse<string>> UploadSong(IFormFile file, string owner)
+        {
+            ServiceResponse<string> response = new();
+            string bucket = GetBucketName(FileType.Audio);
+
+            using MemoryStream memoryStream = new();
+            await file.CopyToAsync(memoryStream);
+
+            string fileName = ComputeFileHash(memoryStream) + Path.GetExtension(file.FileName);
+            string supabasePath = $"{owner}/{fileName}";
+            Console.WriteLine(fileName);
+
+            if (await IsDuplicate(supabasePath, FileType.Audio))
+            {
+                response.Success = false;
+                response.Message = "You've already uploaded this file!";
+                response.StatusCode = 409;
+                return response;
+            }
+
+            string res = await _client.Storage
+                .From(bucket)
+                .Upload(memoryStream.ToArray(), supabasePath);
+            Console.WriteLine(res);
+            string url = _configuration.GetSection("AppSettings:SupabaseURL").Value! ?? throw new InvalidOperationException("SupabaseURL AppSetting not set!");
+
+            //TODO: Grab From CLient?
+            response.Data = supabasePath;
+            return response;
         }
 
         public bool IsValidType(string contentType, FileType type)
         {
-            if (type == FileType.Image) {
-                return contentType.StartsWith("image/");
-            }
-
-            return false;
+            return type == FileType.Image && contentType.StartsWith("image/");
         }
 
-        private async Task<string> GetFileName(string extension, string bucket)
+        private static string GetBucketName(FileType type)
         {
-            bool isValid = false;
-            
-            while (!isValid)
-            {
-                string randomId =  Guid.NewGuid().ToString("N");
-                string newFileName = randomId + extension; 
-                var response = await _client.Rpc("storage_file_exists", new Dictionary<string, object> { { "path", newFileName}, { "bucket", bucket} });
+            return type == FileType.Image ? "images" : "songs"; ;
+        }
 
-                if (response.Content == "false")
-                {
-                    // Console.WriteLine("Does not exist");
-                    return newFileName;
-                }
-            }
+        private async Task<bool> IsDuplicate(string filePath, FileType type)
+        {
+            string bucket = GetBucketName(type);
 
-            return Guid.NewGuid().ToString("N") + extension; //This will never get hit? fallsafe
+            Postgrest.Responses.BaseResponse response = await _client.Rpc("storage_file_exists", new Dictionary<string, object> { { "path", filePath }, { "bucket", bucket } });
+
+            return response.Content != "false";
+        }
+
+        private static string ComputeFileHash(MemoryStream stream)
+        {
+            byte[] hash = MD5.HashData(stream.ToArray());
+            return BitConverter.ToString(hash).Replace("-", "").ToLower(System.Globalization.CultureInfo.CurrentCulture);
         }
 
         public async Task<bool> DeleteFile(string bucket, string path)
         {
-            if (path.StartsWith(bucket + '/')) {
-                path = path.Substring(bucket.Length + 1);
+            if (path.StartsWith(bucket + '/'))
+            {
+                path = path[(bucket.Length + 1)..];
             }
 
             Console.WriteLine(path);
-            await _client.Storage.From(bucket).Remove(new List<string> { path });
+            _ = await _client.Storage.From(bucket).Remove(new List<string> { path });
 
             return true;
+        }
+
+        public async Task<string> GetSignedUrl(string filePath, FileType type)
+        {
+            string bucket = GetBucketName(type);
+            try
+            {
+                return await _client.Storage.From(bucket).CreateSignedUrl(filePath, 60);
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
         }
     }
 }

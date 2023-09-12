@@ -1,7 +1,7 @@
 'use client';
 import { usePathname } from 'next/navigation';
 import React, { useMemo } from 'react';
-import { AiOutlineCompass, AiOutlineHome } from 'react-icons/ai';
+import { AiOutlineHome } from 'react-icons/ai';
 import { BiArrowBack } from 'react-icons/bi';
 import { MdOutlineAudioFile, MdOutlineFavorite } from 'react-icons/md';
 import { twMerge } from 'tailwind-merge';
@@ -26,12 +26,12 @@ const Sidebar = ({ children }: SidebarProps) => {
         active: pathname === '/',
         href: '/',
       },
-      {
-        icon: AiOutlineCompass,
-        label: 'Discover',
-        active: pathname === '/discover',
-        href: '/discover',
-      },
+      // {
+      //   icon: AiOutlineCompass,
+      //   label: 'Discover',
+      //   active: pathname === '/discover',
+      //   href: '/discover',
+      // },
       {
         icon: MdOutlineFavorite,
         label: 'Favourites',
@@ -82,7 +82,7 @@ const Sidebar = ({ children }: SidebarProps) => {
 
       <main className="h-full flex-1 overflow-y-auto px-4 py-2 pr-5">
         <Navbar />
-        {children}
+        <div className="pr-5">{children}</div>
       </main>
     </div>
   );

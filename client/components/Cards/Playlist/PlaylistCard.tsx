@@ -1,5 +1,7 @@
 'use client';
 
+import { getImageUrl } from '@/lib/helpers';
+import { getDefaultImage } from '@/utils';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -30,8 +32,8 @@ const PlaylistCard: React.FC<IPlaylistCard> = ({
       className="group min-w-[200px] cursor-pointer duration-300 ease-in-out hover:scale-110"
     >
       <Image
-        className="rounded-lg"
-        src={imageUrl}
+        className="h-[200px] rounded-lg"
+        src={imageUrl ? getImageUrl(imageUrl) : getDefaultImage()}
         width={200}
         height={200}
         alt="Playlist Cover"

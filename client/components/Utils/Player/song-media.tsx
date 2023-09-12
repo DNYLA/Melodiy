@@ -1,5 +1,6 @@
 'use client';
 
+import { getImageUrl } from '@/lib/helpers';
 import { Song } from '@/types/playlist';
 import { getDefaultImage } from '@/utils';
 import Image from 'next/image';
@@ -27,7 +28,7 @@ const SongMedia: React.FC<SongMediaProps> = ({ data, onClick }) => {
       <div className="relative min-h-[48px] min-w-[48px] overflow-hidden rounded-md">
         <Image
           fill
-          src={data.coverPath || getDefaultImage()}
+          src={data.coverPath ? getImageUrl(data.coverPath) : getDefaultImage()}
           alt="Media Item"
           className="object-cover"
         />

@@ -1,8 +1,8 @@
 'use client';
+import SearchInput from '@/components/Inputs/Searchbar/SearchInput';
 import { useRouter } from 'next/navigation';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { twMerge } from 'tailwind-merge';
-import Input from '../../Inputs/Input/Input';
 import AuthSection from './AuthSection';
 
 const Navbar = () => {
@@ -29,7 +29,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="my-1 flex flex-row justify-between">
+    <div className="my-1 mb-3 flex flex-row justify-between">
       <div className="flex flex-row items-center gap-x-3">
         <div className="flex flex-row gap-x-3 text-inactive">
           <AiOutlineLeft
@@ -50,7 +50,7 @@ const Navbar = () => {
           />
         </div>
         <div>
-          <Input placeholder="Search" />
+          <SearchInput />
         </div>
       </div>
       <div className="">

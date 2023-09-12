@@ -7,61 +7,61 @@ using Microsoft.AspNetCore.Mvc;
 namespace melodiy.server.Controllers
 {
     [CheckStatusCode]
-	[ApiController]
-	[Route("[controller]")]
+    [ApiController]
+    [Route("[controller]")]
     public class SongController : ControllerBase
     {
-		private readonly ISongService _songService;
-    	private readonly IAuthService _authService;
-		public SongController(ISongService songService, IAuthService authService, IMapper iMapper)
-		{
-      		_authService = authService;
-      		_songService = songService;
-		}
+        private readonly ISongService _songService;
+        private readonly IAuthService _authService;
+        public SongController(ISongService songService, IAuthService authService, IMapper iMapper)
+        {
+            _authService = authService;
+            _songService = songService;
+        }
 
 
-		[Authorize]
-       	[HttpPost]
-		public async Task<ActionResult<ServiceResponse<GetSongResponse>>> Create([FromForm] UploadSongRequest request)
-		{
-			var response = await _songService.UploadSong(request);
-			// var response = new ServiceResponse<GetSongResponse>();
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult<ServiceResponse<GetSongResponse>>> Create([FromForm] UploadSongRequest request)
+        {
+            ServiceResponse<GetSongResponse> response = await _songService.UploadSong(request);
+            // var response = new ServiceResponse<GetSongResponse>();
 
             Console.WriteLine(request.Audio.FileName);
             Console.WriteLine(request.Image?.FileName);
 
-			return response;
-		}
+            return response;
+        }
 
         [Authorize]
         [HttpGet()]
-		public async Task<ActionResult<ServiceResponse<List<GetSongResponse>>>> GetUserSongs()
-		{
-            var userId = _authService.GetUserId();
-			var response = await _songService.GetUserSongs(userId);
+        public async Task<ActionResult<ServiceResponse<List<GetSongResponse>>>> GetUserSongs()
+        {
+            int userId = _authService.GetUserId();
+            ServiceResponse<List<GetSongResponse>> response = await _songService.GetUserSongs(userId);
 
-			return response;
-		}
+            return response;
+        }
 
         [HttpGet("{id}")]
-		public async Task<ActionResult<ServiceResponse<GetSongResponse>>> GetUserSongs(string id)
-		{
+        public async Task<ActionResult<ServiceResponse<GetSongResponse>>> GetSong(string id)
+        {
             //TODO: Add Authorsiation
             // var userId = _authService.GetUserId();
-			var response = await _songService.GetSong(id);
+            ServiceResponse<GetSongResponse> response = await _songService.GetSong(id);
 
-			return response;
-		}
+            return response;
+        }
 
 
         [Authorize]
         [HttpDelete("{id}")]
-		public async Task<ActionResult<ServiceResponse<GetSongResponse>>> DeleteSong(string id)
-		{
-            var userId = _authService.GetUserId();
-			var response = await _songService.DeleteSong(id, userId);
+        public async Task<ActionResult<ServiceResponse<GetSongResponse>>> DeleteSong(string id)
+        {
+            int userId = _authService.GetUserId();
+            ServiceResponse<GetSongResponse> response = await _songService.DeleteSong(id, userId);
 
-			return response;
-		}
+            return response;
+        }
     }
 }
