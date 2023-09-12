@@ -11,9 +11,11 @@ COPY .eslintrc.json next.config.js ./
 COPY tailwind.config.ts postcss.config.js ./
 
 #Folders
+COPY actions ./actions
 COPY app ./app
 COPY components ./components
 COPY hooks ./hooks
+COPY lib ./lib
 COPY providers ./providers
 COPY public ./public
 COPY types ./types

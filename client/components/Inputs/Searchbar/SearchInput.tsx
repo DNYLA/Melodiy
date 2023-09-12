@@ -26,7 +26,7 @@ const SearchInput = () => {
     const url = qs.stringifyUrl({ url: '/search', query });
 
     router.push(url);
-  }, [debouncedValue, router]);
+  }, [debouncedValue, router, value]);
 
   useEffect(() => {
     handleReRoute();
