@@ -1,4 +1,4 @@
-name: Release Melodiy Containers
+name: Release Melodiy Server Image
 
 on:
   workflow_dispatch:
