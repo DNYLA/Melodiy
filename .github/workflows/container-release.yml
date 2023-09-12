@@ -20,9 +20,9 @@ jobs:
           - dockerfile: ./server/Dockerfile
             image: ghcr.io/dnyla/melodiy-server
             context: ./server
-          - dockerfile: ./client/Dockerfile
-            image: ghcr.io/dnyla/melodiy-web
-            context: ./client
+          # - dockerfile: ./client/Dockerfile
+          #   image: ghcr.io/dnyla/melodiy-web
+          #   context: ./client
     permissions:
       contents: read
       packages: write
