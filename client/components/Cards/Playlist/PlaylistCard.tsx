@@ -32,7 +32,7 @@ const PlaylistCard: React.FC<IPlaylistCard> = ({
       className="group min-w-[200px] cursor-pointer duration-300 ease-in-out hover:scale-110"
     >
       <Image
-        className="rounded-lg"
+        className="h-[200px] rounded-lg"
         src={imageUrl ? getImageUrl(imageUrl) : getDefaultImage()}
         width={200}
         height={200}

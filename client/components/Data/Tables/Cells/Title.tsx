@@ -20,7 +20,7 @@ const TitleCell: React.FC<ITitleCell> = ({
     <div className="flex gap-x-2">
       <Image
         draggable={false}
-        className="rounded-md"
+        className="h-[45px] w-[45px] rounded-md"
         src={cover ? getImageUrl(cover) : getDefaultImage()}
         width={45}
         height={45}
