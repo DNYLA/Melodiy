@@ -205,10 +205,12 @@ namespace melodiy.server.Services.SongService
                 _ = await _context.SaveChangesAsync();
 
                 _ = await _fileService.DeleteFile("songs", song.SongPath);
-                if (song.CoverPath is not null and (not "images/default_playlist.png" or not "default_playlist.png"))
-                {
-                    _ = await _fileService.DeleteFile("images", song.CoverPath);
-                }
+
+                //TODO: Check if image is used in other songs/playlists before deleting.
+                // if (song.CoverPath is not null)
+                // {
+                //     _ = await _fileService.DeleteFile("images", song.CoverPath);
+                // }
 
                 response.Data = _mapper.Map<GetSongResponse>(song);
             }

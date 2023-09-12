@@ -82,7 +82,7 @@ const Sidebar = ({ children }: SidebarProps) => {
 
       <main className="h-full flex-1 overflow-y-auto px-4 py-2 pr-5">
         <Navbar />
-        {children}
+        <div className="pr-5">{children}</div>
       </main>
     </div>
   );

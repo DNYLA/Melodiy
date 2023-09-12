@@ -93,7 +93,11 @@ export class ColumnBuilder {
   AddDuration(): ColumnBuilder {
     const col = this.columnHelper.accessor('duration', {
       header: () => <BsClock size={18} className="" />,
-      cell: ({ getValue }) => <span>{msToMinuteSeconds(getValue())}</span>,
+      cell: ({ getValue }) => (
+        <span className="text-neutral-400">
+          {msToMinuteSeconds(getValue())}
+        </span>
+      ),
     });
 
     this.columns.push(col);
