@@ -16,6 +16,7 @@ using melodiy.server.Data.File;
 using melodiy.server.Services.FileService;
 using melodiy.server.Services.SongService;
 using melodiy.server.Services.SearchService;
+using melodiy.server.Providers.Search;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -68,6 +69,10 @@ builder.Services.AddSingleton(provider => new Supabase.Client(url, key, options)
 //API Repositories
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IFileRepository, SupabaseRepository>();
+
+//API Providers
+builder.Services.AddScoped<ISearchProvider, SpotifyProvider>();
+// builder.Services.AddScoped<IStreamProvider, YoutubeProvider>();
 
 //API Services
 builder.Services.AddScoped<ISearchService, SearchService>();
