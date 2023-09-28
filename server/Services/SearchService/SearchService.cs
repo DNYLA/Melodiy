@@ -1,7 +1,6 @@
 using melodiy.server.Dtos.Search;
 using melodiy.server.Dtos.Song;
 using melodiy.server.Providers.Search;
-using server.Models;
 
 namespace melodiy.server.Services.SearchService
 {
@@ -31,7 +30,6 @@ namespace melodiy.server.Services.SearchService
             };
 
 
-
             return response;
         }
 
@@ -40,7 +38,7 @@ namespace melodiy.server.Services.SearchService
             try
             {
                 //TODO: Sort by views in future ?
-                List<Song> foundSongs = await _context.Songs.Where(s => (s.Provider == TrackProviderType.Local) && (s.Title.ToLower().Contains(songName) || s.Artist.ToLower().Contains(songName) || (s.Album != null && s.Album.ToLower().Contains(songName)))).Take(2).ToListAsync();
+                List<Song> foundSongs = await _context.Songs.Where(s => (s.Provider == ProviderType.Local) && (s.Title.ToLower().Contains(songName) || s.Artist.ToLower().Contains(songName) || (s.Album != null && s.Album.ToLower().Contains(songName)))).Take(2).ToListAsync();
                 List<GetSongResponse> mappedSongs = foundSongs.Select(_mapper.Map<GetSongResponse>).ToList();
                 List<GetSongResponse> combinedSongs = providerSongs.Concat(mappedSongs).ToList();
                 return combinedSongs;

@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using server.Models;
 
 namespace melodiy.server.Models
 {
@@ -26,7 +25,7 @@ namespace melodiy.server.Models
         public string? CoverPath { get; set; }
         public string SongPath { get; set; } = string.Empty;
         public string? SpotifyId { get; set; }
-        public TrackProviderType Provider { get; set; } = TrackProviderType.Local;
+        public ProviderType Provider { get; set; }
         public int Duration { get; set; }
         public List<PlaylistSong> PlaylistSongs { get; set; }
         public int? UserId { get; set; }

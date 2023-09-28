@@ -7,6 +7,7 @@ const nextConfig = {
     domains: [
       'dmzuqlhabiwwcasbtoem.supabase.co', //Host Upload
       'svmigokmzkjddcixdmzh.supabase.co', //Host Upload
+      'i.scdn.co',
     ],
   },
   webpack: (config) => {

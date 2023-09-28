@@ -1,6 +1,6 @@
-namespace server.Models
+namespace melodiy.server.Models
 {
-    public enum TrackProviderType
+    public enum ProviderType
     {
         Local,
         External

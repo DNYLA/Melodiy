@@ -23,11 +23,11 @@ namespace melodiy.server.Data.File
             string fileName = ComputeFileHash(memoryStream) + Path.GetExtension(file.FileName);
             string supabasePath = $"{owner}/{fileName}";
             string url = _configuration.GetSection("AppSettings:SupabaseURL").Value! ?? throw new InvalidOperationException("SupabaseURL AppSetting not set!");
-
+            string host = $"{url}/storage/v1/object/public";
 
             if (await IsDuplicate(supabasePath, FileType.Image))
             {
-                response.Data = $"{bucket}/{supabasePath}";
+                response.Data = $"{url}/{bucket}/{supabasePath}";
                 return response;
             }
 
@@ -37,7 +37,7 @@ namespace melodiy.server.Data.File
             Console.WriteLine(res);
 
             //TODO: Grab From CLient?
-            response.Data = res;
+            response.Data = $"{url}/{res}";
             return response;
         }
 

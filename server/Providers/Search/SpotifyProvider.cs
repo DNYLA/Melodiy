@@ -2,7 +2,6 @@ using System.Globalization;
 using AutoMapper.Internal;
 using melodiy.server.Dtos.Search;
 using melodiy.server.Dtos.Song;
-using server.Models;
 using SpotifyAPI.Web;
 
 namespace melodiy.server.Providers.Search
@@ -58,7 +57,7 @@ namespace melodiy.server.Providers.Search
                     CoverPath = track.Album.Images[0].Url,
                     SongPath = track.PreviewUrl ?? "25", //TODO: Update to YoutubeUrl
                     Duration = track.DurationMs,
-                    Provider = TrackProviderType.External,
+                    Provider = ProviderType.External,
                     SpotifyId = track.Id,
                     ReleaseDate = releaseDate.ToUniversalTime(),
                 });

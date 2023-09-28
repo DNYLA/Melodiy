@@ -61,7 +61,6 @@ builder.Services.AddSwaggerGen(c =>
 
     c.OperationFilter<SecurityRequirementsOperationFilter>();
 });
-builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 //
 builder.Services.AddSingleton(provider => new Supabase.Client(url, key, options));
@@ -81,6 +80,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISongService, SongService>();
 builder.Services.AddScoped<IPlaylistService, PlaylistService>();
 builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 //Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
