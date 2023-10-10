@@ -1,6 +1,7 @@
 using melodiy.server.Dtos.Search;
 using melodiy.server.Providers.Search;
 using Microsoft.AspNetCore.Mvc;
+using server.Providers;
 
 namespace melodiy.server.Controllers
 {
@@ -9,22 +10,37 @@ namespace melodiy.server.Controllers
     [Route("[controller]")]
     public class TestController
     {
-        private readonly ISearchProvider _spotifyProvider;
+        private readonly ISearchProvider _searchProvider;
+        private readonly IAudioProvider _streamProvider;
 
-        public TestController(ISearchProvider spotifyProvider)
+        public TestController(ISearchProvider searchProvider, IAudioProvider streamProvider)
         {
-            _spotifyProvider = spotifyProvider;
+            _searchProvider = searchProvider;
+            _streamProvider = streamProvider;
         }
 
         [HttpGet()]
         public async Task<ActionResult<ServiceResponse<SearchResults>>> RunTest()
         {
-            SearchResults res = await _spotifyProvider.Search("Roddy Ricch", 5);
+            SearchResults res = await _searchProvider.Search("Roddy Ricch", 5);
             ServiceResponse<SearchResults> serviceRes = new()
             {
                 Data = res
             };
 
+            return serviceRes;
+
+        }
+
+        [HttpGet("youtube")]
+        public async Task<ActionResult<ServiceResponse<string>>> Youtube()
+        {
+            string url = await _streamProvider.GetUrl("Die Young", new List<string> { "Roddy Ricch" }, 166000);
+            ServiceResponse<string> serviceRes = new()
+            {
+                Data = url
+            };
+            Console.WriteLine("Here");
             return serviceRes;
 
         }

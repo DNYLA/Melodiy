@@ -29,6 +29,7 @@ namespace melodiy.server.Providers.Search
             SpotifyClient spotify = new(DefaultConfig);
             // SearchResponse results = await spotify.Search.Item(new SearchRequest(SearchRequest.Types.Artist | SearchRequest.Types.Album | SearchRequest.Types.Track, term));
 
+            //Searches for only Artists, Albums and Tracks
             SearchResponse results = await spotify.Search.Item(new SearchRequest(SearchRequest.Types.Artist | SearchRequest.Types.Album | SearchRequest.Types.Track, term)
             {
                 Type = SearchRequest.Types.Artist | SearchRequest.Types.Album | SearchRequest.Types.Track,
@@ -37,6 +38,7 @@ namespace melodiy.server.Providers.Search
             });
 
 
+            //No Results so we can return an empty result;
             SearchResults pipedResults = new();
             if (results == null || results.Tracks == null || results.Tracks.Items == null)
             {
@@ -45,14 +47,18 @@ namespace melodiy.server.Providers.Search
 
             List<Song> _insertSongs = new();
 
+            //Converts Spotify API results into DB serialised Song Track.
             results.Tracks.Items.ForEach(track =>
             {
                 DateTime releaseDate = GetReleaseDate(track.Album.ReleaseDate, track.Album.ReleaseDatePrecision);
+                //Check if it already exists.
+                // List<string> artists = track.Artists.ConvertAll(a => a.Name);
+
                 Console.WriteLine(releaseDate);
                 _ = _insertSongs.TryAdd(new Song
                 {
                     Title = track.Name,
-                    Artist = track.Artists[0].Name,
+                    Artist = track.Artists[0].Name, //TODO: Update to include multiple artists ?
                     Album = track.Album.Name,
                     CoverPath = track.Album.Images[0].Url,
                     SongPath = track.PreviewUrl ?? "25", //TODO: Update to YoutubeUrl
@@ -84,8 +90,10 @@ namespace melodiy.server.Providers.Search
             return pipedResults;
         }
 
+        //Converts YYYY-MM-DD (2004-01-01 || 2004-01)  to a DateTime Variable.
         private static DateTime GetReleaseDate(string releaseDate, string releaseDatePrecision)
         {
+            //Some results are only accurate to the month or year in this case we default to the start of the period.
             if (releaseDatePrecision == "month")
             {
                 releaseDate += "-01";

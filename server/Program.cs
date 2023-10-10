@@ -17,12 +17,14 @@ using melodiy.server.Services.FileService;
 using melodiy.server.Services.SongService;
 using melodiy.server.Services.SearchService;
 using melodiy.server.Providers.Search;
+using server.Providers;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 string url = builder.Configuration.GetSection("AppSettings:SupabaseURL").Value!;
 string key = builder.Configuration.GetSection("AppSettings:SupabaseKey").Value!;
+
 Supabase.SupabaseOptions options = new()
 {
     AutoRefreshToken = true,
@@ -71,7 +73,7 @@ builder.Services.AddScoped<IFileRepository, SupabaseRepository>();
 
 //API Providers
 builder.Services.AddScoped<ISearchProvider, SpotifyProvider>();
-// builder.Services.AddScoped<IStreamProvider, YoutubeProvider>();
+builder.Services.AddScoped<IAudioProvider, YoutubeProvider>();
 
 //API Services
 builder.Services.AddScoped<ISearchService, SearchService>();
