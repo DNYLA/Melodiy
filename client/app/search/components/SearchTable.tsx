@@ -21,7 +21,7 @@ const SearchTable: React.FC<ISearchTable> = ({ songs }) => {
     // .AddDate('Date Added')
     .AddDuration()
     .Build();
-  console.log(songs);
+
   return (
     <div className="flex flex-col">
       <span className="text-center text-lg font-bold">Top Songs</span>

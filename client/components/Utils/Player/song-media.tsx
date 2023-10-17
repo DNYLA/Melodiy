@@ -1,6 +1,8 @@
 'use client';
 
+import SongContextMenu from '@/components/Utils/ContextMenu/SongContextMenu/SongContextMenu';
 import { getImageUrl } from '@/lib/helpers';
+import { PlaylistType } from '@/types';
 import { Song } from '@/types/playlist';
 import { getDefaultImage } from '@/utils';
 import Image from 'next/image';
@@ -21,25 +23,34 @@ const SongMedia: React.FC<SongMediaProps> = ({ data, onClick }) => {
   };
 
   return (
-    <div
-      onClick={handleClick}
-      className="cursor-poiner flex w-full cursor-pointer items-center gap-x-3 rounded-md p-2 hover:bg-neutral-600/25"
+    <SongContextMenu
+      trackId={data.uid}
+      ownerId={data.user?.id}
+      key={data.uid}
+      type={PlaylistType.Playlist}
     >
-      <div className="relative min-h-[48px] min-w-[48px] overflow-hidden rounded-md">
-        <Image
-          fill
-          src={data.coverPath ? getImageUrl(data.coverPath) : getDefaultImage()}
-          alt="Media Item"
-          className="object-cover"
-        />
+      <div
+        onClick={handleClick}
+        className="cursor-poiner flex w-full cursor-pointer items-center gap-x-3 rounded-md p-2 hover:bg-neutral-600/25"
+      >
+        <div className="relative min-h-[48px] min-w-[48px] overflow-hidden rounded-md">
+          <Image
+            fill
+            src={
+              data.coverPath ? getImageUrl(data.coverPath) : getDefaultImage()
+            }
+            alt="Media Item"
+            className="object-cover"
+          />
+        </div>
+        <div className="flex flex-col gap-y-1 overflow-hidden">
+          <p className="truncate text-white hover:underline">{data.title}</p>
+          <p className="truncate text-sm text-neutral-400 hover:underline">
+            {data.artist}
+          </p>
+        </div>
       </div>
-      <div className="flex flex-col gap-y-1 overflow-hidden">
-        <p className="truncate text-white hover:underline">{data.title}</p>
-        <p className="truncate text-sm text-neutral-400 hover:underline">
-          {data.artist}
-        </p>
-      </div>
-    </div>
+    </SongContextMenu>
   );
 };
 
