@@ -7,6 +7,6 @@ namespace melodiy.server.Services.SearchService
     {
         Task<ServiceResponse<SearchResults>> Search(string term);
 
-        Task<List<GetSongResponse>> SearchSong(string songName, List<GetSongResponse> providerSongs);
+        Task<List<GetSongResponse>> SearchSong(string term, List<GetSongResponse> providerSongs);
     }
 }
