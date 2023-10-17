@@ -4,6 +4,7 @@ using melodiy.server.Dtos.Song;
 using melodiy.server.Providers;
 using melodiy.server.Services.AuthService;
 using melodiy.server.Services.FileService;
+using YoutubeSearchApi.Net.Models.Youtube;
 
 namespace melodiy.server.Services.SongService
 {
@@ -126,6 +127,35 @@ namespace melodiy.server.Services.SongService
                     return response;
                 }
 
+                if (dbSong.Provider == ProviderType.External && dbSong.YoutubeId == null)
+                {
+                    //TODO: Add posibility for multiple artists (shouldnt be here)
+
+                    try
+                    {
+                        YoutubeVideo video = await _audioProvider.Find(dbSong.Title, new List<string> { dbSong.Artist }, dbSong.Duration);
+                        _ = TimeSpan.TryParseExact(video.Duration, @"m\:ss", null, out TimeSpan videoDuration);
+
+                        dbSong.YoutubeId = video.Id;
+                        dbSong.Duration = (int)videoDuration.TotalMilliseconds;
+
+                        _ = await _context.SaveChangesAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+
+                        //TODO: Make hidden instead to avoid refetches when searching
+                        _ = await DeleteSong(dbSong.UID, -1);
+
+                        response.Success = false;
+                        response.StatusCode = 404;
+                        response.Message = $"Song {songId} not found";
+                        return response;
+                    }
+
+                }
+
                 string songUrl = dbSong.Provider == ProviderType.Local
                     ? await _fileRepo.GetSignedUrl(dbSong.SongPath!, FileType.Audio)
                     : await _audioProvider.GetStream(dbSong.YoutubeId!);
@@ -197,7 +227,7 @@ namespace melodiy.server.Services.SongService
                     return response;
                 }
 
-                if (song.User.Id != userId)
+                if (song.Provider == ProviderType.Local && song.User!.Id != userId)
                 {
                     response.Success = false;
                     response.Message = "Can't delete a song you didn't create.";

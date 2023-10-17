@@ -57,7 +57,7 @@ namespace melodiy.server.Services.SearchService
                 // List<Song> localDbSongs = await _context.Songs.Where(s => (s.Provider == ProviderType.Local) && (s.Title.ToLower().Contains(term) || s.Artist.ToLower().Contains(term) || (s.Album != null && s.Album.ToLower().Contains(term)))).ToListAsync();
                 List<GetSongResponse> mappedSongs = localDbSongs.Select(_mapper.Map<GetSongResponse>).ToList();
                 List<GetSongResponse> combinedSongs = providerSongs.Concat(mappedSongs).ToList();
-                List<GetSongResponse> sortedSongs = SortSongs(combinedSongs, term).Take(10).ToList();
+                List<GetSongResponse> sortedSongs = SortSongs(combinedSongs, term).Take(5).ToList();
 
                 return sortedSongs;
             }

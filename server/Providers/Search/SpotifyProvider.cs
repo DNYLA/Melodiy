@@ -3,7 +3,6 @@ using AutoMapper.Internal;
 using melodiy.server.Dtos.Search;
 using melodiy.server.Dtos.Song;
 using SpotifyAPI.Web;
-using YoutubeSearchApi.Net.Models.Youtube;
 
 namespace melodiy.server.Providers.Search
 {
@@ -70,9 +69,11 @@ namespace melodiy.server.Providers.Search
                 List<string> artists = track.Artists.ConvertAll(a => a.Name);
                 try
                 {
+                    //To Make searches quicker and reduce uneeded API calls the audio stream is fetched whenever the individual song
+                    //is requested (usually when it is played by a user).
                     //This will throw an error if no video is found
-                    YoutubeVideo video = await _audioProvider.Find(track.Name, artists, track.DurationMs);
-                    _ = TimeSpan.TryParseExact(video.Duration, @"m\:ss", null, out TimeSpan videoDuration);
+                    // YoutubeVideo video = await _audioProvider.Find(track.Name, artists, track.DurationMs);
+                    // _ = TimeSpan.TryParseExact(video.Duration, @"m\:ss", null, out TimeSpan videoDuration);
 
                     Console.WriteLine(releaseDate);
                     _ = _insertSongs.TryAdd(new Song
@@ -81,10 +82,10 @@ namespace melodiy.server.Providers.Search
                         Artist = track.Artists[0].Name, //TODO: Update to include multiple artists ?
                         Album = track.Album.Name,
                         CoverPath = track.Album.Images[0].Url,
-                        Duration = (int)videoDuration.TotalMilliseconds,
+                        Duration = track.DurationMs,
                         Provider = ProviderType.External,
                         SpotifyId = track.Id,
-                        YoutubeId = video.Id,
+                        // YoutubeId = video.Id,
                         ReleaseDate = releaseDate.ToUniversalTime(),
                     });
                     spotifyIds.Add(track.Id);
