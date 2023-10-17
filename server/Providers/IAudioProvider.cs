@@ -1,9 +1,11 @@
-namespace server.Providers
+using YoutubeSearchApi.Net.Models.Youtube;
+
+namespace melodiy.server.Providers
 {
     public interface IAudioProvider
     {
-        //Release is optional but in the future to refine searches it may help filter out false positives.
-        Task<string> GetUrl(string track, List<string> artists, int durationMs);
-        
+        //TODO: Should not return YoutubeVideo instead return id + duration?
+        Task<YoutubeVideo> Find(string track, List<string> artists, int durationMs);
+        Task<string> GetStream(string id);
     }
 }

@@ -21,15 +21,16 @@ namespace melodiy.server.Models
         public string Artist { get; set; } = string.Empty;
         public string? Album { get; set; }
         public string? AlbumArtist { get; set; }
-        public DateTime ReleaseDate { get; set; }
         public string? CoverPath { get; set; }
-        public string SongPath { get; set; } = string.Empty;
+        public string? SongPath { get; set; } = string.Empty;
         public string? SpotifyId { get; set; }
+        public string? YoutubeId { get; set; }
         public ProviderType Provider { get; set; }
         public int Duration { get; set; }
         public List<PlaylistSong> PlaylistSongs { get; set; }
         public int? UserId { get; set; }
         public User? User { get; set; }
+        public DateTime ReleaseDate { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime CreatedAt { get; set; }

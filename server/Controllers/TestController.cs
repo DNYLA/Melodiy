@@ -1,7 +1,8 @@
 using melodiy.server.Dtos.Search;
+using melodiy.server.Providers;
 using melodiy.server.Providers.Search;
 using Microsoft.AspNetCore.Mvc;
-using server.Providers;
+using YoutubeSearchApi.Net.Models.Youtube;
 
 namespace melodiy.server.Controllers
 {
@@ -35,10 +36,10 @@ namespace melodiy.server.Controllers
         [HttpGet("youtube")]
         public async Task<ActionResult<ServiceResponse<string>>> Youtube()
         {
-            string url = await _streamProvider.GetUrl("Die Young", new List<string> { "Roddy Ricch" }, 166000);
+            YoutubeVideo video = await _streamProvider.Find("Die Young", new List<string> { "Roddy Ricch" }, 166000);
             ServiceResponse<string> serviceRes = new()
             {
-                Data = url
+                Data = video.Url
             };
             Console.WriteLine("Here");
             return serviceRes;

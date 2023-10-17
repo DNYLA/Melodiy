@@ -3,6 +3,7 @@ using AutoMapper.Internal;
 using melodiy.server.Dtos.Search;
 using melodiy.server.Dtos.Song;
 using SpotifyAPI.Web;
+using YoutubeSearchApi.Net.Models.Youtube;
 
 namespace melodiy.server.Providers.Search
 {
@@ -12,12 +13,14 @@ namespace melodiy.server.Providers.Search
         private readonly IConfiguration _configuration;
         private readonly DataContext _context;
         private readonly IMapper _mapper;
+        private readonly IAudioProvider _audioProvider;
 
-        public SpotifyProvider(IConfiguration configuration, DataContext context, IMapper mapper)
+        public SpotifyProvider(IConfiguration configuration, DataContext context, IMapper mapper, IAudioProvider audioProvider)
         {
             _configuration = configuration;
             _context = context;
             _mapper = mapper;
+            _audioProvider = audioProvider;
 
             string spotifyClientId = _configuration.GetSection("AppSettings:SpotifyClientId").Value ?? throw new Exception("SpotifyClientId is null!");
             string spotifyClientSecret = _configuration.GetSection("AppSettings:SpotifyClientSecret").Value ?? throw new Exception("SpotifyClientSecret is null!");
@@ -46,36 +49,60 @@ namespace melodiy.server.Providers.Search
             }
 
             List<Song> _insertSongs = new();
+            List<string> spotifyIds = new(); //List of all songs fetched regardless if they have already exist.
 
             //Converts Spotify API results into DB serialised Song Track.
-            results.Tracks.Items.ForEach(track =>
+            for (int i = 0; i < results.Tracks.Items.Count; i++)
             {
+                FullTrack track = results.Tracks.Items[i];
                 DateTime releaseDate = GetReleaseDate(track.Album.ReleaseDate, track.Album.ReleaseDatePrecision);
-                //Check if it already exists.
-                // List<string> artists = track.Artists.ConvertAll(a => a.Name);
 
-                Console.WriteLine(releaseDate);
-                _ = _insertSongs.TryAdd(new Song
+                //Check if it already exists.
+                //TODO: Filter out list before instead of individually checking (Less DB calls)
+                Song? dbSong = await _context.Songs.SingleOrDefaultAsync(s => s.SpotifyId == track.Id);
+                if (dbSong != null)
                 {
-                    Title = track.Name,
-                    Artist = track.Artists[0].Name, //TODO: Update to include multiple artists ?
-                    Album = track.Album.Name,
-                    CoverPath = track.Album.Images[0].Url,
-                    SongPath = track.PreviewUrl ?? "25", //TODO: Update to YoutubeUrl
-                    Duration = track.DurationMs,
-                    Provider = ProviderType.External,
-                    SpotifyId = track.Id,
-                    ReleaseDate = releaseDate.ToUniversalTime(),
-                });
-            });
+                    spotifyIds.Add(track.Id);
+                    continue;
+                }
+
+
+                List<string> artists = track.Artists.ConvertAll(a => a.Name);
+                try
+                {
+                    //This will throw an error if no video is found
+                    YoutubeVideo video = await _audioProvider.Find(track.Name, artists, track.DurationMs);
+                    _ = TimeSpan.TryParseExact(video.Duration, @"m\:ss", null, out TimeSpan videoDuration);
+
+                    Console.WriteLine(releaseDate);
+                    _ = _insertSongs.TryAdd(new Song
+                    {
+                        Title = track.Name,
+                        Artist = track.Artists[0].Name, //TODO: Update to include multiple artists ?
+                        Album = track.Album.Name,
+                        CoverPath = track.Album.Images[0].Url,
+                        Duration = (int)videoDuration.TotalMilliseconds,
+                        Provider = ProviderType.External,
+                        SpotifyId = track.Id,
+                        YoutubeId = video.Id,
+                        ReleaseDate = releaseDate.ToUniversalTime(),
+                    });
+                    spotifyIds.Add(track.Id);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+            }
 
             try
             {
                 await _context.Songs.BulkInsertAsync(_insertSongs, options =>
                 {
                     options.InsertIfNotExists = true;
+                    // options.index
                     options.ColumnPrimaryKeyExpression = s => s.SpotifyId;
-
                 });
             }
             catch (Exception ex)
@@ -84,7 +111,7 @@ namespace melodiy.server.Providers.Search
             }
 
             //Pointless as we don't care about getting the newest "createdAt" variable for searched results.
-            List<Song> dbSongs = await _context.Songs.Where(s => _insertSongs.Select(i => i.SpotifyId).Contains(s.SpotifyId)).ToListAsync();
+            List<Song> dbSongs = await _context.Songs.Where(s => spotifyIds.Contains(s.SpotifyId!)).ToListAsync();
             pipedResults.Songs = dbSongs.Select(_mapper.Map<GetSongResponse>).ToList();
 
             return pipedResults;

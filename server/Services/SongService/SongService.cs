@@ -1,6 +1,7 @@
 using ATL;
 using melodiy.server.Data.File;
 using melodiy.server.Dtos.Song;
+using melodiy.server.Providers;
 using melodiy.server.Services.AuthService;
 using melodiy.server.Services.FileService;
 
@@ -13,14 +14,16 @@ namespace melodiy.server.Services.SongService
         private readonly IAuthService _authService;
         private readonly IFileService _fileService;
         private readonly IFileRepository _fileRepo;
+        private readonly IAudioProvider _audioProvider;
 
-        public SongService(DataContext context, IMapper mapper, IAuthService authService, IFileService fileService, IFileRepository fileRepo)
+        public SongService(DataContext context, IMapper mapper, IAuthService authService, IFileService fileService, IFileRepository fileRepo, IAudioProvider audioProvider)
         {
             _mapper = mapper;
             _context = context;
             _authService = authService;
             _fileService = fileService;
             _fileRepo = fileRepo;
+            _audioProvider = audioProvider;
         }
 
         public async Task<ServiceResponse<GetSongResponse>> UploadSong(UploadSongRequest request)
@@ -123,13 +126,15 @@ namespace melodiy.server.Services.SongService
                     return response;
                 }
 
-                string songUrl = await _fileRepo.GetSignedUrl(dbSong.SongPath, FileType.Audio);
+                string songUrl = dbSong.Provider == ProviderType.Local
+                    ? await _fileRepo.GetSignedUrl(dbSong.SongPath!, FileType.Audio)
+                    : await _audioProvider.GetStream(dbSong.YoutubeId!);
 
                 if (songUrl == string.Empty)
                 {
                     response.Success = false;
                     response.StatusCode = 404;
-                    response.Message = $"Song, {songId} not found";
+                    response.Message = $"Song {songId} not found";
                     return response;
                 }
 

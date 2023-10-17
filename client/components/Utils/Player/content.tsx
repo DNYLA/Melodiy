@@ -103,7 +103,14 @@ function PlayerContent({ song, songUrl }: PlayerContentProps) {
   const onTrackSeek = (value: number) => {
     if (!duration) return;
     let newValue = (duration * value) / 1000; //value is a % of what the actual should be
-    newValue = newValue < duration ? newValue : duration;
+    newValue = newValue < duration ? newValue : duration; //Clamping it to duration (should of just used clamp)
+    const isNumber = Number.parseInt(((duration % 60000) / 1000).toFixed(0));
+
+    //When streaming externally an issue when seeking causes a NaN to be returned for a split second
+    //Skipping this second is easier than trying to correct the issue because this should only last <1000ms
+    if (Number.isNaN(isNumber)) {
+      return;
+    }
     setCurSecond(newValue);
 
     return newValue;

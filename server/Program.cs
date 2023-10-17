@@ -17,7 +17,7 @@ using melodiy.server.Services.FileService;
 using melodiy.server.Services.SongService;
 using melodiy.server.Services.SearchService;
 using melodiy.server.Providers.Search;
-using server.Providers;
+using melodiy.server.Providers;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
