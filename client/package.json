@@ -51,6 +51,7 @@
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.6",
     "use-sound": "^4.0.1",
+    "ytdl-core": "^4.11.5",
     "zustand": "^4.4.1"
   },
   "devDependencies": {

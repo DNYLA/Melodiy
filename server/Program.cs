@@ -16,12 +16,15 @@ using melodiy.server.Data.File;
 using melodiy.server.Services.FileService;
 using melodiy.server.Services.SongService;
 using melodiy.server.Services.SearchService;
+using melodiy.server.Providers.Search;
+using melodiy.server.Providers;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 string url = builder.Configuration.GetSection("AppSettings:SupabaseURL").Value!;
 string key = builder.Configuration.GetSection("AppSettings:SupabaseKey").Value!;
+
 Supabase.SupabaseOptions options = new()
 {
     AutoRefreshToken = true,
@@ -60,7 +63,6 @@ builder.Services.AddSwaggerGen(c =>
 
     c.OperationFilter<SecurityRequirementsOperationFilter>();
 });
-builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 //
 builder.Services.AddSingleton(provider => new Supabase.Client(url, key, options));
@@ -69,6 +71,10 @@ builder.Services.AddSingleton(provider => new Supabase.Client(url, key, options)
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IFileRepository, SupabaseRepository>();
 
+//API Providers
+builder.Services.AddScoped<ISearchProvider, SpotifyProvider>();
+builder.Services.AddScoped<IAudioProvider, YoutubeProvider>();
+
 //API Services
 builder.Services.AddScoped<ISearchService, SearchService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -76,6 +82,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISongService, SongService>();
 builder.Services.AddScoped<IPlaylistService, PlaylistService>();
 builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 //Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

@@ -24,7 +24,16 @@ export type Song = {
   albumArtist?: string;
   coverPath: string;
   songPath: string;
+  spotifyId?: string;
+  youtubeId?: string;
   duration: number;
   createdAt: string;
+  releaseDate: string;
+  provider: Provider;
   user?: PublicUser;
 };
+
+export enum Provider {
+  Local = 0,
+  External = 1,
+}

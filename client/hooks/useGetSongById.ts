@@ -14,7 +14,7 @@ const useGetSongById = (id?: string) => {
     setIsLoading(true);
 
     const fetchSong = async () => {
-      //TODO: Switch to SWR
+      //TODO: Switch to SWR -> ??? what does this even mean
       const { data: res } = await AXIOS.get<ServiceResponse<Song>>(
         `song/${id}`
       );
@@ -24,6 +24,22 @@ const useGetSongById = (id?: string) => {
         toast.error(res.message);
         return;
       }
+
+      // if (res.data.provider == Provider.External) {
+      //   if (!res.data.youtubeId) return;
+      //   //Fetch Youtube Stream URL.
+      //   const videoInfo = await ytdl.getInfo(res.data.youtubeId);
+      //   const audioFormats = ytdl.filterFormats(videoInfo.formats, 'audioonly');
+      //   if (!audioFormats || audioFormats.length == 0) return;
+
+      //   const highestAudioFormat = ytdl.chooseFormat(videoInfo.formats, {
+      //     filter: 'audio',
+      //     quality: 'highestaudio',
+      //   });
+
+      //   if (!highestAudioFormat) return;
+      //   res.data.songPath = highestAudioFormat.url;
+      // }
 
       setSong(res.data);
       setIsLoading(false);

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using melodiy.server.Data;
@@ -11,9 +12,11 @@ using melodiy.server.Data;
 namespace melodiy.server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230916231701_OptionalSpotifyId")]
+    partial class OptionalSpotifyId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,10 +136,8 @@ namespace melodiy.server.Migrations
                     b.Property<int>("Provider")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("ReleaseDate")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("SongPath")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("SpotifyId")
@@ -150,11 +151,8 @@ namespace melodiy.server.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("YoutubeId")
-                        .HasColumnType("text");
 
                     b.HasKey("UID")
                         .HasAnnotation("SqlServer:Clustered", false);
@@ -230,7 +228,9 @@ namespace melodiy.server.Migrations
                 {
                     b.HasOne("melodiy.server.Models.User", "User")
                         .WithMany("Songs")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
