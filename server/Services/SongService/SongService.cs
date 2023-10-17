@@ -239,7 +239,10 @@ namespace melodiy.server.Services.SongService
                 _context.PlaylistSongs.RemoveRange(song.PlaylistSongs);
                 _ = await _context.SaveChangesAsync();
 
-                _ = await _fileService.DeleteFile("songs", song.SongPath);
+                if (song.Provider == ProviderType.Local)
+                {
+                    _ = await _fileService.DeleteFile("songs", song.SongPath!);
+                }
 
                 //TODO: Check if image is used in other songs/playlists before deleting.
                 // if (song.CoverPath is not null)

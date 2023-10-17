@@ -8,7 +8,7 @@ services:
   #   volumes:
   #     - ./client/.env.production:/app/.env
   server:
-    image: ghcr.io/dnyla/melodiy-server:master
+    image: ghcr.io/dnyla/melodiy-server:latest
     ports:
       - 5062:5062
     volumes:

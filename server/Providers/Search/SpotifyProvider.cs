@@ -92,6 +92,7 @@ namespace melodiy.server.Providers.Search
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine("Errored Out");
                     Console.WriteLine(ex.Message);
                 }
 
@@ -102,7 +103,6 @@ namespace melodiy.server.Providers.Search
                 await _context.Songs.BulkInsertAsync(_insertSongs, options =>
                 {
                     options.InsertIfNotExists = true;
-                    // options.index
                     options.ColumnPrimaryKeyExpression = s => s.SpotifyId;
                 });
             }
