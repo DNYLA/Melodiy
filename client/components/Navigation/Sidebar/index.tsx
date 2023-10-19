@@ -52,6 +52,17 @@ const Sidebar = ({ children }: SidebarProps) => {
 
   useEffect(() => {
     if (resizeDragger.current) {
+      const savedSize = localStorage.getItem('sidebar-width');
+      if (savedSize) {
+        // Sort of a hack, if we are restoring sidebar width from a saved width,
+        // we want a smooth transition, but we don't want it if user is manually
+        // resizing, so we remove it after.
+        sidebar.current!.classList.add('transition-all');
+        resize(Number(savedSize));
+        setTimeout(() => {
+          sidebar.current!.classList.remove('transition-all');
+        }, 200);
+      }
       resizeDragger.current.addEventListener('mousedown', () => {
         document.addEventListener('mousemove', resize, false);
         document.addEventListener(
@@ -65,14 +76,16 @@ const Sidebar = ({ children }: SidebarProps) => {
     }
   }, []);
 
-  const resize = (e: MouseEvent) => {
-    if (e.x < 50) {
+  const resize = (xx: number | MouseEvent) => {
+    const x = typeof xx == 'number' ? xx : xx.x;
+    localStorage.setItem('sidebar-width', String(x));
+    if (x < 50) {
       sidebar.current!.style.width = `0px`;
       sidebar.current!.classList.add('collapsed-sidebar');
       return;
     }
     sidebar.current!.classList.remove('collapsed-sidebar');
-    sidebar.current!.style.width = `${e.x}px`;
+    sidebar.current!.style.width = `${x}px`;
   };
 
   return (
@@ -93,7 +106,7 @@ const Sidebar = ({ children }: SidebarProps) => {
         </div>
 
         <div className="flex flex-col gap-y-1 py-4">
-          <p className="text-lg font-semibold">Browse</p>
+          <p className="truncate text-lg font-semibold">Browse</p>
           <div className="mx-2">
             {routes.map((item) => (
               <SidebarItem key={item.label} {...item} />
