@@ -123,7 +123,7 @@ const Sidebar = ({ children }: SidebarProps) => {
         <div
           ref={resizeDragger}
           id="sidebar-dragger"
-          className="bg-green absolute right-[-5px] top-0 h-full w-[20px] cursor-col-resize"
+          className="bg-green absolute right-[-8px] top-0 h-full w-[20px] cursor-col-resize"
         ></div>
       </div>
 
