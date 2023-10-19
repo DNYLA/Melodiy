@@ -97,7 +97,7 @@ const Sidebar = ({ children }: SidebarProps) => {
     >
       <div
         ref={sidebar}
-        className="relative h-full w-[250px] max-w-[400px] select-none flex-col gap-y-2 bg-sidebar-background px-4 py-2 md:flex"
+        className="relative h-full w-[250px] min-w-[100px] max-w-[400px] select-none flex-col gap-y-2 bg-sidebar-background px-4 py-2 md:flex"
       >
         {/* <div className="hidden md:flex flex-col gap-y-2 bg-black h-full w-[300px] p-2"> */}
 
