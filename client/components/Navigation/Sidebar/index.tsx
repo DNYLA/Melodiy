@@ -10,6 +10,7 @@ import usePlayer from '@/hooks/stores/usePlayer';
 import Navbar from '../Navbar';
 import PlaylistHeader from './PlaylistTitle';
 import SidebarItem from './SidebarNavItem';
+import './index.css';
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -65,6 +66,12 @@ const Sidebar = ({ children }: SidebarProps) => {
   }, []);
 
   const resize = (e: MouseEvent) => {
+    if (e.x < 50) {
+      sidebar.current!.style.width = `0px`;
+      sidebar.current!.classList.add('collapsed-sidebar');
+      return;
+    }
+    sidebar.current!.classList.remove('collapsed-sidebar');
     sidebar.current!.style.width = `${e.x}px`;
   };
 
@@ -102,6 +109,7 @@ const Sidebar = ({ children }: SidebarProps) => {
         {/* Resize dragger */}
         <div
           ref={resizeDragger}
+          id="sidebar-dragger"
           className="bg-green absolute right-[-5px] top-0 h-full w-[20px] cursor-col-resize"
         ></div>
       </div>
