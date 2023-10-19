@@ -29,7 +29,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="my-1 mb-3 flex flex-row justify-between">
+    <div className="sticky top-0 z-50 flex flex-row justify-between bg-[#131111] py-3">
       <div className="flex flex-row items-center gap-x-3">
         <div className="flex flex-row gap-x-3 text-inactive">
           <AiOutlineLeft
