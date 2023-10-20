@@ -1,6 +1,9 @@
+import ActionButton from '@/app/artist/[id]/components/ActionButton';
 import Image from 'next/image';
+import { AiOutlineUserAdd } from 'react-icons/ai';
 import { BiShuffle } from 'react-icons/bi';
-import { BsFillPlayFill } from 'react-icons/bs';
+import { BsFillPlayFill, BsPlayFill } from 'react-icons/bs';
+import { FiShare } from 'react-icons/fi';
 import { twMerge } from 'tailwind-merge';
 
 function ArtistHeader() {
@@ -8,9 +11,9 @@ function ArtistHeader() {
     return (
       <div className="relative">
         <Image
-          src={'/images/cover-3.webp'}
+          // src={'/images/cover-3.webp'}
           // src={'/images/cover-2.jpeg'}
-          // src={'/images/artist-cover.png'}
+          src={'/images/artist-cover.png'}
           fill={true}
           objectFit="cover"
           alt="Artist Cover"
@@ -33,9 +36,9 @@ function ArtistHeader() {
         // }}
       >
         <img
-          src={'/images/cover-3.webp'}
+          // src={'/images/cover-3.webp'}
           // src={'/images/cover-2.jpeg'}
-          // src={'/images/artist-cover.png'}
+          src={'/images/artist-cover.png'}
           alt="Artist Cover"
           className={' bottom-0 z-10 h-[60px] w-full object-cover blur-[75px]'}
         />
@@ -69,6 +72,16 @@ function ArtistHeader() {
             </button>
           </div>
         </div>
+        <div className="absolute bottom-0 right-56 pb-4">
+          <div className="flex h-full w-full gap-x-8">
+            <ActionButton icon={<BsPlayFill size={25} />}>Play</ActionButton>
+            <ActionButton icon={<BiShuffle size={25} />}>Shuffle</ActionButton>
+            <ActionButton icon={<AiOutlineUserAdd size={25} />}>
+              Follow
+            </ActionButton>
+            <ActionButton icon={<FiShare size={25} />}>Share</ActionButton>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -81,7 +94,7 @@ export default async function Artist({ params }: { params: { id: string } }) {
   return (
     <div className="">
       <ArtistHeader />
-      <div className="z-50 h-[20px] w-full bg-red-500"></div>
+      <div className="z-50 h-[20px] w-full"></div>
     </div>
   );
 }
