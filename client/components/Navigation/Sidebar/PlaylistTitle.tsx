@@ -15,7 +15,7 @@ const PlaylistTitle: React.FC<IPlaylistTitle> = ({ children }) => {
   return (
     <div className="flex flex-col gap-y-1 py-0">
       <div className="flex items-center justify-between">
-        <p className="text-lg font-semibold">Playlists</p>
+        <p className="truncate text-lg font-semibold">Playlists</p>
         {session && (
           <AiOutlinePlus
             onClick={() => onOpen()}

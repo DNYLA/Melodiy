@@ -1,0 +1,8 @@
+.collapsed-sidebar {
+  padding: 0 !important;
+  min-width: 0 !important;
+}
+
+.collapsed-sidebar > *:not(#sidebar-dragger) {
+  visibility: hidden;
+}
