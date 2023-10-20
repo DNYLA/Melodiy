@@ -1,12 +1,22 @@
+import { twMerge } from 'tailwind-merge';
+
 export interface IActionButton {
   children: React.ReactNode;
   icon?: React.ReactNode;
+  className?: string;
 }
 
-const ActionButton: React.FC<IActionButton> = ({ children, icon }) => {
+const ActionButton: React.FC<IActionButton> = ({
+  children,
+  className,
+  icon,
+}) => {
   return (
     <button
-      className="border-none p-0  hover:opacity-70"
+      className={twMerge(
+        'border-none p-0  transition-all delay-75 ease-in hover:opacity-70',
+        className
+      )}
       data-test="shuffle-all"
       type="button"
       data-type="button"

@@ -1,4 +1,5 @@
 import ActionButton from '@/app/artist/[id]/components/ActionButton';
+import TopTracks from '@/app/artist/[id]/components/TopTracks';
 import Image from 'next/image';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import { BiShuffle } from 'react-icons/bi';
@@ -53,26 +54,41 @@ function ArtistHeader() {
         {Array(3)
           .fill(0)
           .map((_, i) => GenerateImage(i))}
-        <div className="absolute bottom-0 z-30 flex px-5 pb-2">
-          <div className="">
-            <h1 className="text-3xl font-bold">Roddy Ricch</h1>
-            <span className="hidden text-base font-medium md:block">
-              24,230,012 Monthly Listerners
-            </span>
-          </div>
-          <div className="mx-10 flex items-center gap-x-4 align-middle">
-            <button className="group flex items-center gap-x-1 rounded bg-white px-4 py-2 text-center font-bold text-black hover:bg-opacity-80 disabled:cursor-not-allowed disabled:opacity-50">
-              <BsFillPlayFill size={25} className="" />
-              Play
-            </button>
+        <div className="absolute bottom-0 z-30 flex w-full items-center justify-between px-5 py-2">
+          <div className="flex ">
+            <div className="">
+              <h1 className="text-3xl font-bold">Roddy Ricch</h1>
+              <span className="hidden text-base font-medium md:block">
+                24,230,012 Monthly Listerners
+              </span>
+            </div>
+            <div className="mx-10  flex items-center gap-x-4 align-middle ">
+              <button className="group flex items-center gap-x-1 rounded bg-white px-4 py-2 text-center font-bold text-black hover:bg-opacity-80 disabled:cursor-not-allowed disabled:opacity-50">
+                <BsFillPlayFill size={25} className="" />
+                Play
+              </button>
 
-            <button className="group flex items-center gap-x-1 rounded bg-white px-4 py-2 text-center font-bold text-black hover:bg-opacity-80 disabled:cursor-not-allowed disabled:opacity-50">
-              <BiShuffle size={25} className="" />
+              <button className="group flex items-center gap-x-1 rounded bg-white px-4 py-2 text-center font-bold text-black hover:bg-opacity-80 disabled:cursor-not-allowed disabled:opacity-50">
+                <BiShuffle size={25} className="" />
+                Shuffle
+              </button>
+            </div>
+          </div>
+
+          <div className="flex h-full gap-x-8 pr-48">
+            <ActionButton icon={<BsPlayFill size={25} />} className="">
+              Play
+            </ActionButton>
+            <ActionButton icon={<BiShuffle size={25} />} className="">
               Shuffle
-            </button>
+            </ActionButton>
+            <ActionButton icon={<AiOutlineUserAdd size={25} />}>
+              Follow
+            </ActionButton>
+            <ActionButton icon={<FiShare size={25} />}>Share</ActionButton>
           </div>
         </div>
-        <div className="absolute bottom-0 right-56 pb-4">
+        {/* <div className="absolute bottom-0 right-56 pb-4">
           <div className="flex h-full w-full gap-x-8">
             <ActionButton icon={<BsPlayFill size={25} />}>Play</ActionButton>
             <ActionButton icon={<BiShuffle size={25} />}>Shuffle</ActionButton>
@@ -81,7 +97,7 @@ function ArtistHeader() {
             </ActionButton>
             <ActionButton icon={<FiShare size={25} />}>Share</ActionButton>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
@@ -94,7 +110,9 @@ export default async function Artist({ params }: { params: { id: string } }) {
   return (
     <div className="">
       <ArtistHeader />
-      <div className="z-50 h-[20px] w-full"></div>
+      <div className="z-50 m-5 px-5">
+        <TopTracks />
+      </div>
     </div>
   );
 }
