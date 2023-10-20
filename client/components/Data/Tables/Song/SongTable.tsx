@@ -47,7 +47,7 @@ const SongTable: React.FC<ISongTable> = ({ columns: cl, data, type }) => {
   };
 
   return (
-    <table className="m-6 w-full text-white">
+    <table className="w-full text-white">
       <thead className="">
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
@@ -56,7 +56,8 @@ const SongTable: React.FC<ISongTable> = ({ columns: cl, data, type }) => {
               headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
-                  className="border-b border-inactive px-3 py-2 text-left"
+                  // className="border-b border-inactive px-3 py-2 text-left"
+                  className="px-3 py-2 text-left font-medium uppercase text-[#B1B2B5]"
                 >
                   {header.isPlaceholder
                     ? null

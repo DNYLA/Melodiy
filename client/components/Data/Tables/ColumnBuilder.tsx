@@ -3,10 +3,13 @@ import { getDefaultImage, msToMinuteSeconds } from '@/utils';
 import { ColumnHelper, createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { BsClock } from 'react-icons/bs';
 import CounterCell from './Cells/Counter';
 import TitleCell from './Cells/Title';
 dayjs.extend(relativeTime);
+
+export type BaseOptions = {
+  capitlise?: boolean;
+};
 
 //TODO: Convert to Hook?
 export class ColumnBuilder {
@@ -92,7 +95,8 @@ export class ColumnBuilder {
 
   AddDuration(): ColumnBuilder {
     const col = this.columnHelper.accessor('duration', {
-      header: () => <BsClock size={18} className="" />,
+      // header: () => <BsClock size={18} className="" />,
+      header: 'Length',
       cell: ({ getValue }) => (
         <span className="text-neutral-400">
           {msToMinuteSeconds(getValue())}
