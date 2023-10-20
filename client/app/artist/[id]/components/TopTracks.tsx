@@ -54,6 +54,20 @@ const TopTracks: React.FC<ITopTracks> = () => {
           },
           {
             uid: '-1',
+            title: 'Letter To My Son',
+            artist: 'Roddy Ricch',
+            album: 'Feed tha streets III',
+            albumArtist: 'Roddy Ricch',
+            coverPath:
+              'https://i.scdn.co/image/ab67616d0000b273d513f31f1445121235424acb',
+            songPath: 'invalid',
+            duration: 2555,
+            createdAt: new Date().toString(),
+            releaseDate: new Date().toString(),
+            provider: Provider.External,
+          },
+          {
+            uid: '-1',
             title: 'Prayers to the Trap God',
             artist: 'Roddy Ricch',
             album: 'Please Excuse Me For Being Antisocial',
@@ -66,25 +80,11 @@ const TopTracks: React.FC<ITopTracks> = () => {
             releaseDate: new Date().toString(),
             provider: Provider.External,
           },
-          // {
-          //   uid: '-1',
-          //   title: 'Down Below',
-          //   artist: 'Roddy Ricch',
-          //   album: 'Feed tha streets II',
-          //   albumArtist: 'Roddy Ricch',
-          //   coverPath:
-          //     'https://i.scdn.co/image/ab67616d0000b273434f4eeb4231f6f4862cafd4',
-          //   songPath: 'invalid',
-          //   duration: 2555,
-          //   createdAt: new Date().toString(),
-          //   releaseDate: new Date().toString(),
-          //   provider: Provider.External,
-          // },
           {
             uid: '-1',
             title: 'Thugs Cry',
             artist: 'Roddy Ricch',
-            album: 'Feed tha streets II',
+            album: 'Unreleased',
             albumArtist: 'Roddy Ricch',
             coverPath:
               'https://svmigokmzkjddcixdmzh.supabase.co/storage/v1/object/public/images/Jungaal/29f4c3934d9e482207a43c3748f60983.png',

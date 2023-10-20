@@ -26,6 +26,7 @@ const TitleCell: React.FC<ITitleCell> = ({
         height={45}
         alt="Song Cover"
         priority={false}
+        quality={100}
       />
       <div className="flex flex-col">
         <span

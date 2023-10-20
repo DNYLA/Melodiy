@@ -1,4 +1,5 @@
 import ActionButton from '@/app/artist/[id]/components/ActionButton';
+import AlbumList from '@/app/artist/[id]/components/AlbumList';
 import TopTracks from '@/app/artist/[id]/components/TopTracks';
 import Image from 'next/image';
 import { AiOutlineUserAdd } from 'react-icons/ai';
@@ -110,8 +111,9 @@ export default async function Artist({ params }: { params: { id: string } }) {
   return (
     <div className="">
       <ArtistHeader />
-      <div className="z-50 m-5 px-5">
+      <div className="z-50 m-5 flex flex-col gap-y-4 px-5">
         <TopTracks />
+        <AlbumList />
       </div>
     </div>
   );
