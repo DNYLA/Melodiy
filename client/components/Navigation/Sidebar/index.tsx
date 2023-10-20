@@ -80,9 +80,12 @@ const Sidebar = ({ children }: SidebarProps) => {
         </PlaylistHeader>
       </div>
 
-      <main className="h-full flex-1 overflow-y-auto px-4 py-2 pr-5">
-        <Navbar />
-        <div className="pr-5">{children}</div>
+      <main className="h-full flex-1 overflow-y-auto ">
+        <div className="px-4 pr-5 pt-2">
+          <Navbar />
+        </div>
+
+        <div className="">{children}</div>
       </main>
     </div>
   );

@@ -16,7 +16,7 @@ const Search = async ({ searchParams }: SearchProps) => {
 
   if (!result || !result.songs || result.songs.length === 0)
     return (
-      <div className="relative left-5 right-0 w-full items-center gap-y-2 self-center text-center align-middle font-bold">
+      <div className="relative left-5 right-0 w-full items-center gap-y-2 self-center px-6 pr-5 pt-2 text-center align-middle font-bold">
         <p className="text-xl">
           No results found for <q>{searchParams.title}</q>
         </p>

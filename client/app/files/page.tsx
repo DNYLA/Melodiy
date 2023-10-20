@@ -16,7 +16,7 @@ export default async function Files() {
 
   return (
     <Suspense fallback={<p>Loading Playlist...</p>}>
-      <div className="px-2 py-3">
+      <div className="px-6 py-3 pr-5 pt-2">
         <PlaylistHeader
           data={{
             uid: '@me',
