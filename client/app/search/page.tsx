@@ -44,8 +44,8 @@ const Search = async ({ searchParams }: SearchProps) => {
 
       <div className="col-span-3 mt-2">
         <span className="text-lg font-bold">Artists</span>
-        <div className="flex gap-x-3">
-          {result.artists.map((artist) => (
+        <div className="flex gap-x-1 overflow-x-auto">
+          {result.artists.slice(0, 8).map((artist) => (
             <ArtistCard
               name={artist.name}
               imageUrl={artist.coverPath}

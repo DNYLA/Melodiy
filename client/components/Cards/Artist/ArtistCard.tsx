@@ -20,7 +20,7 @@ const ArtistCard: React.FC<IArtistCard> = ({ name, imageUrl, redirect }) => {
 
   return (
     <div
-      className="flex h-[220px] w-[220px] cursor-pointer flex-col gap-y-1 "
+      className="flex h-[220px] w-[220px] cursor-pointer flex-col items-center justify-center gap-y-1"
       onClick={handleRedirect}
     >
       <Image
@@ -33,9 +33,9 @@ const ArtistCard: React.FC<IArtistCard> = ({ name, imageUrl, redirect }) => {
         alt="Artist Avatar"
         quality={100}
       />
-      <div className="m-0 flex flex-col gap-0 p-0">
-        <p className="truncate text-center font-bold hover:underline">{name}</p>
-      </div>
+      {/* <div className="m-0 flex flex-col gap-0 p-0"> */}
+      <p className="truncate text-center font-bold hover:underline">{name}</p>
+      {/* </div> */}
     </div>
   );
 };
