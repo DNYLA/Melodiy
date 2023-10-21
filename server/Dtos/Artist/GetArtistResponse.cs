@@ -1,4 +1,4 @@
-namespace server.Dtos.Artist
+namespace melodiy.server.Dtos.Artist
 {
     public class GetArtistResponse
     {
@@ -6,6 +6,6 @@ namespace server.Dtos.Artist
         public string UID { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string? CoverPath { get; set; }
-        public Boolean Verified { get; set; }
+        public bool Verified { get; set; }
     }
 }

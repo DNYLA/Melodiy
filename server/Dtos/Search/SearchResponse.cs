@@ -1,5 +1,5 @@
+using melodiy.server.Dtos.Artist;
 using melodiy.server.Dtos.Song;
-using server.Dtos.Artist;
 
 namespace melodiy.server.Dtos.Search
 {

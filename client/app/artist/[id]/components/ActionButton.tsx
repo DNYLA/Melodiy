@@ -1,43 +1,45 @@
+import * as React from 'react';
 import { twMerge } from 'tailwind-merge';
 
-export interface IActionButton {
-  children: React.ReactNode;
+export interface IActionButton
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: React.ReactNode;
-  className?: string;
 }
 
-const ActionButton: React.FC<IActionButton> = ({
-  children,
-  className,
-  icon,
-}) => {
-  return (
-    <button
-      className={twMerge(
-        'border-none p-0  transition-all delay-75 ease-in hover:opacity-70',
-        className
-      )}
-      data-test="shuffle-all"
-      type="button"
-      data-type="button"
-      data-track--button-id="shuffle"
-      data-tracktype--button-id="string"
-      data-tracktype--content-id="undefined"
-      data-tracktype--content-type="undefined"
-      data-tracktype--end-result="undefined"
-      data-tracktype--target="undefined"
-    >
-      <div className="flex h-full w-full flex-col items-center justify-center">
-        <div className="opacity-80">{icon}</div>
-        <span
-          data-wave-color="textDefault"
-          className="mt-[9px] text-sm font-light"
-        >
-          {children}
-        </span>
-      </div>
-    </button>
-  );
-};
+const ActionButton = React.forwardRef<HTMLButtonElement, IActionButton>(
+  ({ className, children, disabled, type = 'button', icon, ...props }, ref) => {
+    return (
+      <button
+        className={twMerge(
+          'border-none p-0  transition-all delay-75 ease-in hover:opacity-70',
+          className
+        )}
+        data-test="shuffle-all"
+        type={type}
+        data-type="button"
+        data-track--button-id="shuffle"
+        data-tracktype--button-id="string"
+        data-tracktype--content-id="undefined"
+        data-tracktype--content-type="undefined"
+        data-tracktype--end-result="undefined"
+        data-tracktype--target="undefined"
+        disabled={disabled}
+        ref={ref}
+        {...props}
+      >
+        <div className="flex h-full w-full flex-col items-center justify-center">
+          <div className="opacity-80">{icon}</div>
+          <span
+            data-wave-color="textDefault"
+            className="mt-[9px] text-sm font-light"
+          >
+            {children}
+          </span>
+        </div>
+      </button>
+    );
+  }
+);
+ActionButton.displayName = 'Button';
 
 export default ActionButton;

@@ -1,5 +1,3 @@
-using server.Models;
-
 namespace melodiy.server.Data
 {
     public class DataContext : DbContext

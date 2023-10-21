@@ -1,7 +1,7 @@
 'use server';
 
 import { ServiceResponse } from '@/types';
-import { Playlist, Song, TrendingPlaylist } from '@/types/playlist';
+import { ArtistInfo, Playlist, Song, TrendingPlaylist } from '@/types/playlist';
 import axios from 'axios';
 import { revalidatePath } from 'next/cache';
 
@@ -58,6 +58,25 @@ export async function getUserSongs(
   } catch (err) {
     console.log(err);
     const sr: ServiceResponse<Song[]> = { message: '', success: false };
+    return sr;
+  }
+}
+
+export async function getArtistInfo(
+  id: string
+): Promise<ServiceResponse<ArtistInfo>> {
+  try {
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}artist/${id}`
+    );
+
+    return data;
+  } catch (err) {
+    console.log(err);
+    const sr: ServiceResponse<ArtistInfo> = {
+      message: 'Unexpected server error!',
+      success: false,
+    };
     return sr;
   }
 }

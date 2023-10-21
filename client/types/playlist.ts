@@ -36,9 +36,14 @@ export type Song = {
 export type Artist = {
   uid: string;
   name: string;
-  description?: string;
   coverPath: string;
   verified: boolean;
+};
+
+export type ArtistInfo = Artist & {
+  description?: string;
+  monthlyListeners: number;
+  topTracks: Song[];
   createdAt: string;
 };
 
