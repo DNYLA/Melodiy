@@ -3,7 +3,7 @@ import { SearchResults } from '@/types/search';
 import axios from 'axios';
 
 const searchQuery = async (query: string): Promise<SearchResults> => {
-  const empty: SearchResults = { songs: [] };
+  const empty: SearchResults = { songs: [], artists: [] };
   if (!query) {
     //TODO: Return Popular || Their Favourites || Recently Searched?
     return empty;

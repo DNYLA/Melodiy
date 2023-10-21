@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using server.Models;
 
 namespace melodiy.server.Models
 {

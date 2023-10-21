@@ -1,23 +1,25 @@
 global using AutoMapper;
-global using Microsoft.EntityFrameworkCore;
-global using melodiy.server.Models;
 global using melodiy.server.Data;
 global using melodiy.server.Dtos.User;
+global using melodiy.server.Models;
 global using melodiy.server.Services.PlaylistService;
-using melodiy.server.Services.UserService;
-using melodiy.server.Data.Auth;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
+global using Microsoft.EntityFrameworkCore;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using melodiy.server.Services.AuthService;
 using Microsoft.Net.Http.Headers;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
+
+using melodiy.server.Data.Auth;
 using melodiy.server.Data.File;
-using melodiy.server.Services.FileService;
-using melodiy.server.Services.SongService;
-using melodiy.server.Services.SearchService;
-using melodiy.server.Providers.Search;
 using melodiy.server.Providers;
+using melodiy.server.Providers.Search;
+using melodiy.server.Services.AuthService;
+using melodiy.server.Services.FileService;
+using melodiy.server.Services.SearchService;
+using melodiy.server.Services.SongService;
+using melodiy.server.Services.UserService;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";

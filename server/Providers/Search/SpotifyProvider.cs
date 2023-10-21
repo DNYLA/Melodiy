@@ -3,7 +3,6 @@ using AutoMapper.Internal;
 using melodiy.server.Dtos.Search;
 using melodiy.server.Dtos.Song;
 using server.Dtos.Artist;
-using server.Models;
 using SpotifyAPI.Web;
 
 namespace melodiy.server.Providers.Search

@@ -33,6 +33,15 @@ export type Song = {
   user?: PublicUser;
 };
 
+export type Artist = {
+  uid: string;
+  name: string;
+  description?: string;
+  coverPath: string;
+  verified: boolean;
+  createdAt: string;
+};
+
 export enum Provider {
   Local = 0,
   External = 1,

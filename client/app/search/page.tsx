@@ -1,6 +1,7 @@
 import searchQuery from '@/actions/searchQuery';
 import SearchTable from '@/app/search/components/SearchTable';
 import TopResult from '@/app/search/components/TopResult';
+import ArtistCard from '@/components/Cards/Artist/ArtistCard';
 
 interface SearchProps {
   searchParams: {
@@ -14,7 +15,7 @@ const Search = async ({ searchParams }: SearchProps) => {
   // const songs = await getSongsByTitle(searchParams.title);
   const result = await searchQuery(searchParams.title);
 
-  if (!result || !result.songs || result.songs.length === 0)
+  if (!result || (result.songs.length === 0 && result.artists.length === 0))
     return (
       <div className="relative left-5 right-0 w-full items-center gap-y-2 self-center px-6 pr-5 pt-2 text-center align-middle font-bold">
         <p className="text-xl">
@@ -28,7 +29,7 @@ const Search = async ({ searchParams }: SearchProps) => {
     );
 
   return (
-    <div className="grid grid-cols-3">
+    <div className="grid grid-cols-3 p-2">
       <div className="col-span-1">
         <span className="text-lg font-bold">Top Result</span>
         <div className="mt-3">
@@ -39,6 +40,20 @@ const Search = async ({ searchParams }: SearchProps) => {
       </div>
       <div className="col-span-2">
         <SearchTable songs={result.songs} />
+      </div>
+
+      <div className="col-span-3 mt-2">
+        <span className="text-lg font-bold">Artists</span>
+        <div className="flex gap-x-3">
+          {result.artists.map((artist) => (
+            <ArtistCard
+              name={artist.name}
+              imageUrl={artist.coverPath}
+              redirect={`/artist/${artist.uid}`}
+              key={artist.uid}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

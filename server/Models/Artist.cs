@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace server.Models
+namespace melodiy.server.Models
 {
 
     [PrimaryKey(nameof(UID))]
@@ -19,12 +19,11 @@ namespace server.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public string? Description {get; set; }
+        public string? Description { get; set; }
         public string? CoverPath { get; set; }
-        public Boolean Verified {get; set; } = false;
+        public bool Verified { get; set; }
         public string? SpotifyId { get; set; }
-        public DateTime ReleaseDate { get; set; } //TODO: Remove and create migration
-        public List<Album> Releases { get; set;}
+        public List<Album> Releases { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime CreatedAt { get; set; }
