@@ -1,5 +1,4 @@
 using melodiy.server.Dtos.Song;
-using server.Models;
 
 namespace melodiy.server.Dtos.Artist
 {

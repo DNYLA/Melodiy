@@ -37,6 +37,14 @@ namespace melodiy.server.Data
                 .Property(s => s.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+            _ = modelBuilder.Entity<Artist>()
+                .Property(a => a.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            _ = modelBuilder.Entity<Album>()
+                .Property(a => a.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
             _ = modelBuilder.Entity<Playlist>()
                 .Property(p => p.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");

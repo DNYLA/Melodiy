@@ -93,7 +93,7 @@ namespace melodiy.server.Providers.Search
                     // YoutubeVideo video = await _audioProvider.Find(track.Name, artists, track.DurationMs);
                     // _ = TimeSpan.TryParseExact(video.Duration, @"m\:ss", null, out TimeSpan videoDuration);
 
-                    Console.WriteLine(releaseDate);
+                    // Console.WriteLine(releaseDate);
                     _ = _insertSongs.TryAdd(new Song
                     {
                         Title = track.Name,
@@ -145,7 +145,6 @@ namespace melodiy.server.Providers.Search
             for (int i = 0; i < artists.Count; i++)
             {
                 FullArtist artist = artists[i];
-
                 //Check if it already exists.
                 //TODO: Filter out list before instead of individually checking (Less DB calls)
                 Artist? dbArtist = await _context.Artists.SingleOrDefaultAsync(a => a.SpotifyId == artist.Id);

@@ -21,17 +21,12 @@ namespace melodiy.server.Services.SearchService
         {
             SearchResults spotifyRes = await _spotifyProvider.Search(term, 10);
 
-            Console.WriteLine("Returned List");
-            foreach (GetSongResponse track in spotifyRes.Songs)
-            {
-                Console.WriteLine($"{track.Title}");
-            }
-
             ServiceResponse<SearchResults> response = new()
             {
                 Data = new SearchResults
                 {
-                    Songs = await SearchSong(term, spotifyRes.Songs)
+                    Songs = await SearchSong(term, spotifyRes.Songs),
+                    Artists = spotifyRes.Artists
                 }
             };
 
@@ -108,7 +103,7 @@ namespace melodiy.server.Services.SearchService
 
                 score += similarity * 10;
 
-                Console.WriteLine($"{track.Title} : {score} : {similarity}");
+                // Console.WriteLine($"{track.Title} : {score} : {similarity}");
 
                 //Its possible two tracks can have the same score so we store a list
                 if (!trackScores.ContainsKey(score))

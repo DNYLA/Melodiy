@@ -1,7 +1,11 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using server.Models;
 
-namespace server.Models
+namespace melodiy.server.Models
 {
+    [PrimaryKey(nameof(UID))]
+    [Index(nameof(Id), IsUnique = true)]
+    [Index(nameof(SpotifyId), IsUnique = true)]
     public class Album
     {
         public Album()
@@ -15,15 +19,15 @@ namespace server.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public string? Description {get; set; }
+        public string? Description { get; set; }
         public string? CoverPath { get; set; }
-        public Boolean Verified { get; set; }= false;
+        public bool Verified { get; set; }
         public string? SpotifyId { get; set; }
         public DateTime ReleaseDate { get; set; }
         public AlbumType Type { get; set; }
         public int TotalTracks { get; set; }
         public int Duration { get; set; }
-        public List<Artist> Artists { get; set;}
+        public List<Artist> Artists { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime CreatedAt { get; set; }
