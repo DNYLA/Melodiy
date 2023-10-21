@@ -1,3 +1,5 @@
+using server.Models;
+
 namespace melodiy.server.Data
 {
     public class DataContext : DbContext
@@ -62,9 +64,13 @@ namespace melodiy.server.Data
             #endregion
         }
 
-        public DbSet<User> Users => Set<User>();
+        public DbSet<Album> Albums => Set<Album>();
+        public DbSet<Artist> Artists => Set<Artist>();
         public DbSet<Playlist> Playlists => Set<Playlist>();
-        public DbSet<Song> Songs => Set<Song>();
         public DbSet<PlaylistSong> PlaylistSongs => Set<PlaylistSong>();
+        public DbSet<Song> Songs => Set<Song>();
+
+        public DbSet<User> Users => Set<User>();
+
     }
 }
