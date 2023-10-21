@@ -10,7 +10,7 @@ namespace melodiy.server.Dtos.Song
         public string? AlbumArtist { get; set; }
         public string CoverPath { get; set; } = string.Empty;
         public string SongPath { get; set; } = string.Empty;
-        public string? SpotifyId { get; set; }
+        public string? SpotifyId { get; set; } //TODO: Remove & Test
         public string? YoutubeId { get; set; }
         public ProviderType Provider { get; set; }
         public int Duration { get; set; }

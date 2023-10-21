@@ -2,6 +2,8 @@ using System.Globalization;
 using AutoMapper.Internal;
 using melodiy.server.Dtos.Search;
 using melodiy.server.Dtos.Song;
+using server.Dtos.Artist;
+using server.Models;
 using SpotifyAPI.Web;
 
 namespace melodiy.server.Providers.Search
@@ -42,18 +44,34 @@ namespace melodiy.server.Providers.Search
 
             //No Results so we can return an empty result;
             SearchResults pipedResults = new();
-            if (results == null || results.Tracks == null || results.Tracks.Items == null)
+            if (results == null)
             {
                 return new();
             }
 
+            if (results.Tracks.Items != null)
+            {
+                pipedResults.Songs = await ParseTracks(results.Tracks.Items);
+            }
+
+            if (results.Artists.Items != null)
+            {
+                pipedResults.Artists = await ParseArtists(results.Artists.Items);
+            }
+
+            return pipedResults;
+        }
+
+        private async Task<List<GetSongResponse>> ParseTracks(List<FullTrack> tracks)
+        {
             List<Song> _insertSongs = new();
             List<string> spotifyIds = new(); //List of all songs fetched regardless if they have already exist.
 
+            //TODO: Move to song service?
             //Converts Spotify API results into DB serialised Song Track.
-            for (int i = 0; i < results.Tracks.Items.Count; i++)
+            for (int i = 0; i < tracks.Count; i++)
             {
-                FullTrack track = results.Tracks.Items[i];
+                FullTrack track = tracks[i];
                 DateTime releaseDate = GetReleaseDate(track.Album.ReleaseDate, track.Album.ReleaseDatePrecision);
 
                 //Check if it already exists.
@@ -111,13 +129,73 @@ namespace melodiy.server.Providers.Search
                 Console.WriteLine(ex.Message);
             }
 
+
             //Pointless as we don't care about getting the newest "createdAt" variable for searched results.
             List<Song> dbSongs = await _context.Songs.Where(s => spotifyIds.Contains(s.SpotifyId!)).ToListAsync();
-            pipedResults.Songs = dbSongs.Select(_mapper.Map<GetSongResponse>).ToList();
-
-            return pipedResults;
+            return dbSongs.Select(_mapper.Map<GetSongResponse>).ToList();
         }
 
+        private async Task<List<GetArtistResponse>> ParseArtists(List<FullArtist> artists)
+        {
+            List<Artist> _insertArtists = new();
+            List<string> spotifyIds = new(); //List of all artists fetched regardless if they have already exist.
+
+            //TODO: Move to song service?
+            //Converts Spotify API results into DB serialised Song Track.
+            for (int i = 0; i < artists.Count; i++)
+            {
+                FullArtist artist = artists[i];
+
+                //Check if it already exists.
+                //TODO: Filter out list before instead of individually checking (Less DB calls)
+                Artist? dbArtist = await _context.Artists.SingleOrDefaultAsync(a => a.SpotifyId == artist.Id);
+                if (dbArtist != null)
+                {
+                    spotifyIds.Add(artist.Id);
+                    continue;
+                }
+
+                try
+                {
+                    _ = _insertArtists.TryAdd(new Artist
+                    {
+                        Name = artist.Name,
+                        CoverPath = artist.Images[0].Url,
+                        Verified = true, //Any artist from the spotify API is "official"
+                        SpotifyId = artist.Id,
+                    });
+                    spotifyIds.Add(artist.Id);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Errored Out");
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+            try
+            {
+                await _context.Artists.BulkInsertAsync(_insertArtists, options =>
+                {
+                    options.InsertIfNotExists = true;
+                    options.ColumnPrimaryKeyExpression = s => s.SpotifyId;
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+
+            //Pointless as we don't care about getting the newest "createdAt" variable for searched results.
+            List<Artist> dbArtists = await _context.Artists.Where(s => spotifyIds.Contains(s.SpotifyId!)).ToListAsync();
+            return dbArtists.Select(_mapper.Map<GetArtistResponse>).ToList();
+        }
+
+        // public async Task<FullArtist> Artist(string id)
+        // {
+
+        // }
         //Converts YYYY-MM-DD (2004-01-01 || 2004-01)  to a DateTime Variable.
         private static DateTime GetReleaseDate(string releaseDate, string releaseDatePrecision)
         {
