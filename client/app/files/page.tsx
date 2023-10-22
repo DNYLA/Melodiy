@@ -18,14 +18,11 @@ export default async function Files() {
     <Suspense fallback={<p>Loading Playlist...</p>}>
       <div className="px-6 py-3 pr-5 pt-2">
         <PlaylistHeader
-          data={{
-            uid: '@me',
-            title: 'Your Files',
-            imagePath: undefined,
-            user: { id: session.user.id, username: session.user.username },
-            createdAt: new Date().toISOString(),
-            tracks: songs.data,
-          }}
+          title={'Your Files'}
+          releaseDate={new Date()}
+          tracks={songs.data}
+          owner={session.user.username}
+          type={PlaylistType.Files}
         />
         <FilesTable data={songs.data} type={PlaylistType.Files} />
       </div>

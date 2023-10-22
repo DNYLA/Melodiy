@@ -16,7 +16,14 @@ export default async function Playlist({ params }: { params: { id: string } }) {
       <div className="px-6 py-3 pr-5 pt-2">
         {data && (
           <>
-            <PlaylistHeader data={data} />
+            <PlaylistHeader
+              title={data.title}
+              releaseDate={new Date(data.createdAt)}
+              tracks={data.tracks}
+              owner={playlist.data.user.username}
+              type={PlaylistType.Playlist}
+              coverPath={data.imagePath}
+            />
             <PlaylistTable data={data.tracks} type={PlaylistType.Playlist} />
           </>
         )}
