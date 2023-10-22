@@ -48,7 +48,7 @@ const Search = async ({ searchParams }: SearchProps) => {
           {result.artists.slice(0, 8).map((artist) => (
             <ArtistCard
               name={artist.name}
-              imageUrl={artist.coverPath}
+              imageUrl={artist.coverPath ?? '/images/default_playlist.png'}
               redirect={`/artist/${artist.uid}`}
               key={artist.uid}
             />
