@@ -1,3 +1,4 @@
+using melodiy.server.Dtos.Album;
 using melodiy.server.Dtos.Artist;
 using melodiy.server.Dtos.Playlist;
 using melodiy.server.Dtos.PlaylistSong;
@@ -15,6 +16,7 @@ namespace melodiy.server
             _ = CreateMap<Song, GetSongResponse>();
             _ = CreateMap<Artist, GetArtistResponse>();
             _ = CreateMap<Artist, GetArtistInfoResponse>();
+            _ = CreateMap<Album, GetAlbumInfoResponse>();
             _ = CreateMap<PlaylistSong, GetPlaylistSongResponse>()
                 .ForMember(dest => dest.PlaylistId, opt => opt.MapFrom(src => src.PlaylistUID))
                 .ForMember(dest => dest.TrackId, opt => opt.MapFrom(src => src.SongUID));

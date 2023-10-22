@@ -69,6 +69,10 @@ builder.Services.AddSwaggerGen(c =>
 
 //
 builder.Services.AddSingleton(provider => new Supabase.Client(url, key, options));
+// builder.Services.AddHangfire(config =>
+//     config.UsePostgreSqlStorage(c =>
+//         c.UseNpgsqlConnection(builder.Configuration.GetConnectionString("HangfireConnection"))));
+// builder.Services.AddHangfireServer();
 
 //API Repositories
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
@@ -113,13 +117,14 @@ if (app.Environment.IsDevelopment())
     _ = app.UseSwagger();
     _ = app.UseSwaggerUI();
 }
+
 app.UseDeveloperExceptionPage();
 app.UseHttpsRedirection();
-
 app.UseCors(MyAllowSpecificOrigins);
-
 app.UseAuthorization();
-
 app.MapControllers();
+
+//Custom App
+// app.UseHangfireDashboard();
 
 app.Run();

@@ -27,6 +27,24 @@ namespace melodiy.server.Data
             _ = modelBuilder.Entity<Playlist>()
                 .HasIndex(s => s.Id)
                 .IsClustered();
+
+            //Album
+            _ = modelBuilder.Entity<Album>()
+                .HasKey(a => a.UID)
+                .IsClustered(false);
+
+            _ = modelBuilder.Entity<Album>()
+                .HasIndex(a => a.Id)
+                .IsClustered();
+
+            //Artist
+            _ = modelBuilder.Entity<Artist>()
+                .HasKey(a => a.UID)
+                .IsClustered(false);
+
+            _ = modelBuilder.Entity<Artist>()
+                .HasIndex(a => a.Id)
+                .IsClustered();
             #endregion
 
             #region Timestamps
@@ -52,7 +70,7 @@ namespace melodiy.server.Data
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
             #endregion
 
-            #region Disable Cascading Deletes
+            #region PlaylistSong Relationships
             _ = modelBuilder.Entity<PlaylistSong>()
                 .HasKey(ps => new { ps.Id });
 
@@ -68,10 +86,28 @@ namespace melodiy.server.Data
                 .HasForeignKey(ps => ps.SongUID)
                 .OnDelete(DeleteBehavior.Restrict); //Needs to be disabled for table to be valid.
             #endregion
+
+            // #region AlbumArtist Relationships
+            // _ = modelBuilder.Entity<AlbumArtist>()
+            //     .HasKey(aa => new { aa.Id });
+
+            // _ = modelBuilder.Entity<AlbumArtist>()
+            //     .HasOne(aa => aa.Album)
+            //     .WithMany(a => a.AlbumArtists)
+            //     .HasForeignKey(aa => aa.AlbumUID)
+            //     .OnDelete(DeleteBehavior.Cascade); // Allow cascading delete for PlaylistSongs in a playlist
+
+            // _ = modelBuilder.Entity<AlbumArtist>()
+            //     .HasOne(aa => aa.Artist)
+            //     .WithMany(a => a.AlbumArtists)
+            //     .HasForeignKey(aa => aa.ArtistUID)
+            //     .OnDelete(DeleteBehavior.Restrict); //Needs to be disabled for table to be valid.
+            // #endregion
         }
 
         public DbSet<Album> Albums => Set<Album>();
         public DbSet<Artist> Artists => Set<Artist>();
+        // public DbSet<AlbumArtist> AlbumArtists => Set<AlbumArtist>();
         public DbSet<Playlist> Playlists => Set<Playlist>();
         public DbSet<PlaylistSong> PlaylistSongs => Set<PlaylistSong>();
         public DbSet<Song> Songs => Set<Song>();

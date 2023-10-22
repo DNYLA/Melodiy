@@ -1,5 +1,7 @@
+using melodiy.server.Dtos.Album;
 using melodiy.server.Dtos.Artist;
 using melodiy.server.Dtos.Song;
+using melodiy.server.Providers.Search;
 
 namespace server.Services.ArtistService
 {
@@ -7,12 +9,13 @@ namespace server.Services.ArtistService
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
+        private readonly ISearchProvider _searchProvider;
 
-        public ArtistService(DataContext context, IMapper mapper)
+        public ArtistService(DataContext context, IMapper mapper, ISearchProvider searchProvider)
         {
             _context = context;
             _mapper = mapper;
-
+            _searchProvider = searchProvider;
         }
 
         public async Task<ServiceResponse<GetArtistInfoResponse>> Get(string artistId)
@@ -22,8 +25,18 @@ namespace server.Services.ArtistService
             try
             {
                 Artist? dbArtist = await _context.Artists
-                                // .Include(s => s.User)
+                                .Include(a => a.Releases)
+                                .ThenInclude(release => release.Artists)
                                 .FirstOrDefaultAsync(s => s.UID == artistId);
+                
+                if (dbArtist != null && dbArtist.UpdatedAt == null && dbArtist.SpotifyId != null)
+                {
+                    await _searchProvider.IndexArtist(dbArtist.SpotifyId);
+
+                    dbArtist = await _context.Artists
+                                .Include(a => a.Releases)
+                                .FirstOrDefaultAsync(s => s.UID == artistId);
+                }
 
                 if (dbArtist == null)
                 {
@@ -33,13 +46,30 @@ namespace server.Services.ArtistService
                     return response;
                 }
 
+
+
                 //TODO: Update once songs are reworked
                 // Currently songs arent attached to an artist(s) or have view counter once this is done change below to use artist ID
                 List<Song> artistSongs = await _context.Songs.Where(s => s.Artist.ToLower() == dbArtist.Name.ToLower()).Take(5).ToListAsync();
 
+                List<Album> albums = new(); 
+                List<Album> singles = new();
+
+                dbArtist.Releases.ForEach(release => {
+                    if (release.Type == AlbumType.Album)
+                    {
+                        albums.Add(release);
+                    } else
+                    {
+                        singles.Add(release);
+                    }
+                }); 
+
                 response.Data = _mapper.Map<GetArtistInfoResponse>(dbArtist);
                 response.Data.MonthlyListeners = 24230012;
                 response.Data.TopTracks = artistSongs.Select(_mapper.Map<GetSongResponse>).ToList();
+                response.Data.Albums = albums.Select(_mapper.Map<GetAlbumInfoResponse>).ToList();
+                response.Data.Singles = singles.Select(_mapper.Map<GetAlbumInfoResponse>).ToList();
             } catch (Exception ex)
             {
                 response.Success = false;

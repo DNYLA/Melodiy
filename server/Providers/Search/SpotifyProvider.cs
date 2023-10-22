@@ -147,6 +147,8 @@ namespace melodiy.server.Providers.Search
                 //Check if it already exists.
                 //TODO: Filter out list before instead of individually checking (Less DB calls)
                 Artist? dbArtist = await _context.Artists.SingleOrDefaultAsync(a => a.SpotifyId == artist.Id);
+
+                //TODO: Re-Index if its been > 24 Hours.
                 if (dbArtist != null)
                 {
                     spotifyIds.Add(artist.Id);
@@ -178,22 +180,110 @@ namespace melodiy.server.Providers.Search
                     options.InsertIfNotExists = true;
                     options.ColumnPrimaryKeyExpression = s => s.SpotifyId;
                 });
+
+                // await BatchIndex(_insertArtists.Select(a => a.SpotifyId!).ToList());
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
 
-
             //Pointless as we don't care about getting the newest "createdAt" variable for searched results.
             List<Artist> dbArtists = await _context.Artists.Where(s => spotifyIds.Contains(s.SpotifyId!)).ToListAsync();
             return dbArtists.Select(_mapper.Map<GetArtistResponse>).ToList();
         }
 
-        // public async Task<FullArtist> Artist(string id)
-        // {
+        //Runs in the background so it requires a DBContext
+        public async Task IndexArtist(string id)
+        {
+            SpotifyClient spotify = new(DefaultConfig);
+            Paging<SimpleAlbum> albums = await spotify.Artists.GetAlbums(id, new ArtistsAlbumsRequest
+            {
+                IncludeGroupsParam = ArtistsAlbumsRequest.IncludeGroups.Album | ArtistsAlbumsRequest.IncludeGroups.Single,
+                Market = "US",
+                Limit = 50,
+            });
 
-        // }
+            IList<SimpleAlbum> allAlbums = await spotify.PaginateAll(albums);
+
+            for (int i = 0; i < allAlbums.Count; i++)
+            {
+                SimpleAlbum album = allAlbums[i];
+                if (album == null || (album.AlbumGroup != "album" && album.AlbumGroup != "single"))
+                {
+                    continue;
+                }
+
+                try
+                {
+                    //Check if it already exists.
+                    //TODO: Filter out list before instead of individually checking (Less DB calls)
+                    Album? dbAlbum = await _context.Albums.SingleOrDefaultAsync(a => a.SpotifyId == album.Id);
+
+                    if (dbAlbum != null)
+                    {
+                        continue;
+                    }
+
+                    DateTime releaseDate = GetReleaseDate(album.ReleaseDate, album.ReleaseDatePrecision);
+                    Console.WriteLine(releaseDate.Hour);
+
+                    //If AlbumGroup == "album" then Album elseif Tracks == 1 then Single else EP
+                    AlbumType type = album.AlbumGroup == "album" ? AlbumType.Album : album.TotalTracks == 1 ? AlbumType.Single : AlbumType.EP;
+                    List<Artist> artists = new();
+
+                    foreach (SimpleArtist artist in album.Artists)
+                    {
+                        Artist? dbArtist = await _context.Artists.FirstOrDefaultAsync(a => a.SpotifyId == artist.Id);
+                        if (dbArtist != null)
+                        {
+                            artists.Add(dbArtist);
+                        }
+                    }
+
+                    if (artists.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    var tempAlbum = new Album()
+                    {
+                        Name = album.Name,
+                        CoverPath = album.Images[0].Url,
+                        Verified = true,
+                        SpotifyId = album.Id,
+                        Type = type,
+                        ReleaseDate = releaseDate.ToUniversalTime(),
+                        TotalTracks = album.TotalTracks,
+                        Artists = artists
+                    };
+                    _context.Albums.Add(tempAlbum);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Errored Out");
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+
+            try
+            {
+                await _context.SaveChangesAsync();
+
+                var dbArtist = await _context.Artists.FirstOrDefaultAsync(a => a.SpotifyId == id);
+                if (dbArtist == null) return;
+                dbArtist.UpdatedAt = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return;
+        }
+
         //Converts YYYY-MM-DD (2004-01-01 || 2004-01)  to a DateTime Variable.
         private static DateTime GetReleaseDate(string releaseDate, string releaseDatePrecision)
         {
