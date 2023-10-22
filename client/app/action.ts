@@ -1,7 +1,13 @@
 'use server';
 
 import { ServiceResponse } from '@/types';
-import { ArtistInfo, Playlist, Song, TrendingPlaylist } from '@/types/playlist';
+import {
+  ArtistInfo,
+  FullAlbum,
+  Playlist,
+  Song,
+  TrendingPlaylist,
+} from '@/types/playlist';
 import axios from 'axios';
 import { revalidatePath } from 'next/cache';
 
@@ -17,6 +23,22 @@ export async function getPlaylist(
   } catch (err) {
     console.log(err);
     const sr: ServiceResponse<Playlist> = { message: '', success: false };
+    return sr;
+  }
+}
+
+export async function getAlbum(
+  uid: string
+): Promise<ServiceResponse<FullAlbum>> {
+  // const session = await getServerSession(authOptions);
+  try {
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}album/${uid}`
+    );
+    return data;
+  } catch (err) {
+    console.log(err);
+    const sr: ServiceResponse<FullAlbum> = { message: '', success: false };
     return sr;
   }
 }

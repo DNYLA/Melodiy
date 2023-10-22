@@ -64,6 +64,10 @@ namespace server.Services.ArtistService
                         singles.Add(release);
                     }
                 }); 
+                
+                //Sort by Release Date
+                albums = albums.OrderByDescending(a => a.ReleaseDate).ToList();
+                singles = singles.OrderByDescending(a => a.ReleaseDate).ToList();
 
                 response.Data = _mapper.Map<GetArtistInfoResponse>(dbArtist);
                 response.Data.MonthlyListeners = 24230012;

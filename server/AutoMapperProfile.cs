@@ -17,6 +17,7 @@ namespace melodiy.server
             _ = CreateMap<Artist, GetArtistResponse>();
             _ = CreateMap<Artist, GetArtistInfoResponse>();
             _ = CreateMap<Album, GetAlbumInfoResponse>();
+            _ = CreateMap<Album, GetFullAlbumResponse>();
             _ = CreateMap<PlaylistSong, GetPlaylistSongResponse>()
                 .ForMember(dest => dest.PlaylistId, opt => opt.MapFrom(src => src.PlaylistUID))
                 .ForMember(dest => dest.TrackId, opt => opt.MapFrom(src => src.SongUID));

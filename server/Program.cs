@@ -21,6 +21,8 @@ using melodiy.server.Services.SearchService;
 using melodiy.server.Services.SongService;
 using melodiy.server.Services.UserService;
 using server.Services.ArtistService;
+using melodiy.server.Services.AlbumService;
+using server.Services.AlbumService;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -85,6 +87,7 @@ builder.Services.AddScoped<IAudioProvider, YoutubeProvider>();
 //API Services
 builder.Services.AddScoped<ISearchService, SearchService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAlbumService, AlbumService>();
 builder.Services.AddScoped<IArtistService, ArtistService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISongService, SongService>();

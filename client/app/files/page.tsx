@@ -1,7 +1,7 @@
 import { getUserSongs } from '@/app/action';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import FilesTable from '@/app/files/components/table';
-import PlaylistHeader from '@/components/Data/PlaylistHeader/PlaylistHeader';
+import PlaylistHeader from '@/components/Data/TableHeader/TableHeader';
 import { PlaylistType } from '@/types';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';

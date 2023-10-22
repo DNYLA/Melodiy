@@ -1,3 +1,4 @@
+import AlbumContextMenu from '@/components/Utils/ContextMenu/AlbumContextMenu/AlbumContextMenu';
 import FileContextMenu from '@/components/Utils/ContextMenu/FileContextMenu/FileContextMenu';
 import PlaylistContextMenu from '@/components/Utils/ContextMenu/PlaylistContextMenu/PlaylistContextMenu';
 import { PlaylistType } from '@/types';
@@ -22,6 +23,8 @@ const SongContextMenu = ({
       return <PlaylistContextMenu trackId={trackId} ownerId={ownerId} />;
     else if (type === PlaylistType.Files)
       return <FileContextMenu trackId={trackId} ownerId={ownerId} />;
+    else if (type === PlaylistType.Album)
+      return <AlbumContextMenu trackId={trackId} ownerId={ownerId} />;
   };
 
   return (

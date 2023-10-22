@@ -1,5 +1,6 @@
+import { PlaylistType } from '@/types';
 import type { Meta, StoryObj } from '@storybook/react';
-import PlaylistHeader from './PlaylistHeader';
+import PlaylistHeader from './TableHeader';
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta = {
@@ -20,16 +21,11 @@ type Story = StoryObj<typeof meta>;
 //TODO: Add Stories for Album, Playlist, etc.
 export const Playlist: Story = {
   args: {
-    data: {
-      uid: '25',
-      title: 'My Amazing Playlist',
-      imagePath: '/images/default_playlist.png',
-      createdAt: '2023-08-24 22:19:57',
-      tracks: [],
-      user: {
-        id: 1,
-        username: 'Dan',
-      },
-    },
+    title: 'My Amazing Playlist',
+    coverPath: '/images/default_playlist.png',
+    releaseDate: new Date('2023-08-24 22:19:57'),
+    tracks: [],
+    type: PlaylistType.Playlist,
+    owner: 'Dan',
   },
 };

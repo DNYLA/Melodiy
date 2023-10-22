@@ -1,18 +1,33 @@
 import ImageOverlay from '@/app/playlist/[id]/components/image-overlay';
 import { getImageUrl } from '@/lib/helpers';
-import { Playlist } from '@/types/playlist';
+import { PlaylistType } from '@/types';
+import { Song } from '@/types/playlist';
 import dayjs from 'dayjs';
 import { BsFillPlayFill } from 'react-icons/bs';
 import { FiEdit2 } from 'react-icons/fi';
 
-export interface IPlaylistHeader {
-  data: Playlist;
+export interface ITableHeader {
+  // data: Playlist;
+  title: string;
+  coverPath?: string;
+  releaseDate: Date;
+  tracks: Song[];
+  owner: string;
+  redirect?: string;
+  type: PlaylistType;
 }
 
-const PlaylistHeader: React.FC<IPlaylistHeader> = ({ data }) => {
+const TableHeader: React.FC<ITableHeader> = ({
+  title,
+  coverPath,
+  releaseDate,
+  tracks,
+  owner,
+  type,
+}) => {
   const calculateDuration = () => {
-    if (!data.tracks || data.tracks.length === 0) return '0 MINUTES';
-    const totalDuration = data.tracks.reduce(
+    if (!tracks || tracks.length === 0) return '0 MINUTES';
+    const totalDuration = tracks.reduce(
       (total, { duration }) => total + duration,
       0
     );
@@ -22,11 +37,17 @@ const PlaylistHeader: React.FC<IPlaylistHeader> = ({ data }) => {
   };
 
   const getPlaylistDetails = () => {
-    const trackAmount = data.tracks?.length ?? 0;
+    const trackAmount = tracks?.length ?? 0;
     const duration = calculateDuration();
-    const date = dayjs(data.createdAt ?? new Date());
+    const date = dayjs(releaseDate ?? new Date());
 
     return `${trackAmount} SONGS • ${duration} • ${date.year()}`;
+  };
+
+  const getType = (type: PlaylistType) => {
+    if (type == PlaylistType.Album) return 'Album';
+    else if (type == PlaylistType.Playlist) return 'Public Playlist';
+    else return 'Files';
   };
 
   return (
@@ -39,16 +60,14 @@ const PlaylistHeader: React.FC<IPlaylistHeader> = ({ data }) => {
           />
           <span className="text-md">Select Photo</span>
         </div>
-        <ImageOverlay src={getImageUrl(data.imagePath)} />
+        <ImageOverlay src={getImageUrl(coverPath)} />
       </div>
       <div>
         <div>
-          <p className="text-inactive">Public Playlist</p>
-          <p className="text-xl font-bold md:text-2xl lg:text-3xl">
-            {data.title}
-          </p>
+          <p className="text-inactive">{getType(type)}</p>
+          <p className="text-xl font-bold md:text-2xl lg:text-3xl">{title}</p>
           <p className="cursor-pointer text-inactive hover:underline">
-            {data.user.username}
+            {owner}
           </p>
           <p className="font-light">{getPlaylistDetails()}</p>
         </div>
@@ -65,4 +84,4 @@ const PlaylistHeader: React.FC<IPlaylistHeader> = ({ data }) => {
   );
 };
 
-export default PlaylistHeader;
+export default TableHeader;

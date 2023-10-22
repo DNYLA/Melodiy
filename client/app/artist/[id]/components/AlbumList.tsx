@@ -1,5 +1,7 @@
+'use client';
 import { Album } from '@/types/playlist';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export interface IAlbumList {
   header: string;
@@ -7,6 +9,12 @@ export interface IAlbumList {
 }
 
 const AlbumList: React.FC<IAlbumList> = ({ header, albums }) => {
+  const router = useRouter();
+
+  const handleRedirect = (id: string) => {
+    // redirect(`artist/${id}`);
+    router.push(`/album/${id}`);
+  };
   return (
     <div className="">
       <div className="mb-1 flex items-center justify-between align-middle">
@@ -15,15 +23,16 @@ const AlbumList: React.FC<IAlbumList> = ({ header, albums }) => {
           View All
         </span>
       </div>
-      <div className="flex gap-x-5">
+      <div className="flex gap-x-5 overflow-auto">
         {albums.map((album) => (
           <div
             key={album.name}
             className="flex cursor-pointer flex-col gap-y-1"
+            onClick={() => handleRedirect(album.uid)}
           >
             <Image
               draggable={false}
-              className={'h-[200px] w-[200px] rounded-md'}
+              className={'min-h-[200px] min-w-[200px] rounded-md'}
               priority={true}
               // onMouseLeave={() => setFilter(randomImageFilter())} //Looks good but looks weird if u spam or enter/exit quickly
               src={album.coverPath ?? 'images/default_playlist.png'}

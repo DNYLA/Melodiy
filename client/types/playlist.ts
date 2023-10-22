@@ -53,6 +53,10 @@ export type Album = {
   artists: Artist[];
 };
 
+export type FullAlbum = Album & {
+  tracks: Song[];
+};
+
 export type ArtistInfo = Artist & {
   description?: string;
   monthlyListeners: number;

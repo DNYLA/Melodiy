@@ -19,8 +19,12 @@ export default async function Artist({ params }: { params: { id: string } }) {
       />
       <div className="z-50 m-5 flex flex-col gap-y-4 px-5">
         <TopTracks songs={data.topTracks} />
-        <AlbumList header="Albums" albums={data.albums} />
-        <AlbumList header={'Singles & EPs'} albums={data.singles.slice(0, 7)} />
+        {data.albums.length > 0 && (
+          <AlbumList header="Albums" albums={data.albums} />
+        )}
+        {data.singles.length > 0 && (
+          <AlbumList header={'Singles & EPs'} albums={data.singles} />
+        )}
       </div>
     </div>
   );

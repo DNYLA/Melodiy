@@ -246,7 +246,7 @@ namespace melodiy.server.Providers.Search
                         continue;
                     }
 
-                    var tempAlbum = new Album()
+                    Album tempAlbum = new()
                     {
                         Name = album.Name,
                         CoverPath = album.Images[0].Url,
@@ -257,7 +257,7 @@ namespace melodiy.server.Providers.Search
                         TotalTracks = album.TotalTracks,
                         Artists = artists
                     };
-                    _context.Albums.Add(tempAlbum);
+                    _ = _context.Albums.Add(tempAlbum);
                 }
                 catch (Exception ex)
                 {
@@ -269,12 +269,16 @@ namespace melodiy.server.Providers.Search
 
             try
             {
-                await _context.SaveChangesAsync();
+                _ = await _context.SaveChangesAsync();
 
-                var dbArtist = await _context.Artists.FirstOrDefaultAsync(a => a.SpotifyId == id);
-                if (dbArtist == null) return;
+                Artist? dbArtist = await _context.Artists.FirstOrDefaultAsync(a => a.SpotifyId == id);
+                if (dbArtist == null)
+                {
+                    return;
+                }
+
                 dbArtist.UpdatedAt = DateTime.UtcNow;
-                await _context.SaveChangesAsync();
+                _ = await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -282,6 +286,61 @@ namespace melodiy.server.Providers.Search
             }
 
             return;
+        }
+
+        public async Task<Album> FetchAlbum(string id)
+        {
+            SpotifyClient spotify = new(DefaultConfig);
+            FullAlbum album = await spotify.Albums.Get(id, new AlbumRequest
+            {
+                Market = "US",
+            });
+            Album? dbAlbum = await _context.Albums
+                                    .Include(a => a.Artists)
+                                    .Include(a => a.Tracks)
+                                    .FirstOrDefaultAsync(a => a.SpotifyId == id);
+
+            Console.WriteLine("HEre");
+            if (album == null || album.Tracks.Items == null || album.TotalTracks == 0 || dbAlbum == null)
+            {
+                return new();
+            }
+            int totalDurationMs = 0;
+            List<Song> insertSongs = new();
+            for (int i = 0; i < album.TotalTracks; i++)
+            {
+                SimpleTrack track = album.Tracks.Items[i];
+                DateTime releaseDate = GetReleaseDate(album.ReleaseDate, album.ReleaseDatePrecision);
+                totalDurationMs += track.DurationMs;
+                Song? existingSong = await _context.Songs.FirstOrDefaultAsync(s => s.SpotifyId == track.Id);
+                if (existingSong != null)
+                {
+                    existingSong.Album2 = dbAlbum;
+                    existingSong.Position = i;
+                }
+                else
+                {
+                    Song newSong = new()
+                    {
+                        Title = track.Name,
+                        Artist = dbAlbum.Artists[0].Name,
+                        Album = dbAlbum.Name,
+                        AlbumArtist = dbAlbum.Artists[0].Name,
+                        Album2 = dbAlbum,
+                        CoverPath = dbAlbum.CoverPath,
+                        Duration = track.DurationMs,
+                        Provider = ProviderType.External,
+                        SpotifyId = track.Id,
+                        ReleaseDate = releaseDate.ToUniversalTime(),
+                    };
+                    _ = _context.Songs.Add(newSong);
+                }
+            }
+            dbAlbum.Duration = totalDurationMs;
+            dbAlbum.UpdatedAt = DateTime.UtcNow;
+
+            _ = await _context.SaveChangesAsync();
+            return dbAlbum;
         }
 
         //Converts YYYY-MM-DD (2004-01-01 || 2004-01)  to a DateTime Variable.

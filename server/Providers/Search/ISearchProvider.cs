@@ -6,5 +6,6 @@ namespace melodiy.server.Providers.Search
     {
         Task<SearchResults> Search(string term, int limit);
         Task IndexArtist(string id);
+        Task<Album> FetchAlbum(string id);
     }
 }

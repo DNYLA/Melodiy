@@ -27,11 +27,10 @@ namespace melodiy.server.Models
         public int TotalTracks { get; set; }
         public int Duration { get; set; }
         public List<Artist> Artists { get; set; }
+        public List<Song> Tracks { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime CreatedAt { get; set; }
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? UpdatedAt { get; set; }
     }
 }
