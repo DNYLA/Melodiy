@@ -107,7 +107,7 @@ namespace melodiy.server.Providers
 
         public async Task<string> GetStream(string id)
         {
-            var youtube = new YoutubeClient();
+            YoutubeClient youtube = new YoutubeClient();
             StreamManifest streamManifest = await youtube.Videos.Streams.GetManifestAsync(id);
             string streamInfo = streamManifest
                             .GetAudioStreams()

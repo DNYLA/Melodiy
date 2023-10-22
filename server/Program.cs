@@ -1,23 +1,28 @@
 global using AutoMapper;
-global using Microsoft.EntityFrameworkCore;
-global using melodiy.server.Models;
 global using melodiy.server.Data;
 global using melodiy.server.Dtos.User;
+global using melodiy.server.Models;
 global using melodiy.server.Services.PlaylistService;
-using melodiy.server.Services.UserService;
-using melodiy.server.Data.Auth;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
+global using Microsoft.EntityFrameworkCore;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using melodiy.server.Services.AuthService;
 using Microsoft.Net.Http.Headers;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
+
+using melodiy.server.Data.Auth;
 using melodiy.server.Data.File;
-using melodiy.server.Services.FileService;
-using melodiy.server.Services.SongService;
-using melodiy.server.Services.SearchService;
-using melodiy.server.Providers.Search;
 using melodiy.server.Providers;
+using melodiy.server.Providers.Search;
+using melodiy.server.Services.AuthService;
+using melodiy.server.Services.FileService;
+using melodiy.server.Services.SearchService;
+using melodiy.server.Services.SongService;
+using melodiy.server.Services.UserService;
+using server.Services.ArtistService;
+using melodiy.server.Services.AlbumService;
+using server.Services.AlbumService;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -66,6 +71,10 @@ builder.Services.AddSwaggerGen(c =>
 
 //
 builder.Services.AddSingleton(provider => new Supabase.Client(url, key, options));
+// builder.Services.AddHangfire(config =>
+//     config.UsePostgreSqlStorage(c =>
+//         c.UseNpgsqlConnection(builder.Configuration.GetConnectionString("HangfireConnection"))));
+// builder.Services.AddHangfireServer();
 
 //API Repositories
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
@@ -78,6 +87,8 @@ builder.Services.AddScoped<IAudioProvider, YoutubeProvider>();
 //API Services
 builder.Services.AddScoped<ISearchService, SearchService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAlbumService, AlbumService>();
+builder.Services.AddScoped<IArtistService, ArtistService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISongService, SongService>();
 builder.Services.AddScoped<IPlaylistService, PlaylistService>();
@@ -109,13 +120,14 @@ if (app.Environment.IsDevelopment())
     _ = app.UseSwagger();
     _ = app.UseSwaggerUI();
 }
+
 app.UseDeveloperExceptionPage();
 app.UseHttpsRedirection();
-
 app.UseCors(MyAllowSpecificOrigins);
-
 app.UseAuthorization();
-
 app.MapControllers();
+
+//Custom App
+// app.UseHangfireDashboard();
 
 app.Run();

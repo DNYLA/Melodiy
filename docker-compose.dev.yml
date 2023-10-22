@@ -20,4 +20,4 @@ services:
     ports:
       - 5062:5062
     volumes:
-      - ./server/appsettings.development.json:/app/appsettings.json
+      - ./server/appsettings.production.json:/app/appsettings.json

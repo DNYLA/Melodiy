@@ -22,6 +22,129 @@ namespace melodiy.server.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("AlbumArtist", b =>
+                {
+                    b.Property<string>("ArtistsUID")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ReleasesUID")
+                        .HasColumnType("text");
+
+                    b.HasKey("ArtistsUID", "ReleasesUID");
+
+                    b.HasIndex("ReleasesUID");
+
+                    b.ToTable("AlbumArtist");
+                });
+
+            modelBuilder.Entity("melodiy.server.Models.Album", b =>
+                {
+                    b.Property<string>("UID")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CoverPath")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("ReleaseDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("SpotifyId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("TotalTracks")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("Verified")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("UID")
+                        .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("Id")
+                        .IsUnique()
+                        .HasAnnotation("SqlServer:Clustered", true);
+
+                    b.HasIndex("SpotifyId")
+                        .IsUnique();
+
+                    b.ToTable("Albums");
+                });
+
+            modelBuilder.Entity("melodiy.server.Models.Artist", b =>
+                {
+                    b.Property<string>("UID")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CoverPath")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SpotifyId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("Verified")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("UID")
+                        .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("Id")
+                        .IsUnique()
+                        .HasAnnotation("SqlServer:Clustered", true);
+
+                    b.HasIndex("SpotifyId")
+                        .IsUnique();
+
+                    b.ToTable("Artists");
+                });
+
             modelBuilder.Entity("melodiy.server.Models.Playlist", b =>
                 {
                     b.Property<string>("UID")
@@ -106,6 +229,9 @@ namespace melodiy.server.Migrations
                     b.Property<string>("Album")
                         .HasColumnType("text");
 
+                    b.Property<string>("Album2UID")
+                        .HasColumnType("text");
+
                     b.Property<string>("AlbumArtist")
                         .HasColumnType("text");
 
@@ -129,6 +255,9 @@ namespace melodiy.server.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Position")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Provider")
                         .HasColumnType("integer");
@@ -158,6 +287,8 @@ namespace melodiy.server.Migrations
 
                     b.HasKey("UID")
                         .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("Album2UID");
 
                     b.HasIndex("Id")
                         .IsUnique()
@@ -196,6 +327,21 @@ namespace melodiy.server.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("AlbumArtist", b =>
+                {
+                    b.HasOne("melodiy.server.Models.Artist", null)
+                        .WithMany()
+                        .HasForeignKey("ArtistsUID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("melodiy.server.Models.Album", null)
+                        .WithMany()
+                        .HasForeignKey("ReleasesUID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("melodiy.server.Models.Playlist", b =>
                 {
                     b.HasOne("melodiy.server.Models.User", "User")
@@ -228,11 +374,22 @@ namespace melodiy.server.Migrations
 
             modelBuilder.Entity("melodiy.server.Models.Song", b =>
                 {
+                    b.HasOne("melodiy.server.Models.Album", "Album2")
+                        .WithMany("Tracks")
+                        .HasForeignKey("Album2UID");
+
                     b.HasOne("melodiy.server.Models.User", "User")
                         .WithMany("Songs")
                         .HasForeignKey("UserId");
 
+                    b.Navigation("Album2");
+
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("melodiy.server.Models.Album", b =>
+                {
+                    b.Navigation("Tracks");
                 });
 
             modelBuilder.Entity("melodiy.server.Models.Playlist", b =>

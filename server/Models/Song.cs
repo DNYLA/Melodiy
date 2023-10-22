@@ -31,6 +31,8 @@ namespace melodiy.server.Models
         public int? UserId { get; set; }
         public User? User { get; set; }
         public DateTime ReleaseDate { get; set; }
+        public Album? Album2 { get; set; }
+        public int Position { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime CreatedAt { get; set; }

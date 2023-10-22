@@ -21,7 +21,12 @@ export const getDefaultImage = () => {
 };
 
 export function msToMinuteSeconds(duration: number) {
-  const minutes = Math.floor(duration / 60000);
-  const seconds = Number.parseInt(((duration % 60000) / 1000).toFixed(0));
+  let minutes = Math.floor(duration / 60000);
+  let seconds = Number.parseInt(((duration % 60000) / 1000).toFixed(0));
+  if (seconds == 60) {
+    minutes += 1;
+    seconds = 0;
+  }
+
   return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
 }

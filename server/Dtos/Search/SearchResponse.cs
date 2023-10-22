@@ -1,3 +1,4 @@
+using melodiy.server.Dtos.Artist;
 using melodiy.server.Dtos.Song;
 
 namespace melodiy.server.Dtos.Search
@@ -6,5 +7,6 @@ namespace melodiy.server.Dtos.Search
     public class SearchResults
     {
         public List<GetSongResponse> Songs { get; set; } = new List<GetSongResponse>();
+        public List<GetArtistResponse> Artists { get; set; } = new List<GetArtistResponse>();
     }
 }

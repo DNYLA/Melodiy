@@ -29,6 +29,7 @@ export default function ImageOverlay({ src }: Props) {
       width={300}
       height={300}
       alt="Playlist Cover"
+      quality={100}
     />
   );
 }

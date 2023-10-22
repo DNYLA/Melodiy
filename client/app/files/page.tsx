@@ -1,7 +1,7 @@
 import { getUserSongs } from '@/app/action';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import FilesTable from '@/app/files/components/table';
-import PlaylistHeader from '@/components/Data/PlaylistHeader/PlaylistHeader';
+import PlaylistHeader from '@/components/Data/TableHeader/TableHeader';
 import { PlaylistType } from '@/types';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
@@ -16,16 +16,13 @@ export default async function Files() {
 
   return (
     <Suspense fallback={<p>Loading Playlist...</p>}>
-      <div className="px-2 py-3">
+      <div className="px-6 py-3 pr-5 pt-2">
         <PlaylistHeader
-          data={{
-            uid: '@me',
-            title: 'Your Files',
-            imagePath: undefined,
-            user: { id: session.user.id, username: session.user.username },
-            createdAt: new Date().toISOString(),
-            tracks: songs.data,
-          }}
+          title={'Your Files'}
+          releaseDate={new Date()}
+          tracks={songs.data}
+          owner={session.user.username}
+          type={PlaylistType.Files}
         />
         <FilesTable data={songs.data} type={PlaylistType.Files} />
       </div>
