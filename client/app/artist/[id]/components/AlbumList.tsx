@@ -23,7 +23,7 @@ const AlbumList: React.FC<IAlbumList> = ({ header, albums }) => {
           View All
         </span>
       </div>
-      <div className="flex gap-x-5 overflow-auto">
+      <div className="flex gap-x-5 overflow-auto pb-3">
         {albums.map((album) => (
           <div
             key={album.name}
