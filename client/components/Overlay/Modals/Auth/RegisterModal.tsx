@@ -104,7 +104,7 @@ const RegisterModal = () => {
               className="text-[13px] text-white opacity-[0.8]"
               match="valueMissing"
             >
-              Please enter a question
+              Please enter a password
             </Form.Message>
           </div>
           <Form.Control asChild>

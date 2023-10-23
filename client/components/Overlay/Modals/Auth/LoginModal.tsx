@@ -89,7 +89,7 @@ const LoginModal = () => {
               className="text-[13px] text-white opacity-[0.8]"
               match="valueMissing"
             >
-              Please enter a question
+              Please enter a password
             </Form.Message>
           </div>
           <Form.Control asChild>
@@ -104,7 +104,7 @@ const LoginModal = () => {
           </Form.Control>
         </Form.Field>
         <Form.Submit asChild>
-          <button className="shadow-blackA7 mt-[10px] box-border inline-flex h-[35px] w-full items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none text-black text-violet11 shadow-[0_2px_10px] hover:bg-mauve3 focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none">
+          <button className="shadow-blackA7 mt-[10px] box-border inline-flex h-[35px] w-full items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none text-black shadow-[0_2px_10px] hover:bg-mauve3 focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none">
             Login
           </button>
         </Form.Submit>
