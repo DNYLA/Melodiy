@@ -17,7 +17,7 @@ export default function AlbumTable({ data }: IAlbumTableProps) {
     .AddPosition(isActiveTrack)
     .AddTitle(isActiveTrack)
     .AddAlbum()
-    .AddDate('Date Created')
+    // .AddDate('Date Created')
     .AddDuration()
     .Build();
 

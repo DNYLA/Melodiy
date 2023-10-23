@@ -316,7 +316,7 @@ namespace melodiy.server.Providers.Search
                 if (existingSong != null)
                 {
                     existingSong.Album2 = dbAlbum;
-                    existingSong.Position = i;
+                    existingSong.Position = track.TrackNumber;
                 }
                 else
                 {
