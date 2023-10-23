@@ -1,4 +1,6 @@
 using System.Globalization;
+using System.Security.Cryptography;
+using System.Text;
 using AutoMapper.Internal;
 using melodiy.server.Dtos.Artist;
 using melodiy.server.Dtos.Search;
@@ -14,7 +16,7 @@ namespace melodiy.server.Providers.Search
         private readonly DataContext _context;
         private readonly IMapper _mapper;
         private readonly IAudioProvider _audioProvider;
-
+        private static readonly Dictionary<string, string> artistsHash = new(); //Stored as Dictionary<ArtistSpotifyId, AlbumsHash>();
         public SpotifyProvider(IConfiguration configuration, DataContext context, IMapper mapper, IAudioProvider audioProvider)
         {
             _configuration = configuration;
@@ -193,6 +195,21 @@ namespace melodiy.server.Providers.Search
             return dbArtists.Select(_mapper.Map<GetArtistResponse>).ToList();
         }
 
+
+        private static string? ComputeHash(object obj)
+        {
+            string? stringObj = obj.ToString();
+
+            if (stringObj != null)
+            {
+                byte[] inputBuffer = Encoding.UTF8.GetBytes(stringObj);
+                byte[] hashBytes = MD5.HashData(inputBuffer);
+                return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
+            }
+
+            return string.Empty;
+        }
+
         //Runs in the background so it requires a DBContext
         public async Task IndexArtist(string id)
         {
@@ -203,6 +220,14 @@ namespace melodiy.server.Providers.Search
                 Market = "US",
                 Limit = 50,
             });
+
+            string? hash = ComputeHash(albums);
+            _ = artistsHash.TryGetValue(id, out string? storedHash);
+
+            if (storedHash != null && storedHash == hash)
+            {
+                return; //Same Data no need to index it again.
+            }
 
             IList<SimpleAlbum> allAlbums = await spotify.PaginateAll(albums);
 
@@ -279,6 +304,10 @@ namespace melodiy.server.Providers.Search
 
                 dbArtist.UpdatedAt = DateTime.UtcNow;
                 _ = await _context.SaveChangesAsync();
+                if (hash != null)
+                {
+                    artistsHash[id] = hash;
+                }
             }
             catch (Exception ex)
             {
