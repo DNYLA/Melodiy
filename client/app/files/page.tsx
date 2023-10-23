@@ -5,7 +5,6 @@ import PlaylistHeader from '@/components/Data/TableHeader/TableHeader';
 import { PlaylistType } from '@/types';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
-import { Suspense } from 'react';
 
 export default async function Files() {
   const session = await getServerSession(authOptions);
@@ -15,17 +14,15 @@ export default async function Files() {
   if (!songs || !songs.success) return redirect('/');
 
   return (
-    <Suspense fallback={<p>Loading Playlist...</p>}>
-      <div className="px-6 py-3 pr-5 pt-2">
-        <PlaylistHeader
-          title={'Your Files'}
-          releaseDate={new Date()}
-          tracks={songs.data}
-          owner={session.user.username}
-          type={PlaylistType.Files}
-        />
-        <FilesTable data={songs.data} type={PlaylistType.Files} />
-      </div>
-    </Suspense>
+    <div className="px-6 py-3 pr-5 pt-2">
+      <PlaylistHeader
+        title={'Your Files'}
+        releaseDate={new Date()}
+        tracks={songs.data}
+        owner={session.user.username}
+        type={PlaylistType.Files}
+      />
+      <FilesTable data={songs.data} type={PlaylistType.Files} />
+    </div>
   );
 }

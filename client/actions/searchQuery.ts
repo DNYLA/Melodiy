@@ -2,6 +2,8 @@ import { ServiceResponse } from '@/types';
 import { SearchResults } from '@/types/search';
 import axios from 'axios';
 
+export const revalidate = 0;
+
 const searchQuery = async (query: string): Promise<SearchResults> => {
   const empty: SearchResults = { songs: [], artists: [] };
   if (!query) {

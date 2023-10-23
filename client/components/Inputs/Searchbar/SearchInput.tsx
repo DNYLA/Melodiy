@@ -9,7 +9,7 @@ export interface IInput extends React.InputHTMLAttributes<HTMLInputElement> {}
 const SearchInput = () => {
   const router = useRouter();
   const [value, setValue] = useState<string>('');
-  const debouncedValue = useDebounce<string>(value, 250);
+  const debouncedValue = useDebounce<string>(value, 500);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -18,15 +18,15 @@ const SearchInput = () => {
   };
 
   const handleReRoute = useCallback(() => {
-    if (!value || value == '') return;
+    if (!debouncedValue || debouncedValue == '') return;
     const query = {
       title: debouncedValue,
     };
 
     const url = qs.stringifyUrl({ url: '/search', query });
-
     router.push(url);
-  }, [debouncedValue, router, value]);
+    // redirect(url, RedirectType.push);
+  }, [debouncedValue, router]);
 
   useEffect(() => {
     handleReRoute();
