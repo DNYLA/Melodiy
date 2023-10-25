@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace melodiy.Controllers;
+namespace Melodiy.Controllers;
 
 [ApiController]
 [Route("[controller]")]
