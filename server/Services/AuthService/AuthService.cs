@@ -1,21 +1,59 @@
-using Melodiy.Dtos;
+using Melodiy.Dtos.Auth;
+using Melodiy.Services.HashService;
+using Melodiy.Services.TokenService;
+using Melodiy.Services.UserService;
 
 namespace Melodiy.Services;
 
 public class AuthService : IAuthService
 {
-    public AuthService()
-    {
+    private readonly IHashService _hashService;
+    private readonly ITokenService _tokenService;
+    private readonly IUserService _userService;
 
+    public AuthService(IHashService hashService, ITokenService tokenService, IUserService userService)
+    {
+        _tokenService = tokenService;
+        _userService = userService;
+        _hashService = hashService;
     }
 
-    public GetAuthResponse Login(string username, string password)
+    public async Task<AuthResponse?> Login(string username, string password)
     {
-        throw new NotImplementedException();
+        var user = await _userService.GetFullUser(username);
+        if (user == null || _hashService.VerifyPassword(password, user.Password))
+        {
+            return null;
+        }
+
+        var token = _tokenService.CreateToken(user.Id, user.Username);
+
+
+        return new AuthResponse
+        {
+            Id = user.Id,
+            Username = user.Username,
+            AccessToken = token
+        };
     }
 
-    public GetAuthResponse Register(string username, string password)
+    public async Task<AuthResponse> Register(string username, string password)
     {
-        throw new NotImplementedException();
+        var existingUser = await _userService.GetFullUser(username);
+        if (existingUser != null)
+        {
+            throw new Exception("Username Already exists 409");
+        }
+
+        var passwordHash = _hashService.HashPassword(password);
+        var user = await _userService.CreateUser(username, passwordHash);
+        var token = _tokenService.CreateToken(user.Id, user.Username);
+
+        return new AuthResponse
+        {
+            Id = user.Id,
+            Username = user.Username,
+            AccessToken = token
+        };
     }
 }

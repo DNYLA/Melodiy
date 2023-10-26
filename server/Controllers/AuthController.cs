@@ -1,3 +1,4 @@
+using Melodiy.Dtos.Auth;
 using Melodiy.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,9 +15,23 @@ public class AuthController : ControllerBase
     }
 
 
-    [HttpGet()]
-    public async Task<ActionResult<bool>> Get()
+    [HttpPost("Login")]
+    public async Task<ActionResult<AuthResponse>> Login(UserLoginRequest request)
     {
-        return true;
+        var response = await _authService.Login(request.Username, request.Password);
+        if (response == null)
+        {
+            return NotFound("User not found");
+        }
+
+        return response;
+    }
+
+    [HttpPost("Register")]
+    public async Task<ActionResult<AuthResponse>> Register(RegisterUserRequest request)
+    {
+        var response = await _authService.Register(request.Username, request.Password);
+
+        return response;
     }
 }

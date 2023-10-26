@@ -1,9 +1,8 @@
-namespace Melodiy.Dtos;
+namespace Melodiy.Dtos.Auth;
 
 #nullable disable
-public class GetAuthResponse
+public class UserLoginRequest
 {
-    public int Id { get; set; }
     public string Username { get; set; }
     public string Password { get; set; }
 }

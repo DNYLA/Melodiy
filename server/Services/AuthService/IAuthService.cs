@@ -1,9 +1,9 @@
-using Melodiy.Dtos;
+using Melodiy.Dtos.Auth;
 
 namespace Melodiy.Services;
 
 public interface IAuthService
 {
-    GetAuthResponse Login(string username, string password);
-    GetAuthResponse Register(string username, string password);
+    Task<AuthResponse?> Login(string username, string password);
+    Task<AuthResponse> Register(string username, string password);
 }

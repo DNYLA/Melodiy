@@ -1,9 +1,14 @@
 global using Melodiy.Models;
+global using Melodiy.Data;
 global using Melodiy.Dtos;
-using Melodiy.Data;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Melodiy.Services;
+using Melodiy.Services.HashService;
+using Melodiy.Services.TokenService;
+using Melodiy.Services.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +21,10 @@ builder.Services.AddControllers();
 //Repositories
 
 //Services
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IHashService, HashService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 //Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
