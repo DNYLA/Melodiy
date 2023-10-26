@@ -1,3 +1,4 @@
+using System.Net;
 using Melodiy.Dtos.Auth;
 using Melodiy.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -18,11 +19,7 @@ public class AuthController : ControllerBase
     [HttpPost("Login")]
     public async Task<ActionResult<AuthResponse>> Login(UserLoginRequest request)
     {
-        var response = await _authService.Login(request.Username, request.Password);
-        if (response == null)
-        {
-            return NotFound("User not found");
-        }
+        var response = await _authService.Login(request.Username, request.Password) ?? throw new APIException(HttpStatusCode.NotFound, "Invalid credentials!");
 
         return response;
     }

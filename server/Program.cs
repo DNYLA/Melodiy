@@ -9,6 +9,7 @@ using Melodiy.Services;
 using Melodiy.Services.HashService;
 using Melodiy.Services.TokenService;
 using Melodiy.Services.UserService;
+using Melodiy.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +56,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.ConfingureCustomExceptionMiddleWare();
 
 app.UseHttpsRedirection();
 

@@ -23,7 +23,7 @@ public class UserService : IUserService
 
     public async Task<User?> GetFullUser(string username)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower());
 
         return user;
     }

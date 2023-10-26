@@ -3,7 +3,9 @@ global using melodiy.server.Data;
 global using melodiy.server.Dtos.User;
 global using melodiy.server.Models;
 global using melodiy.server.Services.PlaylistService;
+
 global using Microsoft.EntityFrameworkCore;
+global using System.Net;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;

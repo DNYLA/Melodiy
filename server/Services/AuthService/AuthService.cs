@@ -1,3 +1,4 @@
+using System.Net;
 using Melodiy.Dtos.Auth;
 using Melodiy.Services.HashService;
 using Melodiy.Services.TokenService;
@@ -21,13 +22,13 @@ public class AuthService : IAuthService
     public async Task<AuthResponse?> Login(string username, string password)
     {
         var user = await _userService.GetFullUser(username);
-        if (user == null || _hashService.VerifyPassword(password, user.Password))
+
+        if (user == null || !_hashService.VerifyPassword(password, user.Password))
         {
             return null;
         }
 
         var token = _tokenService.CreateToken(user.Id, user.Username);
-
 
         return new AuthResponse
         {
@@ -42,7 +43,7 @@ public class AuthService : IAuthService
         var existingUser = await _userService.GetFullUser(username);
         if (existingUser != null)
         {
-            throw new Exception("Username Already exists 409");
+            throw new APIException(HttpStatusCode.Conflict, "Username already exists");
         }
 
         var passwordHash = _hashService.HashPassword(password);
