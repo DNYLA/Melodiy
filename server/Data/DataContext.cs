@@ -5,11 +5,22 @@ namespace Melodiy.Data;
 
 public class DataContext : DbContext
 {
+    public DbSet<Album> Albums => Set<Album>();
+    public DbSet<Artist> Artists => Set<Artist>();
+    public DbSet<Image> Images => Set<Image>();
+    public DbSet<Playlist> Playlists => Set<Playlist>();
+    public DbSet<PlaylistTrack> PlaylistTracks => Set<PlaylistTrack>();
+    public DbSet<Track> Tracks => Set<Track>();
     public DbSet<User> Users => Set<User>();
 
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
 
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<PlaylistTrack>().HasKey(pt => new { pt.PlaylistId, pt.Position }); // Composite key
     }
 
     public override int SaveChanges()
