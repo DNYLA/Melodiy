@@ -1,5 +1,5 @@
 using System.Net;
-using Melodiy.Dtos.Auth;
+using Melodiy.Contracts.Auth;
 using Melodiy.Services;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,4 +1,4 @@
-namespace Melodiy.Dtos.Auth;
+namespace Melodiy.Contracts.Auth;
 
 public class UserLoginRequest
 {

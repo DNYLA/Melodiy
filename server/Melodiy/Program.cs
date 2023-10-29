@@ -1,6 +1,6 @@
 global using Melodiy.Models;
 global using Melodiy.Data;
-global using Melodiy.Dtos;
+global using Melodiy.Contracts;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

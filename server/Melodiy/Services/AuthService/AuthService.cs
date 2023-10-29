@@ -1,5 +1,5 @@
 using System.Net;
-using Melodiy.Dtos.Auth;
+using Melodiy.Contracts.Auth;
 using Melodiy.Services.HashService;
 using Melodiy.Services.TokenService;
 using Melodiy.Services.UserService;

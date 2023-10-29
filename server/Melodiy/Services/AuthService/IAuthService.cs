@@ -1,4 +1,4 @@
-using Melodiy.Dtos.Auth;
+using Melodiy.Contracts.Auth;
 
 namespace Melodiy.Services;
 
