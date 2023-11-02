@@ -21,8 +21,8 @@ public class AuthenticationController : ControllerBase
         
         var response = new AuthenticationResponse()
         {
-            Id = authResult.Id,
-            Username = authResult.Username,
+            Id = authResult.User.Id,
+            Username = authResult.User.Username,
             AccessToken = authResult.AccessToken
         };
 
@@ -36,8 +36,8 @@ public class AuthenticationController : ControllerBase
         
         var response = new AuthenticationResponse()
         {
-            Id = authResult.Id,
-            Username = authResult.Username,
+            Id = authResult.User.Id,
+            Username = authResult.User.Username,
             AccessToken = authResult.AccessToken
         };
 
