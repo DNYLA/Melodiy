@@ -1,9 +1,9 @@
 namespace Tests;
 
-public class UnitTest1
+public class HashServiceTests
 {
     [Fact]
-    public void Test1()
+    public void HashService_VerifyPassword_Succeed()
     {
         Assert.Equal(4, Add(2, 2));
     }

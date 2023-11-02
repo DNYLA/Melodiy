@@ -20,7 +20,6 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<AuthResponse>> Login(UserLoginRequest request)
     {
         var response = await _authService.Login(request.Username, request.Password) ?? throw new APIException(HttpStatusCode.NotFound, "Invalid credentials!");
-
         return response;
     }
 

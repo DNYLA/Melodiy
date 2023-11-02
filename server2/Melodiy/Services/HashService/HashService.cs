@@ -1,6 +1,3 @@
-using Melodiy.Models;
-using Microsoft.AspNetCore.Identity;
-using BCrypt.Net;
 namespace Melodiy.Services.HashService;
 
 public class HashService : IHashService
