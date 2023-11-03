@@ -4,6 +4,7 @@ const nextConfig = {
     serverActions: true,
   },
   images: {
+    unoptimized: true,
     domains: [
       'dmzuqlhabiwwcasbtoem.supabase.co', //Host Upload
       'svmigokmzkjddcixdmzh.supabase.co', //Host Upload
