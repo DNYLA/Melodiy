@@ -1,6 +1,9 @@
 using Melodiy.Application.Common.Interfaces.Authentication;
+using Melodiy.Application.Common.Interfaces.Persistance;
+using Melodiy.Application.Common.Interfaces.Services;
 using Melodiy.Application.Services.UserService;
 using Melodiy.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Melodiy.Application.Services.Authentication;
 
@@ -8,19 +11,24 @@ public class AuthenticationService : IAuthenticationService
 {
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IUserService _userService;
-    public AuthenticationService(IJwtTokenGenerator jwtTokenGenerator, IUserService userService)
+    private readonly IHashService _hashService;
+    private readonly IDataContext _context;
+    public AuthenticationService(IJwtTokenGenerator jwtTokenGenerator, IUserService userService, IHashService hashService, IDataContext context)
     {
         _jwtTokenGenerator = jwtTokenGenerator;
         _userService = userService;
+        _hashService = hashService;
+        _context = context;
     }
 
     public async Task<AuthenticationResult> Login(string username, string password)
     {
-        //User Exists
-        var user = await _userService.GetByName(username) ?? throw new Exception("Invalid Credentials!");
+        //Check if user exists
+        //Dont use UserService as that doesn't expose password
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower());
 
         //Validate Password
-        if (user.Password != password)
+        if (user is null || !_hashService.VerifyPassword(password, user.Password))
         {
             throw new Exception("Invalid Credentials");
         }
@@ -38,28 +46,26 @@ public class AuthenticationService : IAuthenticationService
     public async Task<AuthenticationResult> Register(string username, string password)
     {
         //Check if user already exists
-        if (_userService.GetByName(username) is not null)
+        //Dont use UserService as that doesn't expose password
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower());
+
+        if (user is not null)
         {
             throw new Exception("Username already exists");
         }
 
-        //Create user
-        var user = new User()
-        {
-            Username = username,
-            Password = password
-        };
-        var user2 = await _userService.Create(user);
+        //TODO: Hash Password
+        var pHash = _hashService.HashPassword(password);
 
-        Console.WriteLine(user2.Id);
-        Console.WriteLine(user.Id);
+        //Create User
+        var createdUser = await _userService.Create(username, pHash);
 
         //Create JWT Token
-        var token = _jwtTokenGenerator.GenerateToken(user);
+        var token = _jwtTokenGenerator.GenerateToken(createdUser);
 
         return new AuthenticationResult()
         {
-            User = user,
+            User = createdUser,
             AccessToken = token,
         };
     }

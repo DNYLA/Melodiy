@@ -22,8 +22,10 @@ public static class DependencyInjection
     {
         services.AddDbContext<IDataContext, DataContext>(options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
         services.AddAuth(configuration);
+    
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-        
+        services.AddScoped<IHashService, HashService>();
+
         services.AddScoped<IUserRepository, UserRepository>();
 
         return services;

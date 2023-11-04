@@ -12,9 +12,18 @@ public class UserService : IUserService
         _context = context;
     }
 
-    public Task<User> Create(User user)
+    public async Task<User> Create(string username, string pHash)
     {
-        throw new NotImplementedException();
+        User newUser = new()
+        {
+            Username = username,
+            Password = pHash
+        };
+
+        _context.Users.Add(newUser);
+        await _context.SaveChangesAsync();
+
+        return newUser;
     }
 
     public Task<User?> GetById(int userId)
