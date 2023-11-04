@@ -15,7 +15,17 @@ public class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 
-    public User? GetByUsername(string username)
+    public User? GetByName(string username)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Remove(User user)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SaveAsync()
     {
         throw new NotImplementedException();
     }

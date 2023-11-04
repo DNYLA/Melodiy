@@ -1,3 +1,5 @@
+using Melodiy.Domain.Common;
+
 namespace Melodiy.Domain.Entities;
 
 public class User : BaseEntity

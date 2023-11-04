@@ -1,4 +1,4 @@
-namespace Melodiy.Domain.Entities;
+namespace Melodiy.Domain.Common;
 
 public abstract class BaseEntity
 {

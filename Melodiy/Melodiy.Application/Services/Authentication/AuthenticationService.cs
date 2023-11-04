@@ -18,7 +18,7 @@ public class AuthenticationService : IAuthenticationService
     public AuthenticationResult Login(string username, string password)
     {
         //User Exists
-        var user = _userRepository.GetByUsername(username) ?? throw new Exception("Invalid Credentials!");
+        var user = _userRepository.GetByName(username) ?? throw new Exception("Invalid Credentials!");
 
         //Validate Password
         if (user.Password != password)
@@ -39,7 +39,7 @@ public class AuthenticationService : IAuthenticationService
     public AuthenticationResult Register(string username, string password)
     {
         //Check if user already exists
-        if (_userRepository.GetByUsername(username) is not null)
+        if (_userRepository.GetByName(username) is not null)
         {
             throw new Exception("Username already exists");
         }
