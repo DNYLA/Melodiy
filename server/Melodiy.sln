@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Melodiy.Domain", "Melodiy.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Melodiy.Infrastructure", "Melodiy.Infrastructure\Melodiy.Infrastructure.csproj", "{FFD98590-8ABD-4449-A4BE-8DCCF7B68ADD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Melodiy.Tests", "Melodiy.Tests\Melodiy.Tests.csproj", "{1B5F1A65-7CE8-4CA6-BEF6-0D40A60A6D72}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{FFD98590-8ABD-4449-A4BE-8DCCF7B68ADD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFD98590-8ABD-4449-A4BE-8DCCF7B68ADD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFD98590-8ABD-4449-A4BE-8DCCF7B68ADD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B5F1A65-7CE8-4CA6-BEF6-0D40A60A6D72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B5F1A65-7CE8-4CA6-BEF6-0D40A60A6D72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B5F1A65-7CE8-4CA6-BEF6-0D40A60A6D72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B5F1A65-7CE8-4CA6-BEF6-0D40A60A6D72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

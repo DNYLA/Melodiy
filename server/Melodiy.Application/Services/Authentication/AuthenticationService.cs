@@ -61,11 +61,11 @@ public class AuthenticationService : IAuthenticationService
         var createdUser = await _userService.Create(username, pHash);
 
         //Create JWT Token
-        var token = _jwtTokenGenerator.GenerateToken(createdUser);
+        var token = _jwtTokenGenerator.GenerateToken(createdUser!);
 
         return new AuthenticationResult()
         {
-            User = createdUser,
+            User = createdUser!,
             AccessToken = token,
         };
     }
