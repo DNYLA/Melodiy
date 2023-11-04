@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Melodiy.Infrastructure.Migrations
 {
-    [DbContext(typeof(MelodiyDbContext))]
-    [Migration("20231104115337_initial-migration")]
+    [DbContext(typeof(DataContext))]
+    [Migration("20231104145334_initial-migration")]
     partial class initialmigration
     {
         /// <inheritdoc />

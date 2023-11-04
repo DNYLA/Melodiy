@@ -1,5 +1,5 @@
 using Melodiy.Application.Common.Interfaces.Authentication;
-using Melodiy.Application.Common.Interfaces.Persistance;
+using Melodiy.Application.Services.UserService;
 using Melodiy.Domain.Entities;
 
 namespace Melodiy.Application.Services.Authentication;
@@ -7,18 +7,17 @@ namespace Melodiy.Application.Services.Authentication;
 public class AuthenticationService : IAuthenticationService
 {
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
-    private readonly IUserRepository _userRepository;
-
-    public AuthenticationService(IJwtTokenGenerator jwtTokenGenerator, IUserRepository userRepository)
+    private readonly IUserService _userService;
+    public AuthenticationService(IJwtTokenGenerator jwtTokenGenerator, IUserService userService)
     {
         _jwtTokenGenerator = jwtTokenGenerator;
-        _userRepository = userRepository;
+        _userService = userService;
     }
 
-    public AuthenticationResult Login(string username, string password)
+    public async Task<AuthenticationResult> Login(string username, string password)
     {
         //User Exists
-        var user = _userRepository.GetByName(username) ?? throw new Exception("Invalid Credentials!");
+        var user = await _userService.GetByName(username) ?? throw new Exception("Invalid Credentials!");
 
         //Validate Password
         if (user.Password != password)
@@ -36,10 +35,10 @@ public class AuthenticationService : IAuthenticationService
         };
     }
 
-    public AuthenticationResult Register(string username, string password)
+    public async Task<AuthenticationResult> Register(string username, string password)
     {
         //Check if user already exists
-        if (_userRepository.GetByName(username) is not null)
+        if (_userService.GetByName(username) is not null)
         {
             throw new Exception("Username already exists");
         }
@@ -50,7 +49,10 @@ public class AuthenticationService : IAuthenticationService
             Username = username,
             Password = password
         };
-        _userRepository.Add(user);
+        var user2 = await _userService.Create(user);
+
+        Console.WriteLine(user2.Id);
+        Console.WriteLine(user.Id);
 
         //Create JWT Token
         var token = _jwtTokenGenerator.GenerateToken(user);

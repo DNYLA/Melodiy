@@ -2,6 +2,7 @@ using Melodiy.Domain.Entities;
 
 namespace Melodiy.Application.Common.Interfaces.Persistance;
 
+[Obsolete]
 public interface IUserRepository
 {
     User? GetById(int id);

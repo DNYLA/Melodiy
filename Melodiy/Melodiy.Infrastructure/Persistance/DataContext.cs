@@ -1,11 +1,12 @@
 
+using Melodiy.Application.Common.Interfaces.Persistance;
 using Melodiy.Domain.Common;
 using Melodiy.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Melodiy.Infrastructure.Persistance;
 
-public class MelodiyDbContext : DbContext 
+public class DataContext : DbContext, IDataContext
 {
     public DbSet<Album> Albums => Set<Album>();
     public DbSet<Artist> Artists => Set<Artist>();
@@ -16,7 +17,7 @@ public class MelodiyDbContext : DbContext
     public DbSet<TrackArtist> TracksArtists => Set<TrackArtist>();
     public DbSet<User> Users => Set<User>();
 
-    public MelodiyDbContext(DbContextOptions<MelodiyDbContext> options) : base(options) {    }
+    public DataContext(DbContextOptions<DataContext> options) : base(options) {    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

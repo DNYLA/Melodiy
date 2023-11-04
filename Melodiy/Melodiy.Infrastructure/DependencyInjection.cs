@@ -20,7 +20,7 @@ public static class DependencyInjection
         this IServiceCollection services,
         ConfigurationManager configuration)
     {
-        services.AddDbContext<MelodiyDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+        services.AddDbContext<IDataContext, DataContext>(options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
         services.AddAuth(configuration);
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         

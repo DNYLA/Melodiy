@@ -15,9 +15,9 @@ public class AuthenticationController : ControllerBase
         
     }
     [HttpPost("Login")]
-    public IActionResult Login(LoginRequest request)
+    public async Task<IActionResult> Login(LoginRequest request)
     {
-        var authResult = _authService.Login(request.Username, request.Password);
+        var authResult = await _authService.Login(request.Username, request.Password);
         
         var response = new AuthenticationResponse()
         {
@@ -30,9 +30,9 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost("Register")]
-    public IActionResult Register(RegisterRequest request)
+    public async Task<IActionResult> Register(RegisterRequest request)
     {
-        var authResult = _authService.Register(request.Username, request.Password);
+        var authResult = await _authService.Register(request.Username, request.Password);
         
         var response = new AuthenticationResponse()
         {

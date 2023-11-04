@@ -3,6 +3,7 @@ using Melodiy.Domain.Entities;
 
 namespace Melodiy.Infrastructure.Persistance;
 
+[Obsolete]
 public class UserRepository : IUserRepository
 {
     public void Add(User user)
