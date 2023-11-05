@@ -10,8 +10,9 @@ import { twMerge } from 'tailwind-merge';
 // import Navbar from '../Navbar';
 // import PlaylistHeader from './PlaylistTitle';
 // import SidebarItem from './SidebarNavItem';
-import Library from '@/components/navigation/Sidebar/Data/Library';
 import { clamp } from '@/lib/utils/number';
+import Navbar from '../Navbar';
+import Library from './Data/Library';
 import NavItem from './NavItem';
 
 interface SidebarProps {
@@ -84,7 +85,7 @@ const Sidebar = ({ children }: SidebarProps) => {
     x = clamp(x, 0, 300);
 
     localStorage.setItem('sidebar-width', String(x));
-    if (x < 50) {
+    if (x < 130) {
       sidebar.current!.style.width = `0px`;
       sidebar.current!.classList.add('collapsed-sidebar');
       return;
@@ -130,7 +131,7 @@ const Sidebar = ({ children }: SidebarProps) => {
       </div>
 
       <main className="h-full flex-1 overflow-y-auto pb-2">
-        {/* <Navbar /> */}
+        <Navbar />
         <div className="w-full">{children}</div>
       </main>
     </div>
