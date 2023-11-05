@@ -1,9 +1,9 @@
+import ToasterProvider from '@/providers/ToasterProvider';
 import Sidebar from '@/components/Navigation/Sidebar';
 import Player from '@/components/Utils/Player';
 import ModalProvider from '@/providers/ModalProvider';
 import { SWRProvider } from '@/providers/SWRProvider';
 import SessionProvider from '@/providers/SessionProvider';
-import ToasterProvider from '@/providers/ToasterProvider';
 import type { Metadata } from 'next';
 import { Figtree } from 'next/font/google';
 import './globals.css';
