@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json;
+using Melodiy.Application.Common.Errors;
 
 namespace Melodiy.Api.Middleware;
 
@@ -18,24 +19,28 @@ public class ErrorHandlingMiddleware
         {
             await _next(context);
         }
-        // catch (APIException ex)
-        // {
-        //     await HandleExceptionAsync(httpContext, ex);
-        // }
+        catch (ApiError ex)
+        {
+            await HandleExceptionAsync(context, ex);
+        }
         catch (Exception ex)
         {
             // _logger.LogError("Something went wrong: {ex}", ex);
-            await HandleExceptionAsync(context, ex);
+            await HandleExceptionAsync(context,
+                new ApiError(HttpStatusCode.InternalServerError, "An error occured while processing your request"));
         }
     }
 
-    private Task HandleExceptionAsync(HttpContext context, Exception ex)
+    private Task HandleExceptionAsync(HttpContext context, ApiError ex)
     {
-        var code = HttpStatusCode.InternalServerError;
-        var result = JsonSerializer.Serialize(new { error = "An error occured while processing your request "});
+        // var code = HttpStatusCode.InternalServerError;
+        //TODO: Add Logging
+
+        var result = JsonSerializer.Serialize(new { error = ex.Message });
 
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)code;
+        context.Response.StatusCode = ex.StatusCode;
+
         return context.Response.WriteAsync(result);
     }
 

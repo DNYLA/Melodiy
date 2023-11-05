@@ -27,8 +27,8 @@ var app = builder.Build();
     //     app.UseSwaggerUI();
     // }
 
-    // app.UseMiddleware<ErrorHandlingMiddleware>();
-    app.UseExceptionHandler("/error");
+    app.UseMiddleware<ErrorHandlingMiddleware>();
+    // app.UseExceptionHandler("/error");
     app.UseHttpsRedirection();
     app.UseAuthentication();
     app.UseAuthorization();

@@ -1,3 +1,5 @@
+using System.Net;
+using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Common.Interfaces.Authentication;
 using Melodiy.Application.Common.Interfaces.Persistance;
 using Melodiy.Application.Common.Interfaces.Services;
@@ -30,7 +32,7 @@ public class AuthenticationService : IAuthenticationService
         //Validate Password
         if (user == null || !_hashService.VerifyPassword(password, user.Password))
         {
-            throw new Exception("Invalid Credentials");
+            throw new ApiError(HttpStatusCode.Unauthorized, "Invalid Credentials");
         }
 
         //Generate Token
@@ -51,7 +53,7 @@ public class AuthenticationService : IAuthenticationService
 
         if (user != null)
         {
-            throw new Exception("Username already exists");
+            throw new ApiError(HttpStatusCode.Conflict, "Username already exists");
         }
 
         //TODO: Hash Password
