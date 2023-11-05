@@ -1,7 +1,7 @@
-import { PublicUser } from "./user";
+import { PublicUser } from './user';
 
 export interface APIError {
-  message: string;
+  error: string;
 }
 
 export type Playlist = {
@@ -36,7 +36,6 @@ export type Song = {
   provider: Provider;
   user?: PublicUser;
 };
-
 
 export enum Provider {
   Local = 0,
