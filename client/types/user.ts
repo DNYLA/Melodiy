@@ -13,3 +13,12 @@ export type AuthResult = {
   username: string;
   accessToken: string;
 };
+
+export type TokenPayload = {
+  sub: string;
+  name: string;
+  jti: string;
+  exp: Date;
+  iss: string;
+  aud: string;
+};
