@@ -28,7 +28,7 @@ public class AuthenticationService : IAuthenticationService
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower());
 
         //Validate Password
-        if (user is null || !_hashService.VerifyPassword(password, user.Password))
+        if (user == null || !_hashService.VerifyPassword(password, user.Password))
         {
             throw new Exception("Invalid Credentials");
         }
@@ -49,7 +49,7 @@ public class AuthenticationService : IAuthenticationService
         //Dont use UserService as that doesn't expose password
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower());
 
-        if (user is not null)
+        if (user != null)
         {
             throw new Exception("Username already exists");
         }

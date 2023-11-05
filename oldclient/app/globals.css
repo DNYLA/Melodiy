@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+:root {
+  user-select: none;
+  height: 100%;
+  background-color: #131111;
+  color: white;
+  color-scheme: dark;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+tr {
+  border-radius: 25px;
+  /* background-color: red; */
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 5px;
+}
+
+/* Track Hover */
+::-webkit-scrollbar-track:hover {
+  background: #ccc;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
