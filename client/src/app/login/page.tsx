@@ -1,11 +1,12 @@
 'use client';
+import { AuthResult } from '@/types/user';
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
-export default function SignUp() {
+export default function Login() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
@@ -13,14 +14,19 @@ export default function SignUp() {
     password: '',
   });
 
-  const onSignup = async () => {
+  const onSignIn = async () => {
     try {
       setLoading(true);
-      const res = await axios.post('/api/signup', user);
-      toast.success(res.data.message);
-      router.push('/login');
+      const { data } = await axios.post<AuthResult>('/api/auth/login', user);
+      // const res = await loginUserAction(user.username, user.password);
+
+      toast.success('Succesfully created user');
+
+      //TODO: Update user context.
+
+      router.push('/profile');
     } catch (err: any) {
-      toast.error(err.response.data.message);
+      toast.error(err.response.data.error);
     } finally {
       setLoading(false);
     }
@@ -28,7 +34,7 @@ export default function SignUp() {
 
   return (
     <div className="flex flex-col px-24">
-      <h1>Sign Up</h1>
+      <h1>Login</h1>
       <hr className="mb-2" />
       <label htmlFor="username">Username</label>
       <input
@@ -50,13 +56,12 @@ export default function SignUp() {
       />
 
       <button
-        disabled={loading}
-        onClick={onSignup}
-        className="mb-1 mt-3 rounded-lg border border-gray-300 p-2 focus:border-gray-600 focus:outline-none disabled:bg-neutral-800"
+        onClick={onSignIn}
+        className="mb-1 mt-3 rounded-lg border border-gray-300 p-2 focus:border-gray-600 focus:outline-none"
       >
-        Signup
+        Login
       </button>
-      <Link href={'/login'}>Already got an account. Login!</Link>
+      <Link href={'/signup'}>Don't have an account. Sign Up Here!</Link>
     </div>
   );
 }

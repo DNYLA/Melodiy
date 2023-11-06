@@ -1,4 +1,4 @@
-import { getDataFromToken } from '@/lib/utils/getDataFromToken';
+import { getDataFromToken } from '@/lib/network/helpers';
 import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
@@ -6,7 +6,7 @@ export function middleware(request: NextRequest) {
   const isPublicPath = path == '/login' || path == '/signup';
 
   const token = request.cookies.get('token')?.value ?? undefined;
-  const payload = getDataFromToken(request);
+  const payload = getDataFromToken(token);
 
   //accessToken cookie is present but expired
   if (token && !payload) {

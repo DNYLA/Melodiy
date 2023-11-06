@@ -1,8 +1,8 @@
 import { PublicUser } from './user';
 
-export interface APIError {
+export type APIError = {
   error: string;
-}
+};
 
 export type Playlist = {
   id: string;

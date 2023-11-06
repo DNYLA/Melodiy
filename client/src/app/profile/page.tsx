@@ -13,7 +13,7 @@ export default function Profile() {
 
   const logout = async () => {
     try {
-      await axios.get('/api/logout');
+      await axios.get('/api/auth/logout');
       toast.success('Logout successfull');
       router.push('/login');
     } catch (err: any) {

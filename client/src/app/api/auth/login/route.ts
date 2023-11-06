@@ -1,4 +1,4 @@
-import { getApiRoute } from '@/lib/utils/helper';
+import { getApiRoute } from '@/lib/network/helpers';
 import { AuthResult } from '@/types/user';
 import axios from 'axios';
 import { NextRequest, NextResponse } from 'next/server';
@@ -20,17 +20,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { data, status } = await axios.post<AuthResult>(
-      getApiRoute('/auth/login'),
-      {
-        username: username,
-        password: password,
-      }
-    );
+    const { data } = await axios.post<AuthResult>(getApiRoute('/auth/login'), {
+      username: username,
+      password: password,
+    });
 
     const response = NextResponse.json({
       id: data.id,
       username: data.username,
+      accessToken: data.accessToken,
     });
 
     response.cookies.set('token', data.accessToken, {
@@ -40,13 +38,11 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch (err: any) {
-    return NextResponse.json(
-      {
-        message:
-          err?.response?.data?.error ??
-          'Unable to register account. Try Again!',
-      },
-      { status: err.response.status ?? 500 }
-    );
+    const message =
+      err?.response?.data?.error ??
+      'Unexpected server error occured. Try Again!';
+    const status = err.response.status ?? 500;
+
+    return NextResponse.json({ error: message }, { status });
   }
 }
