@@ -105,7 +105,9 @@ export const SessionProvider: React.FC<IProvider> = ({ children }) => {
     try {
       await axios.get('/api/auth/logout');
       toast.success('Logout successfull');
-      router.push('/');
+      setAccessToken(undefined);
+      setUser(undefined);
+      router.refresh();
     } catch (err: any) {
       toast.error(err.message);
     }
