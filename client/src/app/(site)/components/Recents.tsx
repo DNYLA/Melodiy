@@ -5,7 +5,7 @@ export default async function Trending() {
   //   return <p className="text-3xl font-bold ">Trending</p>;
   // }
 
-  return <p className="text-3xl font-bold ">Trending</p>;
+  return <p className="text-3xl font-bold ">Recently Created</p>;
 
   // return (
   //   <div className="">

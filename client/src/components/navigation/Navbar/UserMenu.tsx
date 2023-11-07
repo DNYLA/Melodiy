@@ -1,9 +1,6 @@
+import Image from '@/components/Data/Image';
 import useSession from '@/hooks/useSession';
 import * as HoverCard from '@radix-ui/react-hover-card';
-// import Image from 'next/image';
-import Image from '@/components/Data/Image';
-
-// import { signOut } from 'next-auth/react';
 
 const UserMenu = () => {
   const { user, signOut } = useSession();

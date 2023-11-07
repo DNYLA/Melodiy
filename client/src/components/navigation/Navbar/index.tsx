@@ -1,5 +1,4 @@
 'use client';
-// import SearchInput from '@/components/Inputs/Searchbar/SearchInput';
 import SearchInput from '@/components/navigation/Navbar/SearchInput';
 import { useRouter } from 'next/navigation';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
@@ -13,18 +12,10 @@ const Navbar = () => {
 
   //TODO: Handle Forward & Back navigation so it doesn't redirect to a different site and the state shows if a forward and back prop is possible
   const handleBackward = () => {
-    // console.log(window.history);
-    // if (window.history.state && window.history.state.tree.length > 0) {
-    //   console.log('Going backwards');
-    //   router.back();
-    // }
     router.back();
   };
 
   const handleForward = () => {
-    // console.log('running');
-    // console.log(window.history);
-
     router.forward();
   };
 
@@ -53,9 +44,8 @@ const Navbar = () => {
           <SearchInput />
         </div>
       </div>
-      <div className="">
-        <AuthSection />
-      </div>
+
+      <AuthSection />
     </div>
   );
 };

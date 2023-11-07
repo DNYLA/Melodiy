@@ -10,7 +10,6 @@ const Image = React.forwardRef<HTMLDivElement, ImageProps>(
   ({ src, fallbackSrc, ...props }, ref: ForwardedRef<HTMLDivElement>) => {
     const handleError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
       const fallback = fallbackSrc ?? 'images/default_playlist.png';
-      console.log(fallbackSrc);
       e.currentTarget.src = fallback;
     };
 
@@ -21,15 +20,5 @@ const Image = React.forwardRef<HTMLDivElement, ImageProps>(
     );
   }
 );
-
-// const Image: FC<ImageProps> = ({ src, fallbackSrc, ...props }) => {
-//   const handleError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
-//     const fallback = fallbackSrc ?? 'images/default_playlist.png';
-//     console.log(fallbackSrc);
-//     e.currentTarget.src = fallback;
-//   };
-
-//   return <NextImage src={src} onError={handleError} {...props} />;
-// };
 
 export default Image;

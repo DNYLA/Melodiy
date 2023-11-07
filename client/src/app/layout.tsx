@@ -21,18 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={font.className}>
-        {/* <ToasterProvider />
-        <Sidebar>{children}</Sidebar> */}
         <Providers>
           <Sidebar>{children}</Sidebar>
         </Providers>
-        {/* <SessionProvider>
-          <SWRProvider>
-            <ModalProvider />
-            <Sidebar>{children}</Sidebar>
-            <Player />
-          </SWRProvider>
-        </SessionProvider> */}
       </body>
     </html>
   );

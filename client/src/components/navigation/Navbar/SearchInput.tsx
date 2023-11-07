@@ -1,3 +1,5 @@
+'use client';
+
 import { Input } from '@/components/Inputs/Input';
 import useDebounce from '@/hooks/useDebounce';
 import { useRouter } from 'next/navigation';
