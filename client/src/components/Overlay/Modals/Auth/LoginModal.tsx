@@ -4,10 +4,17 @@ import { Button } from '@/components/Inputs/Buttons/Button';
 import { Input } from '@/components/Inputs/Input';
 import useAuthModal from '@/hooks/modals/useAuthModal';
 import useSession from '@/hooks/useSession';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 import Modal from '../Modal';
+
+const schema = z.object({
+  username: z.string().min(3, 'Please enter a valid username'),
+  password: z.string().min(3, 'Please enter a valid password'),
+});
 
 type FormValues = {
   username: string;
@@ -23,7 +30,9 @@ const LoginModal = () => {
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<FormValues>();
+  } = useForm<FormValues>({
+    resolver: zodResolver(schema),
+  });
 
   useEffect(() => {
     if (user && isOpen) {
@@ -92,7 +101,9 @@ const LoginModal = () => {
           Don't have an account? Register now.
         </button>
 
-        <Button type="submit">Login</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          Login
+        </Button>
       </form>
     </Modal>
   );

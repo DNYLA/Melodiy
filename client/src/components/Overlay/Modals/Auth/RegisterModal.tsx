@@ -4,15 +4,33 @@ import { Button } from '@/components/Inputs/Buttons/Button';
 import { Input } from '@/components/Inputs/Input';
 import useAuthModal from '@/hooks/modals/useAuthModal';
 import useSession from '@/hooks/useSession';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 import Modal from '../Modal';
 
 type FormValues = {
   username: string;
   password: string;
+  confirmPassword: string;
 };
+
+const schema = z
+  .object({
+    username: z
+      .string()
+      .min(3, 'Username must contain at least 3 character(s)'),
+    password: z
+      .string()
+      .min(3, 'Password must contain at least 3 character(s)'),
+    confirmPassword: z.string().min(3, ''),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'],
+  });
 
 const RegisterModal = () => {
   const router = useRouter();
@@ -23,7 +41,9 @@ const RegisterModal = () => {
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<FormValues>();
+  } = useForm<FormValues>({
+    resolver: zodResolver(schema),
+  });
 
   useEffect(() => {
     if (user && isOpen) {
@@ -69,7 +89,7 @@ const RegisterModal = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-y-1">
+        <div className="mb-3 flex flex-col gap-y-1">
           <div className="flex items-center justify-between">
             <label className="font-medium" htmlFor="password">
               Password
@@ -88,11 +108,34 @@ const RegisterModal = () => {
           />
         </div>
 
+        <div className="flex flex-col gap-y-1">
+          <div className="flex items-center justify-between">
+            <label className="font-medium" htmlFor="password">
+              Confirm Password
+            </label>
+            <p className="text-xs opacity-80">
+              {errors.confirmPassword?.message}
+            </p>
+          </div>
+
+          <Input
+            {...register('confirmPassword', {
+              required: 'Please enter your password',
+            })}
+            disabled={isSubmitting}
+            id="password"
+            type="password"
+            placeholder="Enter your password again"
+          />
+        </div>
+
         <button className="mb-4 text-sm" onClick={() => onOpen(true)}>
           Already got an account. Login!
         </button>
 
-        <Button type="submit">Register</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          Register
+        </Button>
       </form>
     </Modal>
   );
