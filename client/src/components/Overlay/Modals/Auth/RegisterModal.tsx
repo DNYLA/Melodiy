@@ -65,6 +65,7 @@ const RegisterModal = () => {
             })}
             disabled={isSubmitting}
             id="username"
+            placeholder="Enter a username"
           />
         </div>
 
@@ -83,6 +84,7 @@ const RegisterModal = () => {
             disabled={isSubmitting}
             id="password"
             type="password"
+            placeholder="Enter a secure password"
           />
         </div>
 

@@ -65,6 +65,7 @@ const LoginModal = () => {
             })}
             disabled={isSubmitting}
             id="username"
+            placeholder="Your Username"
           />
         </div>
 
@@ -83,6 +84,7 @@ const LoginModal = () => {
             disabled={isSubmitting}
             id="password"
             type="password"
+            placeholder="Your Password"
           />
         </div>
 
