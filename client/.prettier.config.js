@@ -1,3 +1,3 @@
 module.exports = {
-  tailwindFunctions: ['tw', 'twMerge'],
+  tailwindFunctions: ['tw', 'twMerge', 'cva'],
 };

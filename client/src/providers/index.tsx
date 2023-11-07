@@ -1,3 +1,4 @@
+import ModalProvider from '@/providers/ModalProvider';
 import React from 'react';
 import { SessionProvider } from './SessionProvider';
 import ToasterProvider from './ToasterProvider';
@@ -10,7 +11,11 @@ const Providers: React.FC<IProvider> = ({ children }) => {
   return (
     <>
       <ToasterProvider />
-      <SessionProvider>{children}</SessionProvider>;
+      <SessionProvider>
+        <ModalProvider />
+        {children}
+      </SessionProvider>
+      ;
     </>
   );
 };

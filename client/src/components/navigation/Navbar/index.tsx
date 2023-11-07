@@ -1,5 +1,6 @@
 'use client';
 // import SearchInput from '@/components/Inputs/Searchbar/SearchInput';
+import SearchInput from '@/components/navigation/Navbar/SearchInput';
 import { useRouter } from 'next/navigation';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { twMerge } from 'tailwind-merge';
@@ -10,7 +11,6 @@ const Navbar = () => {
   const canGoForward = true;
   const router = useRouter();
 
-  //TODO: Move to seperate file
   //TODO: Handle Forward & Back navigation so it doesn't redirect to a different site and the state shows if a forward and back prop is possible
   const handleBackward = () => {
     // console.log(window.history);
@@ -50,7 +50,7 @@ const Navbar = () => {
           />
         </div>
         <div>
-          {/* <SearchInput /> */}
+          <SearchInput />
         </div>
       </div>
       <div className="">

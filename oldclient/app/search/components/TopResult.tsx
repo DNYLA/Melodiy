@@ -16,6 +16,9 @@ const TopResult: React.FC<ITopResult> = ({ song }) => {
   const handlePlay = () => {
     onPlay(song.uid, [song]);
   };
+
+  if (!song) return <div>Empty</div>;
+
   return (
     <div
       className="group flex cursor-pointer justify-between rounded-md bg-[#1d1b1b] p-3 transition-all duration-200 ease-in-out hover:scale-105 hover:bg-[#313030] "

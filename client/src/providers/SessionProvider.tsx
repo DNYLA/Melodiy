@@ -11,8 +11,8 @@ type SessionContextType = {
   accessToken?: string;
   user?: User;
   isLoading: boolean;
-  login: (username: string, password: string) => void;
-  register: (username: string, password: string) => void;
+  login: (username: string, password: string) => Promise<boolean>;
+  register: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
   // update: () => void;
 };
@@ -21,9 +21,9 @@ export const SessionContext = createContext<SessionContextType>({
   accessToken: undefined,
   user: undefined,
   isLoading: false,
-  login: () => {},
-  register: () => {},
-  logout: () => {},
+  login: async () => false,
+  register: async () => false,
+  logout: async () => {},
 });
 
 export const SessionProvider: React.FC<IProvider> = ({ children }) => {
@@ -68,8 +68,10 @@ export const SessionProvider: React.FC<IProvider> = ({ children }) => {
         setAccessToken(data.accessToken);
 
         router.push('/profile');
+        return true;
       } catch (err: any) {
         toast.error(err.response.data.error);
+        return false;
       } finally {
         setLoading(false);
       }
@@ -91,9 +93,14 @@ export const SessionProvider: React.FC<IProvider> = ({ children }) => {
         setUser({ id: data.id, username: data.username });
         setAccessToken(data.accessToken);
 
+        console.log('here 1');
+
         router.push('/profile');
+        console.log('here');
+        return true;
       } catch (err: any) {
         toast.error(err.response.data.error);
+        return false;
       } finally {
         setLoading(false);
       }

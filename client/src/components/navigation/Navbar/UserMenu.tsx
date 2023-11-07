@@ -6,7 +6,7 @@ import Image from '@/components/Data/Image';
 // import { signOut } from 'next-auth/react';
 
 const UserMenu = () => {
-  const { user, logout } = useSession();
+  const { user, signOut } = useSession();
   const defaultAvatar = '/images/default_avatar.jpg';
 
   return (
@@ -34,7 +34,7 @@ const UserMenu = () => {
               <div>
                 <span
                   className="cursor-pointer hover:text-neutral-600"
-                  onClick={() => logout()}
+                  onClick={() => signOut()}
                 >
                   Sign Out
                 </span>

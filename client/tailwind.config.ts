@@ -1,3 +1,4 @@
+import { mauve, violet } from '@radix-ui/colors';
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
@@ -19,6 +20,8 @@ const config: Config = {
           active: '',
           background: '#131111',
         },
+        ...mauve,
+        ...violet,
       },
     },
   },

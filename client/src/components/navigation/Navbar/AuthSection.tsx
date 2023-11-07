@@ -1,13 +1,14 @@
 'use client';
 import { Button } from '@/components/Inputs/Buttons/Button';
 import UserMenu from '@/components/navigation/Navbar/UserMenu';
+import useAuthModal from '@/hooks/modals/useAuthModal';
 import useSession from '@/hooks/useSession';
 // import useAuthModal from '@/hooks/modals/useAuthModal';
 // import { useSession } from 'next-auth/react';
 // import Button from '../../Inputs/Buttons/Button/Button';
 
 const AuthSection = () => {
-  // const { onOpen } = useAuthModal();
+  const { onOpen } = useAuthModal();
   const { user } = useSession();
 
   return (
@@ -20,7 +21,9 @@ const AuthSection = () => {
         <>
           <div>
             <Button
-            // onClick={() => onOpen(false)}
+              className="py-2"
+              variant={'unstyled'}
+              onClick={() => onOpen(false)}
             >
               Sign Up
             </Button>
@@ -29,7 +32,7 @@ const AuthSection = () => {
             <Button
               variant={'alternative'}
               size={'lg'}
-              // onClick={() => onOpen()}
+              onClick={() => onOpen()}
             >
               Login
             </Button>

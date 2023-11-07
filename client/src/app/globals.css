@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .base-container {
+    @apply px-6 py-3 pr-5 pt-2;
+    /* @apply px-6 py-3 pr-5 pt-2; */
+  }
+}
+
 html,
 body,
 :root {

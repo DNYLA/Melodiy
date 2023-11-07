@@ -5,10 +5,8 @@ import LibraryItems from '@/components/navigation/Sidebar/Data/LibraryItems';
 import React from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 
-interface IPlaylistTitle {
-}
+interface IPlaylistTitle {}
 
-// TODO: Convert to server component once data fetching is correctly setup.
 const Library: React.FC<IPlaylistTitle> = () => {
   // const { data: session } = useSession();
   // const { onOpen: onOpenUpload } = useUploadModal();

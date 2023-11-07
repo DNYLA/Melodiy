@@ -9,9 +9,9 @@ function useSession() {
 
   return {
     user: session?.user,
-    login: session.login,
-    logout: session.logout,
-    register: session.register,
+    signIn: session.login,
+    signOut: session.logout,
+    signUp: session.register,
     loading: session.isLoading,
   };
 }
