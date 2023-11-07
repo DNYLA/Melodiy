@@ -7,6 +7,7 @@ import UserMenu from './UserMenu';
 const AuthSection = () => {
   const { onOpen } = useAuthModal();
   const { data: session } = useSession();
+
   return (
     <div className="flex items-center justify-between gap-x-1">
       {session?.user ? (

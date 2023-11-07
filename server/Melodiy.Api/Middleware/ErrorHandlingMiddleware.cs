@@ -21,10 +21,12 @@ public class ErrorHandlingMiddleware
         }
         catch (ApiError ex)
         {
+            Console.WriteLine(ex.Message);
             await HandleExceptionAsync(context, ex);
         }
         catch (Exception ex)
         {
+            Console.WriteLine(ex);
             // _logger.LogError("Something went wrong: {ex}", ex);
             await HandleExceptionAsync(context,
                 new ApiError(HttpStatusCode.InternalServerError, "An error occured while processing your request"));

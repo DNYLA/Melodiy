@@ -1,6 +1,12 @@
+export type Session = {
+  accessToken: string;
+  user: User;
+};
+
 export type User = {
   id: number;
   username: string;
+  avatar?: string;
 };
 
 export type PublicUser = {
@@ -9,7 +15,7 @@ export type PublicUser = {
 };
 
 export type AuthResult = {
-  id: string;
+  id: number;
   username: string;
   accessToken: string;
 };

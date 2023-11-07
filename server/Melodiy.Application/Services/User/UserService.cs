@@ -17,11 +17,11 @@ public class UserService : IUserService
     {
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower());
 
-        if (user is not null) 
+        if (user is not null)
         {
             return null;
         }
-        
+
         User newUser = new()
         {
             Username = username,
@@ -34,12 +34,21 @@ public class UserService : IUserService
         return newUser;
     }
 
-    public Task<User?> GetById(int userId)
+    public async Task<UserResponse?> GetById(int userId)
     {
-        throw new NotImplementedException();
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        if (user == null) return null;
+
+        //TODO: Map using AutoMapper
+        return new UserResponse()
+        {
+            Id = user.Id,
+            Username = user.Username
+            // Avatar = user.avatar
+        };
     }
 
-    public Task<User?> GetByName(string username)
+    public Task<UserResponse?> GetByName(string username)
     {
         throw new NotImplementedException();
     }

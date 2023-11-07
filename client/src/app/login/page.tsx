@@ -1,35 +1,17 @@
 'use client';
-import { AuthResult } from '@/types/user';
-import axios from 'axios';
+import useSession from '@/hooks/useSession';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import toast from 'react-hot-toast';
 
 export default function Login() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
     username: '',
     password: '',
   });
+  const { login, loading } = useSession();
 
   const onSignIn = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.post<AuthResult>('/api/auth/login', user);
-      // const res = await loginUserAction(user.username, user.password);
-
-      toast.success('Succesfully created user');
-
-      //TODO: Update user context.
-
-      router.push('/profile');
-    } catch (err: any) {
-      toast.error(err.response.data.error);
-    } finally {
-      setLoading(false);
-    }
+    login(user.username, user.password);
   };
 
   return (
@@ -57,7 +39,8 @@ export default function Login() {
 
       <button
         onClick={onSignIn}
-        className="mb-1 mt-3 rounded-lg border border-gray-300 p-2 focus:border-gray-600 focus:outline-none"
+        disabled={loading}
+        className="mb-1 mt-3 rounded-lg border border-gray-300 p-2 focus:border-gray-600 focus:outline-none disabled:bg-red-500"
       >
         Login
       </button>

@@ -1,33 +1,17 @@
 'use client';
-import { AuthResult } from '@/types/user';
-import axios from 'axios';
+import useSession from '@/hooks/useSession';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import toast from 'react-hot-toast';
 
 export default function SignUp() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
     username: '',
     password: '',
   });
+  const { register, loading } = useSession();
 
   const onSignup = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.post<AuthResult>('/api/auth/signup', user);
-      toast.success('Successfully regisetered account');
-
-      //TODO: Update Context
-
-      router.push('/');
-    } catch (err: any) {
-      toast.error(err.response.data.error);
-    } finally {
-      setLoading(false);
-    }
+    register(user.username, user.password);
   };
 
   return (
