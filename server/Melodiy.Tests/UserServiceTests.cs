@@ -68,13 +68,13 @@ public class UserServiceTests : IClassFixture<DataContextFixture>
     [Fact]
     public async Task GetById_ShouldReturnUser_WhenUserExists()
     {
-        
+
         //Arrange
         var dbUser = await CreateSeedUser();
 
         //Act
         var user = await _sut.GetById(dbUser.Id);
-        
+
         //Assert
         Assert.NotNull(user);
         Assert.Equal(dbUser.Id, user.Id);
@@ -87,7 +87,7 @@ public class UserServiceTests : IClassFixture<DataContextFixture>
 
         //Act
         var user = await _sut.GetById(1);
-        
+
         //Assert
         Assert.Null(user);
     }

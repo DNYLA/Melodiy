@@ -13,7 +13,6 @@
   "dependencies": {
     "@radix-ui/colors": "^3.0.0",
     "@radix-ui/react-dialog": "^1.0.5",
-    "@radix-ui/react-form": "^0.0.3",
     "@radix-ui/react-hover-card": "^1.0.7",
     "axios": "^1.6.0",
     "class-variance-authority": "^0.7.0",
@@ -24,11 +23,13 @@
     "query-string": "^8.1.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook-form": "^7.48.2",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.11.0",
     "zustand": "^4.4.6"
   },
   "devDependencies": {
+    "@hookform/devtools": "^4.3.1",
     "@storybook/addon-essentials": "^7.5.2",
     "@storybook/addon-interactions": "^7.5.2",
     "@storybook/addon-links": "^7.5.2",

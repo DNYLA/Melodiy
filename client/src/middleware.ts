@@ -11,8 +11,10 @@ export function middleware(request: NextRequest) {
   if (!token) {
     //No accessToken available on protected route
     return NextResponse.redirect(new URL('/', request.url));
-  } else if (token && !payload) {
+  } else if (!payload) {
     //accessToken cookie is present but expired
+    //TODO: Add refresh token
+
     const response = NextResponse.redirect(new URL('/', request.url));
     response.cookies.delete('token');
     return response;

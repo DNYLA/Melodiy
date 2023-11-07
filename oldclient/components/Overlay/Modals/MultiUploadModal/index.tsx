@@ -49,6 +49,7 @@ const MultiUploadModal: React.FC<TabModalProps> = () => {
               <UploadSong />
             </Tabs.Content>
           </Tabs.Root>
+
           <Dialog.Close asChild>
             <button className="absolute right-[10px] top-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full text-neutral-400 hover:text-white focus:outline-none">
               <IoMdClose />
