@@ -1,20 +1,20 @@
-// import useAuthModal from '@/hooks/modals/useAuthModal';
-// import useUploadModal from '@/hooks/modals/useUploadModal';
-// import { useSession } from 'next-auth/react';
 import LibraryItems from '@/components/navigation/Sidebar/Data/LibraryItems';
+import useAuthModal from '@/hooks/modals/useAuthModal';
+import useUploadModal from '@/hooks/modals/useUploadModal';
+import useSession from '@/hooks/useSession';
 import React from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 
 interface IPlaylistTitle {}
 
 const Library: React.FC<IPlaylistTitle> = () => {
-  // const { data: session } = useSession();
-  // const { onOpen: onOpenUpload } = useUploadModal();
-  // const { onOpen: onOpenAuth } = useAuthModal();
+  const { user } = useSession();
+  const { onOpen: onOpenUpload } = useUploadModal();
+  const { onOpen: onOpenAuth } = useAuthModal();
 
   const handleOpen = () => {
-    // if (session) onOpenUpload();
-    // else onOpenAuth();
+    if (user) onOpenUpload();
+    else onOpenAuth();
   };
 
   return (
