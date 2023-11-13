@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/components/Inputs/Buttons/Button';
+import ActionButton from '@/components/Inputs/Buttons/ActionButton';
 import { Input } from '@/components/Inputs/Input';
 import useAuthModal from '@/hooks/modals/useAuthModal';
 import useSession from '@/hooks/useSession';
@@ -101,9 +101,9 @@ const LoginModal = () => {
           Don't have an account? Register now.
         </button>
 
-        <Button type="submit" disabled={isSubmitting}>
+        <ActionButton type="submit" isLoading={isSubmitting}>
           Login
-        </Button>
+        </ActionButton>
       </form>
     </Modal>
   );

@@ -29,11 +29,12 @@ const buttonVariants = cva(
 );
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, size, variant, type = 'button', ...props }) => {
+  ({ className, size, variant, type = 'button', ...props }, ref) => {
     return (
       <button
         className={cn(buttonVariants({ variant, size, className }))}
         type={type}
+        ref={ref}
         {...props}
       />
     );

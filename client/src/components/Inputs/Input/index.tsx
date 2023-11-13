@@ -7,7 +7,7 @@ export interface InputProps
     VariantProps<typeof inputVariants> {}
 
 const inputVariants = cva(
-  'text-sm leading-none items-center justify-center placeholder:text-sm placeholder:font-extralight outline-none placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:bg-neutral-400',
+  'w-full text-sm leading-none items-center justify-center placeholder:text-sm placeholder:font-extralight outline-none placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:bg-neutral-400',
   {
     variants: {
       variant: {
