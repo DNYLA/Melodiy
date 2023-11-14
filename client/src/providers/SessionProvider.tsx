@@ -19,7 +19,7 @@ type SessionContextType = {
 
 export const SessionContext = createContext<SessionContextType>({
   user: undefined,
-  isLoading: false,
+  isLoading: true,
   login: async () => false,
   register: async () => false,
   logout: async () => {},
@@ -27,7 +27,7 @@ export const SessionContext = createContext<SessionContextType>({
 
 export const SessionProvider: React.FC<IProvider> = ({ children }) => {
   const [user, setUser] = useState<User>();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
