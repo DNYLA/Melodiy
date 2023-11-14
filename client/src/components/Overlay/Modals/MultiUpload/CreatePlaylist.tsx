@@ -83,10 +83,10 @@ const CreatePlaylist: FC<ICreatePlaylist> = () => {
 
       //TODO: Refresh Playlist Mutation with useQuery
       toast.success('Created new playlist');
-      // router.push(`/playlist/${res.id}`);
-      // reset();
-      // resetCover();
-      // onClose();
+      router.push(`/playlist/${res.id}`);
+      reset();
+      resetCover();
+      onClose();
     } catch (err) {
       console.log(err);
       toast.error('Unable to create playlist');

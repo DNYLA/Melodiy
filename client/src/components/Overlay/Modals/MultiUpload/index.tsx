@@ -30,6 +30,7 @@ const MultiUploadModal: React.FC<TabModalProps> = () => {
             <Tabs.List
               className="flex shrink-0 border-b border-mauve6"
               aria-label="Manage your account"
+              tabIndex={1}
             >
               <Tabs.Trigger
                 className="flex h-[45px] flex-1 items-center justify-center py-[20px] text-sm text-mauve11 hover:text-inactive data-[state=active]:text-primary"

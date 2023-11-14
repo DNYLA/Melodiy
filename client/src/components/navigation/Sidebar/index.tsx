@@ -1,6 +1,6 @@
 'use client';
 import { usePathname } from 'next/navigation';
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { AiOutlineHome } from 'react-icons/ai';
 import { MdOutlineAudioFile, MdOutlineFavorite } from 'react-icons/md';
 import { twMerge } from 'tailwind-merge';
@@ -10,7 +10,7 @@ import { twMerge } from 'tailwind-merge';
 // import Navbar from '../Navbar';
 // import PlaylistHeader from './PlaylistTitle';
 // import SidebarItem from './SidebarNavItem';
-import { clamp } from '@/lib/utils/number';
+import useResize from '@/hooks/useResize';
 import Navbar from '../Navbar';
 import Library from './Data/Library';
 import NavItem from './NavItem';
@@ -52,52 +52,12 @@ const Sidebar = ({ children }: SidebarProps) => {
   );
   const sidebar = useRef<HTMLDivElement>(null);
   const resizeDragger = useRef<HTMLDivElement>(null);
-
-  //TODO: Switch to Framer Motion / GSAP / react-spring 
-  useEffect(() => {
-    if (resizeDragger.current) {
-      const savedSize = localStorage.getItem('sidebar-width');
-      if (savedSize) {
-        // Sort of a hack, if we are restoring sidebar width from a saved width,
-        // we want a smooth transition, but we don't want it if user is manually
-        // resizing, so we remove it after.
-        sidebar.current!.classList.add('transition-all');
-        resize(Number(savedSize));
-        setTimeout(() => {
-          sidebar.current!.classList.remove('transition-all');
-        }, 200);
-      }
-      resizeDragger.current.addEventListener('mousedown', () => {
-        document.addEventListener('mousemove', resize, false);
-        document.addEventListener(
-          'mouseup',
-          () => {
-            document.removeEventListener('mousemove', resize, false);
-          },
-          false
-        );
-      });
-    }
-  }, []);
-
-  const resize = (xx: number | MouseEvent) => {
-    let x = typeof xx == 'number' ? xx : xx.x;
-    x = clamp(x, 0, 300);
-
-    localStorage.setItem('sidebar-width', String(x));
-    if (x < 130) {
-      sidebar.current!.style.width = `0px`;
-      sidebar.current!.classList.add('collapsed-sidebar');
-      return;
-    }
-    sidebar.current!.classList.remove('collapsed-sidebar');
-    sidebar.current!.style.width = `${x}px`;
-  };
+  useResize(sidebar, resizeDragger, 'sidebar-width');
 
   return (
     <div
       className={twMerge(
-        `flex h-full`,
+        `flex h-full`
         // player.activeId && 'h-[calc(100%-80px)]'
       )}
     >
@@ -105,8 +65,6 @@ const Sidebar = ({ children }: SidebarProps) => {
         ref={sidebar}
         className="relative h-full w-[250px] min-w-[100px] max-w-[400px] select-none flex-col gap-y-2 bg-sidebar-background px-4 py-2 md:flex"
       >
-        {/* <div className="hidden md:flex flex-col gap-y-2 bg-black h-full w-[300px] p-2"> */}
-
         <div className="relative flex flex-row items-center justify-center">
           <p className="">Melodiy</p>
         </div>

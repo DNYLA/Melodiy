@@ -23,16 +23,10 @@ public class PlaylistController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<GetPlaylistResponse>> Create([FromForm] IFormFile? image, [FromQuery] string title, [FromQuery(Name = "public")] bool isPublic)
     {
-        Console.WriteLine("Started");
         //TODO: Move to a seperate service / middleware to parse this data.
         var userIdString = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value!;
         var username = User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Name)!.Value!;
         int userId = int.Parse(userIdString ?? throw new ApiError(HttpStatusCode.Unauthorized, "User not found"));
-
-        if (image != null)
-        {
-            Console.WriteLine("Valid Image");
-        }
 
         var response = await _playlistService.Create(image, username, userId, title, isPublic);
 
