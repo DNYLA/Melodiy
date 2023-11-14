@@ -65,6 +65,7 @@ const CreatePlaylist: FC<ICreatePlaylist> = () => {
     if (coverFile && coverFile.length > 0) {
       const file = coverFile[0];
       formData.append('image', file);
+      console.log('appending image');
     }
 
     //Creates Image from blob
@@ -74,17 +75,18 @@ const CreatePlaylist: FC<ICreatePlaylist> = () => {
     // }
 
     try {
+      console.log(formData.has('image'));
       const { data: res } = await AXIOS.post<Playlist>(
         `playlist?title=${data.title}`,
-        formData.entries.length > 0 ? formData : null
+        formData.has('image') ? formData : null
       );
 
       //TODO: Refresh Playlist Mutation with useQuery
       toast.success('Created new playlist');
-      router.push(`/playlist/${res.id}`);
-      reset();
-      resetCover();
-      onClose();
+      // router.push(`/playlist/${res.id}`);
+      // reset();
+      // resetCover();
+      // onClose();
     } catch (err) {
       console.log(err);
       toast.error('Unable to create playlist');

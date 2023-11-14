@@ -1,3 +1,4 @@
+global using Mapster;
 using Melodiy.Application.Services.Authentication;
 using Melodiy.Application.Services.Playlist;
 using Melodiy.Application.Services.UserService;

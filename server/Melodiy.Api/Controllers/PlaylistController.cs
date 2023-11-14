@@ -1,7 +1,9 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Services.Playlist;
+using Melodiy.Contracts.Playlist;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,15 +21,23 @@ public class PlaylistController : ControllerBase
 
     [Authorize]
     [HttpPost]
-    public async Task<ActionResult<PlaylistResponse>> Create([FromBody] IFormFile? image, [FromQuery] string title, [FromQuery(Name = "public")] bool isPublic)
+    public async Task<ActionResult<GetPlaylistResponse>> Create([FromForm] IFormFile? image, [FromQuery] string title, [FromQuery(Name = "public")] bool isPublic)
     {
+        Console.WriteLine("Started");
         //TODO: Move to a seperate service / middleware to parse this data.
         var userIdString = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value!;
+        var username = User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Name)!.Value!;
         int userId = int.Parse(userIdString ?? throw new ApiError(HttpStatusCode.Unauthorized, "User not found"));
-        var response = await _playlistService.Create(image, userId, title, isPublic);
 
-        //Map to PlaylistResponse
+        if (image != null)
+        {
+            Console.WriteLine("Valid Image");
+        }
 
-        return response;
+        var response = await _playlistService.Create(image, username, userId, title, isPublic);
+
+        var mapped = response.Adapt<GetPlaylistResponse>();
+
+        return mapped;
     }
 }

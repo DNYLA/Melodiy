@@ -3,6 +3,7 @@ using System;
 using Melodiy.Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Melodiy.Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231114131243_ImageUserId")]
+    partial class ImageUserId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,9 +182,6 @@ namespace Melodiy.Infrastructure.Migrations
                     b.Property<int?>("ImageId")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("IsPublic")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasColumnType("text");
@@ -251,9 +251,6 @@ namespace Melodiy.Infrastructure.Migrations
 
                     b.Property<int?>("ImageId")
                         .HasColumnType("integer");
-
-                    b.Property<bool>("IsPublic")
-                        .HasColumnType("boolean");
 
                     b.Property<int>("Position")
                         .HasColumnType("integer");

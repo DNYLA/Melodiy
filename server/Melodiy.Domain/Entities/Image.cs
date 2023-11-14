@@ -7,10 +7,14 @@ public class Image : BaseEntity
 {
     public int Id { get; set; }
     public string Url { get; set; } = string.Empty;
+    public string? Path { get; set; } //The path where the local file was uploaded to. e.g Dan/image.png
     public SourceType Source { get; set; }
-    public string? StorageId { get; set; } //Id for supabase bucket if this is a local file
+
+    //Foreign Keys
+    public int? UserId { get; set; }
 
     //Relationships
+    public User? User { get; set; } = null!;
     public List<Artist> Artists { get; set; } = null!;
     public List<Album> Albums { get; set; } = null!;
     public List<Playlist> Playlists { get; set; } = null!;

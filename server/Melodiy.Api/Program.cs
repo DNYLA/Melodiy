@@ -1,7 +1,10 @@
 
+global using Mapster;
 using Melodiy.Api.Filters;
 using Melodiy.Api.Middleware;
 using Melodiy.Application;
+using Melodiy.Application.Services.Playlist;
+using Melodiy.Contracts.Playlist;
 using Melodiy.Infrastructure;
 using Microsoft.Net.Http.Headers;
 
@@ -42,7 +45,7 @@ var app = builder.Build();
     //     app.UseSwagger();
     //     app.UseSwaggerUI();
     // }
-
+    ConfigureMapster();
     app.UseMiddleware<ErrorHandlingMiddleware>();
     // app.UseExceptionHandler("/error");
     app.UseCors(MyAllowSpecificOrigins);
@@ -53,7 +56,9 @@ var app = builder.Build();
     app.Run();
 }
 
-
-
-
-
+static void ConfigureMapster()
+{
+    TypeAdapterConfig<PlaylistResponse, GetPlaylistResponse>.NewConfig()
+        .Map(dest => dest.Id, src => src.Slug)
+        .Map(dest => dest.Image, src => src.Image != null && src.Image.Url != null);
+}

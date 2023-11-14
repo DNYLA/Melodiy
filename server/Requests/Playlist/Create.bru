@@ -5,14 +5,14 @@ meta {
 }
 
 post {
-  url: http://localhost:5041/playlist/
-  body: json
+  url: http://localhost:5041/playlist/?title=Jungaals Playlist&public=true
+  body: none
   auth: bearer
 }
 
 query {
-  ~title: Jungaals Playlist
-  ~public: true
+  title: Jungaals Playlist
+  public: true
 }
 
 auth:bearer {

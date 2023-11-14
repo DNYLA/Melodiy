@@ -39,13 +39,7 @@ public class UserService : IUserService
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
         if (user == null) return null;
 
-        //TODO: Map using AutoMapper
-        return new UserResponse()
-        {
-            Id = user.Id,
-            Username = user.Username
-            // Avatar = user.avatar
-        };
+        return user.Adapt<UserResponse>();
     }
 
     public Task<UserResponse?> GetByName(string username)

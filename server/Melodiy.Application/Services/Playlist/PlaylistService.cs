@@ -1,3 +1,5 @@
+using System.Net;
+using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Common.Interfaces.Persistance;
 using Melodiy.Domain.Entities;
 using Microsoft.AspNetCore.Http;
@@ -7,38 +9,34 @@ namespace Melodiy.Application.Services.Playlist;
 public class PlaylistService : IPlaylistService
 {
     private readonly IDataContext _context;
+    private readonly IFileRepository _fileRepository;
 
-    public PlaylistService(IDataContext context)
+    public PlaylistService(IDataContext context, IFileRepository fileRepository)
     {
         _context = context;
+        _fileRepository = fileRepository;
     }
 
-    public async Task<PlaylistResponse> Create(IFormFile? image, int userId, string title, bool isPublic)
+    public async Task<PlaylistResponse> Create(IFormFile? image, string username, int userId, string title, bool isPublic)
     {
-        //TODO: Upload Image
+        Image? uploadedImage = null;
+
+        if (image != null)
+        {
+            uploadedImage = await _fileRepository.UploadImage(image, username, userId);
+        }
 
         var playlist = new Domain.Entities.Playlist
         {
             Slug = Guid.NewGuid().ToString("N"), //TODO: Update to better slug generation?
             Title = title,
-            // Image = image,
-            UserId = userId
+            Image = uploadedImage,
+            User = _context.Users.Find(userId)!,
         };
 
         _context.Playlists.Add(playlist);
         await _context.SaveChangesAsync();
 
-        //TODO: Switch to automapper
-        var mappedRes = new PlaylistResponse
-        {
-            Id = playlist.Id,
-            Slug = playlist.Slug,
-            Title = playlist.Title,
-            UserId = playlist.UserId,
-            Image = playlist.Image,
-            CreatedAt = playlist.CreatedAt
-        };
-
-        return mappedRes;
+        return playlist.Adapt<PlaylistResponse>();
     }
 }

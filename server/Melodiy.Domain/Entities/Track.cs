@@ -15,6 +15,7 @@ public class Track : BaseEntity
     public string? SpotifyId { get; set; }
     public string? YoutubeId { get; set; }
     public int Position { get; set; } = 0; //If its not in an album default is 0
+    public bool IsPublic { get; set; }
     public SourceType Source { get; set; }
     public TimeSpan Duration { get; set; }
     public DateTime ReleaseDate { get; set; }
