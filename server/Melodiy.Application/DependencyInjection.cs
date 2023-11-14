@@ -1,4 +1,5 @@
 using Melodiy.Application.Services.Authentication;
+using Melodiy.Application.Services.Playlist;
 using Melodiy.Application.Services.UserService;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +11,7 @@ public static class DependencyInjection
     {
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IPlaylistService, PlaylistService>();
 
         return services;
     }

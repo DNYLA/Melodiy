@@ -1,5 +1,6 @@
 'use client';
 
+import { resetAccessToken, setAccessToken } from '@/lib/network';
 import { IProvider } from '@/providers';
 import { AuthResult, User } from '@/types/user';
 import axios from 'axios';
@@ -8,7 +9,6 @@ import { createContext, useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 type SessionContextType = {
-  accessToken?: string;
   user?: User;
   isLoading: boolean;
   login: (username: string, password: string) => Promise<boolean>;
@@ -18,7 +18,6 @@ type SessionContextType = {
 };
 
 export const SessionContext = createContext<SessionContextType>({
-  accessToken: undefined,
   user: undefined,
   isLoading: false,
   login: async () => false,
@@ -28,7 +27,6 @@ export const SessionContext = createContext<SessionContextType>({
 
 export const SessionProvider: React.FC<IProvider> = ({ children }) => {
   const [user, setUser] = useState<User>();
-  const [accessToken, setAccessToken] = useState<string>();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -112,7 +110,7 @@ export const SessionProvider: React.FC<IProvider> = ({ children }) => {
     try {
       await axios.get('/api/auth/logout');
       toast.success('Logout successfull');
-      setAccessToken(undefined);
+      resetAccessToken();
       setUser(undefined);
       router.refresh();
     } catch (err: any) {
@@ -123,7 +121,6 @@ export const SessionProvider: React.FC<IProvider> = ({ children }) => {
   return (
     <SessionContext.Provider
       value={{
-        accessToken,
         user,
         login: handleLogin,
         register: handleSignUp,

@@ -5,6 +5,8 @@ import { Input } from '@/components/Inputs/Input';
 import useUploadModal from '@/hooks/modals/useUploadModal';
 import useFilePreview from '@/hooks/useFilePreview';
 import useSession from '@/hooks/useSession';
+import { AXIOS } from '@/lib/network';
+import { Playlist } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useRouter } from 'next/navigation';
@@ -72,14 +74,14 @@ const CreatePlaylist: FC<ICreatePlaylist> = () => {
     // }
 
     try {
-      // const { data: res } = await AXIOS.post<Playlist>(
-      //   `playlist?title=${data.title}`,
-      //   formData
-      // );
+      const { data: res } = await AXIOS.post<Playlist>(
+        `playlist?title=${data.title}`,
+        formData.entries.length > 0 ? formData : null
+      );
 
       //TODO: Refresh Playlist Mutation with useQuery
       toast.success('Created new playlist');
-      // router.push(`/playlist/${res.data?.uid}`);
+      router.push(`/playlist/${res.id}`);
       reset();
       resetCover();
       onClose();
