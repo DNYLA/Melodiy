@@ -1,11 +1,24 @@
-export default async function Trending() {
+'use client';
+
+import { Button } from '@/components/Inputs/Buttons/Button';
+import usePlaylists from '@/hooks/query/usePlaylist';
+
+export default function Trending() {
   // const trending = await getTrending();
 
   // if (trending && !trending.success) {
   //   return <p className="text-3xl font-bold ">Trending</p>;
   // }
+  const { data, refetch: refresh } = usePlaylists();
+  return (
+    <div>
+      <p className="mb-5 text-3xl font-bold">Recently Created</p>
+      <p className="mb-2 text-3xl font-bold">Your Playlists</p>
+      {data && data.map((playlist) => <p>{playlist.title}</p>)}
 
-  return <p className="text-3xl font-bold ">Recently Created</p>;
+      <Button onClick={() => refresh()}>Refresh Data</Button>
+    </div>
+  );
 
   // return (
   //   <div className="">
