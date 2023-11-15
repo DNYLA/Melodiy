@@ -1,4 +1,4 @@
-import Sidebar from '@/components/navigation/Sidebar';
+import Sidebar from '@/components/Navigation/Sidebar';
 import Providers from '@/providers';
 import type { Metadata } from 'next';
 import { Figtree } from 'next/font/google';

@@ -60,5 +60,5 @@ static void ConfigureMapster()
 {
     TypeAdapterConfig<PlaylistResponse, GetPlaylistResponse>.NewConfig()
         .Map(dest => dest.Id, src => src.Slug)
-        .Map(dest => dest.Image, src => src.Image != null && src.Image.Url != null);
+        .Map(dest => dest.Image, src => src.Image != null ? src.Image.Url : null);
 }

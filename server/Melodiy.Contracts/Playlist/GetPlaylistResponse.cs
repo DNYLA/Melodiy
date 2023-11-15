@@ -8,6 +8,6 @@ public class GetPlaylistResponse
     public string Id { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
     public UserResponse User { get; set; } = null!;
-    public string? Image { get; set; }
+    public string? Image { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
 }

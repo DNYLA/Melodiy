@@ -3,6 +3,7 @@ using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Common.Interfaces.Persistance;
 using Melodiy.Domain.Entities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace Melodiy.Application.Services.Playlist;
 
@@ -38,5 +39,16 @@ public class PlaylistService : IPlaylistService
         await _context.SaveChangesAsync();
 
         return playlist.Adapt<PlaylistResponse>();
+    }
+
+    public async Task<List<PlaylistResponse>> GetAll(int userId)
+    {
+        var playlists = await _context.Playlists
+            .Include(p => p.User)
+            .Include(p => p.Image)
+            .Where(p => p.UserId == userId)
+            .ToListAsync();
+
+        return playlists.Adapt<List<PlaylistResponse>>();
     }
 }

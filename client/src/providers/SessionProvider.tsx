@@ -65,7 +65,6 @@ export const SessionProvider: React.FC<IProvider> = ({ children }) => {
         setUser({ id: data.id, username: data.username });
         setAccessToken(data.accessToken);
 
-        router.push('/profile');
         return true;
       } catch (err: any) {
         toast.error(err.response.data.error);
@@ -91,10 +90,6 @@ export const SessionProvider: React.FC<IProvider> = ({ children }) => {
         setUser({ id: data.id, username: data.username });
         setAccessToken(data.accessToken);
 
-        console.log('here 1');
-
-        router.push('/profile');
-        console.log('here');
         return true;
       } catch (err: any) {
         toast.error(err.response.data.error);

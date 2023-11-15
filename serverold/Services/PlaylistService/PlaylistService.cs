@@ -13,40 +13,40 @@ using Newtonsoft.Json;
 
 namespace melodiy.server.Services.PlaylistService
 {
-	public class PlaylistService : IPlaylistService
-	{
-    	private readonly IAuthService _authService;
-    	private readonly DataContext _context;
-    	private readonly IMapper _mapper;
+    public class PlaylistService : IPlaylistService
+    {
+        private readonly IAuthService _authService;
+        private readonly DataContext _context;
+        private readonly IMapper _mapper;
         private readonly IFileService _fileService;
         private readonly ISongService _songService;
-		public PlaylistService(DataContext context, IMapper mapper, IAuthService authService, IFileService fileService, ISongService songService)
-		{
+        public PlaylistService(DataContext context, IMapper mapper, IAuthService authService, IFileService fileService, ISongService songService)
+        {
             _songService = songService;
             _fileService = fileService;
-      		_mapper = mapper;
-      		_context = context;
-      		_authService = authService;
-		}
+            _mapper = mapper;
+            _context = context;
+            _authService = authService;
+        }
 
-		
-		public async Task<ServiceResponse<GetPlaylistResponse>> CreatePlaylist(IFormFile? image, string title)
-		{
-			var response = new ServiceResponse<GetPlaylistResponse>();
 
-			// Services should not inherntly require an AuthService to be present however in this case
-			// CreatePlaylist will never be called without an authentiction provided.
-			//TODO: Move To Controller
+        public async Task<ServiceResponse<GetPlaylistResponse>> CreatePlaylist(IFormFile? image, string title)
+        {
+            var response = new ServiceResponse<GetPlaylistResponse>();
+
+            // Services should not inherntly require an AuthService to be present however in this case
+            // CreatePlaylist will never be called without an authentiction provided.
+            //TODO: Move To Controller
             if (!_authService.IsAuthenticated())
-			{
+            {
                 response.Success = false;
-				response.StatusCode = 401;
-				response.Message = "Unauthorized Access";
-				return response;
-			}
-			
-			try
-			{
+                response.StatusCode = 401;
+                response.Message = "Unauthorized Access";
+                return response;
+            }
+
+            try
+            {
                 string? path = null;
                 if (image != null)
                 {
@@ -54,64 +54,64 @@ namespace melodiy.server.Services.PlaylistService
                     path = imageDetails.Success ? imageDetails.Data : null;
                 }
 
-                
 
-				var userId = _authService.GetUserId();
-				var playlist = new Playlist
-				{
-					Title = title,
+
+                var userId = _authService.GetUserId();
+                var playlist = new Playlist
+                {
+                    Title = title,
                     ImagePath = path,
-					UserId = userId,
-				};
-				_context.Playlists.Add(playlist);
-				await _context.SaveChangesAsync();
+                    UserId = userId,
+                };
+                _context.Playlists.Add(playlist);
+                await _context.SaveChangesAsync();
 
-				response.Data = _mapper.Map<GetPlaylistResponse>(playlist);
-			}
-			catch (Exception ex)
-			{
+                response.Data = _mapper.Map<GetPlaylistResponse>(playlist);
+            }
+            catch (Exception ex)
+            {
                 response.Success = false;
-				response.StatusCode = 500;
-				response.Message = ex.Message;
-			}
+                response.StatusCode = 500;
+                response.Message = ex.Message;
+            }
 
-			return response;
-		}
+            return response;
+        }
 
-		public async Task<ServiceResponse<List<GetPlaylistResponse>>> GetAllPlaylists(int userId)
-		{
-			var response = new ServiceResponse<List<GetPlaylistResponse>>();
+        public async Task<ServiceResponse<List<GetPlaylistResponse>>> GetAllPlaylists(int userId)
+        {
+            var response = new ServiceResponse<List<GetPlaylistResponse>>();
 
-			try
-			{
-				var dbPlaylists = await _context.Playlists
-								.Include(p => p.User)
-								.Where(p => p.UserId == userId).ToListAsync();
-				response.Data = dbPlaylists.Select(p => _mapper.Map<GetPlaylistResponse>(p)).ToList();
-				return response;
-			}
-			catch (Exception ex)
-			{
+            try
+            {
+                var dbPlaylists = await _context.Playlists
+                                .Include(p => p.User)
+                                .Where(p => p.UserId == userId).ToListAsync();
+                response.Data = dbPlaylists.Select(p => _mapper.Map<GetPlaylistResponse>(p)).ToList();
+                return response;
+            }
+            catch (Exception ex)
+            {
                 response.Success = false;
-				response.StatusCode = 500;
-				response.Message = ex.Message;
-			}
+                response.StatusCode = 500;
+                response.Message = ex.Message;
+            }
 
-			return response;
-		}
+            return response;
+        }
 
-		public async Task<ServiceResponse<GetPlaylistResponse>> GetPlaylistByUID(string uid) 
-		{
-			var response = new ServiceResponse<GetPlaylistResponse>();
+        public async Task<ServiceResponse<GetPlaylistResponse>> GetPlaylistByUID(string uid)
+        {
+            var response = new ServiceResponse<GetPlaylistResponse>();
 
-			try
-			{
-				var playlist = await _context.Playlists
-								.Include(p => p.User)
+            try
+            {
+                var playlist = await _context.Playlists
+                                .Include(p => p.User)
                                 .Include(p => p.PlaylistSongs)
                                 .ThenInclude(ps => ps.Song)
-								.FirstOrDefaultAsync(p => p.UID == uid);
-                
+                                .FirstOrDefaultAsync(p => p.UID == uid);
+
                 if (playlist == null)
                 {
                     response.Message = "Playlist not found.";
@@ -123,8 +123,8 @@ namespace melodiy.server.Services.PlaylistService
                 //var songIds = playlist.PlaylistSongs.Select(ps => ps.SongUID).ToList();
                 // var songs = await _songService.GetSongs(songIds);
                 var mappedSongs = playlist.PlaylistSongs.Select(ps => _mapper.Map<GetSongResponse>(ps.Song)).ToList();
-  
-                mappedSongs = mappedSongs.Select(s => 
+
+                mappedSongs = mappedSongs.Select(s =>
                 {
                     var foundSong = playlist.PlaylistSongs.Find(ps => ps.SongUID == s.UID);
                     if (foundSong == null) return s;
@@ -141,25 +141,25 @@ namespace melodiy.server.Services.PlaylistService
                 //     return song;
                 // }).ToList();
 
-				response.Data = _mapper.Map<GetPlaylistResponse>(playlist);
+                response.Data = _mapper.Map<GetPlaylistResponse>(playlist);
                 response.Data.Tracks = mappedSongs;
-			}
-			catch (Exception ex)
-			{   
+            }
+            catch (Exception ex)
+            {
                 Console.WriteLine(ex.Message);
                 response.Success = false;
-				response.StatusCode = 500;
-				response.Message = ex.Message;
-			}
+                response.StatusCode = 500;
+                response.Message = ex.Message;
+            }
 
-			return response;
-		}
+            return response;
+        }
 
         public async Task<ServiceResponse<GetPlaylistSongResponse>> AddSong(int userId, string playlistId, string trackId)
         {
             var response = new ServiceResponse<GetPlaylistSongResponse>();
 
-            try 
+            try
             {
                 var playlist = await _context.Playlists
                         .Include(p => p.User)
@@ -212,8 +212,8 @@ namespace melodiy.server.Services.PlaylistService
             {
                 Console.WriteLine(ex);
                 response.Success = false;
-				response.StatusCode = 500;
-				response.Message = ex.Message;
+                response.StatusCode = 500;
+                response.Message = ex.Message;
             }
 
             return response;
@@ -223,15 +223,15 @@ namespace melodiy.server.Services.PlaylistService
         {
             var response = new ServiceResponse<List<GetTrendingPlaylistResponse>>();
 
-            try 
+            try
             {
                 var dbPlaylists = await _context.Playlists
-						    .Include(p => p.User)
+                            .Include(p => p.User)
                             .OrderByDescending(p => p.CreatedAt)
                             .Where(p => p.PlaylistSongs.Count > 0)
                             .Take(10).ToListAsync();
-				response.Data = dbPlaylists.Select(_mapper.Map<GetTrendingPlaylistResponse>).ToList();
-                
+                response.Data = dbPlaylists.Select(_mapper.Map<GetTrendingPlaylistResponse>).ToList();
+
             }
             catch (Exception ex)
             {
@@ -248,7 +248,7 @@ namespace melodiy.server.Services.PlaylistService
         {
             var response = new ServiceResponse<GetPlaylistSongResponse>();
 
-            try 
+            try
             {
                 var playlist = await _context.Playlists
                         .Include(p => p.User)
@@ -268,7 +268,7 @@ namespace melodiy.server.Services.PlaylistService
                     response.StatusCode = 400;
                     return response;
                 }
-                
+
                 if (playlist.UserId != userId)
                 {
                     response.Success = false;
@@ -297,8 +297,8 @@ namespace melodiy.server.Services.PlaylistService
             {
                 Console.WriteLine(ex);
                 response.Success = false;
-				response.StatusCode = 500;
-				response.Message = ex.Message;
+                response.StatusCode = 500;
+                response.Message = ex.Message;
             }
 
             return response;
