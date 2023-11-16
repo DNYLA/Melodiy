@@ -1,6 +1,9 @@
 using Melodiy.Domain.Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace Melodiy.Domain.Entities;
+
+[Index(nameof(Slug), IsUnique = true)]
 public class Playlist : BaseEntity
 {
     public int Id { get; set; }
