@@ -1,6 +1,8 @@
 import { mauve, violet } from '@radix-ui/colors';
 import type { Config } from 'tailwindcss';
 
+// bg-teal-600
+
 const config: Config = {
   content: [
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -9,7 +11,8 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: '#ec3454',
+        primary: '#319795', // bg-teal-600 (Better colour?)
+        // primary: '#ec3454',
         inactive: '#a3a3a3',
         sidebar: {
           // background: '#131111',

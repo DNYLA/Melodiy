@@ -19,7 +19,7 @@ export interface ILibraryItem {
 //TODO: Conver to Server component
 const LibraryItems = () => {
   const { user } = useSession();
-  const { data, isLoading, error } = usePlaylists();
+  const { data, isLoading, isPending, error } = usePlaylists();
 
   const router = useRouter();
   const path = usePathname();

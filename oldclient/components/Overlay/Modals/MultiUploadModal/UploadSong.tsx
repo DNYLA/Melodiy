@@ -224,6 +224,7 @@ const UploadSong: React.FC<IUploadSong> = () => {
               />
             </div>
           </div>
+
           <div>
             {errors.title?.type === 'required' && (
               <p role="alert">Title is required</p>

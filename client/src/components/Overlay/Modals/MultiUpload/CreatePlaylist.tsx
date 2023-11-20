@@ -6,6 +6,7 @@ import useUploadModal from '@/hooks/modals/useUploadModal';
 import useFilePreview from '@/hooks/useFilePreview';
 import useSession from '@/hooks/useSession';
 import { AXIOS } from '@/lib/network';
+import { addFormFile } from '@/lib/utils';
 import { Playlist } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Dialog from '@radix-ui/react-dialog';
@@ -61,18 +62,7 @@ const CreatePlaylist: FC<ICreatePlaylist> = () => {
     if (!user) return;
 
     const formData = new FormData();
-
-    if (coverFile && coverFile.length > 0) {
-      const file = coverFile[0];
-      formData.append('image', file);
-      console.log('appending image');
-    }
-
-    //Creates Image from blob
-    // if (coverSrc) {
-    //   var uploadFile = new File([coverSrc], 'name');
-    //   formData.append('cover', uploadFile);
-    // }
+    addFormFile(formData, 'image', coverFile);
 
     try {
       console.log(formData.has('image'));
@@ -131,7 +121,7 @@ const CreatePlaylist: FC<ICreatePlaylist> = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-y-2 ">
+        <div className="flex flex-col">
           <div className="pb-1">Select an image</div>
           <Input
             variant="file"

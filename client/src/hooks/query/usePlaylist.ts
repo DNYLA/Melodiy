@@ -5,12 +5,15 @@ import { useQuery } from '@tanstack/react-query';
 
 export default function usePlaylists() {
   const { user } = useSession();
-  return useQuery({
+
+  const query = useQuery({
     queryKey: ['playlists', user?.username],
     queryFn: async () => {
-      if (!user) return undefined;
       const { data } = await AXIOS.get<Playlist[]>('/playlist');
       return data;
     },
+    enabled: user ? true : false,
   });
+
+  return query;
 }

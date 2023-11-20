@@ -47,3 +47,9 @@ export enum AlbumType {
   Single = 1,
   EP = 2,
 }
+
+export enum SearchType {
+  Album = 0,
+  Artist = 1,
+  All = 2,
+}

@@ -18,9 +18,11 @@ public class Album : BaseEntity
 
     //Foreign Keys
     public int? ImageId { get; set; }
+    public int? UserId { get; set; }
 
     //Navigation Properties
     public List<Track> Tracks { get; set; } = null!;
     public List<Artist> Artists { get; set; } = null!;
     public Image? Image { get; set; }
+    public User? User { get; set; }
 }

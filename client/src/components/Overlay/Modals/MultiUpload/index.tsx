@@ -28,7 +28,7 @@ const MultiUploadModal: React.FC<TabModalProps> = () => {
             defaultValue={isUploadTab === true ? 'tab2' : 'tab1'}
           >
             <Tabs.List
-              className="flex shrink-0 border-b border-mauve6"
+              className="flex shrink-0 border-b border-mauve6 font-bold"
               aria-label="Manage your account"
               tabIndex={1}
             >

@@ -8,6 +8,12 @@ const nextConfig = {
       'i.scdn.co',
     ],
   },
+
+  webpack: (config) => {
+    config.externals.push({ 'react-native-fs': 'reactNativeFs' });
+
+    return config;
+  },
 };
 
 module.exports = nextConfig;

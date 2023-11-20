@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { RxCross2 } from 'react-icons/rx';
 import { twMerge } from 'tailwind-merge';
 import Image from '../Image';
@@ -16,6 +16,13 @@ const ImagePreview: FC<ImagePreviewProps> = ({
   alt,
   onReset,
 }) => {
+  useEffect(() => {
+    if (!src) return;
+
+    console.log('Ive changed');
+    console.log(src);
+  }, [src]);
+
   return (
     <div
       className={twMerge(
