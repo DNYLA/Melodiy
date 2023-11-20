@@ -51,5 +51,4 @@ export enum AlbumType {
 export enum SearchType {
   Album = 0,
   Artist = 1,
-  All = 2,
 }

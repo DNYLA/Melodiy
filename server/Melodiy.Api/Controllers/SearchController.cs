@@ -7,7 +7,8 @@ namespace Melodiy.Api.Controllers;
 public class SearchResult
 {
     public int Id { get; set; }
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string? Image { get; set; }
 }
 
 public enum SearchType
@@ -42,16 +43,24 @@ public class SearchController : ControllerBase
             {
                 Id = 1,
                 Name =  term + " Fery",
+                Image = "https://svmigokmzkjddcixdmzh.supabase.co/storage/v1/object/public/images/Jungaal/29f4c3934d9e482207a43c3748f60983.png",
             },
             new()
             {
                 Id = 2,
                 Name =  term,
+                Image = "https://i.scdn.co/image/ab67616d0000b273600adbc750285ea1a8da249f"
             },
             new()
             {
                 Id = 3,
                 Name =  term + "123",
+                Image = "https://i.scdn.co/image/ab67616d0000b2738007e1fcf108e4270b6df942"
+            },
+            new()
+            {
+                Id = 4,
+                Name = "Bobby" + term,
             }
         };
 

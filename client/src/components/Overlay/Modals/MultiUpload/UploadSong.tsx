@@ -3,13 +3,14 @@
 import ImagePreview from '@/components/Data/ImagePreview';
 import ActionButton from '@/components/Inputs/Buttons/ActionButton';
 import { Button } from '@/components/Inputs/Buttons/Button';
-import ComboBox from '@/components/Inputs/ComboBox';
+import ComboBox, { ComboBoxItem } from '@/components/Inputs/ComboBox';
 import { Input } from '@/components/Inputs/Input';
 import useUploadModal from '@/hooks/modals/useUploadModal';
-import useArtistSearch from '@/hooks/query/useArtistSearch';
+import useAlbumOrArtistSearch from '@/hooks/query/useAlbumOrArtistSearch';
 import useFilePreview from '@/hooks/useFilePreview';
 import useSession from '@/hooks/useSession';
 import useTrackTags from '@/hooks/useTrackTags';
+import { SearchType } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useRouter } from 'next/navigation';
@@ -31,17 +32,21 @@ const schema = z.object({
     .string()
     .min(1, 'Title must contain at least 1 character(s)')
     .max(100, 'Title must contain less than 100 character(s)'),
-  artist: z
-    .string()
-    .min(1, 'Artist must contain at least 1 character(s)')
-    .max(100, 'Artist must contain less than 100 character(s)'),
+  artist: z.object({
+    id: z.number().nonnegative('Select an artist'),
+    name: z.string().min(3, 'Artist must contain at least 3 character(s)'),
+  }),
+  album: z.object({
+    id: z.number().nonnegative('Select an artist'),
+    name: z.string().min(3, 'Artist must contain at least 3 character(s)'),
+  }),
   isPublic: z.boolean(),
 });
 
 export interface CreateSongForm {
   title: string;
-  artist: string;
-  album?: string;
+  artist: ComboBoxItem;
+  album?: ComboBoxItem;
   albumArtist?: string;
   cover?: FileList;
   track: FileList;
@@ -58,12 +63,13 @@ const UploadSong: React.FC = () => {
     reset,
     watch,
     setValue,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<CreateSongForm>({
     defaultValues: {
       title: '',
-      artist: '',
-      album: '',
+      artist: { id: -1, name: '' },
+      album: undefined,
       albumArtist: '',
       isPublic: true,
     },
@@ -71,8 +77,20 @@ const UploadSong: React.FC = () => {
   });
   const coverFile = watch('cover');
   const trackFile = watch('track');
+  const artist = watch('artist');
+  const album = watch('album');
   const { tags: tags, isLoading: isReadingTags } = useTrackTags(trackFile);
-  const { query, term, setTerm, loading } = useArtistSearch();
+  const {
+    query: artistQuery,
+    term: artistTerm,
+    loading: loadingArtist,
+  } = useAlbumOrArtistSearch(artist.name, SearchType.Artist);
+  const {
+    query: albumQuery,
+    term: albumTerm,
+    loading: loadingAlbum,
+  } = useAlbumOrArtistSearch(album?.name, SearchType.Album);
+
   useEffect(() => {
     if (!user) onClose();
   }, [user]);
@@ -82,11 +100,12 @@ const UploadSong: React.FC = () => {
   }, [tags]);
 
   const setTags = () => {
+    console.log(trackFile);
     if (tags?.title) setValue('title', tags.title);
-    if (tags?.album) setValue('album', tags.album);
+    if (tags?.album) setValue('album', { id: -1, name: tags.album });
     if (tags?.artist) {
-      setValue('artist', tags.artist);
-      setValue('albumArtist', tags.artist);
+      setValue('artist', { id: -1, name: tags.artist });
+      // setValue('albumArtist', tags.artist);
     }
 
     if (tags?.cover) {
@@ -102,10 +121,12 @@ const UploadSong: React.FC = () => {
     useFilePreview(coverFile);
 
   const onSubmit = async (data: CreateSongForm) => {
+    console.log('here');
     if (!user) return;
 
     console.log(trackFile);
     console.log(coverFile);
+    console.log(data);
 
     // const formData = new FormData();
     // addFormFile(formData, 'image', coverFile);
@@ -163,37 +184,57 @@ const UploadSong: React.FC = () => {
           </div>
 
           <div>
-            <p className="text-xs opacity-80">{errors.artist?.message}</p>
+            <p className="text-xs opacity-80">{errors.artist?.id?.message}</p>
             <ComboBox
-              data={query.data}
-              loading={loading}
-              term={term}
-              setTerm={setTerm}
+              data={artistQuery.data}
+              loading={loadingArtist}
+              term={artistTerm}
+              onChange={(value) => setValue('artist', value)}
               placeholder="Artist"
               id="artist"
-              {...register('artist')}
             />
           </div>
 
           <div>
-            <p className="text-xs opacity-80">{errors.album?.message}</p>
-            <Input
-              {...register('album')}
-              disabled={isSubmitting}
+            <p className="text-xs opacity-80">{errors.album?.id?.message}</p>
+            <ComboBox
+              data={albumQuery.data}
+              loading={loadingAlbum}
+              term={albumTerm}
+              onChange={(value) => setValue('album', value)}
               id="album"
-              placeholder="Album"
+              disabled={isSubmitting || !artist || artist.id == -1}
+              placeholder={
+                !artist || artist.id == -1 ? 'Select an artist first' : 'Album'
+              }
             />
           </div>
+
           <div>
             <p className="text-xs opacity-80">{errors.albumArtist?.message}</p>
-            <Input
+            {/* <Input
               {...register('albumArtist')}
-              disabled={isSubmitting}
+              disabled={isSubmitting || !album || album.id == -1}
               id="artist"
-              placeholder="Album Artist"
+              placeholder={album ? 'Album Artist' : 'Select an album first'}
+            /> */}
+            <ComboBox
+              // disabled={isSubmitting || !album || album.id == -1}
+              disabled={true}
+              data={artistQuery.data}
+              loading={loadingArtist}
+              term={artistTerm}
+              onChange={(value) => setValue('artist', value)}
+              placeholder={
+                !album || album.id == -1
+                  ? 'Select an album first'
+                  : 'Album Artist'
+              }
+              id="artist"
             />
           </div>
         </>
+
         <div className="flex flex-col">
           <div className="pb-1">Select a track</div>
           <Input
@@ -221,7 +262,11 @@ const UploadSong: React.FC = () => {
         </div>
         <div className="mt-2 flex gap-x-4">
           {/* <Button onClick={() => readTags(trackFile)}>Read Tags</Button> */}
-          <ActionButton isLoading={isReadingTags} onClick={() => setTags()}>
+          <ActionButton
+            disabled={!trackFile || trackFile.length == 0}
+            isLoading={isReadingTags}
+            onClick={() => setTags()}
+          >
             Read Tags
           </ActionButton>
           <Button onClick={resetForm}>Clear</Button>
@@ -230,6 +275,7 @@ const UploadSong: React.FC = () => {
           Create
         </ActionButton>
       </form>
+      {/* <DevTool control={control} /> */}
     </>
   );
 };

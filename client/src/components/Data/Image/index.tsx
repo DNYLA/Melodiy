@@ -15,7 +15,11 @@ const Image = React.forwardRef<HTMLDivElement, ImageProps>(
 
     return (
       <div ref={ref}>
-        <NextImage src={src} onError={handleError} {...props} />
+        <NextImage
+          src={src ?? 'images/default_playlist.png'}
+          onError={handleError}
+          {...props}
+        />
       </div>
     );
   }

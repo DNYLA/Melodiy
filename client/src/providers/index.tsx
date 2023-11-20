@@ -18,7 +18,6 @@ const Providers: React.FC<IProvider> = ({ children }) => {
           {children}
         </TanstackProvider>
       </SessionProvider>
-      ;
     </>
   );
 };
