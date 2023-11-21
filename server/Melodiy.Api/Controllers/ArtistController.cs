@@ -1,3 +1,8 @@
+using Melodiy.Api.Attributes;
+using Melodiy.Api.Models;
+using Melodiy.Application.Services.ArtistService;
+using Melodiy.Contracts.Artist;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Melodiy.Api.Controllers;
@@ -6,16 +11,19 @@ namespace Melodiy.Api.Controllers;
 [Route("[controller]")]
 public class ArtistController : ControllerBase
 {
-    // private readonly IArtistService _ArtistService;
-    // public ArtistController(IArtistService ArtistService)
-    // {
-    //     _ArtistService = ArtistService;
-    // }
-
-
-    [HttpGet()]
-    public async Task<ActionResult<bool>> Get()
+    private readonly IArtistService _artistService;
+    public ArtistController(IArtistService ArtistService)
     {
-        return true;
+        _artistService = ArtistService;
+    }
+
+
+    [Authorize]
+    [HttpPost]
+    public async Task<ActionResult<GetArtistResponse>> Create(string name, [FromForm] IFormFile? image, [FromClaims] UserClaims user)
+    {
+        var response = await _artistService.Create(name, image, user.Username, user.Id);
+
+        return response.Adapt<GetArtistResponse>();
     }
 }

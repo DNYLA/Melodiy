@@ -4,7 +4,11 @@ using Melodiy.Api.Bindings;
 using Melodiy.Api.Filters;
 using Melodiy.Api.Middleware;
 using Melodiy.Application;
+using Melodiy.Application.Services.AlbumService;
+using Melodiy.Application.Services.ArtistService;
 using Melodiy.Application.Services.Playlist;
+using Melodiy.Contracts.Album;
+using Melodiy.Contracts.Artist;
 using Melodiy.Contracts.Playlist;
 using Melodiy.Infrastructure;
 using Microsoft.Net.Http.Headers;
@@ -66,4 +70,12 @@ static void ConfigureMapster()
     TypeAdapterConfig<PlaylistResponse, GetPlaylistResponse>.NewConfig()
         .Map(dest => dest.Id, src => src.Slug)
         .Map(dest => dest.Image, src => src.Image != null ? src.Image.Url : null);
+
+    TypeAdapterConfig<AlbumResponse, GetAlbumResponse>.NewConfig()
+        .Map(dest => dest.Id, src => src.Slug)
+        .Map(dest => dest.Image, src => src.Image != null ? src.Image.Url : null);
+
+    TypeAdapterConfig<ArtistResponse, GetArtistResponse>.NewConfig()
+    .Map(dest => dest.Id, src => src.Slug)
+    .Map(dest => dest.Image, src => src.Image != null ? src.Image.Url : null);
 }

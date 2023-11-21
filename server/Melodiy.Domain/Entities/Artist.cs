@@ -14,10 +14,12 @@ public class Artist : BaseEntity
     public string? SpotifyId { get; set; }
 
     //Foreign Keys
+    public int? UserId { get; set; }
     public int? ImageId { get; set; }
 
     //Navigation Properties
-    public Image? Image { get; set; }
     public List<TrackArtist> TrackArtists { get; set; } = null!;
     public List<Album> Albums { get; set; } = null!;
+    public Image? Image { get; set; }
+    public User? User { get; set; }
 }
