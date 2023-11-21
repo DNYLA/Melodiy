@@ -1,6 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
+using Melodiy.Api.Attributes;
+using Melodiy.Api.Models;
 using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Services.TrackService;
 using Melodiy.Contracts.Track;
@@ -22,14 +24,9 @@ public class TrackController : ControllerBase
 
     [Authorize]
     [HttpPost]
-    public async Task<ActionResult<GetTrackResponse>> Create([FromForm] UploadTrackRequest request)
+    public async Task<ActionResult<GetTrackResponse>> Create([FromForm] UploadTrackRequest request, [FromClaims] UserClaims user)
     {
-        //TODO: Move to a seperate service / middleware to parse this data.
-        var userIdString = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value!;
-        var username = User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Name)!.Value!;
-        int userId = int.Parse(userIdString ?? throw new ApiError(HttpStatusCode.Unauthorized, "User not found"));
-
-        var response = await _trackService.UploadSong(request, userId);
+        var response = await _trackService.UploadSong(request, user.Username, user.Id);
 
         return response.Adapt<GetTrackResponse>();
     }

@@ -25,7 +25,7 @@ public class SupabaseRepository : IFileRepository
         _supabaseSettings = supabaseOptions.Value;
     }
 
-    public async Task<Image> UploadImage(IFormFile file, string username, int userId)
+    public async Task<Image> UploadImage(IFormFile file, string folder, int userId)
     {
         Console.WriteLine("Uploading Image");
         string bucket = GetBucketName(StorageBucket.Images);
@@ -35,7 +35,7 @@ public class SupabaseRepository : IFileRepository
 
         string fileHash = _hashService.HashFile(memoryStream);
         string fileName = fileHash + Path.GetExtension(file.FileName);
-        string supabasePath = $"{username}/{fileName}";
+        string supabasePath = $"{folder}/{fileName}";
 
         if (await IsDuplicate(StorageBucket.Images, supabasePath))
         {

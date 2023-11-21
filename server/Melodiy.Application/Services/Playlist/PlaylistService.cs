@@ -2,6 +2,7 @@ using System.Net;
 using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Common.Interfaces.Persistance;
 using Melodiy.Application.Common.Interfaces.Services;
+using Melodiy.Application.Services.FileService;
 using Melodiy.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -11,11 +12,11 @@ namespace Melodiy.Application.Services.Playlist;
 public class PlaylistService : IPlaylistService
 {
     private readonly IDataContext _context;
-    private readonly IFileRepository _fileRepository;
-    public PlaylistService(IDataContext context, IFileRepository fileRepository)
+    private readonly IFileService _fileService;
+    public PlaylistService(IDataContext context, IFileService fileService)
     {
         _context = context;
-        _fileRepository = fileRepository;
+        _fileService = fileService;
     }
 
     public async Task<PlaylistResponse> Create(IFormFile? image, string username, int userId, string title, bool isPublic)
@@ -24,7 +25,7 @@ public class PlaylistService : IPlaylistService
 
         if (image != null)
         {
-            uploadedImage = await _fileRepository.UploadImage(image, username, userId);
+            uploadedImage = await _fileService.UploadImage(image, username, userId);
         }
 
         var playlist = new Domain.Entities.Playlist

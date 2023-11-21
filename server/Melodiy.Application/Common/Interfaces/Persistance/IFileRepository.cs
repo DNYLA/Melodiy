@@ -6,7 +6,7 @@ namespace Melodiy.Application.Common.Interfaces.Persistance;
 
 public interface IFileRepository
 {
-    Task<Image> UploadImage(IFormFile file, string username, int userId);
+    Task<Image> UploadImage(IFormFile file, string folder, int userId);
     Task<string> UploadTrack(IFormFile file, string username, bool isPublic);
     Task<bool> DeleteFile(StorageBucket bucket, string path);
     // Task<string> GetSignedUrl(StorageBucket bucket, string path, int seconds = 150);

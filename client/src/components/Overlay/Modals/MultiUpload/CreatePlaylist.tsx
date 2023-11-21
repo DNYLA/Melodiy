@@ -7,9 +7,11 @@ import useFilePreview from '@/hooks/useFilePreview';
 import useSession from '@/hooks/useSession';
 import { AXIOS } from '@/lib/network';
 import { addFormFile } from '@/lib/utils';
-import { Playlist } from '@/types';
+import { APIError } from '@/types';
+import { Playlist } from '@/types/playlist';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Dialog from '@radix-ui/react-dialog';
+import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { FC, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -79,7 +81,8 @@ const CreatePlaylist: FC<ICreatePlaylist> = () => {
       onClose();
     } catch (err) {
       console.log(err);
-      toast.error('Unable to create playlist');
+      const axiosErr = err as AxiosError<APIError, Playlist>;
+      toast.error(axiosErr.response?.data.error ?? 'Unable to create playlist');
     }
   };
 

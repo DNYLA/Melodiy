@@ -8,6 +8,7 @@ public class UploadTrackRequest
     public IFormFile? Image { get; set; }
     public string Title { get; set; } = string.Empty;
     public string ArtistId { get; set; } = string.Empty;
+    public bool IsPublic { get; set; } = true;
     public string? AlbumId { get; set; }
     public string? AlbumArtistId { get; set; }
 }
