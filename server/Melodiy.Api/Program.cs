@@ -1,5 +1,6 @@
 
 global using Mapster;
+using Melodiy.Api.Bindings;
 using Melodiy.Api.Filters;
 using Melodiy.Api.Middleware;
 using Melodiy.Application;
@@ -16,7 +17,11 @@ var builder = WebApplication.CreateBuilder(args);
         .AddAplication()
         .AddInfrastructure(builder.Configuration);
     // builder.Services.AddControllers(options => options.Filters.Add<ErrorHandlingFilter>());
-    builder.Services.AddControllers();
+    builder.Services.AddControllers(options =>
+    {
+        options.ModelBinderProviders.Insert(0, new ClaimsModelBinderProvider());
+    });
+
     builder.Services.AddCors(options =>
     {
         options.AddPolicy(name: MyAllowSpecificOrigins, policy =>

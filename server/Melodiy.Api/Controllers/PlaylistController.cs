@@ -1,6 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
+using Melodiy.Api.Attributes;
+using Melodiy.Api.Filters;
+using Melodiy.Api.Models;
 using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Services.Playlist;
 using Melodiy.Contracts.Playlist;
@@ -21,15 +24,9 @@ public class PlaylistController : ControllerBase
 
     [Authorize]
     [HttpPost]
-    public async Task<ActionResult<GetPlaylistResponse>> Create([FromForm] IFormFile? image, [FromQuery] string title, [FromQuery(Name = "public")] bool isPublic)
+    public async Task<ActionResult<GetPlaylistResponse>> Create([FromForm] IFormFile? image, [FromQuery] string title, [FromQuery(Name = "public")] bool isPublic, [FromClaims] UserClaims user)
     {
-        //TODO: Move to a seperate service / middleware to parse this data.
-        var userIdString = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value!;
-        var username = User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Name)!.Value!;
-        int userId = int.Parse(userIdString ?? throw new ApiError(HttpStatusCode.Unauthorized, "User not found"));
-
-        var response = await _playlistService.Create(image, username, userId, title, isPublic);
-
+        var response = await _playlistService.Create(image, user.Username, user.Id, title, isPublic);
         var mapped = response.Adapt<GetPlaylistResponse>();
 
         return mapped;
@@ -37,16 +34,12 @@ public class PlaylistController : ControllerBase
 
     [Authorize]
     [HttpGet]
-    public async Task<ActionResult<List<GetPlaylistResponse>>> GetAll()
+    public async Task<ActionResult<List<GetPlaylistResponse>>> GetAll([FromClaims] UserClaims user)
     {
-        //TODO: Move to a seperate service / middleware to parse this data.
-        var userIdString = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value!;
-        int userId = int.Parse(userIdString ?? throw new ApiError(HttpStatusCode.Unauthorized, "User not found"));
-
-        var response = await _playlistService.GetAll(userId);
+        var response = await _playlistService.GetAll(user.Id);
 
         //TODO: If Not authorised return guest playlist data (for not auth is required).
 
-        return response.Adapt<List<GetPlaylistResponse>>(); ;
+        return response.Adapt<List<GetPlaylistResponse>>();
     }
 }

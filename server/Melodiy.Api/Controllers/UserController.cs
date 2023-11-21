@@ -1,5 +1,7 @@
 using System.Net;
 using System.Security.Claims;
+using Melodiy.Api.Attributes;
+using Melodiy.Api.Models;
 using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Services.UserService;
 using Microsoft.AspNetCore.Authorization;
@@ -22,12 +24,10 @@ public class UserController : ControllerBase
 
     [Authorize]
     [HttpGet]
-    public async Task<IActionResult> GetUser()
+    public async Task<IActionResult> GetUser([FromClaims] UserClaims claims)
     {
 
-
-        var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value;
-        var user = await _userService.GetById(int.Parse(userId)) ?? throw new ApiError(HttpStatusCode.Unauthorized, "User not found");
+        var user = await _userService.GetById(claims.Id);
 
         var response = user.Adapt<Contracts.User.UserResponse>();
 
