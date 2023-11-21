@@ -1,6 +1,6 @@
 import useSession from '@/hooks/useSession';
 import { AXIOS } from '@/lib/network';
-import { Playlist } from '@/types';
+import { Playlist } from '@/types/playlist';
 import { useQuery } from '@tanstack/react-query';
 
 export default function usePlaylists() {

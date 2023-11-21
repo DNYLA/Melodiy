@@ -6,11 +6,12 @@ import { Button } from '@/components/Inputs/Buttons/Button';
 import ComboBox, { ComboBoxItem } from '@/components/Inputs/ComboBox';
 import { Input } from '@/components/Inputs/Input';
 import useUploadModal from '@/hooks/modals/useUploadModal';
-import useAlbumOrArtistSearch from '@/hooks/query/useAlbumOrArtistSearch';
+import useAlbumSearch from '@/hooks/query/useAlbumSearch';
+import useArtistSearch from '@/hooks/query/useArtistSearch';
 import useFilePreview from '@/hooks/useFilePreview';
 import useSession from '@/hooks/useSession';
 import useTrackTags from '@/hooks/useTrackTags';
-import { SearchType } from '@/types';
+import { convertToComboItem } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useRouter } from 'next/navigation';
@@ -23,13 +24,15 @@ const schema = z.object({
     .string()
     .min(1, 'Title must contain at least 1 character(s)')
     .max(100, 'Title must contain less than 100 character(s)'),
-  artist: z.object({
-    id: z.number().nonnegative('Select an artist'),
-    name: z.string().min(3, 'Artist must contain at least 3 character(s)'),
-  }),
+  artist: z
+    .object({
+      id: z.string().min(1, 'Select an artist'),
+      name: z.string().min(3, 'Artist must contain at least 3 character(s)'),
+    })
+    .refine((data) => data.id !== undefined, 'Select an artist!'),
   album: z
     .object({
-      id: z.number().nonnegative('Select an album'),
+      id: z.string().min(1, 'Select an album'),
       name: z.string().min(3, 'Album must contain at least 3 character(s)'),
     })
     .optional(),
@@ -76,7 +79,7 @@ const UploadSong: React.FC = () => {
   } = useForm<CreateSongForm>({
     defaultValues: {
       title: '',
-      artist: { id: -1, name: '' },
+      artist: { id: undefined, name: '' },
       albumArtist: '',
       isPublic: true,
     },
@@ -91,12 +94,12 @@ const UploadSong: React.FC = () => {
     query: artistQuery,
     term: artistTerm,
     loading: loadingArtist,
-  } = useAlbumOrArtistSearch(artist.name, SearchType.Artist);
+  } = useArtistSearch(artist.name);
   const {
     query: albumQuery,
     term: albumTerm,
     loading: loadingAlbum,
-  } = useAlbumOrArtistSearch(album?.name, SearchType.Album);
+  } = useAlbumSearch(album?.name);
 
   useEffect(() => {
     if (!user) onClose();
@@ -108,9 +111,9 @@ const UploadSong: React.FC = () => {
 
   const setTags = () => {
     if (tags?.title) setValue('title', tags.title);
-    if (tags?.album) setValue('album', { id: -1, name: tags.album });
+    if (tags?.album) setValue('album', { id: undefined, name: tags.album });
     if (tags?.artist) {
-      setValue('artist', { id: -1, name: tags.artist });
+      setValue('artist', { id: undefined, name: tags.artist });
       // setValue('albumArtist', tags.artist);
     }
 
@@ -194,26 +197,36 @@ const UploadSong: React.FC = () => {
               data={artistQuery.data}
               loading={loadingArtist}
               term={artistTerm}
-              onChange={(value) => setValue('artist', value)}
-              onReset={() => resetField('artist')}
+              onChange={(value) => {
+                console.log('tets');
+                setValue('artist', value);
+              }}
+              onReset={() => {
+                console.log('here');
+                // resetField('artist');
+                setValue('artist', { id: undefined, name: '' });
+              }}
               placeholder="Artist"
-              id="artist"
             />
           </div>
 
           <div>
             <p className="text-xs opacity-80">{errors.album?.id?.message}</p>
             <ComboBox
-              data={albumQuery.data}
+              data={convertToComboItem(albumQuery.data)}
               loading={loadingAlbum}
               term={albumTerm}
-              onChange={(value) => setValue('album', value)}
-              onReset={() => resetField('album')}
-              id="album"
-              disabled={isSubmitting || !artist || artist.id == -1}
-              placeholder={
-                !artist || artist.id == -1 ? 'Select an artist first' : 'Album'
-              }
+              onChange={(value) => {
+                console.log('tets');
+                setValue('album', value);
+              }}
+              onReset={() => {
+                console.log('Resetting');
+                resetField('album');
+                setValue('title', 'Die Young');
+              }}
+              disabled={isSubmitting || !artist || !artist.id}
+              placeholder={!artist ? 'Select an artist first' : 'Album'}
             />
           </div>
 
@@ -232,13 +245,11 @@ const UploadSong: React.FC = () => {
               loading={loadingArtist}
               term={artistTerm}
               onChange={(value) => setValue('artist', value)}
-              onReset={() => resetField('artist')}
-              placeholder={
-                !album || album.id == -1
-                  ? 'Select an album first'
-                  : 'Album Artist'
-              }
-              id="artist"
+              onReset={() => {
+                console.log('Resetting');
+                resetField('artist');
+              }}
+              placeholder={!album ? 'Select an album first' : 'Album Artist'}
             />
           </div>
         </>

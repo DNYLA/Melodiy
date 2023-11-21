@@ -6,7 +6,7 @@ import { FC, Fragment, useEffect, useState } from 'react';
 import { IoMdCheckmark } from 'react-icons/io';
 
 export type ComboBoxItem = {
-  id: number;
+  id?: string;
   name: string;
   image?: string;
 };
@@ -18,7 +18,6 @@ export interface ComboBoxProps {
   onChange: (value: ComboBoxItem) => void;
   onReset: () => void;
   placeholder?: string;
-  id?: string;
   disabled?: boolean;
 }
 
@@ -28,7 +27,6 @@ const SearchComboBox: FC<ComboBoxProps> = ({
   onChange,
   loading,
   placeholder,
-  id,
   disabled,
   onReset,
 }) => {
@@ -37,6 +35,8 @@ const SearchComboBox: FC<ComboBoxProps> = ({
 
   const onSelect = (selected: ComboBoxItem | null) => {
     if (!selected) {
+      onReset();
+      setInputValue('');
       return;
     }
 
@@ -47,13 +47,34 @@ const SearchComboBox: FC<ComboBoxProps> = ({
 
   const onInputChange = (name: string) => {
     if (name == '') {
+      console.log('resetting');
       setInputValue('');
       onReset();
+      setSelectedValue(null);
       return;
     }
 
     setInputValue(name);
-    onChange({ id: -1, name }); //if value === selectedValue.name that means we forced the update in onSelect
+    // setSelectedValue(null);
+    onChange({ id: undefined, name }); //if value === selectedValue.name that means we forced the update in onSelect
+  };
+
+  const onBlur = () => {
+    // if (!selectedValue) {
+    //   onReset();
+    //   setInputValue('');
+    // } else if (selectedValue && selectedValue.name !== inputValue) {
+    //   setInputValue(selectedValue.name);
+    // }
+
+    if (
+      selectedValue &&
+      selectedValue.name !== inputValue &&
+      inputValue !== ''
+    ) {
+      setInputValue(selectedValue.name);
+      onChange(selectedValue);
+    }
   };
 
   useEffect(() => {
@@ -75,22 +96,24 @@ const SearchComboBox: FC<ComboBoxProps> = ({
           className="inset-y-0 right-0 flex w-full items-center"
         >
           <Combobox.Input
+            autoComplete={'off'}
+            onBlur={onBlur}
             onKeyDown={(e) => e.stopPropagation()} // prevent conflicts with Headless UI keyboard navigation
             onAbort={() => console.log('here')}
             onAbortCapture={() => console.log('here')}
             value={inputValue}
             placeholder={placeholder}
-            // className={'w-full px-3 py-2 focus:outline-none'}
             className="w-full items-center justify-center rounded bg-neutral-700 px-2.5 py-2 text-sm leading-none text-white outline-none placeholder:text-sm placeholder:font-extralight placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:bg-neutral-400"
             onChange={(event) => onInputChange(event.target.value)}
-            // as={Input}
-            id={id}
           />
           {/* <Input
-            id={id}
+            autoComplete={'none'}
+            onBlur={onBlur}
+            onKeyDown={(e) => e.stopPropagation()} // prevent conflicts with Headless UI keyboard navigation
+            onAbort={() => console.log('here')}
+            onAbortCapture={() => console.log('here')}
             value={inputValue}
             placeholder={placeholder}
-            // disabled={disabled}
             className="w-full items-center justify-center rounded bg-neutral-700 px-2.5 py-2 text-sm leading-none text-white outline-none placeholder:text-sm placeholder:font-extralight placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:bg-neutral-400"
             onChange={(event) => onInputChange(event.target.value)}
           /> */}
@@ -104,7 +127,13 @@ const SearchComboBox: FC<ComboBoxProps> = ({
           <Combobox.Options className="mt-1 max-h-60 w-full overflow-auto rounded-md bg-neutral-700 py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
             {!data || data.length === 0 || term === '' || loading ? (
               <div className="relative cursor-default select-none px-4 py-2 text-white">
-                {loading ? <>Loading...</> : `Enter an ${id} name to search`}
+                {loading ? (
+                  <>Loading...</>
+                ) : term.length > 3 && (!data || data?.length == 0) ? (
+                  `${inputValue} not found`
+                ) : (
+                  `Enter three character(s) to search`
+                )}
               </div>
             ) : (
               data.map((item: ComboBoxItem) => (
@@ -121,7 +150,7 @@ const SearchComboBox: FC<ComboBoxProps> = ({
                     <div className="flex gap-x-2">
                       <Image
                         src={item.image ?? 'images/default_playlist.png'}
-                        alt={`${id} cover`}
+                        alt={`item cover`}
                         width={40}
                         height={40}
                         className="rounded"
