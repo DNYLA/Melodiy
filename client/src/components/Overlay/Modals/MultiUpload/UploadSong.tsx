@@ -26,13 +26,15 @@ const schema = z.object({
     .max(100, 'Title must contain less than 100 character(s)'),
   artist: z
     .object({
-      id: z.string().min(1, 'Select an artist'),
+      id: z
+        .string({ required_error: 'Select an album' })
+        .min(1, 'Select an artist'),
       name: z.string().min(3, 'Artist must contain at least 3 character(s)'),
     })
     .refine((data) => data.id !== undefined, 'Select an artist!'),
   album: z
     .object({
-      id: z.string().min(1, 'Select an album'),
+      id: z.string().min(1, 'Select an artist'),
       name: z.string().min(3, 'Album must contain at least 3 character(s)'),
     })
     .optional(),
@@ -193,6 +195,7 @@ const UploadSong: React.FC = () => {
 
           <div>
             <p className="text-xs opacity-80">{errors.artist?.id?.message}</p>
+            <p className="text-xs opacity-80">{errors.artist?.message}</p>
             <ComboBox
               data={artistQuery.data}
               loading={loadingArtist}
@@ -232,12 +235,6 @@ const UploadSong: React.FC = () => {
 
           <div>
             <p className="text-xs opacity-80">{errors.albumArtist?.message}</p>
-            {/* <Input
-              {...register('albumArtist')}
-              disabled={isSubmitting || !album || album.id == -1}
-              id="artist"
-              placeholder={album ? 'Album Artist' : 'Select an album first'}
-            /> */}
             <ComboBox
               // disabled={isSubmitting || !album || album.id == -1}
               disabled={true}
