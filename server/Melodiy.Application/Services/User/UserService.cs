@@ -1,4 +1,5 @@
 using Melodiy.Application.Common.Interfaces.Persistance;
+using Melodiy.Application.Services.ArtistService;
 using Melodiy.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 

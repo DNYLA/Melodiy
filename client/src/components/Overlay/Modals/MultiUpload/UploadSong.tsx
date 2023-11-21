@@ -18,15 +18,6 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-export interface IUploadSongForm {
-  title: string;
-  artist: string;
-  album: string;
-  albumArtist: string;
-  image?: FileList;
-  song: FileList;
-}
-
 const schema = z.object({
   title: z
     .string()
@@ -36,11 +27,27 @@ const schema = z.object({
     id: z.number().nonnegative('Select an artist'),
     name: z.string().min(3, 'Artist must contain at least 3 character(s)'),
   }),
-  album: z.object({
-    id: z.number().nonnegative('Select an artist'),
-    name: z.string().min(3, 'Artist must contain at least 3 character(s)'),
-  }),
+  album: z
+    .object({
+      id: z.number().nonnegative('Select an album'),
+      name: z.string().min(3, 'Album must contain at least 3 character(s)'),
+    })
+    .optional(),
   isPublic: z.boolean(),
+  track:
+    typeof window === 'undefined'
+      ? z.any()
+      : z
+          .instanceof(FileList)
+          .refine((data) => data.length === 1, 'No Audio file selected')
+          .refine(
+            (data) =>
+              data.item(0) !== null &&
+              (data.item(0)?.type === 'audio/mpeg' ||
+                data.item(0)?.type === 'audio/wav'),
+            'Only MP3 and Wav files are supported'
+          ),
+  // .refine((data) => data.),
 });
 
 export interface CreateSongForm {
@@ -61,6 +68,7 @@ const UploadSong: React.FC = () => {
     register,
     handleSubmit,
     reset,
+    resetField,
     watch,
     setValue,
     control,
@@ -69,7 +77,6 @@ const UploadSong: React.FC = () => {
     defaultValues: {
       title: '',
       artist: { id: -1, name: '' },
-      album: undefined,
       albumArtist: '',
       isPublic: true,
     },
@@ -100,7 +107,6 @@ const UploadSong: React.FC = () => {
   }, [tags]);
 
   const setTags = () => {
-    console.log(trackFile);
     if (tags?.title) setValue('title', tags.title);
     if (tags?.album) setValue('album', { id: -1, name: tags.album });
     if (tags?.artist) {
@@ -116,7 +122,6 @@ const UploadSong: React.FC = () => {
       setValue('cover', list.files);
     }
   };
-
   const { setImgSrc: setCoverSrc, imgSrc: coverSrc } =
     useFilePreview(coverFile);
 
@@ -124,7 +129,7 @@ const UploadSong: React.FC = () => {
     console.log('here');
     if (!user) return;
 
-    console.log(trackFile);
+    console.log(trackFile.item(0));
     console.log(coverFile);
     console.log(data);
 
@@ -190,6 +195,7 @@ const UploadSong: React.FC = () => {
               loading={loadingArtist}
               term={artistTerm}
               onChange={(value) => setValue('artist', value)}
+              onReset={() => resetField('artist')}
               placeholder="Artist"
               id="artist"
             />
@@ -202,6 +208,7 @@ const UploadSong: React.FC = () => {
               loading={loadingAlbum}
               term={albumTerm}
               onChange={(value) => setValue('album', value)}
+              onReset={() => resetField('album')}
               id="album"
               disabled={isSubmitting || !artist || artist.id == -1}
               placeholder={
@@ -225,6 +232,7 @@ const UploadSong: React.FC = () => {
               loading={loadingArtist}
               term={artistTerm}
               onChange={(value) => setValue('artist', value)}
+              onReset={() => resetField('artist')}
               placeholder={
                 !album || album.id == -1
                   ? 'Select an album first'
@@ -236,6 +244,7 @@ const UploadSong: React.FC = () => {
         </>
 
         <div className="flex flex-col">
+          <p className="text-xs opacity-80">{errors.track?.message}</p>
           <div className="pb-1">Select a track</div>
           <Input
             variant="file"

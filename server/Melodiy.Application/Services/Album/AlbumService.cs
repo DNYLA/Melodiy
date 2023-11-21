@@ -24,10 +24,10 @@ public class AlbumService : IAlbumService
     public async Task<AlbumResponse> Create(string title, long timestamp, IFormFile? image, string username, int userId)
     {
         Image? uploadedImage = null;
-        if (image != null)
-        {
-            uploadedImage = await _fileRepository.UploadImage(image, username, userId);
-        }
+        // if (image != null)
+        // {
+        //     uploadedImage = await _fileRepository.UploadImage(image, username, userId);
+        // }
 
         var utcReleaseTime = _dateTimeProvider.UnixTimeStampToUtc(timestamp);
         var Album = new Album

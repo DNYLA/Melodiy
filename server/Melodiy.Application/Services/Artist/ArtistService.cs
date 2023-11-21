@@ -1,7 +1,9 @@
 
+using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Common.Interfaces.Persistance;
 using Melodiy.Domain.Entities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace Melodiy.Application.Services.ArtistService;
 
@@ -40,8 +42,17 @@ public class ArtistService : IArtistService
         return artist.Adapt<ArtistResponse>();
     }
 
-    public Task<ArtistResponse> Get(string id)
+    public async Task<ArtistResponse> Get(string slug, bool includeImage = false)
     {
-        throw new NotImplementedException();
+        var artists = _context.Artists.AsQueryable();
+
+        if (includeImage)
+        {
+
+            artists = artists.Include(artist => artist.Image);
+        }
+        var artist = await artists.FirstOrDefaultAsync(artist => artist.Slug == slug) ?? throw new ApiError(System.Net.HttpStatusCode.NotFound, $"Artist Id {slug} not found");
+
+        return artist.Adapt<ArtistResponse>();
     }
 }

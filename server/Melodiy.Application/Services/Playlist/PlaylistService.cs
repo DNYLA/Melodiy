@@ -1,6 +1,7 @@
 using System.Net;
 using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Common.Interfaces.Persistance;
+using Melodiy.Application.Common.Interfaces.Services;
 using Melodiy.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +12,6 @@ public class PlaylistService : IPlaylistService
 {
     private readonly IDataContext _context;
     private readonly IFileRepository _fileRepository;
-
     public PlaylistService(IDataContext context, IFileRepository fileRepository)
     {
         _context = context;

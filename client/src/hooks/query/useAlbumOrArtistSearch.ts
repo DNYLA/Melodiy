@@ -15,13 +15,12 @@ const MIN_SEARCH_LENGTH = 3;
 export default function useAlbumOrArtistSearch(term = '', type: SearchType) {
   // const [term, setTerm] = useState('');
   const [loading, setLoading] = useState(false);
-  const debouncedTerm = useDebounce(term);
+  const debouncedTerm = useDebounce(term, 250);
 
   const query = useQuery({
     // queryKey: ['search', { type, value: debouncedTerm }],
     queryKey: ['search', { type, value: debouncedTerm.toLowerCase() }],
     queryFn: async () => {
-      console.log('search', { type, value: debouncedTerm.toLowerCase() });
       const { data } = await AXIOS.get<SpecificSearchResult[]>(
         `search?term=${debouncedTerm}&type=${SearchType.Artist}`
       );

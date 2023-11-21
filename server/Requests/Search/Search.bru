@@ -1,0 +1,20 @@
+meta {
+  name: Search
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:5041/search?term=Feed Tha Street&type=0
+  body: none
+  auth: bearer
+}
+
+query {
+  term: Feed Tha Street
+  type: 0
+}
+
+auth:bearer {
+  token: {{token}}
+}

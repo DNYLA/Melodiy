@@ -1,5 +1,12 @@
 using System.Net;
+using Melodiy.Api.Attributes;
+using Melodiy.Api.Models;
 using Melodiy.Application.Common.Errors;
+using Melodiy.Application.Services.SearchService;
+using Melodiy.Contracts.Album;
+using Melodiy.Contracts.Artist;
+using Melodiy.Contracts.Search;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Melodiy.Api.Controllers;
@@ -23,46 +30,51 @@ public enum SearchType
 [Route("[controller]")]
 public class SearchController : ControllerBase
 {
-    // private readonly ISearchService _SearchService;
-    // public SearchController(ISearchService SearchService)
-    // {
-    //     _SearchService = SearchService;
-    // }
-
-
-    [HttpGet()]
-    public async Task<ActionResult<List<SearchResult>>> Search([FromQuery] string term, [FromQuery] SearchType? type)
+    private readonly ISearchService _searchService;
+    public SearchController(ISearchService searchService)
     {
-        type ??= SearchType.All;
-        if (type != SearchType.Artist) throw new ApiError(HttpStatusCode.NotImplemented, "Currently Not implemented");
+        _searchService = searchService;
+    }
+
+
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<ActionResult<SearchResponse>> Search([FromQuery] string term, [FromQuery] string? artistId, [FromQuery] SearchType? type, [FromClaims] UserClaims user)
+    {
+        type ??= SearchType.All; //If no type provided search all
         if (term.Length < 3) throw new ApiError(HttpStatusCode.BadRequest, "Search term must contain a minimum of three characters");
 
-        var results = new List<SearchResult>()
+        var result = new SearchResponse();
+
+        if (type == SearchType.Album)
         {
-            new()
-            {
-                Id = 1,
-                Name =  term + " Fery",
-                Image = "https://svmigokmzkjddcixdmzh.supabase.co/storage/v1/object/public/images/Jungaal/29f4c3934d9e482207a43c3748f60983.png",
-            },
-            new()
-            {
-                Id = 2,
-                Name =  term,
-                Image = "https://i.scdn.co/image/ab67616d0000b273600adbc750285ea1a8da249f"
-            },
-            new()
-            {
-                Id = 3,
-                Name =  term + "123",
-                Image = "https://i.scdn.co/image/ab67616d0000b2738007e1fcf108e4270b6df942"
-            },
-            new()
-            {
-                Id = 4,
-                Name = "Bobby" + term,
-            }
-        };
+            var response = await _searchService.SearchAlbumsCreatedByUser(term, artistId, user.Id, 5);
+            result.Albums = response.Adapt<List<GetAlbumResponse>>();
+        }
+        else
+        {
+            throw new ApiError(HttpStatusCode.NotImplemented, $"SearchType: {type} currently not accepted.");
+        }
+
+        return result;
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<SearchResponse>> Search([FromQuery] string term, [FromQuery] SearchType? type)
+    {
+        type ??= SearchType.All; //If no type provided search all
+        if (term.Length < 3) throw new ApiError(HttpStatusCode.BadRequest, "Search term must contain a minimum of three characters");
+        var results = new SearchResponse();
+
+        if (type == SearchType.Artist)
+        {
+            var response = await _searchService.SearchArtist(term);
+            results.Artists = response.Adapt<List<GetArtistResponse>>();
+        }
+        else
+        {
+            throw new ApiError(HttpStatusCode.NotImplemented, $"SearchType: {type} currently not accepted.");
+        }
 
         return results;
     }

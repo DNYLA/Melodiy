@@ -16,6 +16,7 @@ export interface ComboBoxProps {
   loading: boolean;
   term: string;
   onChange: (value: ComboBoxItem) => void;
+  onReset: () => void;
   placeholder?: string;
   id?: string;
   disabled?: boolean;
@@ -29,6 +30,7 @@ const SearchComboBox: FC<ComboBoxProps> = ({
   placeholder,
   id,
   disabled,
+  onReset,
 }) => {
   const [selectedValue, setSelectedValue] = useState<ComboBoxItem | null>(null);
   const [inputValue, setInputValue] = useState(''); //Want to update inputbox with current value without causing a refetch
@@ -44,6 +46,12 @@ const SearchComboBox: FC<ComboBoxProps> = ({
   };
 
   const onInputChange = (name: string) => {
+    if (name == '') {
+      setInputValue('');
+      onReset();
+      return;
+    }
+
     setInputValue(name);
     onChange({ id: -1, name }); //if value === selectedValue.name that means we forced the update in onSelect
   };
