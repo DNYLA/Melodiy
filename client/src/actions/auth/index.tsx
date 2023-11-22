@@ -1,6 +1,6 @@
-'user server';
+'use server';
 
-import { getApiRoute } from '@/lib/network/helpers';
+import { getApiRoute, getDataFromToken } from '@/lib/network/helpers';
 import { APIError } from '@/types';
 import { AuthResult } from '@/types/user';
 import axios from 'axios';
@@ -32,4 +32,16 @@ export async function loginUserAction(
 
     return { error: message };
   }
+}
+
+export async function getServerSession() {
+  'use server';
+  const token = cookies().get('token');
+  const payload = getDataFromToken(token?.value);
+
+  return {
+    token: token?.value ?? null,
+    id: payload?.sub,
+    username: payload?.name,
+  };
 }

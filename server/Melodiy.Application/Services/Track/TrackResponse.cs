@@ -1,6 +1,8 @@
 using Melodiy.Application.Services.AlbumService;
+using Melodiy.Application.Services.ArtistService;
 using Melodiy.Application.Services.ImageService;
 using Melodiy.Application.Services.UserService;
+using Melodiy.Domain.Entities;
 using Melodiy.Domain.Enums;
 
 namespace Melodiy.Application.Services.TrackService;
@@ -18,6 +20,8 @@ public class TrackResponse
     public SourceType Source { get; set; }
     public int Duration { get; set; }
     public DateTime ReleaseDate { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public List<ArtistResponse> Artists { get; set; } = new();
     public AlbumResponse? Album { get; set; }
     public UserResponse? User { get; set; }
     public ImageResponse? Image { get; set; }

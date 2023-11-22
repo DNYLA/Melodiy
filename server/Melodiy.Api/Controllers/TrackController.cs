@@ -40,7 +40,6 @@ public class TrackController : ControllerBase
         {
             throw new ApiError(HttpStatusCode.BadRequest, "Provide an ArtistId or a new artist both cannot be chosen at the same time.");
         }
-
         if (request.AlbumId != null && album != null)
         {
             throw new ApiError(HttpStatusCode.BadRequest, "Provide an AlbumId or a new album both cannot be chosen at the same time.");
@@ -51,7 +50,6 @@ public class TrackController : ControllerBase
             var createdArtist = await _artistService.Create(artist, null, user.Username, user.Id);
             request.ArtistId = createdArtist.Slug;
         }
-
         if (album != null)
         {
             var createdAlbum = await _albumService.Create(album, request.ArtistId!, 0, null, user.Username, user.Id);
@@ -59,7 +57,15 @@ public class TrackController : ControllerBase
         }
 
         var response = await _trackService.Create(request, user.Username, user.Id);
-
         return response.Adapt<GetTrackResponse>();
+    }
+
+    [Authorize]
+    [HttpGet]
+    public async Task<List<GetTrackResponse>> GetUserTracks(UserClaims user)
+    {
+        var tracks = await _trackService.GetUserTracks(user.Id);
+
+        return tracks.Adapt<List<GetTrackResponse>>();
     }
 }
