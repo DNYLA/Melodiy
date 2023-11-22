@@ -25,7 +25,7 @@ public class AlbumController : ControllerBase
     // public async Task<ActionResult<GetAlbumResponse>> Create(string title, long releaseTimestamp, [FromForm] IFormFile? image, [FromClaims] UserClaims user)
     public async Task<ActionResult<GetAlbumResponse>> Create([FromForm] CreateAlbumRequest request, [FromClaims] UserClaims user)
     {
-        var response = await _albumService.Create(request.Title, request.Timestamp, request.Image, user.Username, user.Id);
+        var response = await _albumService.Create(request.Title, request.ArtistId, request.Timestamp, request.Image, user.Username, user.Id);
         return response.Adapt<GetAlbumResponse>();
     }
 }

@@ -16,6 +16,7 @@ const Image = React.forwardRef<HTMLDivElement, ImageProps>(
     return (
       <div ref={ref}>
         <NextImage
+          style={{ objectFit: 'cover' }}
           src={src ?? 'images/default_playlist.png'}
           onError={handleError}
           {...props}

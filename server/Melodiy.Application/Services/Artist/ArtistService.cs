@@ -42,7 +42,7 @@ public class ArtistService : IArtistService
         return artist.Adapt<ArtistResponse>();
     }
 
-    public async Task<ArtistResponse> Get(string slug, bool includeImage = false)
+    public async Task<Artist> Get(string slug, bool includeImage = false)
     {
         var artists = _context.Artists.AsQueryable();
 
@@ -53,6 +53,7 @@ public class ArtistService : IArtistService
         }
         var artist = await artists.FirstOrDefaultAsync(artist => artist.Slug == slug) ?? throw new ApiError(System.Net.HttpStatusCode.NotFound, $"Artist Id {slug} not found");
 
-        return artist.Adapt<ArtistResponse>();
+        return artist;
+        // return artist.Adapt<ArtistResponse>();
     }
 }

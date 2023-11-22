@@ -3,8 +3,10 @@
 import ImagePreview from '@/components/Data/ImagePreview';
 import ActionButton from '@/components/Inputs/Buttons/ActionButton';
 import { Button } from '@/components/Inputs/Buttons/Button';
-import ComboBox, { ComboBoxItem } from '@/components/Inputs/ComboBox';
 import { Input } from '@/components/Inputs/Input';
+import SearchComboBox, {
+  ComboBoxItem,
+} from '@/components/Inputs/SearchComboBox';
 import useUploadModal from '@/hooks/modals/useUploadModal';
 import useAlbumSearch from '@/hooks/query/useAlbumSearch';
 import useArtistSearch from '@/hooks/query/useArtistSearch';
@@ -31,14 +33,16 @@ const schema = z.object({
   artist: z
     .object({
       id: z
-        .string({ required_error: 'Select an album' })
+        .string({ required_error: 'Select an Artist' })
         .min(1, 'Select an artist'),
       name: z.string().min(3, 'Artist must contain at least 3 character(s)'),
     })
     .refine((data) => data.id !== undefined, 'Select an artist!'),
   album: z
     .object({
-      id: z.string().min(1, 'Select an artist'),
+      id: z
+        .string({ required_error: 'Invalid album selected' })
+        .min(1, 'Select an Album'),
       name: z.string().min(3, 'Album must contain at least 3 character(s)'),
     })
     .optional(),
@@ -101,11 +105,10 @@ const UploadSong: React.FC = () => {
     term: artistTerm,
     loading: loadingArtist,
   } = useArtistSearch(artist.name);
-  const {
-    query: albumQuery,
-    term: albumTerm,
-    loading: loadingAlbum,
-  } = useAlbumSearch(album?.name);
+  const { query: albumQuery, loading: loadingAlbum } = useAlbumSearch(
+    album?.name,
+    artist.id
+  );
 
   useEffect(() => {
     if (!user) onClose();
@@ -136,7 +139,7 @@ const UploadSong: React.FC = () => {
 
   const onSubmit = async (data: CreateSongForm) => {
     if (!user) return;
-
+    let url = `track?&`;
     console.log(trackFile.item(0));
     console.log(coverFile);
     console.log(data);
@@ -148,10 +151,16 @@ const UploadSong: React.FC = () => {
     if (!data.artist || !data.artist.id) {
       toast.error('Invalid Artist selected');
       return;
+    } else if (data.artist.id == 'new') url += `artist=${data.artist.name}`;
+    else formData.append('artistId', data.artist.id);
+
+    if (data.album && data.album.id) {
+      if (data.album.id === 'new') url += `&album=${data.album.name}`;
+      else formData.append('albumId', data.album.id);
     }
-    formData.append('artistId', data.artist.id);
+
     try {
-      await AXIOS.post(`track`, formData);
+      await AXIOS.post(url, formData);
       // revalidatePath('/files');
       toast.success('Uploaded Song!');
     } catch (err) {
@@ -170,6 +179,8 @@ const UploadSong: React.FC = () => {
     reset();
     setCoverSrc(undefined);
   };
+
+  console.log(album);
 
   return (
     <>
@@ -208,24 +219,28 @@ const UploadSong: React.FC = () => {
           <div>
             <p className="text-xs opacity-80">{errors.artist?.id?.message}</p>
             <p className="text-xs opacity-80">{errors.artist?.message}</p>
-            <ComboBox
+            <SearchComboBox
               data={artistQuery.data}
               loading={loadingArtist}
               term={artistTerm}
               onChange={(value) => setValue('artist', value)}
-              onReset={() => setValue('artist', { id: undefined, name: '' })}
+              // onReset={() => setValue('artist', { id: undefined, name: '' })}
+              onReset={() => resetField('artist')}
               placeholder="Artist"
             />
           </div>
 
           <div>
             <p className="text-xs opacity-80">{errors.album?.id?.message}</p>
-            <ComboBox
+            <SearchComboBox
               data={convertToComboItem(albumQuery.data)}
               loading={loadingAlbum}
-              term={albumTerm}
+              term={album?.name ?? ''}
               onChange={(value) => setValue('album', value)}
-              onReset={() => resetField('album')}
+              onReset={() => {
+                console.log('resetting');
+                resetField('album');
+              }}
               disabled={isSubmitting || !artist || !artist.id}
               placeholder={!artist ? 'Select an artist first' : 'Album'}
             />
@@ -233,7 +248,7 @@ const UploadSong: React.FC = () => {
 
           <div>
             <p className="text-xs opacity-80">{errors.albumArtist?.message}</p>
-            <ComboBox
+            <SearchComboBox
               // disabled={isSubmitting || !album || album.id == -1}
               disabled={true}
               data={artistQuery.data}

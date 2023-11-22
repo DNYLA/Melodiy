@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 const MIN_SEARCH_LENGTH = 3;
 
-export default function useAlbumSearch(term = '') {
+export default function useAlbumSearch(term = '', artistId?: string) {
   const [loading, setLoading] = useState(false);
   const debouncedTerm = useDebounce(term, 250);
   const queryClient = useQueryClient();
@@ -19,19 +19,25 @@ export default function useAlbumSearch(term = '') {
       { id: user?.id, value: debouncedTerm.toLowerCase() },
     ],
     queryFn: async () => {
-      const { data } = await AXIOS.get<SearchResult>(
-        `search/me?term=${debouncedTerm}&type=${SearchType.Album}`
-      );
+      let query = `search/me?term=${debouncedTerm}&type=${SearchType.Album}`;
+      if (artistId) query += `&artistId=${artistId}`;
+
+      const { data } = await AXIOS.get<SearchResult>(query);
       return data.albums;
     },
     // staleTime: 1000 * 15, //Cached for 15 seconds
-    enabled: debouncedTerm.length >= MIN_SEARCH_LENGTH && !!user,
+    enabled:
+      debouncedTerm.length >= MIN_SEARCH_LENGTH && !!user && artistId !== 'new',
   });
 
   useEffect(() => {
+    console.log(term);
     if (term.length < MIN_SEARCH_LENGTH) {
       setLoading(false); //Empty query has priorty as no loading will ever happen
-      queryClient.setQueryData(['search-artist', { value: term }], []);
+      queryClient.setQueryData(
+        ['search-album', { id: user?.id, value: term }],
+        []
+      );
       return;
     }
 
@@ -43,5 +49,5 @@ export default function useAlbumSearch(term = '') {
     }
   }, [query.isLoading, term, debouncedTerm]);
 
-  return { query, term, loading };
+  return { query, loading };
 }

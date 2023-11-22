@@ -1,4 +1,4 @@
-import { ComboBoxItem } from '@/components/Inputs/ComboBox';
+import { ComboBoxItem } from '@/components/Inputs/SearchComboBox';
 import { Album } from '@/types/playlist';
 import clsx, { ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';

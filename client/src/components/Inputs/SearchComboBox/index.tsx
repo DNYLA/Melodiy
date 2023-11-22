@@ -34,6 +34,7 @@ const SearchComboBox: FC<ComboBoxProps> = ({
   const [inputValue, setInputValue] = useState(''); //Want to update inputbox with current value without causing a refetch
 
   const onSelect = (selected: ComboBoxItem | null) => {
+    console.log(selected);
     if (!selected) {
       onReset();
       setInputValue('');
@@ -46,6 +47,7 @@ const SearchComboBox: FC<ComboBoxProps> = ({
   };
 
   const onInputChange = (name: string) => {
+    console.log(name);
     if (name == '') {
       console.log('resetting');
       setInputValue('');
@@ -72,6 +74,7 @@ const SearchComboBox: FC<ComboBoxProps> = ({
       selectedValue.name !== inputValue &&
       inputValue !== ''
     ) {
+      console.log('cyhage');
       setInputValue(selectedValue.name);
       onChange(selectedValue);
     }
@@ -79,6 +82,7 @@ const SearchComboBox: FC<ComboBoxProps> = ({
 
   useEffect(() => {
     setInputValue(term);
+    console.log(term);
   }, [term]);
 
   return (
@@ -178,6 +182,19 @@ const SearchComboBox: FC<ComboBoxProps> = ({
                   )}
                 </Combobox.Option>
               ))
+            )}
+            {inputValue.length >= 3 && (
+              <Combobox.Option
+                key={'new'}
+                value={{ id: 'new', name: inputValue }}
+                className={({ active, selected }) =>
+                  `flex cursor-default select-none flex-row px-3 py-2 pr-4 ${
+                    selected && !active ? 'bg-neutral-600' : ''
+                  } ${active ? 'bg-primary text-white' : 'text-white'}`
+                }
+              >
+                <span>Create new {inputValue}</span>
+              </Combobox.Option>
             )}
           </Combobox.Options>
         </Transition>

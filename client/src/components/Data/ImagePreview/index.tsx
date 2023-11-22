@@ -40,6 +40,8 @@ const ImagePreview: FC<ImagePreviewProps> = ({
       />
       <Image
         className={twMerge('h-[150px] w-[150px] rounded', className)}
+        placeholder="blur"
+        blurDataURL="/images/default_playlist.png"
         src={src ?? '/images/default_playlist.png'}
         alt={alt}
         width={150}

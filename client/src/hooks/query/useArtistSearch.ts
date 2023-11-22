@@ -30,13 +30,6 @@ export default function useArtistSearch(term = '') {
       queryClient.setQueryData(['search-artist', { value: term }], []);
       return;
     }
-
-    //We want to simulate loading when term !== debounceTerm even though we are not fetching anything
-    if (query.isLoading || term !== debouncedTerm) {
-      setLoading(true);
-    } else {
-      setLoading(false);
-    }
   }, [query.isLoading, term, debouncedTerm]);
 
   return { query, term, loading };

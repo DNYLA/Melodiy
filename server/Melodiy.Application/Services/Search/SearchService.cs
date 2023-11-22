@@ -25,7 +25,7 @@ public class SearchService : ISearchService
 
     public async Task<List<AlbumResponse>> SearchAlbumsCreatedByUser(string term, string? artistSlug, int userId, int limit = 5)
     {
-        ArtistResponse? artist = null;
+        Artist? artist = null;
         term = term.ToLower();
         if (artistSlug != null)
         {
@@ -44,7 +44,7 @@ public class SearchService : ISearchService
                 : query.Where(album => album.UserId == userId && album.Title.ToLower().Contains(curTerm));
         }
 
-        var albums = await query.OrderBy(a => a.Title).Take(limit).ToListAsync();
+        var albums = await query.OrderBy(a => a.Title).Include(a => a.Artists).Include(a => a.Image).Take(limit).ToListAsync();
 
         Console.WriteLine(albums.Count);
 
@@ -67,7 +67,7 @@ public class SearchService : ISearchService
             query = query.Where(artist => artist.Name.ToLower().Contains(curTerm));
         }
 
-        var artists = await query.OrderBy(a => a.Name).Take(limit).ToListAsync();
+        var artists = await query.OrderBy(a => a.Name).Include(a => a.Image).Take(limit).ToListAsync();
         var mappedAlbums = artists.Adapt<List<ArtistResponse>>();
         var sortedAlbums = SortList(mappedAlbums, album => album.Name, term).ToList();
 
