@@ -38,9 +38,10 @@ export async function getServerSession() {
   'use server';
   const token = cookies().get('token');
   const payload = getDataFromToken(token?.value);
+  if (!token || !payload) return null;
 
   return {
-    token: token?.value ?? null,
+    token: token.value,
     id: payload?.sub,
     username: payload?.name,
   };

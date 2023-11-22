@@ -1,4 +1,5 @@
 import { ComboBoxItem } from '@/components/Inputs/SearchComboBox';
+import { CollectionType } from '@/types/collections';
 import { Album } from '@/types/playlist';
 import clsx, { ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -29,3 +30,16 @@ export const convertToComboItem = (albums?: Album[]) => {
 
 export const titleCase = (text: string) =>
   text.charAt(0).toUpperCase() + text.slice(1);
+
+export const collectionTypeToString = (type: CollectionType) => {
+  switch (type) {
+    case CollectionType.Album:
+      return 'Album';
+    case CollectionType.Files:
+      return 'Files';
+    case CollectionType.Playlist:
+      return 'Public Playlist';
+    default:
+      return '';
+  }
+};

@@ -24,3 +24,25 @@ export interface SearchResult {
   artists: Artist[];
   // tracks: Track[]
 }
+
+export type Track = {
+  id: string;
+  title: string;
+  duration: number;
+  releaseDate: string;
+  createdAt: string;
+  artists: ArtistPreview[];
+  album: AlbumPreview;
+  user: User;
+  image: string;
+};
+
+export type ArtistPreview = {
+  id: string;
+  name: string;
+};
+
+export type AlbumPreview = {
+  id: string;
+  title: string;
+};

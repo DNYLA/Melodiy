@@ -8,8 +8,6 @@ public class GetTrackResponse
 {
     public string Id { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
-    public int Position { get; set; }
-    public bool IsPublic { get; set; }
     public int Duration { get; set; }
     public DateTime ReleaseDate { get; set; }
     public DateTime CreatedAt { get; set; }
