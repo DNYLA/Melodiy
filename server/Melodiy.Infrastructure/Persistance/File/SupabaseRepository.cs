@@ -27,7 +27,6 @@ public class SupabaseRepository : IFileRepository
 
     public async Task<Image> UploadImage(IFormFile file, string folder, int userId)
     {
-        Console.WriteLine("Uploading Image");
         string bucket = GetBucketName(StorageBucket.Images);
 
         using MemoryStream memoryStream = new();
@@ -80,9 +79,28 @@ public class SupabaseRepository : IFileRepository
         return image;
     }
 
-    public Task<string> UploadTrack(IFormFile file, string username, bool isPublic)
+    public async Task<string> UploadAudio(IFormFile file, string folder, bool isPublic)
     {
-        throw new NotImplementedException();
+        StorageBucket bucketType = isPublic ? StorageBucket.TrackPublic : StorageBucket.TracksPrivate;
+        string bucket = GetBucketName(bucketType);
+
+        using MemoryStream memoryStream = new();
+        await file.CopyToAsync(memoryStream);
+
+        string fileHash = _hashService.HashFile(memoryStream);
+        string fileName = fileHash + Path.GetExtension(file.FileName);
+        string supabasePath = $"{folder}/{fileName}";
+
+        if (await IsDuplicate(bucketType, supabasePath))
+        {
+            return supabasePath;
+        }
+
+        string res = await _client.Storage
+            .From(bucket)
+            .Upload(memoryStream.ToArray(), supabasePath);
+
+        return supabasePath;
     }
 
     public Task<bool> DeleteFile(StorageBucket bucket, string path)

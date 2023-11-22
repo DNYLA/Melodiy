@@ -1,3 +1,4 @@
+using Melodiy.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 
 namespace Melodiy.Application.Services.ArtistService;

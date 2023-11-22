@@ -11,12 +11,16 @@ import useArtistSearch from '@/hooks/query/useArtistSearch';
 import useFilePreview from '@/hooks/useFilePreview';
 import useSession from '@/hooks/useSession';
 import useTrackTags from '@/hooks/useTrackTags';
-import { convertToComboItem } from '@/lib/utils';
+import { AXIOS } from '@/lib/network';
+import { addFormFile, convertToComboItem } from '@/lib/utils';
+import { APIError } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Dialog from '@radix-ui/react-dialog';
+import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { z } from 'zod';
 
 const schema = z.object({
@@ -131,22 +135,30 @@ const UploadSong: React.FC = () => {
     useFilePreview(coverFile);
 
   const onSubmit = async (data: CreateSongForm) => {
-    console.log('here');
     if (!user) return;
 
     console.log(trackFile.item(0));
     console.log(coverFile);
     console.log(data);
 
-    // const formData = new FormData();
-    // addFormFile(formData, 'image', coverFile);
-    // addFormFile(formData, 'track', trackFile);
-
-    // await AXIOS.post(`song`, formData);
-
-    // if (!session?.user) return;
-    // if (!imageFileRef.current?.files || imageFileRef.current.files.length === 0)
-    //   return;
+    const formData = new FormData();
+    addFormFile(formData, 'image', coverFile);
+    addFormFile(formData, 'audio', trackFile);
+    formData.append('title', data.title);
+    if (!data.artist || !data.artist.id) {
+      toast.error('Invalid Artist selected');
+      return;
+    }
+    formData.append('artistId', data.artist.id);
+    try {
+      await AXIOS.post(`track`, formData);
+      // revalidatePath('/files');
+      toast.success('Uploaded Song!');
+    } catch (err) {
+      console.log(err);
+      const axiosErr = err as AxiosError<APIError, any>;
+      toast.error(axiosErr.response?.data.error ?? 'Unable to create playlist');
+    }
   };
 
   const resetCover = () => {
@@ -200,15 +212,8 @@ const UploadSong: React.FC = () => {
               data={artistQuery.data}
               loading={loadingArtist}
               term={artistTerm}
-              onChange={(value) => {
-                console.log('tets');
-                setValue('artist', value);
-              }}
-              onReset={() => {
-                console.log('here');
-                // resetField('artist');
-                setValue('artist', { id: undefined, name: '' });
-              }}
+              onChange={(value) => setValue('artist', value)}
+              onReset={() => setValue('artist', { id: undefined, name: '' })}
               placeholder="Artist"
             />
           </div>
@@ -219,15 +224,8 @@ const UploadSong: React.FC = () => {
               data={convertToComboItem(albumQuery.data)}
               loading={loadingAlbum}
               term={albumTerm}
-              onChange={(value) => {
-                console.log('tets');
-                setValue('album', value);
-              }}
-              onReset={() => {
-                console.log('Resetting');
-                resetField('album');
-                setValue('title', 'Die Young');
-              }}
+              onChange={(value) => setValue('album', value)}
+              onReset={() => resetField('album')}
               disabled={isSubmitting || !artist || !artist.id}
               placeholder={!artist ? 'Select an artist first' : 'Album'}
             />
@@ -242,10 +240,7 @@ const UploadSong: React.FC = () => {
               loading={loadingArtist}
               term={artistTerm}
               onChange={(value) => setValue('artist', value)}
-              onReset={() => {
-                console.log('Resetting');
-                resetField('artist');
-              }}
+              onReset={() => resetField('artist')}
               placeholder={!album ? 'Select an album first' : 'Album Artist'}
             />
           </div>

@@ -7,9 +7,11 @@ using Melodiy.Application;
 using Melodiy.Application.Services.AlbumService;
 using Melodiy.Application.Services.ArtistService;
 using Melodiy.Application.Services.Playlist;
+using Melodiy.Application.Services.TrackService;
 using Melodiy.Contracts.Album;
 using Melodiy.Contracts.Artist;
 using Melodiy.Contracts.Playlist;
+using Melodiy.Contracts.Track;
 using Melodiy.Infrastructure;
 using Microsoft.Net.Http.Headers;
 
@@ -76,6 +78,10 @@ static void ConfigureMapster()
         .Map(dest => dest.Image, src => src.Image != null ? src.Image.Url : null);
 
     TypeAdapterConfig<ArtistResponse, GetArtistResponse>.NewConfig()
-    .Map(dest => dest.Id, src => src.Slug)
-    .Map(dest => dest.Image, src => src.Image != null ? src.Image.Url : null);
+        .Map(dest => dest.Id, src => src.Slug)
+        .Map(dest => dest.Image, src => src.Image != null ? src.Image.Url : null);
+
+    TypeAdapterConfig<TrackResponse, GetTrackResponse>.NewConfig()
+        .Map(dest => dest.Id, src => src.Slug)
+        .Map(dest => dest.Image, src => src.Image != null ? src.Image.Url : null);
 }

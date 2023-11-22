@@ -80,7 +80,6 @@ const CreatePlaylist: FC<ICreatePlaylist> = () => {
       resetCover();
       onClose();
     } catch (err) {
-      console.log(err);
       const axiosErr = err as AxiosError<APIError, Playlist>;
       toast.error(axiosErr.response?.data.error ?? 'Unable to create playlist');
     }

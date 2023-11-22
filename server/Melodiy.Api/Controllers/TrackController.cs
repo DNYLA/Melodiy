@@ -26,7 +26,7 @@ public class TrackController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<GetTrackResponse>> Create([FromForm] UploadTrackRequest request, [FromClaims] UserClaims user)
     {
-        var response = await _trackService.UploadSong(request, user.Username, user.Id);
+        var response = await _trackService.Create(request, user.Username, user.Id);
 
         return response.Adapt<GetTrackResponse>();
     }
