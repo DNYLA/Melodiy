@@ -4,6 +4,7 @@ using Melodiy.Application.Common.Interfaces.Persistance;
 using Melodiy.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using ATL;
+using Melodiy.Application.Common.Enums;
 
 namespace Melodiy.Application.Services.FileService;
 
@@ -58,6 +59,11 @@ public class FileService : IFileService
 
         ATL.Track track = new(memoryStream);
         return track.DurationMs;
+    }
+
+    public async Task<string> GetUrl(string path, StorageBucket bucket)
+    {
+        return await _fileRepository.GetUrl(path, bucket);
     }
 
     private static bool IsValidImageContentType(string contentType)

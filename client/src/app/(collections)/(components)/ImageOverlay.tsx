@@ -27,16 +27,19 @@ const ImageOverlay: FC<ImageOverlayProps> = ({ src }) => {
         />
         <span className="text-md">Select Photo</span>
       </div>
-      <Image
-        src={src ?? 'images/default_playlist.png'}
-        onClick={changeFilter}
-        draggable={false}
-        className={twMerge('z-5 h-[300px] w-[300px] rounded-md', filter)}
-        priority={true}
-        width={300}
-        height={300}
-        alt={'Collection cover'}
-      />
+      <div className="h-[300px] w-[300px]">
+        <Image
+          src={src ?? 'images/default_playlist.png'}
+          onClick={changeFilter}
+          draggable={false}
+          className={twMerge('z-5 rounded-md', filter)}
+          priority={true}
+          width={300}
+          height={300}
+          style={{ objectFit: 'contain' }}
+          alt={'Collection cover'}
+        />
+      </div>
     </div>
   );
 };

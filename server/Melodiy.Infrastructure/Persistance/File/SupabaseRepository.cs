@@ -1,5 +1,7 @@
+using System.Net;
 using System.Runtime.InteropServices;
 using Melodiy.Application.Common.Enums;
+using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Common.Interfaces.Persistance;
 using Melodiy.Application.Common.Interfaces.Services;
 using Melodiy.Domain.Entities;
@@ -8,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Supabase;
+using Supabase.Storage.Exceptions;
 
 namespace Melodiy.Infrastructure.Persistance.File;
 
@@ -108,9 +111,26 @@ public class SupabaseRepository : IFileRepository
         throw new NotImplementedException();
     }
 
-    public Task<string> GetUrl(StorageBucket bucket, string path)
+    public async Task<string> GetUrl(string path, StorageBucket bucket)
     {
-        throw new NotImplementedException();
+        if (bucket != StorageBucket.TracksPrivate)
+        {
+            var url = $"{_supabaseSettings.Url}/storage/v1/object/public";
+            var fileUrl = $"{url}/{GetBucketName(bucket)}/{path}";
+            return fileUrl;
+        }
+
+        string bucketName = GetBucketName(bucket);
+        try
+        {
+            return await _client.Storage.From(bucketName).CreateSignedUrl(path, 120);
+        }
+        catch (SupabaseStorageException ex)
+        {
+            Console.WriteLine(ex.StatusCode);
+            return string.Empty;
+        }
+
     }
 
     private static string GetBucketName(StorageBucket bucket)

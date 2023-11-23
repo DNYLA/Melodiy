@@ -1,5 +1,6 @@
 
 using System.Net;
+using Melodiy.Application.Common.Enums;
 using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Common.Interfaces.Persistance;
 using Melodiy.Application.Common.Interfaces.Services;
@@ -88,9 +89,37 @@ public class TrackService : ITrackService
             .OrderBy(t => t.CreatedAt)
             .ToListAsync();
 
-        Console.WriteLine(tracks[0].Title);
-        Console.WriteLine(tracks[0].TrackArtists[0].Artist.Name);
-
         return tracks.Adapt<List<TrackResponse>>();
+    }
+
+    public async Task<TrackResponse> Get(string slug, int? userId, bool includeImage = true)
+    {
+        var tracks = _context.Tracks.AsQueryable();
+
+        if (includeImage)
+        {
+
+            tracks = tracks.Include(artist => artist.Image);
+        }
+        var track = await tracks
+            .Include(t => t.User)
+            .Include(t => t.TrackArtists)
+            .ThenInclude(t => t.Artist)
+            .Include(t => t.Album)
+            .FirstOrDefaultAsync(track => track.Slug == slug) ?? throw new ApiError(HttpStatusCode.NotFound, $"Track Id {slug} not found");
+
+        if (!track.IsPublic && track.UserId != userId)
+        {
+            throw new ApiError(HttpStatusCode.Unauthorized, $"{slug} is a private track.");
+        }
+        var bucket = track.IsPublic ? StorageBucket.TrackPublic : StorageBucket.TracksPrivate;
+
+        if (track.FilePath == null)
+        {
+            throw new ApiError(HttpStatusCode.InternalServerError, $"Unable to find track {slug}");
+        }
+
+        track.FilePath = await _fileService.GetUrl(track.FilePath, bucket);
+        return track.Adapt<TrackResponse>();
     }
 }

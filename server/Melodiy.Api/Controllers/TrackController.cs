@@ -68,4 +68,12 @@ public class TrackController : ControllerBase
 
         return tracks.Adapt<List<GetTrackResponse>>();
     }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<GetFullTrackResponse>> Get(string id, UserClaims? user)
+    {
+        var response = await _trackService.Get(id, user?.Id ?? null);
+
+        return response.Adapt<GetFullTrackResponse>();
+    }
 }

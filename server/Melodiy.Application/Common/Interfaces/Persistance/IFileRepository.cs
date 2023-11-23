@@ -11,5 +11,5 @@ public interface IFileRepository
     Task<bool> DeleteFile(StorageBucket bucket, string path);
     // Task<string> GetSignedUrl(StorageBucket bucket, string path, int seconds = 150);
     // Task<string> GetPublicUrl(StorageBucket bucket, string path);
-    Task<string> GetUrl(StorageBucket bucket, string path);
+    Task<string> GetUrl(string path, StorageBucket bucket);
 }

@@ -4,4 +4,5 @@ public interface ITrackService
 {
     Task<TrackResponse> Create(UploadTrackRequest request, string username, int userId);
     Task<List<TrackResponse>> GetUserTracks(int userId);
+    Task<TrackResponse> Get(string slug, int? userId, bool includeImage = true);
 }

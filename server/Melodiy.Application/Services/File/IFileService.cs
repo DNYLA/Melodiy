@@ -1,3 +1,4 @@
+using Melodiy.Application.Common.Enums;
 using Melodiy.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 
@@ -9,4 +10,5 @@ public interface IFileService
     Task<string> UploadAudio(IFormFile song, string username, bool isPublic);
     Task<bool> DeleteFile(string bucket, string path);
     Task<double> GetAudioDuration(IFormFile file);
+    Task<string> GetUrl(string path, StorageBucket bucket);
 }

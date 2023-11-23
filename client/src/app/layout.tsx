@@ -1,4 +1,5 @@
 import Sidebar from '@/components/Navigation/Sidebar';
+import Player from '@/components/Utils/Player';
 import Providers from '@/providers';
 import type { Metadata } from 'next';
 import { Figtree } from 'next/font/google';
@@ -23,6 +24,7 @@ export default function RootLayout({
       <body className={font.className}>
         <Providers>
           <Sidebar>{children}</Sidebar>
+          <Player />
         </Providers>
       </body>
     </html>

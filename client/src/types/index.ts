@@ -32,9 +32,13 @@ export type Track = {
   releaseDate: string;
   createdAt: string;
   artists: ArtistPreview[];
-  album: AlbumPreview;
+  album?: AlbumPreview;
   user: User;
   image: string;
+};
+
+export type FullTrack = Track & {
+  path: string;
 };
 
 export type ArtistPreview = {

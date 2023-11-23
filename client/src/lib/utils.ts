@@ -43,3 +43,16 @@ export const collectionTypeToString = (type: CollectionType) => {
       return '';
   }
 };
+
+export const getDefaultImage = () => '/images/default_playlist.png';
+
+export function msToMinuteSeconds(duration: number) {
+  let minutes = Math.floor(duration / 60000);
+  let seconds = Number.parseInt(((duration % 60000) / 1000).toFixed(0));
+  if (seconds == 60) {
+    minutes += 1;
+    seconds = 0;
+  }
+
+  return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+}
