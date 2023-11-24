@@ -1,8 +1,10 @@
+import usePlayer from '@/hooks/stores/usePlayer';
 import { getDefaultImage, msToMinuteSeconds } from '@/lib/utils';
 import { Track } from '@/types';
 import { ColumnHelper, createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useRouter } from 'next/navigation';
 import CounterCell from './Cells/Counter';
 import TitleCell from './Cells/Title';
 dayjs.extend(relativeTime);
@@ -20,7 +22,11 @@ export class ColumnBuilder {
     this.columns = [];
   }
 
-  AddPosition(isActiveTrack: (id: string) => boolean): ColumnBuilder {
+  AddPosition(collectionId: string): ColumnBuilder {
+    const { active } = usePlayer();
+    const isActiveTrack = (id: string) =>
+      active?.id == id && active.collectionId == collectionId;
+
     const col = this.columnHelper.accessor((_, i) => i + 1, {
       header: '#',
       cell: ({ getValue, row }) => (
@@ -36,7 +42,11 @@ export class ColumnBuilder {
     return this;
   }
 
-  AddTitle(isActiveTrack: (id: string) => boolean): ColumnBuilder {
+  AddTitle(collectionId: string): ColumnBuilder {
+    const { active } = usePlayer();
+    const isActiveTrack = (id: string) =>
+      active?.id == id && active.collectionId == collectionId;
+
     const col = this.columnHelper.accessor(
       (row) => {
         return {
@@ -64,10 +74,18 @@ export class ColumnBuilder {
   }
 
   AddAlbum(): ColumnBuilder {
+    const router = useRouter();
     const col = this.columnHelper.accessor('album', {
       header: 'Album',
       cell: ({ getValue }) => (
-        <span className="cursor-pointer text-[15px] hover:underline">
+        <span
+          onClick={(e) => {
+            if (!getValue()) return;
+            e.stopPropagation();
+            router.push(`/album/${getValue()?.id}`);
+          }}
+          className="cursor-pointer text-[15px] hover:underline"
+        >
           {getValue()?.title}
         </span>
       ),

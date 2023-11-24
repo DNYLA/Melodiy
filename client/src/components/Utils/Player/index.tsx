@@ -8,15 +8,13 @@ import PlayerContent from './content';
 
 function Player() {
   const player = usePlayer();
-  const { data, isLoading } = useGetTrack(player.active?.id);
+  const { track } = useGetTrack(player.active?.id);
 
-  if (!player.active) return <></>;
-  if (!data || !data.path || isLoading) return <></>;
+  if (!track || !track.path || !player.active) return null;
 
   return (
     <div className="fixed bottom-0 h-[80px] w-full bg-[#1b1818] px-4 py-2">
-      {/* <PlayerContent key={songUrl} song={song} songUrl={songUrl} /> */}
-      <PlayerContent key={data.id} track={data} />
+      <PlayerContent key={track.id} track={track} />
     </div>
   );
 }

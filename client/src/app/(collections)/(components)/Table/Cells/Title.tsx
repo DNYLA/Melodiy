@@ -18,6 +18,15 @@ const TitleCell: React.FC<ITitleCell> = ({
   isActive,
 }) => {
   const router = useRouter();
+
+  const handleRedirect = (
+    e: React.MouseEvent<HTMLSpanElement, MouseEvent>,
+    id: string
+  ) => {
+    e.stopPropagation();
+    router.push(`/artist/${id}`);
+  };
+
   return (
     <div className="flex gap-x-2">
       <Image
@@ -32,10 +41,7 @@ const TitleCell: React.FC<ITitleCell> = ({
       />
       <div className="flex flex-col">
         <span
-          className={twMerge(
-            'cursor-pointer text-[15px] hover:underline',
-            isActive && 'text-primary-light'
-          )}
+          className={twMerge('text-[15px]', isActive && 'text-primary-light')}
         >
           {title}
         </span>
@@ -43,7 +49,7 @@ const TitleCell: React.FC<ITitleCell> = ({
           {artists.map((artist, i) => (
             <span
               key={artist.id}
-              onClick={() => router.push(`/artist/${artist.id}`)}
+              onClick={(e) => handleRedirect(e, artist.id)}
               className="cursor-pointer text-sm text-inactive hover:underline"
             >
               {artist.name}

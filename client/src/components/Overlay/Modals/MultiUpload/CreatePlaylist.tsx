@@ -2,6 +2,7 @@
 import ImagePreview from '@/components/Data/ImagePreview';
 import ActionButton from '@/components/Inputs/Buttons/ActionButton';
 import { Input } from '@/components/Inputs/Input';
+import Switch from '@/components/Inputs/Switch';
 import useUploadModal from '@/hooks/modals/useUploadModal';
 import useFilePreview from '@/hooks/useFilePreview';
 import useSession from '@/hooks/useSession';
@@ -23,13 +24,13 @@ const schema = z.object({
     .string()
     .min(1, 'Title must contain at least 1 character(s)')
     .max(100, 'Title must contain less than 100 character(s)'),
-  isPublic: z.boolean(),
+  public: z.boolean().default(true),
 });
 
 interface CreatePlaylistForm {
   title: string;
   cover?: FileList;
-  isPublic: boolean;
+  public: boolean;
 }
 
 export interface ICreatePlaylist {}
@@ -48,11 +49,12 @@ const CreatePlaylist: FC<ICreatePlaylist> = () => {
   } = useForm<CreatePlaylistForm>({
     defaultValues: {
       title: '',
-      isPublic: true,
+      public: true,
     },
     resolver: zodResolver(schema),
   });
   const coverFile = watch('cover');
+  const isPublic = watch('public');
   const { setImgSrc: setCoverSrc, imgSrc: coverSrc } =
     useFilePreview(coverFile);
 
@@ -69,7 +71,7 @@ const CreatePlaylist: FC<ICreatePlaylist> = () => {
     try {
       console.log(formData.has('image'));
       const { data: res } = await AXIOS.post<Playlist>(
-        `playlist?title=${data.title}`,
+        `playlist?title=${data.title}&public=${data.public}`,
         formData.has('image') ? formData : null
       );
 
@@ -121,6 +123,16 @@ const CreatePlaylist: FC<ICreatePlaylist> = () => {
             id="username"
             placeholder="New playlist name"
           />
+        </div>
+
+        <div className="flex flex-col">
+          <Switch
+            value={isPublic}
+            onChange={(value) => setValue('public', value)}
+            // {...register('public')}
+          >
+            Public
+          </Switch>
         </div>
 
         <div className="flex flex-col">

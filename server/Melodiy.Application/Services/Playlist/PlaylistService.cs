@@ -34,6 +34,7 @@ public class PlaylistService : IPlaylistService
             Title = title,
             Image = uploadedImage,
             User = _context.Users.Find(userId)!,
+            IsPublic = isPublic
         };
 
         _context.Playlists.Add(playlist);

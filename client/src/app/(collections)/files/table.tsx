@@ -11,14 +11,16 @@ interface FilesTableProps {
   data: Track[];
 }
 
+const FILES_COLLECTION_ID = 'files';
+
 export default function FilesTable({ data }: FilesTableProps) {
   const { active } = usePlayer();
   const isActiveTrack = (id: string) =>
     active?.id == id && active.collectionId == 'files';
 
   const columns = new ColumnBuilder()
-    .AddPosition(isActiveTrack)
-    .AddTitle(isActiveTrack)
+    .AddPosition(FILES_COLLECTION_ID)
+    .AddTitle(FILES_COLLECTION_ID)
     .AddAlbum()
     .AddDate('Date Added')
     .AddDuration()
@@ -28,7 +30,7 @@ export default function FilesTable({ data }: FilesTableProps) {
     <TrackTable
       data={data}
       columns={columns}
-      collectionId="files"
+      collectionId={FILES_COLLECTION_ID}
       type={CollectionType.Files}
     />
   );
