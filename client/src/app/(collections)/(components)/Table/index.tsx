@@ -60,7 +60,7 @@ const TrackTable: FC<TrackTableProps> = ({
   };
 
   return (
-    <table className="w-full text-white">
+    <table className="w-full text-white ">
       <thead className="">
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>

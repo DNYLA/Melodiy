@@ -11,6 +11,8 @@ import { twMerge } from 'tailwind-merge';
 // import PlaylistHeader from './PlaylistTitle';
 // import SidebarItem from './SidebarNavItem';
 import useResize from '@/hooks/useResize';
+import { ScrollContext } from '@/providers/ScrollProvider';
+import { useScroll } from 'framer-motion';
 import Navbar from '../Navbar';
 import Library from './Data/Library';
 import NavItem from './NavItem';
@@ -19,7 +21,19 @@ interface SidebarProps {
   children: React.ReactNode;
 }
 const Sidebar = ({ children }: SidebarProps) => {
-  // const player = usePlayer();
+  const pageRef = useRef(null);
+  const { scrollX, scrollY, scrollXProgress, scrollYProgress } = useScroll({
+    container: pageRef,
+  });
+
+  // useMotionValueEvent(scrollY, 'change', (latest) => {
+  //   console.log('Page scroll: ', latest);
+  // });
+
+  // useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+  //   console.log('Page scroll Progress: ', latest);
+  // });
+
   const pathname = usePathname();
   const routes = useMemo(
     () => [
@@ -88,10 +102,16 @@ const Sidebar = ({ children }: SidebarProps) => {
         ></div>
       </div>
 
-      <main className="h-full flex-1 overflow-y-auto pb-2">
-        <Navbar />
-        <div className="w-full">{children}</div>
-      </main>
+      <ScrollContext.Provider
+        value={{ scrollX, scrollY, scrollXProgress, scrollYProgress }}
+      >
+        <main className="h-full flex-1 overflow-y-auto pb-2" ref={pageRef}>
+          <Navbar />
+
+          <div className="w-full">{children}</div>
+          {/* </ScrollContext.Provider> */}
+        </main>
+      </ScrollContext.Provider>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 'use client';
-import Image from '@/components/Data/Image';
-import { FC, useEffect, useState } from 'react';
+import { ScrollContext } from '@/providers/ScrollProvider';
+import { motion, useTransform } from 'framer-motion';
+import { FC, useContext, useEffect, useState } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
 import { twMerge } from 'tailwind-merge';
 
@@ -10,6 +11,9 @@ export interface ImageOverlayProps {
 
 const ImageOverlay: FC<ImageOverlayProps> = ({ src }) => {
   const [filter, setFilter] = useState('');
+  const { scrollY, scrollYProgress } = useContext(ScrollContext);
+  const imageScale = useTransform(scrollY!, [50, 375], ['300px', '150px']);
+  const visible = useTransform(scrollY!, [50, 375], [true, false]);
 
   useEffect(() => {
     setFilter(randomImageFilter());
@@ -18,8 +22,16 @@ const ImageOverlay: FC<ImageOverlayProps> = ({ src }) => {
   const changeFilter = () => {
     setFilter(randomImageFilter(filter));
   };
+
+  useEffect(() => {
+    console.log(scrollY?.get());
+  }, [scrollY]);
+
   return (
-    <div className="group relative cursor-pointer">
+    <motion.div
+      style={{ height: imageScale }}
+      className="group relative cursor-pointer"
+    >
       <div className="absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 transform cursor-pointer flex-col place-items-center text-white group-hover:flex ">
         <FiEdit2
           size={30}
@@ -27,20 +39,26 @@ const ImageOverlay: FC<ImageOverlayProps> = ({ src }) => {
         />
         <span className="text-md">Select Photo</span>
       </div>
-      <div className="h-[300px] w-[300px]">
-        <Image
-          src={src ?? 'images/default_playlist.png'}
+      <div className="">
+        <motion.img
+          src={src ?? '/mages/default_playlist.png'}
           onClick={changeFilter}
           draggable={false}
           className={twMerge('z-5 rounded-md', filter)}
-          priority={true}
-          width={300}
-          height={300}
-          style={{ objectFit: 'contain' }}
+          // priority={true}
+          // width={300}
+          // height={300}
+          // width={imageScale.get()}
+          // height={imageScale.get()}
+          style={{
+            objectFit: 'contain',
+            height: imageScale,
+            width: imageScale,
+          }}
           alt={'Collection cover'}
         />
       </div>
-    </div>
+    </motion.div>
   );
 };
 

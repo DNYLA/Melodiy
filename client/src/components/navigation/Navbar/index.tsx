@@ -20,7 +20,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="sticky top-0 z-50 flex w-full flex-row justify-between bg-base-background px-2 py-3">
+    <div className="fixed top-0 z-50 flex h-[70px] w-full flex-row justify-between px-2 py-3">
       <div className="flex flex-row items-center gap-x-3">
         <div className="flex flex-row gap-x-3 text-inactive">
           <AiOutlineLeft
