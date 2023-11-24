@@ -42,15 +42,19 @@ const TrackMedia: React.FC<TrackMediaProps> = ({ data, onClick }) => {
         />
       </div>
       <div className="flex flex-col gap-y-1 overflow-hidden">
-        <p className="truncate text-white hover:underline">{data.title}</p>
-        {data.artists.map(({ id, name }) => (
-          <p
-            onClick={() => router.push(`/artist/${id}`)}
-            className="truncate text-sm text-neutral-400 hover:underline"
-          >
-            {name}
-          </p>
-        ))}
+        <p className="flex truncate text-white hover:underline">{data.title}</p>
+        <div className="flex gap-x-1">
+          {data.artists.map(({ id, name }, i) => (
+            <span
+              key={id}
+              onClick={() => router.push(`/artist/${id}`)}
+              className="cursor-pointer text-sm text-inactive hover:underline"
+            >
+              {name}
+              {i !== data.artists.length - 1 ? ',' : ''}
+            </span>
+          ))}
+        </div>
       </div>
     </div>
     // </SongContextMenu>

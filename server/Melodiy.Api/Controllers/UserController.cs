@@ -1,7 +1,7 @@
 using System.Net;
 using System.Security.Claims;
 using Melodiy.Api.Attributes;
-using Melodiy.Api.Models;
+using Melodiy.Application.Common;
 using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Services.UserService;
 using Microsoft.AspNetCore.Authorization;

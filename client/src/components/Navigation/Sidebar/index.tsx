@@ -10,6 +10,7 @@ import { twMerge } from 'tailwind-merge';
 // import Navbar from '../Navbar';
 // import PlaylistHeader from './PlaylistTitle';
 // import SidebarItem from './SidebarNavItem';
+import usePlayer from '@/hooks/stores/usePlayer';
 import useResize from '@/hooks/useResize';
 import { ScrollContext } from '@/providers/ScrollProvider';
 import { useScroll } from 'framer-motion';
@@ -22,6 +23,7 @@ interface SidebarProps {
 }
 const Sidebar = ({ children }: SidebarProps) => {
   const pageRef = useRef(null);
+  const player = usePlayer();
   const { scrollX, scrollY, scrollXProgress, scrollYProgress } = useScroll({
     container: pageRef,
   });
@@ -71,8 +73,8 @@ const Sidebar = ({ children }: SidebarProps) => {
   return (
     <div
       className={twMerge(
-        `flex h-full`
-        // player.activeId && 'h-[calc(100%-80px)]'
+        `flex h-full w-full`,
+        player.active && 'h-[calc(100%-80px)]'
       )}
     >
       <div
@@ -105,11 +107,12 @@ const Sidebar = ({ children }: SidebarProps) => {
       <ScrollContext.Provider
         value={{ scrollX, scrollY, scrollXProgress, scrollYProgress }}
       >
-        <main className="h-full flex-1 overflow-y-auto pb-2" ref={pageRef}>
+        <main
+          className="h-full w-full flex-1 overflow-y-auto pb-2"
+          ref={pageRef}
+        >
           <Navbar />
-
           <div className="w-full">{children}</div>
-          {/* </ScrollContext.Provider> */}
         </main>
       </ScrollContext.Provider>
     </div>

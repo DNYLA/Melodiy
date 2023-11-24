@@ -50,3 +50,8 @@ export type AlbumPreview = {
   id: string;
   title: string;
 };
+
+export type PlayerResponse = {
+  currentTrack: FullTrack;
+  queue: Track[];
+};

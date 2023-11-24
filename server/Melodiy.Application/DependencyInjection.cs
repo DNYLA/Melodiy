@@ -3,6 +3,7 @@ using Melodiy.Application.Services.AlbumService;
 using Melodiy.Application.Services.ArtistService;
 using Melodiy.Application.Services.Authentication;
 using Melodiy.Application.Services.FileService;
+using Melodiy.Application.Services.PlayerService;
 using Melodiy.Application.Services.Playlist;
 using Melodiy.Application.Services.SearchService;
 using Melodiy.Application.Services.TrackService;
@@ -19,6 +20,7 @@ public static class DependencyInjection
         services.AddScoped<IArtistService, ArtistService>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<IFileService, FileService>();
+        services.AddScoped<IPlayerService, PlayerService>();
         services.AddScoped<IPlaylistService, PlaylistService>();
         services.AddScoped<ISearchService, SearchService>();
         services.AddScoped<ITrackService, TrackService>();

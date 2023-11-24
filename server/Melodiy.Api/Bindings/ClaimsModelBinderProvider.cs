@@ -1,5 +1,4 @@
-using Melodiy.Api.Bindings;
-using Melodiy.Api.Models;
+using Melodiy.Application.Common;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 

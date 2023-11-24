@@ -1,7 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
-using Melodiy.Api.Models;
+using Melodiy.Application.Common;
 using Melodiy.Application.Common.Errors;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 

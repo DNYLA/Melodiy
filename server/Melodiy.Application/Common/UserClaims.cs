@@ -1,4 +1,4 @@
-namespace Melodiy.Api.Models;
+namespace Melodiy.Application.Common;
 
 public class UserClaims
 {

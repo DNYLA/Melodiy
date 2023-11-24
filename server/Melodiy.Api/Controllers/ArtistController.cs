@@ -1,5 +1,5 @@
 using Melodiy.Api.Attributes;
-using Melodiy.Api.Models;
+using Melodiy.Application.Common;
 using Melodiy.Application.Services.ArtistService;
 using Melodiy.Contracts.Artist;
 using Microsoft.AspNetCore.Authorization;

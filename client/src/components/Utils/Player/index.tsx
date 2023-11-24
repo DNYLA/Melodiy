@@ -1,6 +1,6 @@
 'use client';
 
-import useGetTrack from '@/hooks/query/useGetTrack';
+import useOnPlay from '@/hooks/query/useOnPlay';
 import usePlayer from '@/hooks/stores/usePlayer';
 import PlayerContent from './content';
 // import useGetSongById from '@/hooks/useGetSongById';
@@ -8,7 +8,7 @@ import PlayerContent from './content';
 
 function Player() {
   const player = usePlayer();
-  const { track } = useGetTrack(player.active?.id);
+  const { track } = useOnPlay(player.active?.id);
 
   if (!track || !track.path || !player.active) return null;
 

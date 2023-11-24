@@ -1,5 +1,5 @@
 export enum CollectionType {
-  Album,
-  Playlist,
-  Files,
+  Album = 0,
+  Playlist = 1,
+  Files = 2,
 }

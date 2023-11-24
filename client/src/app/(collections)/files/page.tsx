@@ -10,7 +10,7 @@ export default async function Files() {
   const myTracks = await getUserTracks(session.token);
 
   return (
-    <main className="flex flex-col gap-y-5">
+    <main className="flex w-full flex-col gap-y-5">
       <FilesTable data={myTracks} username={session.username} />
     </main>
   );

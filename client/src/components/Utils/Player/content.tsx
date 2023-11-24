@@ -8,6 +8,7 @@ import usePlayer from '@/hooks/stores/usePlayer';
 import useVolume from '@/hooks/useVolume';
 import { msToMinuteSeconds } from '@/lib/utils';
 import { FullTrack } from '@/types';
+import { CollectionType } from '@/types/collections';
 import { useEffect, useState } from 'react';
 import { AiFillStepBackward, AiFillStepForward } from 'react-icons/ai';
 import { BsPauseFill, BsPlayFill } from 'react-icons/bs';
@@ -36,15 +37,18 @@ function PlayerContent({ track }: PlayerContentProps) {
   const VolumeIcon = getVolumeIcon();
 
   const onPlayNext = () => {
-    // if (player..length === 0) {
-    //   return;
-    // }
-    // const currentIndex = player.ids.findIndex((id) => id === player.activeId);
-    // const nextSong = player.ids[currentIndex + 1];
-    // if (!nextSong) {
-    //   return player.setId(player.ids[0]);
-    // }
-    // player.setId(nextSong);
+    if (player.queue.length === 0) {
+      setIsPlaying(false);
+      return;
+    }
+
+    const nextSong = player.queue[0];
+    console.log(nextSong);
+    if (!nextSong) {
+      // return player.setActive
+      return;
+    }
+    return player.setActive(nextSong.id, 'files', CollectionType.Files);
   };
 
   const onPlayPrevious = () => {

@@ -12,7 +12,7 @@ import {
   useMotionValueEvent,
   useTransform,
 } from 'framer-motion';
-import { FC, useContext, useRef, useState } from 'react';
+import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { BiShuffle } from 'react-icons/bi';
 import { BsFillPlayFill } from 'react-icons/bs';
 
@@ -42,15 +42,23 @@ const CollectionHeader: FC<CollectionHeaderProps> = ({
 
   const size = useTransform(scrollY!, [50, 375], ['400px', '235px']);
   const isVisibleMotion = useTransform(scrollY!, (value) => value < 175);
-  const [isVisible, setIsVisible] = useState(isVisibleMotion.get());
+  const isFullVisibleMotion = useTransform(scrollY!, (value) => value < 175);
+  const isPreviewVisibleMotion = useTransform(scrollY!, (value) => value > 225);
+  const [isFullVisible, setIsFullVisible] = useState(true);
+  const [isPreviewVisible, setIsPreviewVisible] = useState(false);
 
   useMotionValueEvent(scrollY!, 'change', (latest) => {
-    setIsVisible(isVisibleMotion.get());
+    setIsFullVisible(isFullVisibleMotion.get());
+    setIsPreviewVisible(isPreviewVisibleMotion.get());
   });
 
   // useMotionValueEvent(scrollY, 'change', (latest) => {
   //   console.log('Page scroll Pixels: ', latest);
   // });
+
+  useEffect(() => {
+    isPreviewVisibleMotion.set(false);
+  });
 
   const calculateDuration = () => {
     if (!tracks || tracks.length === 0) return '0 MINUTES';
@@ -73,12 +81,6 @@ const CollectionHeader: FC<CollectionHeaderProps> = ({
 
   return (
     <motion.div
-      // style={{
-      //   position: 'sticky',
-      //   top: '5rem',
-      //   width: '100%',
-      //   // height: '300px',
-      // }}
       style={{
         backgroundColor: '#2b2525',
         position: 'sticky',
@@ -91,18 +93,16 @@ const CollectionHeader: FC<CollectionHeaderProps> = ({
     >
       <ImageOverlay src={cover ?? 'images/default_playlist.png'} />
       <AnimatePresence mode="popLayout">
-        {isVisible ? (
+        {isFullVisible && (
           <motion.div
             key="content"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, transition: { delay: 0.1 } }} // Add delay here
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1, transition: { delay: 0 } }} // Add delay here
             exit={{ opacity: 0 }}
             transition={{ duration: 0.1 }}
           >
             <div>
-              <p>{isVisible}</p>
               <p className="text-inactive">{collectionTypeToString(type)}</p>
-              <p>Visible: {isVisible ? 'true' : 'false'}</p>
               <p className="text-xl font-bold md:text-2xl lg:text-3xl">
                 {title}
               </p>
@@ -113,7 +113,6 @@ const CollectionHeader: FC<CollectionHeaderProps> = ({
             </div>
 
             <div className="mt-8 flex gap-x-6">
-              {/* TODO: Update Button Hover Effect */}
               <button className="group flex items-center gap-x-1 rounded bg-white px-4 py-2 text-center font-bold text-black hover:bg-opacity-80 disabled:cursor-not-allowed disabled:opacity-50">
                 <BsFillPlayFill size={25} className="" />
                 Play
@@ -124,7 +123,9 @@ const CollectionHeader: FC<CollectionHeaderProps> = ({
               </button>
             </div>
           </motion.div>
-        ) : (
+        )}
+
+        {isPreviewVisible && (
           <motion.div
             key="alternative"
             initial={{ opacity: 0 }}

@@ -1,7 +1,5 @@
-using System.Net;
 using Melodiy.Api.Attributes;
-using Melodiy.Api.Models;
-using Melodiy.Application.Common.Errors;
+using Melodiy.Application.Common;
 using Melodiy.Application.Services.AlbumService;
 using Melodiy.Contracts.Album;
 using Microsoft.AspNetCore.Authorization;

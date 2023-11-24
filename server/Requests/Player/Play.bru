@@ -1,0 +1,25 @@
+meta {
+  name: Play
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:5041/player/play
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "trackId": "c60739a1da0f4ed185e56a5b2230f90d",
+    "collectionId": "15",
+    "type": 2,
+    "position": 26,
+    "shuffle": false
+  }
+}

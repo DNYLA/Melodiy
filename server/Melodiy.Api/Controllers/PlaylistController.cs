@@ -1,10 +1,5 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Net;
-using System.Security.Claims;
 using Melodiy.Api.Attributes;
-using Melodiy.Api.Filters;
-using Melodiy.Api.Models;
-using Melodiy.Application.Common.Errors;
+using Melodiy.Application.Common;
 using Melodiy.Application.Services.Playlist;
 using Melodiy.Contracts.Playlist;
 using Microsoft.AspNetCore.Authorization;

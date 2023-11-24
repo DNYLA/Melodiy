@@ -77,14 +77,14 @@ static void ConfigureMapster()
         .Map(dest => dest.Id, src => src.Slug)
         .Map(dest => dest.Image, src => src.Image != null ? src.Image.Url : null);
 
-    TypeAdapterConfig<AlbumResponse, TrackAlbumResponse>.NewConfig()
+    TypeAdapterConfig<AlbumResponse, GetAlbumPreview>.NewConfig()
         .Map(dest => dest.Id, src => src.Slug);
 
     TypeAdapterConfig<ArtistResponse, GetArtistResponse>.NewConfig()
         .Map(dest => dest.Id, src => src.Slug)
         .Map(dest => dest.Image, src => src.Image != null ? src.Image.Url : null);
 
-    TypeAdapterConfig<ArtistResponse, TrackArtistResponse>.NewConfig()
+    TypeAdapterConfig<ArtistResponse, GetArtistPreview>.NewConfig()
         .Map(dest => dest.Id, src => src.Slug);
 
     TypeAdapterConfig<Track, TrackResponse>.NewConfig()
@@ -97,6 +97,16 @@ static void ConfigureMapster()
     TypeAdapterConfig<TrackResponse, GetFullTrackResponse>.NewConfig()
         .Map(dest => dest.Id, src => src.Slug)
         .Map(dest => dest.Path, src => src.FilePath)
+        .Map(dest => dest.Image, src => src.Image != null ? src.Image.Url : null);
+
+    TypeAdapterConfig<ArtistPreview, GetArtistPreview>.NewConfig()
+        .Map(dest => dest.Id, src => src.Slug);
+
+    TypeAdapterConfig<AlbumPreview, GetAlbumPreview>.NewConfig()
+        .Map(dest => dest.Id, src => src.Slug);
+
+    TypeAdapterConfig<TrackPreview, GetTrackResponse>.NewConfig()
+        .Map(dest => dest.Id, src => src.Slug)
         .Map(dest => dest.Image, src => src.Image != null ? src.Image.Url : null);
 
 }

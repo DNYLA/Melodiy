@@ -1,5 +1,6 @@
 'use client';
 
+import { revalidatePathClient } from '@/actions';
 import ImagePreview from '@/components/Data/ImagePreview';
 import ActionButton from '@/components/Inputs/Buttons/ActionButton';
 import { Button } from '@/components/Inputs/Buttons/Button';
@@ -140,9 +141,6 @@ const UploadSong: React.FC = () => {
   const onSubmit = async (data: CreateSongForm) => {
     if (!user) return;
     let url = `track?&`;
-    console.log(trackFile.item(0));
-    console.log(coverFile);
-    console.log(data);
 
     const formData = new FormData();
     addFormFile(formData, 'image', coverFile);
@@ -161,7 +159,7 @@ const UploadSong: React.FC = () => {
 
     try {
       await AXIOS.post(url, formData);
-      // revalidatePath('/files');
+      revalidatePathClient('/files');
       toast.success('Uploaded Song!');
     } catch (err) {
       console.log(err);

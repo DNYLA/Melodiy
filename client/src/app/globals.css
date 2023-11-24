@@ -30,7 +30,7 @@ tr {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 3px;
   height: 6px;
 }
 
@@ -47,7 +47,7 @@ tr {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: transparent;
+  background: #ccc;
   border-radius: 5px;
 }
 
