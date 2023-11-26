@@ -21,6 +21,7 @@ export default function useOnPrevious() {
 
       return data;
     },
+    gcTime: 0,
     enabled: !!id,
   });
 

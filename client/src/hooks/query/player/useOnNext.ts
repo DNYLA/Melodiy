@@ -22,6 +22,7 @@ export default function useOnNext() {
 
       return data;
     },
+    gcTime: 0,
     enabled: !!id,
   });
 

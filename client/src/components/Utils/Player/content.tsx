@@ -135,7 +135,7 @@ function PlayerContent({ track }: PlayerContentProps) {
       </div>
 
       <div className="row-span-full h-full">
-        <div className="hidden max-w-[722px] items-center justify-center gap-x-6 md:flex">
+        <div className="hidden w-full items-center justify-center gap-x-6 md:flex">
           <AiFillStepBackward
             size={25}
             className="cursor-pointer text-neutral-400 transition hover:text-white"

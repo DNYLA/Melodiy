@@ -28,7 +28,10 @@ const usePlayer = create<PlayerStore>((set) => ({
   isPlaying: false,
   setIsPlaying: (value: boolean) => set({ isPlaying: value }),
   setActive: (track: FullTrack, collectionId: string, type: CollectionType) =>
-    set({ active: { ...track, collectionId, type: type }, isPlaying: true }),
+    set({
+      active: { ...track, collectionId, type: type },
+      isPlaying: true,
+    }),
   setQueue: (tracks: Track[]) => set({ queue: tracks }),
 }));
 

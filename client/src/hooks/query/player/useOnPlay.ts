@@ -23,6 +23,7 @@ export default function useOnPlay(collectionId: string, type: CollectionType) {
 
       return data;
     },
+    gcTime: 0,
     enabled: !!position,
   });
 

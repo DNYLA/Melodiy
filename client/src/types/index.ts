@@ -33,7 +33,7 @@ export type Track = {
   createdAt: string;
   artists: ArtistPreview[];
   album?: AlbumPreview;
-  user: User;
+  user?: User;
   image: string;
 };
 
