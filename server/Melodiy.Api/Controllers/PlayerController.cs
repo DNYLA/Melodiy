@@ -4,7 +4,9 @@ using Melodiy.Application.Common;
 using Melodiy.Application.Services.PlayerService;
 using Melodiy.Contracts;
 using Melodiy.Contracts.Player;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using CollectionType = Melodiy.Application.Services.PlayerService.CollectionType;
 
 namespace Melodiy.Api.Controllers;
 
@@ -22,8 +24,18 @@ public class PlayerController : ControllerBase
     [HttpPost("play")]
     public async Task<GetPlayerResponse> Play(PlayRequest req, [FromClaims] UserClaims? claims)
     {
-        Application.Services.PlayerService.CollectionType type = req.Type.Adapt<Application.Services.PlayerService.CollectionType>();
+        CollectionType type = req.Type.Adapt<CollectionType>();
         var response = await _playerService.Play(req.TrackId, type, req.CollectionId, req.Position, req.Shuffle, claims);
+        return response.Adapt<GetPlayerResponse>();
+    }
+
+    [Authorize]
+    [HttpPost("next")]
+    public async Task<GetPlayerResponse> Next(NextTrackRequest req, [FromClaims] UserClaims claims)
+    {
+        CollectionType type = req.Type.Adapt<CollectionType>();
+        var response = await _playerService.Next(req.TrackId, req.CollectionId, type, claims);
+
         return response.Adapt<GetPlayerResponse>();
     }
 }

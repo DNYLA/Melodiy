@@ -1,26 +1,23 @@
 import usePlayer from '@/hooks/stores/usePlayer';
 import useSession from '@/hooks/useSession';
 import { AXIOS } from '@/lib/network';
-import { FullTrack, PlayerResponse } from '@/types';
+import { PlayerResponse } from '@/types';
 import { CollectionType } from '@/types/collections';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
-export default function useOnPlay(id?: string) {
+export default function useOnPlay(collectionId: string, type: CollectionType) {
   const { user } = useSession();
   const player = usePlayer();
-  //useQuery will reset data to null whenever a new id is passed meaning that the player will
-  //be reinstantiated into the DOM causing it to go "invisible" for a second. Returning a track all the time after one is loaded
-  //prevents this as we can keep the previous track displayed whilst we load the next.
-  const [track, setTrack] = useState<FullTrack>();
+  const [id, setId] = useState<string | undefined>(undefined);
 
   const query = useQuery({
     queryKey: ['play', { id, userId: user?.id }], //If a track is private and a user logs out without refreshing the browser we want to make sure the track is not cached
     queryFn: async () => {
       const { data } = await AXIOS.post<PlayerResponse>(`/player/play/`, {
         trackId: id,
-        collectionId: '15',
-        type: CollectionType.Files,
+        collectionId: collectionId,
+        type: type,
         position: 26,
         shuffle: false,
       });
@@ -30,12 +27,17 @@ export default function useOnPlay(id?: string) {
     enabled: !!id,
   });
 
+  const onPlay = (trackId: string) => {
+    setId(trackId);
+  };
+
   useEffect(() => {
     if (query.data === undefined) return;
 
-    setTrack(query.data.currentTrack);
+    const curTrack = query.data.currentTrack;
+    player.setActive(curTrack, collectionId, type);
     player.setQueue(query.data.queue);
   }, [query.data]);
 
-  return { query, track };
+  return { query, onPlay };
 }

@@ -36,13 +36,13 @@ public class PlayerService : IPlayerService
             };
         }
 
-        _userHistory.TryGetValue(claims.Id, out PlayerHistory? curHistory);
         var nextTracks = await GenerateQueue(collectionId, type, trackId, position, shuffle, claims.Id);
 
         var curTrack = new CurrentTrackLog
         {
-            TrackSlug = track.Slug,
-            TrackDurationMs = track.Duration,
+            Id = track.Id,
+            Slug = track.Slug,
+            Duration = track.Duration,
             StartedListening = _dateProvider.UtcNow,
         };
 
@@ -67,6 +67,51 @@ public class PlayerService : IPlayerService
         };
     }
 
+    public async Task<PlayerResponse> Next(string trackId, string collectionId, CollectionType type, UserClaims claims)
+    {
+        _userHistory.TryGetValue(claims.Id, out PlayerHistory? curHistory);
+
+        //Generate a new Queue if we have inconsistent values.
+        if (curHistory == null || curHistory.CollectionId != collectionId || curHistory.CollectionType != type)
+        {
+            return await Play(trackId, type, collectionId, 0, false, claims);
+        }
+
+
+        // if (curHistory.NextTracks.Count == 0 && !curHistory.Repeat)
+        if (curHistory.NextTracks.Count == 0)
+        {
+            //Restats queue from first song or replays curSong.
+            var restartTrackId = curHistory.PreviousTracks.FirstOrDefault()?.Slug ?? trackId;
+            return await Play(restartTrackId, type, collectionId, 0, curHistory.Shuffle, claims);
+        }
+
+        //Log Current Track
+        curHistory.PreviousTracks.Add(curHistory.CurrentTrack.Adapt<TrackPreview>());
+        var nextTrack = curHistory.NextTracks[0];
+        curHistory.NextTracks.RemoveAt(0);
+
+        var curTrack = await _trackService.Get(nextTrack.Slug, claims.Id, true);
+        curHistory.CurrentTrack = new CurrentTrackLog
+        {
+            Id = curTrack.Id,
+            Slug = curTrack.Slug,
+            Duration = curTrack.Duration,
+            StartedListening = _dateProvider.UtcNow,
+        };
+
+        _userHistory[claims.Id] = curHistory;
+
+        //Validate if StartedTime + Duration >= DateNow.Utc()
+        //True: Log to Database
+        //False: Ignore
+
+        return new PlayerResponse
+        {
+            CurrentTrack = curTrack,
+            Queue = new(),
+        };
+    }
 
     private async Task<List<TrackPreview>> GenerateQueue(string collectionId, CollectionType type, string trackId, int position, bool shuffle, int userId)
     {

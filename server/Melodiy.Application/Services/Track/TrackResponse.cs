@@ -9,7 +9,7 @@ namespace Melodiy.Application.Services.TrackService;
 
 public class TrackResponse
 {
-    public string Id { get; set; } = string.Empty;
+    public int Id { get; set; }
     public string Slug { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
     public string? FilePath { get; set; }

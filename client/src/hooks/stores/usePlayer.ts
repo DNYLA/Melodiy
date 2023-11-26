@@ -1,4 +1,4 @@
-import { Track } from '@/types';
+import { FullTrack, Track } from '@/types';
 import { CollectionType } from '@/types/collections';
 import { create } from 'zustand';
 
@@ -9,11 +9,16 @@ export interface ActiveTrack {
 }
 
 interface PlayerStore {
-  active?: ActiveTrack;
+  active?: FullTrack & { collectionId: string; type: CollectionType };
   queue: Track[];
   isPlaying: boolean;
   setIsPlaying: (value: boolean) => void;
-  setActive: (id: string, collectionId: string, type: CollectionType) => void;
+  // setActive: (id: string, collectionId: string, type: CollectionType) => void;
+  setActive: (
+    track: FullTrack,
+    collectionId: string,
+    type: CollectionType
+  ) => void;
   setQueue: (tracks: Track[]) => void;
 }
 
@@ -22,8 +27,8 @@ const usePlayer = create<PlayerStore>((set) => ({
   queue: [],
   isPlaying: false,
   setIsPlaying: (value: boolean) => set({ isPlaying: value }),
-  setActive: (id: string, collectionId: string, type: CollectionType) =>
-    set({ active: { id, collectionId, type }, isPlaying: true }),
+  setActive: (track: FullTrack, collectionId: string, type: CollectionType) =>
+    set({ active: { ...track, collectionId, type: type }, isPlaying: true }),
   setQueue: (tracks: Track[]) => set({ queue: tracks }),
 }));
 

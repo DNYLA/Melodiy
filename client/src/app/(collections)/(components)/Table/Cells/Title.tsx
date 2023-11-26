@@ -41,7 +41,10 @@ const TitleCell: React.FC<ITitleCell> = ({
       />
       <div className="flex flex-col">
         <span
-          className={twMerge('text-[15px]', isActive && 'text-primary-light')}
+          className={twMerge(
+            'text-[15px]',
+            isActive && 'font-medium text-primary-light'
+          )}
         >
           {title}
         </span>

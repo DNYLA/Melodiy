@@ -1,6 +1,5 @@
 'use client';
 
-import useOnPlay from '@/hooks/query/useOnPlay';
 import usePlayer from '@/hooks/stores/usePlayer';
 import PlayerContent from './content';
 // import useGetSongById from '@/hooks/useGetSongById';
@@ -8,13 +7,12 @@ import PlayerContent from './content';
 
 function Player() {
   const player = usePlayer();
-  const { track } = useOnPlay(player.active?.id);
 
-  if (!track || !track.path || !player.active) return null;
+  if (!player.active || !player.active.path) return null;
 
   return (
     <div className="fixed bottom-0 h-[80px] w-full bg-[#1b1818] px-4 py-2">
-      <PlayerContent key={track.id} track={track} />
+      <PlayerContent key={player.active.id} track={player.active} />
     </div>
   );
 }

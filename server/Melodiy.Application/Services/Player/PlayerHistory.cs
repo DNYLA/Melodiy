@@ -15,7 +15,8 @@ public class PlayerHistory
 
 public class CurrentTrackLog
 {
-    public string TrackSlug { get; set; } = null!;
-    public int TrackDurationMs { get; set; }
+    public int Id { get; set; }
+    public string Slug { get; set; } = null!;
+    public int Duration { get; set; }
     public DateTime StartedListening { get; set; }
 }

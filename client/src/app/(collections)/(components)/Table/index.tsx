@@ -1,7 +1,7 @@
 'use client';
-import useOnPlay from '@/hooks/useOnPlay';
-// import usePlayer from '@/hooks/stores/usePlayer';
-// import useOnPlay from '@/hooks/useOnPlay';
+import useOnPlay from '@/hooks/query/player/useOnPlay';
+import usePlayer from '@/hooks/stores/usePlayer';
+
 import { Track } from '@/types';
 import { CollectionType } from '@/types/collections';
 import {
@@ -11,6 +11,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { FC } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 export interface TrackTableProps {
   data: Track[];
@@ -31,30 +32,26 @@ const TrackTable: FC<TrackTableProps> = ({
     columns: cl,
     getCoreRowModel: getCoreRowModel(),
     enableRowSelection: true,
+    enableMultiRowSelection: false,
   });
 
-  // const player = usePlayer();
-  // const onPlay = useOnPlay();
-
-  const player = {
-    activeId: '15',
-    isPlaying: false,
-    setIsPlaying: (value: boolean) => console.log('isPlaying: ' + value),
-  };
-  const onPlay = useOnPlay();
+  const player = usePlayer();
+  const { onPlay } = useOnPlay(collectionId, type);
 
   const onRowClick = (track: Track) => {
-    const isActiveTrack = track.id === player.activeId;
-    if (!player.activeId) {
-      onPlay(track.id, collectionId, type);
-      return;
-    }
+    const isActiveTrack = track.id === player.active?.id;
+    onPlay(track.id);
+    return;
+    // if (!player.active?.id) {
+    // onPlay(track.id);
+    // return;
+    // }
 
     //TODO: Fix Song Playback
     //Handles playling and pausing if same song is clicked currently bugged
-    if (isActiveTrack && player.isPlaying) player.setIsPlaying(false);
-    else if (isActiveTrack && !player.isPlaying) player.setIsPlaying(true);
-    else onPlay(track.id, collectionId, type);
+    // if (isActiveTrack && player.isPlaying) player.setIsPlaying(false);
+    // else if (isActiveTrack && !player.isPlaying) player.setIsPlaying(true);
+    // else onPlay(track.id);
 
     // onPlay(song.uid);
   };
@@ -93,8 +90,15 @@ const TrackTable: FC<TrackTableProps> = ({
           // >
           <tr
             key={row.id}
-            className="group hover:bg-[#1f1c1c]"
-            onClick={() => onRowClick(row.original)}
+            className={twMerge(
+              'group hover:bg-[#1f1c1c]',
+              row.getIsSelected() && 'bg-[#1f1c1c]'
+            )}
+            onClick={() => row.toggleSelected()}
+            onDoubleClick={() => {
+              onRowClick(row.original);
+              row.toggleSelected(true);
+            }}
           >
             {row.getVisibleCells().map((cell) => (
               <td

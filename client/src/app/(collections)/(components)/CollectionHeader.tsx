@@ -118,7 +118,7 @@ const CollectionHeader: FC<CollectionHeaderProps> = ({
                 Play
               </button>
               <button className="group flex items-center gap-x-1 rounded bg-white px-4 py-2 text-center font-bold text-black hover:bg-opacity-80 disabled:cursor-not-allowed disabled:opacity-50">
-                <BsFillPlayFill size={25} className="" />
+                <BiShuffle size={25} className="" />
                 Shuffle
               </button>
             </div>

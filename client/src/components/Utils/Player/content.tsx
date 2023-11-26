@@ -1,6 +1,7 @@
 'use client';
 import Slider from '@/components/Inputs/Slider';
 import TrackMedia from '@/components/Utils/Player/track-media';
+import useOnNext from '@/hooks/query/player/useOnNext';
 // import Slider from './Slider';
 // import LikeButton from './LikeButton';
 // import MediaItem from './MediaItem';
@@ -8,7 +9,6 @@ import usePlayer from '@/hooks/stores/usePlayer';
 import useVolume from '@/hooks/useVolume';
 import { msToMinuteSeconds } from '@/lib/utils';
 import { FullTrack } from '@/types';
-import { CollectionType } from '@/types/collections';
 import { useEffect, useState } from 'react';
 import { AiFillStepBackward, AiFillStepForward } from 'react-icons/ai';
 import { BsPauseFill, BsPlayFill } from 'react-icons/bs';
@@ -21,6 +21,7 @@ interface PlayerContentProps {
 
 function PlayerContent({ track }: PlayerContentProps) {
   const player = usePlayer();
+  const { onNext } = useOnNext();
   const { volume, update: updateVolume, toggleMute } = useVolume();
   const [curSecond, setCurSecond] = useState(0);
   // const [duration, setDuration] = useState(0);
@@ -42,13 +43,8 @@ function PlayerContent({ track }: PlayerContentProps) {
       return;
     }
 
-    const nextSong = player.queue[0];
-    console.log(nextSong);
-    if (!nextSong) {
-      // return player.setActive
-      return;
-    }
-    return player.setActive(nextSong.id, 'files', CollectionType.Files);
+    onNext(player.active!.id);
+    // return player.setActive(nextSong.id, 'files', CollectionType.Files);
   };
 
   const onPlayPrevious = () => {
