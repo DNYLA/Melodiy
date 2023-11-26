@@ -4,7 +4,6 @@ using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Common.Interfaces.Persistance;
 using Melodiy.Application.Common.Interfaces.Services;
 using Melodiy.Application.Services.TrackService;
-using Melodiy.Domain.Entities;
 
 namespace Melodiy.Application.Services.PlayerService;
 
@@ -23,20 +22,32 @@ public class PlayerService : IPlayerService
         _context = context;
     }
 
-    public async Task<PlayerResponse> Play(string trackId, CollectionType type, string collectionId, int position, bool shuffle, UserClaims? claims)
+    public async Task<PlayerResponse> Play(int position, CollectionType type, string collectionId, bool shuffle, UserClaims? claims)
     {
-        var track = await _trackService.Get(trackId, claims?.Id);
         if (claims == null)
         {
-            //Guests don't have a track history
-            return new PlayerResponse
-            {
-                CurrentTrack = track,
-                Queue = new(),
-            };
+            //Currently only files are implemented which require auth
+            throw new ApiError(HttpStatusCode.Unauthorized, "You must be logged in to play a track");
+            // if (trackId == null) throw new ApiError(HttpStatusCode.BadRequest, "A TrackId must be provided if you aren't logged in");
+            // //Guests don't have a track history
+            // var guestTrack = await _trackService.Get(trackId, null, true);
+            // return new PlayerResponse
+            // {
+            //     CurrentTrack = guestTrack,
+            //     Queue = new(),
+            // };
         }
 
-        var nextTracks = await GenerateQueue(collectionId, type, trackId, position, shuffle, claims.Id);
+        var queue = await GenerateQueue(collectionId, type, position, shuffle, claims.Id);
+
+        if (queue.Count == 0)
+        {
+            throw new ApiError(HttpStatusCode.NotFound, "No Tracks found");
+        }
+
+        //TODO: Redo this as you should be refetching the track? although EF Core does cache in memory so this shouldnt be a bad thing?
+        var track = await _trackService.Get(queue[0].Slug, null, true);
+        queue.RemoveAt(0);
 
         var curTrack = new CurrentTrackLog
         {
@@ -54,7 +65,7 @@ public class PlayerService : IPlayerService
             Repeat = false, //Not Needed for playing can default to false
             PreviousTracks = new(), //Not adding this one as its the current playing track
             CurrentTrack = curTrack,
-            NextTracks = nextTracks,
+            NextTracks = queue,
         };
 
         //Overwrite What is currently stored as Play() is only called whenever a track is manually selected.
@@ -63,27 +74,24 @@ public class PlayerService : IPlayerService
         return new PlayerResponse
         {
             CurrentTrack = track,
-            Queue = nextTracks,
+            Queue = queue,
         };
     }
 
-    public async Task<PlayerResponse> Next(string trackId, string collectionId, CollectionType type, UserClaims claims)
+    public async Task<PlayerResponse> Next(string collectionId, CollectionType type, UserClaims claims)
     {
         _userHistory.TryGetValue(claims.Id, out PlayerHistory? curHistory);
 
         //Generate a new Queue if we have inconsistent values.
         if (curHistory == null || curHistory.CollectionId != collectionId || curHistory.CollectionType != type)
         {
-            return await Play(trackId, type, collectionId, 0, false, claims);
+            return await Play(0, type, collectionId, false, claims);
         }
 
-
-        // if (curHistory.NextTracks.Count == 0 && !curHistory.Repeat)
         if (curHistory.NextTracks.Count == 0)
         {
-            //Restats queue from first song or replays curSong.
-            var restartTrackId = curHistory.PreviousTracks.FirstOrDefault()?.Slug ?? trackId;
-            return await Play(restartTrackId, type, collectionId, 0, curHistory.Shuffle, claims);
+            //Restats queue from first song.
+            return await Play(0, type, collectionId, curHistory.Shuffle, claims);
         }
 
         //Log Current Track
@@ -113,16 +121,16 @@ public class PlayerService : IPlayerService
         };
     }
 
-    private async Task<List<TrackPreview>> GenerateQueue(string collectionId, CollectionType type, string trackId, int position, bool shuffle, int userId)
+    private async Task<List<TrackPreview>> GenerateQueue(string collectionId, CollectionType type, int position, bool shuffle, int userId)
     {
         if (type != CollectionType.Files)
         {
             throw new ApiError(HttpStatusCode.NotImplemented, "Not Implemented");
         }
 
-        if (position <= 0)
+        if (position < 0)
         {
-            position = 1;
+            position = 0;
         }
 
         var tracks = await _trackService.GetUserTracks(userId);
@@ -132,13 +140,14 @@ public class PlayerService : IPlayerService
             throw new ApiError(HttpStatusCode.InternalServerError, "Unexpected Server Error");
         }
 
-        var pos = tracks.FindIndex(t => t.Slug == trackId);
-        Console.WriteLine(pos);
-        Console.WriteLine(trackId);
+        if (position >= tracks.Count)
+        {
+            position = 0; //Restart to first track
+        }
 
         //TODO: Also return previous tracks if you aren't shuffling
-        List<TrackResponse> previousTracks = tracks.Take(pos).ToList();
-        List<TrackResponse> nextTracks = tracks.Skip(pos + 1).ToList();
+        List<TrackResponse> previousTracks = tracks.Take(position - 1).ToList();
+        List<TrackResponse> nextTracks = tracks.Skip(position).ToList();
 
         return nextTracks.Adapt<List<TrackPreview>>();
     }

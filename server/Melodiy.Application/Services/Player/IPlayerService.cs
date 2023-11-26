@@ -6,6 +6,6 @@ namespace Melodiy.Application.Services.PlayerService;
 
 public interface IPlayerService
 {
-    Task<PlayerResponse> Play(string trackId, CollectionType type, string collectionId, int position, bool shuffle, UserClaims? claims);
-    Task<PlayerResponse> Next(string trackId, string collectionId, CollectionType type, UserClaims claims);
+    Task<PlayerResponse> Play(int position, CollectionType type, string collectionId, bool shuffle, UserClaims? claims);
+    Task<PlayerResponse> Next(string collectionId, CollectionType type, UserClaims claims);
 }

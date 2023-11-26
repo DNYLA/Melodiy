@@ -9,26 +9,25 @@ import { useEffect, useState } from 'react';
 export default function useOnPlay(collectionId: string, type: CollectionType) {
   const { user } = useSession();
   const player = usePlayer();
-  const [id, setId] = useState<string | undefined>(undefined);
+  const [position, setPosition] = useState<number | undefined>(undefined);
 
   const query = useQuery({
-    queryKey: ['play', { id, userId: user?.id }], //If a track is private and a user logs out without refreshing the browser we want to make sure the track is not cached
+    queryKey: ['play', { position, collectionId, userId: user?.id }], //If a track is private and a user logs out without refreshing the browser we want to make sure the track is not cached
     queryFn: async () => {
       const { data } = await AXIOS.post<PlayerResponse>(`/player/play/`, {
-        trackId: id,
         collectionId: collectionId,
         type: type,
-        position: 26,
+        position,
         shuffle: false,
       });
 
       return data;
     },
-    enabled: !!id,
+    enabled: !!position,
   });
 
-  const onPlay = (trackId: string) => {
-    setId(trackId);
+  const onPlay = (position: number) => {
+    setPosition(position);
   };
 
   useEffect(() => {
