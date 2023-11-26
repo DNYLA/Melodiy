@@ -1,4 +1,7 @@
+using System.Diagnostics;
+using System.Formats.Tar;
 using System.Net;
+using ATL;
 using Melodiy.Application.Common;
 using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Common.Interfaces.Persistance;
@@ -45,9 +48,14 @@ public class PlayerService : IPlayerService
             throw new ApiError(HttpStatusCode.NotFound, "No Tracks found");
         }
 
+        if (position > queue.Count - 1)
+        {
+            position = 0; //Reset to start of queue;
+        }
+
         //TODO: Redo this as you should be refetching the track? although EF Core does cache in memory so this shouldnt be a bad thing?
-        var track = await _trackService.Get(queue[0].Slug, null, true);
-        queue.RemoveAt(0);
+        var track = queue[position];
+        track.FilePath = await _trackService.GetTrackPath(track.FilePath, track.IsPublic);
 
         var curTrack = new CurrentTrackLog
         {
@@ -59,22 +67,71 @@ public class PlayerService : IPlayerService
 
         var newHistory = new PlayerHistory
         {
+            Position = position,
             CollectionId = collectionId,
             CollectionType = type,
             Shuffle = shuffle,
             Repeat = false, //Not Needed for playing can default to false
-            PreviousTracks = new(), //Not adding this one as its the current playing track
             CurrentTrack = curTrack,
-            NextTracks = queue,
+            Queue = queue.Adapt<List<TrackPreview>>(),
         };
 
         //Overwrite What is currently stored as Play() is only called whenever a track is manually selected.
         _userHistory[claims.Id] = newHistory;
 
+        //Server Queue and Client Queue are seperate
+        //Server Queue = Queue of full playlist from start - finish (Could be shuffled)
+        //Client Queue = List of Next Tracks that will play
+        var clientQueue = queue.Skip(position).ToList().Adapt<List<TrackPreview>>();
+
         return new PlayerResponse
         {
             CurrentTrack = track,
-            Queue = queue,
+            Queue = clientQueue,
+        };
+    }
+
+    public async Task<PlayerResponse> Previous(string collectionId, CollectionType type, UserClaims claims)
+    {
+        _userHistory.TryGetValue(claims.Id, out PlayerHistory? curHistory);
+
+        //Generate a new Queue if we have inconsistent values.
+        if (curHistory == null || curHistory.CollectionId != collectionId || curHistory.CollectionType != type)
+        {
+            return await Play(0, type, collectionId, false, claims);
+        }
+
+        curHistory.Position--;
+        if (curHistory.Position < 0)
+        {
+            curHistory.Position = 0;
+        }
+        else if (curHistory.Position == 0 && curHistory.Repeat)
+        {
+            //If Repeat is enabled we go back to the last track otherwise we stay at track 0;
+            curHistory.Position = curHistory.Queue.Count - 1;
+        }
+
+        //Return Current Track (Let it replay from start);
+        var track = await _trackService.Get(curHistory.Queue[curHistory.Position].Slug, claims.Id, true);
+        curHistory.CurrentTrack = new CurrentTrackLog
+        {
+            Id = track.Id,
+            Slug = track.Slug,
+            Duration = track.Duration,
+            StartedListening = _dateProvider.UtcNow,
+        };
+
+        _userHistory[claims.Id] = curHistory;
+
+        //Validate if StartedTime + Duration >= DateNow.Utc()
+        //True: Log to Database
+        //False: Ignore
+
+        return new PlayerResponse
+        {
+            CurrentTrack = track,
+            Queue = new(),
         };
     }
 
@@ -88,23 +145,20 @@ public class PlayerService : IPlayerService
             return await Play(0, type, collectionId, false, claims);
         }
 
-        if (curHistory.NextTracks.Count == 0)
+        curHistory.Position++;
+        if (curHistory.Position > curHistory.Queue.Count - 1)
         {
-            //Restats queue from first song.
-            return await Play(0, type, collectionId, curHistory.Shuffle, claims);
+            curHistory.Position = 0; //Start back from first track.
         }
 
         //Log Current Track
-        curHistory.PreviousTracks.Add(curHistory.CurrentTrack.Adapt<TrackPreview>());
-        var nextTrack = curHistory.NextTracks[0];
-        curHistory.NextTracks.RemoveAt(0);
+        var track = await _trackService.Get(curHistory.Queue[curHistory.Position].Slug, claims.Id, true);
 
-        var curTrack = await _trackService.Get(nextTrack.Slug, claims.Id, true);
         curHistory.CurrentTrack = new CurrentTrackLog
         {
-            Id = curTrack.Id,
-            Slug = curTrack.Slug,
-            Duration = curTrack.Duration,
+            Id = track.Id,
+            Slug = track.Slug,
+            Duration = track.Duration,
             StartedListening = _dateProvider.UtcNow,
         };
 
@@ -116,21 +170,16 @@ public class PlayerService : IPlayerService
 
         return new PlayerResponse
         {
-            CurrentTrack = curTrack,
+            CurrentTrack = track,
             Queue = new(),
         };
     }
 
-    private async Task<List<TrackPreview>> GenerateQueue(string collectionId, CollectionType type, int position, bool shuffle, int userId)
+    private async Task<List<TrackResponse>> GenerateQueue(string collectionId, CollectionType type, int position, bool shuffle, int userId)
     {
         if (type != CollectionType.Files)
         {
             throw new ApiError(HttpStatusCode.NotImplemented, "Not Implemented");
-        }
-
-        if (position < 0)
-        {
-            position = 0;
         }
 
         var tracks = await _trackService.GetUserTracks(userId);
@@ -140,15 +189,6 @@ public class PlayerService : IPlayerService
             throw new ApiError(HttpStatusCode.InternalServerError, "Unexpected Server Error");
         }
 
-        if (position >= tracks.Count)
-        {
-            position = 0; //Restart to first track
-        }
-
-        //TODO: Also return previous tracks if you aren't shuffling
-        List<TrackResponse> previousTracks = tracks.Take(position - 1).ToList();
-        List<TrackResponse> nextTracks = tracks.Skip(position).ToList();
-
-        return nextTracks.Adapt<List<TrackPreview>>();
+        return tracks;
     }
 }

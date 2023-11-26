@@ -112,14 +112,22 @@ public class TrackService : ITrackService
         {
             throw new ApiError(HttpStatusCode.Unauthorized, $"{slug} is a private track.");
         }
-        var bucket = track.IsPublic ? StorageBucket.TrackPublic : StorageBucket.TracksPrivate;
+        track.FilePath = await GetTrackPath(track.FilePath, track.IsPublic);
 
-        if (track.FilePath == null)
+        return track.Adapt<TrackResponse>();
+    }
+
+    public async Task<string> GetTrackPath(string? path, bool isPublic)
+    {
+        var bucket = isPublic ? StorageBucket.TrackPublic : StorageBucket.TracksPrivate;
+
+        if (path == null || path == string.Empty)
         {
-            throw new ApiError(HttpStatusCode.InternalServerError, $"Unable to find track {slug}");
+            throw new ApiError(HttpStatusCode.InternalServerError, $"Unable to find track.");
         }
 
-        track.FilePath = await _fileService.GetUrl(track.FilePath, bucket);
-        return track.Adapt<TrackResponse>();
+        var url = await _fileService.GetUrl(path, bucket);
+
+        return url;
     }
 }

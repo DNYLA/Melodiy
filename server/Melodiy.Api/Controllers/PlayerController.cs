@@ -24,6 +24,11 @@ public class PlayerController : ControllerBase
     [HttpPost("play")]
     public async Task<GetPlayerResponse> Play(PlayRequest req, [FromClaims] UserClaims? claims)
     {
+        if (req.Position < 0)
+        {
+            req.Position = 0;
+        }
+
         CollectionType type = req.Type.Adapt<CollectionType>();
         var response = await _playerService.Play(req.Position, type, req.CollectionId, req.Shuffle, claims);
         return response.Adapt<GetPlayerResponse>();
@@ -35,6 +40,16 @@ public class PlayerController : ControllerBase
     {
         CollectionType type = req.Type.Adapt<CollectionType>();
         var response = await _playerService.Next(req.CollectionId, type, claims);
+
+        return response.Adapt<GetPlayerResponse>();
+    }
+
+    [Authorize]
+    [HttpPost("previous")]
+    public async Task<GetPlayerResponse> Previous(NextTrackRequest req, [FromClaims] UserClaims claims)
+    {
+        CollectionType type = req.Type.Adapt<CollectionType>();
+        var response = await _playerService.Previous(req.CollectionId, type, claims);
 
         return response.Adapt<GetPlayerResponse>();
     }

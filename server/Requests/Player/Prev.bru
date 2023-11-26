@@ -1,0 +1,23 @@
+meta {
+  name: Prev
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:5041/player/previous
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "trackId": "c60739a1da0f4ed185e56a5b2230f90d",
+    "collectionId": "15",
+    "type": 2
+  }
+}

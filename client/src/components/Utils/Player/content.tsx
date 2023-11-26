@@ -2,6 +2,7 @@
 import Slider from '@/components/Inputs/Slider';
 import TrackMedia from '@/components/Utils/Player/track-media';
 import useOnNext from '@/hooks/query/player/useOnNext';
+import useOnPrevious from '@/hooks/query/player/useOnPrevious';
 // import Slider from './Slider';
 // import LikeButton from './LikeButton';
 // import MediaItem from './MediaItem';
@@ -22,6 +23,7 @@ interface PlayerContentProps {
 function PlayerContent({ track }: PlayerContentProps) {
   const player = usePlayer();
   const { onNext } = useOnNext();
+  const { onPrevious } = useOnPrevious();
   const { volume, update: updateVolume, toggleMute } = useVolume();
   const [curSecond, setCurSecond] = useState(0);
   // const [duration, setDuration] = useState(0);
@@ -48,6 +50,7 @@ function PlayerContent({ track }: PlayerContentProps) {
   };
 
   const onPlayPrevious = () => {
+    onPrevious(player.active!.id);
     // if (player.ids.length === 0) {
     //   return;
     // }
