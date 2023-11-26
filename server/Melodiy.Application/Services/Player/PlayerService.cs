@@ -82,7 +82,7 @@ public class PlayerService : IPlayerService
         //Server Queue and Client Queue are seperate
         //Server Queue = Queue of full playlist from start - finish (Could be shuffled)
         //Client Queue = List of Next Tracks that will play
-        var clientQueue = queue.Skip(position).ToList().Adapt<List<TrackPreview>>();
+        var clientQueue = queue.Skip(position + 1).ToList().Adapt<List<TrackPreview>>();
 
         return new PlayerResponse
         {
@@ -112,7 +112,6 @@ public class PlayerService : IPlayerService
             curHistory.Position = curHistory.Queue.Count - 1;
         }
 
-        //Return Current Track (Let it replay from start);
         var track = await _trackService.Get(curHistory.Queue[curHistory.Position].Slug, claims.Id, true);
         curHistory.CurrentTrack = new CurrentTrackLog
         {
@@ -144,7 +143,7 @@ public class PlayerService : IPlayerService
         {
             return await Play(0, type, collectionId, false, claims);
         }
-
+        // Console.WriteLine("Next Pos: " + curHistory.Position);
         curHistory.Position++;
         if (curHistory.Position > curHistory.Queue.Count - 1)
         {

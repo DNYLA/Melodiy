@@ -11,12 +11,11 @@ export default function useOnPrevious() {
   const [id, setId] = useState<string | undefined>(undefined);
 
   const query = useQuery({
-    queryKey: ['next', { id, userId: user?.id }],
+    queryKey: ['previous', { id, userId: user?.id }],
     queryFn: async () => {
-      console.log(player.active);
       const { data } = await AXIOS.post<PlayerResponse>(`/player/previous/`, {
         trackId: id,
-        collectionId: player.active!.collectionId, //OnNext will never be called when no current track is playing / available
+        collectionId: player.active!.collectionId,
         type: player.active!.type,
       });
 
@@ -31,6 +30,7 @@ export default function useOnPrevious() {
 
   useEffect(() => {
     if (query.data === undefined) return;
+    console.log(query.data.currentTrack.title);
 
     player.setActive(
       query.data.currentTrack,
