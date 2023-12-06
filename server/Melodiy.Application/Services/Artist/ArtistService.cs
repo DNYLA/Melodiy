@@ -1,4 +1,5 @@
 
+using Melodiy.Application.Common.Entities;
 using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Common.Interfaces.Persistance;
 using Melodiy.Domain.Entities;
@@ -18,6 +19,46 @@ public class ArtistService : IArtistService
         _fileRepository = fileRepository;
     }
 
+    public async Task<List<ArtistResponse>> BulkInsertExternal(List<ExternalArtist> data)
+    {
+        //Fetch Already Existing Artists (Need this as we still want to return them)
+        List<string> ids = data.Select(d => d.Id).ToList(); //Needed for query below (Any isn't translatable to SQL but contains is)
+        List<Artist> existingArtists = _context.Artists.Where(a => a.SpotifyId != null && ids.Contains(a.SpotifyId)).Include(a => a.Image).ToList();
+        List<string> existingIds = existingArtists.Select(a => a.SpotifyId!).ToList(); //SpotifyId can't be null in this case.
+
+        //Filters out duplicates theese are the only artists we need to insert
+        List<ExternalArtist> newArtists = data.ExceptBy(existingIds, id => id.Id).ToList();
+        var newArtistsWithImages = newArtists.Select(artist => new Artist
+        {
+            Slug = Guid.NewGuid().ToString("N"),
+            Name = artist.Name,
+            Image = artist.ImageUrl != null ? new Image
+            {
+                Url = artist.ImageUrl,
+            } : null,
+            Verified = true,
+            SpotifyId = artist.Id,
+        }).ToList();
+
+        //Check if any of theese images already exist.
+        List<string> urls = newArtistsWithImages.Where(a => a.Image != null).Select(a => a.Image!.Url).ToList();
+        var existingImages = _context.Images.Where(i => urls.Contains(i.Url)).ToList();
+
+        //Relate the existing images with the new artist.
+        foreach (var artist in newArtistsWithImages)
+        {
+            var existingImage = existingImages.FirstOrDefault(i => i.Url == artist.Image!.Url);
+
+            if (existingImage != null)
+            {
+                artist.Image = existingImage;
+            }
+        }
+        _context.Artists.AddRange(newArtistsWithImages);
+        await _context.SaveChangesAsync();
+
+        return existingArtists.Concat(newArtistsWithImages).ToList().Adapt<List<ArtistResponse>>();
+    }
 
     public async Task<ArtistResponse> Create(string name, IFormFile? image, string username, int userId)
     {

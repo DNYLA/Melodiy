@@ -66,7 +66,12 @@ public class SearchController : ControllerBase
         if (term.Length < 3) throw new ApiError(HttpStatusCode.BadRequest, "Search term must contain a minimum of three characters");
         var results = new SearchResponse();
 
-        if (type == SearchType.Artist)
+        if (type == SearchType.All)
+        {
+            var response = await _searchService.Search(term);
+            return response.Adapt<SearchResponse>();
+        }
+        else if (type == SearchType.Artist)
         {
             var response = await _searchService.SearchArtist(term);
             results.Artists = response.Adapt<List<GetArtistResponse>>();

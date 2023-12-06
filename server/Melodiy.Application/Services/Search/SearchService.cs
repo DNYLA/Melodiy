@@ -1,5 +1,6 @@
-using System.Diagnostics;
+using Melodiy.Application.Common.Entities;
 using Melodiy.Application.Common.Interfaces.Persistance;
+using Melodiy.Application.Common.Interfaces.Search;
 using Melodiy.Application.Services.AlbumService;
 using Melodiy.Application.Services.ArtistService;
 using Melodiy.Domain.Entities;
@@ -9,18 +10,28 @@ namespace Melodiy.Application.Services.SearchService;
 
 public class SearchService : ISearchService
 {
+    private readonly IExternalSearchProvider _searchProvider;
     private readonly IDataContext _context;
     private readonly IArtistService _artistService;
 
-    public SearchService(IDataContext context, IArtistService artistService)
+    public SearchService(IDataContext context, IArtistService artistService, IExternalSearchProvider searchProvider)
     {
         _context = context;
         _artistService = artistService;
+        _searchProvider = searchProvider;
     }
 
-    public Task<SearchResult> Search(string term, int limit = 10)
+    public async Task<SearchResult> Search(string term, int limit = 10)
     {
-        throw new NotImplementedException();
+        ExternalSearchResult externalResult = await _searchProvider.Search(term, 10);
+        var result = new SearchResult
+        {
+            Artists = await _artistService.BulkInsertExternal(externalResult.Artists),
+            // Albums = "",
+            // Tracks = "",
+        };
+
+        return result;
     }
 
     public async Task<List<AlbumResponse>> SearchAlbumsCreatedByUser(string term, string? artistSlug, int userId, int limit = 5)
@@ -40,14 +51,11 @@ public class SearchService : ISearchService
         {
             //Search albums from a specific artist created by user or search through all the users created albums.
             query = artist != null
-                ? query.Where(album => album.Artists.Any(artist => artist.Id == artist.Id) && album.UserId == userId && album.Title.ToLower().Contains(curTerm))
+                ? query.Where(album => album.Artists.Any(a => a.Id == artist.Id) && album.UserId == userId && album.Title.ToLower().Contains(curTerm))
                 : query.Where(album => album.UserId == userId && album.Title.ToLower().Contains(curTerm));
         }
 
         var albums = await query.OrderBy(a => a.Title).Include(a => a.Artists).Include(a => a.Image).Take(limit).ToListAsync();
-
-        Console.WriteLine(albums.Count);
-
         var mappedAlbums = albums.Adapt<List<AlbumResponse>>();
         var sortedAlbums = SortList(mappedAlbums, album => album.Title, term).ToList();
 
@@ -68,14 +76,14 @@ public class SearchService : ISearchService
         }
 
         var artists = await query.OrderBy(a => a.Name).Include(a => a.Image).Take(limit).ToListAsync();
-        var mappedAlbums = artists.Adapt<List<ArtistResponse>>();
-        var sortedAlbums = SortList(mappedAlbums, album => album.Name, term).ToList();
+        var mappedArtists = artists.Adapt<List<ArtistResponse>>();
+        var sortedArtists = SortList(mappedArtists, artist => artist.Name, term).ToList();
 
-        return sortedAlbums;
+        return sortedArtists;
     }
 
     //TODO: Move to Sort Service?
-    public List<T> SortList<T>(List<T> list, Func<T, string> keySelector, string term)
+    public static List<T> SortList<T>(List<T> list, Func<T, string> keySelector, string term)
     // public List<AlbumResponse> SortList(List<T> list, Func<AlbumResponse, string> keySelector, string term)
     {
         //Dictionary of List<T> as some songs can have the same score. 

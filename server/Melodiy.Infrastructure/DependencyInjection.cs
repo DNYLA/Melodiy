@@ -1,11 +1,14 @@
+using System.Runtime.CompilerServices;
 using System.Text;
 using Melodiy.Application.Common.Interfaces.Authentication;
 using Melodiy.Application.Common.Interfaces.Persistance;
+using Melodiy.Application.Common.Interfaces.Search;
 using Melodiy.Application.Common.Interfaces.Services;
 using Melodiy.Infrastructure.Authentication;
 using Melodiy.Infrastructure.Persistance;
 using Melodiy.Infrastructure.Persistance.File;
 using Melodiy.Infrastructure.Services;
+using Melodiy.Infrastructure.Services.Search;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +27,7 @@ public static class DependencyInjection
         services.AddDbContext<IDataContext, DataContext>(options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
         services.AddAuth(configuration);
         services.AddSupabase(configuration);
+        services.AddSpotifyProvider(configuration);
 
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         services.AddScoped<IHashService, HashService>();
@@ -76,6 +80,17 @@ public static class DependencyInjection
         services.AddSingleton(Options.Create(supabaseSettings));
         services.AddSingleton(provider => new Supabase.Client(supabaseSettings.Url, supabaseSettings.PrivateKey, options));
         services.AddScoped<IFileRepository, SupabaseRepository>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddSpotifyProvider(this IServiceCollection services, ConfigurationManager configuration)
+    {
+        var spotifySettings = new SpotifySettings();
+        configuration.Bind(SpotifySettings.SectionName, spotifySettings);
+
+        services.AddSingleton(Options.Create(spotifySettings));
+        services.AddScoped<IExternalSearchProvider, SpotifyProvider>();
 
         return services;
     }

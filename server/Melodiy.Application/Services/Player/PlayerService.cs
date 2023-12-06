@@ -17,7 +17,6 @@ public class PlayerService : IPlayerService
     private readonly IDataContext _context;
     private static readonly Dictionary<int, PlayerHistory> _userHistory = new(); //Stored as Dictionary<UserId, PlayerHistory>();
 
-
     public PlayerService(ITrackService trackService, IDateTimeProvider dateProvider, IDataContext context)
     {
         _trackService = trackService;

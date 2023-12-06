@@ -10,6 +10,11 @@ export enum SearchType {
   Artist = 1,
 }
 
+export interface SearchResults {
+  songs: Track[];
+  artists: Artist[];
+}
+
 export type Artist = {
   id: string;
   name: string;
