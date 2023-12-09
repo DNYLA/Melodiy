@@ -1,11 +1,11 @@
-using System.Net;
 using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Common.Interfaces.Persistance;
-using Melodiy.Application.Common.Interfaces.Services;
 using Melodiy.Application.Services.FileService;
+using Melodiy.Application.Services.TrackService;
 using Melodiy.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace Melodiy.Application.Services.Playlist;
 
@@ -41,6 +41,27 @@ public class PlaylistService : IPlaylistService
         await _context.SaveChangesAsync();
 
         return playlist.Adapt<PlaylistResponse>();
+    }
+
+    public async Task<PlaylistResponse> Get(string slug, int? userId)
+    {
+        var playlist = await _context.Playlists
+                .Include(p => p.User)
+                .Include(p => p.Image)
+                .Include(p => p.PlaylistTracks)
+                .ThenInclude(pt => pt.Track)
+                .ThenInclude(track => track.TrackArtists)
+                .ThenInclude(ta => ta.Artist)
+                .FirstOrDefaultAsync(p => p.Slug == slug) ?? throw new ApiError(System.Net.HttpStatusCode.NotFound, $"Playlist Id {slug} not found");
+
+        if (!playlist.IsPublic && playlist.UserId != userId)
+        {
+            throw new ApiError(HttpStatusCode.Unauthorized, $"Playlist Id {slug} not found");
+        }
+        var mappedPlaylist = playlist.Adapt<PlaylistResponse>();
+        mappedPlaylist.Tracks = playlist.PlaylistTracks.Select(pt => pt.Track.Adapt<TrackResponse>()).ToList();
+
+        return mappedPlaylist;
     }
 
     public async Task<List<PlaylistResponse>> GetAll(int userId)

@@ -39,7 +39,7 @@
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.292.0",
     "music-metadata": "^7.14.0",
-    "next": "14.0.1",
+    "next": "^14.0.1",
     "query-string": "^8.1.0",
     "react": "^18",
     "react-dom": "^18",

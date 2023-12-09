@@ -6,8 +6,7 @@ import { redirect } from 'next/navigation';
 export default async function Files() {
   const session = await getServerSession();
   if (!session) return redirect('/');
-
-  const myTracks = await getUserTracks(session.token);
+  const myTracks = await getUserTracks();
 
   return (
     <main className="flex w-full flex-col gap-y-5">

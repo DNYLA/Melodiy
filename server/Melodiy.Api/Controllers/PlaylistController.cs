@@ -27,6 +27,15 @@ public class PlaylistController : ControllerBase
         return mapped;
     }
 
+    [HttpGet("{slug}")]
+    public async Task<ActionResult<GetPlaylistResponse>> GetPlaylist(string slug, [FromClaims] UserClaims? user)
+    {
+        var response = await _playlistService.Get(slug, user?.Id);
+
+        return response.Adapt<GetPlaylistResponse>();
+    }
+
+
     [Authorize]
     [HttpGet]
     public async Task<ActionResult<List<GetPlaylistResponse>>> GetAll([FromClaims] UserClaims user)

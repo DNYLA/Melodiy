@@ -1,9 +1,10 @@
-import { Artist } from '@/types';
+import { Artist, Track } from '@/types';
 import { User } from '@/types/user';
 
 export type Playlist = {
   id: string;
   title: string;
+  tracks: Track[];
   user: User;
   image?: string;
   createdAt: string;

@@ -1,7 +1,7 @@
 'use client';
 
 import ImageOverlay from '@/app/(collections)/(components)/ImageOverlay';
-import { collectionTypeToString } from '@/lib/utils';
+import { collectionTypeToString, getDefaultImage } from '@/lib/utils';
 import { ScrollContext } from '@/providers/ScrollProvider';
 import { Track } from '@/types';
 import { CollectionType } from '@/types/collections';
@@ -79,6 +79,8 @@ const CollectionHeader: FC<CollectionHeaderProps> = ({
     return `${trackAmount} SONGS • ${duration} • ${date.year()}`;
   };
 
+  console.log(cover);
+
   return (
     <motion.div
       style={{
@@ -91,7 +93,7 @@ const CollectionHeader: FC<CollectionHeaderProps> = ({
       className="flex gap-x-4 bg-red-500 p-2 px-5 pt-[4.5rem]"
       ref={ref}
     >
-      <ImageOverlay src={cover ?? 'images/default_playlist.png'} />
+      <ImageOverlay src={cover ?? getDefaultImage()} />
       <AnimatePresence mode="popLayout">
         {isFullVisible && (
           <motion.div

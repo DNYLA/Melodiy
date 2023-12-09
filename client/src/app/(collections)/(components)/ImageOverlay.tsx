@@ -1,7 +1,8 @@
 'use client';
+import { getDefaultImage } from '@/lib/utils';
 import { ScrollContext } from '@/providers/ScrollProvider';
 import { motion, useTransform } from 'framer-motion';
-import { FC, useContext, useEffect, useState } from 'react';
+import { FC, SyntheticEvent, useContext, useEffect, useState } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
 import { twMerge } from 'tailwind-merge';
 
@@ -23,6 +24,11 @@ const ImageOverlay: FC<ImageOverlayProps> = ({ src }) => {
     setFilter(randomImageFilter(filter));
   };
 
+  const handleError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
+    console.log(e);
+    e.currentTarget.src = getDefaultImage();
+  };
+
   useEffect(() => {
     console.log(scrollY?.get());
   }, [scrollY]);
@@ -41,7 +47,8 @@ const ImageOverlay: FC<ImageOverlayProps> = ({ src }) => {
       </div>
       <div className="">
         <motion.img
-          src={src ?? '/mages/default_playlist.png'}
+          src={src ?? '/images/default_playlist.png'}
+          onError={handleError}
           onClick={changeFilter}
           draggable={false}
           className={twMerge('z-5 rounded-md', filter)}
@@ -51,7 +58,8 @@ const ImageOverlay: FC<ImageOverlayProps> = ({ src }) => {
           // width={imageScale.get()}
           // height={imageScale.get()}
           style={{
-            objectFit: 'contain',
+            objectFit: 'cover',
+            // objectFit: 'contain',
             height: imageScale,
             width: imageScale,
           }}
