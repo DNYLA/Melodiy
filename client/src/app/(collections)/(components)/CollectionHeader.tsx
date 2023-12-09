@@ -52,10 +52,6 @@ const CollectionHeader: FC<CollectionHeaderProps> = ({
     setIsPreviewVisible(isPreviewVisibleMotion.get());
   });
 
-  // useMotionValueEvent(scrollY, 'change', (latest) => {
-  //   console.log('Page scroll Pixels: ', latest);
-  // });
-
   useEffect(() => {
     isPreviewVisibleMotion.set(false);
   });

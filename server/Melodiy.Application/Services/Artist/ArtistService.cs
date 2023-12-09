@@ -1,10 +1,14 @@
-
-using Melodiy.Application.Common.Entities;
 using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Common.Interfaces.Persistance;
+using Melodiy.Application.Common.Interfaces.Search;
+using Melodiy.Application.Services.AlbumService;
+using Melodiy.Application.Services.BulkInsertService;
+using Melodiy.Application.Services.TrackService;
 using Melodiy.Domain.Entities;
+using Melodiy.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace Melodiy.Application.Services.ArtistService;
 
@@ -12,55 +16,15 @@ public class ArtistService : IArtistService
 {
     private readonly IDataContext _context;
     private readonly IFileRepository _fileRepository;
+    private readonly IExternalSearchProvider _externalSearchProvider;
+    private readonly IBulkInsertService _bulkInsertService;
 
-    public ArtistService(IDataContext context, IFileRepository fileRepository)
+    public ArtistService(IDataContext context, IFileRepository fileRepository, IExternalSearchProvider externalSearchProvider, IBulkInsertService bulkInsertService)
     {
         _context = context;
         _fileRepository = fileRepository;
-    }
-
-    public async Task<List<Artist>> BulkInsertExternal(List<ExternalArtist> data)
-    {
-        //Removes duplicates based on Id
-        List<ExternalArtist> artists = data.GroupBy(a => a.Id).Select(a => a.First()).ToList();
-
-        //Fetch Already Existing Artists (Need this as we still want to return them)
-        List<string> ids = artists.Select(d => d.Id).ToList(); //Needed for query below (Any isn't translatable to SQL but contains is)
-        List<Artist> existingArtists = _context.Artists.Where(a => a.SpotifyId != null && ids.Contains(a.SpotifyId)).Include(a => a.Image).ToList();
-        List<string> existingIds = existingArtists.Select(a => a.SpotifyId!).ToList(); //SpotifyId can't be null in this case.
-
-        //Filters out duplicates theese are the only artists we need to insert
-        List<ExternalArtist> newArtists = artists.ExceptBy(existingIds, artist => artist.Id).ToList();
-        var newArtistsWithImages = newArtists.Select(artist => new Artist
-        {
-            Slug = Guid.NewGuid().ToString("N"),
-            Name = artist.Name,
-            Image = artist.ImageUrl != null ? new Image
-            {
-                Url = artist.ImageUrl,
-            } : null,
-            Verified = true,
-            SpotifyId = artist.Id,
-        }).ToList();
-
-        //Check if any of theese images already exist.
-        List<string> urls = newArtistsWithImages.Where(a => a.Image != null).Select(a => a.Image!.Url).ToList();
-        var existingImages = _context.Images.Where(i => urls.Contains(i.Url)).ToList();
-
-        //Relate the existing images with the new artist.
-        foreach (var artist in newArtistsWithImages)
-        {
-            var existingImage = existingImages.FirstOrDefault(i => i.Url == artist.Image!.Url);
-
-            if (existingImage != null)
-            {
-                artist.Image = existingImage;
-            }
-        }
-        _context.Artists.AddRange(newArtistsWithImages);
-        await _context.SaveChangesAsync();
-
-        return existingArtists.Concat(newArtistsWithImages).ToList();
+        _externalSearchProvider = externalSearchProvider;
+        _bulkInsertService = bulkInsertService;
     }
 
     public async Task<ArtistResponse> Create(string name, IFormFile? image, string username, int userId)
@@ -99,5 +63,70 @@ public class ArtistService : IArtistService
 
         return artist;
         // return artist.Adapt<ArtistResponse>();
+    }
+
+    public async Task<ArtistDetails> GetFullArtist(string slug)
+    {
+        var artist = await _context.Artists.Include(a => a.Image)
+                                           .Include(a => a.Albums)
+                                           .ThenInclude(album => album.Image)
+                                           .Include(a => a.TrackArtists.OrderBy(ta => ta.Track.Views).Take(5)) //Takes Top x tracks by views
+                                           .ThenInclude(ta => ta.Track)
+                                           .FirstOrDefaultAsync(artist => artist.Slug == slug) ?? throw new ApiError(System.Net.HttpStatusCode.NotFound, $"Artist Id {slug} not found");
+
+        if (artist.SpotifyId != null)
+        {
+            artist = await IndexArtist(artist);
+        }
+
+        var artistDetails = artist.Adapt<ArtistDetails>();
+        artistDetails.Albums = artist.Albums.Where(album => album.Type == AlbumType.Album)
+                                            .ToList()
+                                            .Adapt<List<AlbumResponse>>()
+                                            .OrderByDescending(a => a.ReleaseDate)
+                                            .ToList();
+        artistDetails.Singles = artist.Albums.Where(album => album.Type != AlbumType.Album)
+                                             .ToList()
+                                             .Adapt<List<AlbumResponse>>()
+                                             .OrderByDescending(a => a.ReleaseDate)
+                                             .ToList();
+        artistDetails.TopTracks = artist.TrackArtists.Select(ta => ta.Track).ToList().Adapt<List<TrackResponse>>();
+
+        return artistDetails;
+    }
+
+    private async Task<Artist> IndexArtist(Artist artist)
+    {
+        if (artist.SpotifyId == null)
+        {
+            throw new ApiError(HttpStatusCode.InternalServerError, "Internal server error");
+        }
+
+        //Get External Data
+        var externalArtist = await _externalSearchProvider.GetArtist(artist.SpotifyId);
+
+        //Update Image if one doesn't already exist.
+        if (artist.Image == null && externalArtist.ImageUrl != null)
+        {
+            var existingImage = await _context.Images.FirstOrDefaultAsync(i => i.Url == externalArtist.ImageUrl);
+            artist.Image = existingImage ?? new Image
+            {
+                Url = externalArtist.ImageUrl,
+            };
+
+            await _context.SaveChangesAsync(); //Save changes here as we don't want tracked changes to affect album inserting.
+        }
+
+        //Insert Albums we fetched (function ignores duplicates/already inserted albums)
+        var albums = await _bulkInsertService.BulkInsertExternalAlbums(externalArtist.Albums);
+
+        var totalAlbums = artist.Albums.Concat(albums).ToList(); //This can include duplicate albums between local and external data.
+
+        //Note that we won't call _context.SaveChanges() on this as all of this data is already in the database however it's more efficient to filter
+        //locally instead of refetching everything again.
+        artist.Albums = totalAlbums.GroupBy(a => a.Id).Select(a => a.First()).ToList();
+
+
+        return artist;
     }
 }

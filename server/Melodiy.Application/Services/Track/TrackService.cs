@@ -6,6 +6,7 @@ using Melodiy.Application.Common.Interfaces.Persistance;
 using Melodiy.Application.Common.Interfaces.Services;
 using Melodiy.Application.Services.AlbumService;
 using Melodiy.Application.Services.ArtistService;
+using Melodiy.Application.Services.BulkInsertService;
 using Melodiy.Application.Services.FileService;
 using Melodiy.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -20,13 +21,15 @@ public class TrackService : ITrackService
     private readonly IAlbumService _albumService;
     private readonly IArtistService _artistService;
     private readonly IDateTimeProvider _dateTimeProvider;
-    public TrackService(IDataContext context, IFileService fileService, IAlbumService albumService, IArtistService artistService, IDateTimeProvider dateTimeProvider)
+    private readonly IBulkInsertService _bulkInsertService;
+    public TrackService(IDataContext context, IFileService fileService, IAlbumService albumService, IArtistService artistService, IDateTimeProvider dateTimeProvider, IBulkInsertService bulkInsertService)
     {
         _context = context;
         _fileService = fileService;
         _albumService = albumService;
         _artistService = artistService;
         _dateTimeProvider = dateTimeProvider;
+        _bulkInsertService = bulkInsertService;
     }
 
     public async Task<List<TrackResponse>> BulkInsertExternal(List<ExternalTrack> data)
@@ -42,8 +45,8 @@ public class TrackService : ITrackService
                                                     .Include(t => t.Album)
                                                     .ToList();
         List<string> existingIds = existingTracks.Select(a => a.SpotifyId!).ToList();
-        List<Artist> trackArtists = await _artistService.BulkInsertExternal(tracks.SelectMany(track => track.Artists).ToList());
-        List<Album> trackAlbums = await _albumService.BulkInsertExternal(tracks.Select(track => track.Album).ToList());
+        List<Artist> trackArtists = await _bulkInsertService.BulkInsertExternalArtists(tracks.SelectMany(track => track.Artists).ToList());
+        List<Album> trackAlbums = await _bulkInsertService.BulkInsertExternalAlbums(tracks.Select(track => track.Album).ToList());
 
         List<ExternalTrack> newTracks = tracks.ExceptBy(existingIds, track => track.Id).ToList();
         var newTracksWithImages = newTracks.Select(track => new Track

@@ -62,7 +62,7 @@ const Search = async ({ searchParams }: SearchProps) => {
 
         <div className="mt-6">
           <span className="text-lg font-bold">Albums</span>
-          <div className="flex gap-x-1 overflow-x-auto py-4 pl-1">
+          <div className="flex gap-x-4 overflow-x-auto py-4 pl-1">
             {result.albums.slice(0, 8).map((album) => (
               <AlbumCard
                 title={album.title}

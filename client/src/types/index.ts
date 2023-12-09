@@ -25,6 +25,15 @@ export type Artist = {
   createdAt: string;
 };
 
+export type FullArtist = Artist & {
+  description?: string;
+  monthlyListeners: number;
+  topTracks: Track[];
+  albums: Album[];
+  singles: Album[];
+  createdAt: string;
+};
+
 export interface SearchResult {
   albums: Album[];
   artists: Artist[];

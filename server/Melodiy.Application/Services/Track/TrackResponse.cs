@@ -2,7 +2,6 @@ using Melodiy.Application.Services.AlbumService;
 using Melodiy.Application.Services.ArtistService;
 using Melodiy.Application.Services.ImageService;
 using Melodiy.Application.Services.UserService;
-using Melodiy.Domain.Entities;
 using Melodiy.Domain.Enums;
 
 namespace Melodiy.Application.Services.TrackService;
@@ -12,6 +11,7 @@ public class TrackResponse
     public int Id { get; set; }
     public string Slug { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
+    public int Views { get; set; }
     public string? FilePath { get; set; }
     public string? SpotifyId { get; set; }
     public string? YoutubeId { get; set; }

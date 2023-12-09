@@ -1,11 +1,11 @@
-using System.Globalization;
 using Melodiy.Application.Common.Entities;
+using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Common.Interfaces.Search;
-using Melodiy.Application.Common.Interfaces.Services;
-using Melodiy.Domain.Entities;
 using Melodiy.Domain.Enums;
 using Microsoft.Extensions.Options;
 using SpotifyAPI.Web;
+using System.Globalization;
+using System.Net;
 
 namespace Melodiy.Infrastructure.Services.Search;
 
@@ -59,6 +59,29 @@ public class SpotifyProvider : IExternalSearchProvider
         return pipedResults;
     }
 
+    public async Task<ExternalFullArtist> GetArtist(string id)
+    {
+        SpotifyClient spotify = new(_defaultConfig);
+
+        FullArtist artist = await spotify.Artists.Get(id) ?? throw new ApiError(HttpStatusCode.InternalServerError, "Server error occured");
+        Paging<SimpleAlbum> albums = await spotify.Artists.GetAlbums(id, new ArtistsAlbumsRequest
+        {
+            IncludeGroupsParam = ArtistsAlbumsRequest.IncludeGroups.Album | ArtistsAlbumsRequest.IncludeGroups.Single,
+            Market = "US",
+            Limit = 50,
+        });
+
+        IList<SimpleAlbum> allAlbums = await spotify.PaginateAll(albums);
+
+        return new ExternalFullArtist
+        {
+            Id = artist.Id,
+            Name = artist.Name,
+            ImageUrl = artist.Images.Any() ? artist.Images[0].Url : null,
+            Albums = allAlbums.Select(SpotifyAlbumToExternalAlbum).ToList(),
+        };
+    }
+
     private static ExternalAlbum SpotifyAlbumToExternalAlbum(SimpleAlbum album)
     {
         return new ExternalAlbum
@@ -68,7 +91,7 @@ public class SpotifyProvider : IExternalSearchProvider
             Title = album.Name,
             ImageUrl = album.Images.Any() ? album.Images[0].Url : null,
             ReleaseDate = SpotifyDateToUniversalTime(album.ReleaseDate, album.ReleaseDatePrecision),
-            Type = SpotifyAlbumTypeToAlbumType(album.AlbumGroup, album.TotalTracks),
+            Type = SpotifyAlbumTypeToAlbumType(album.AlbumType, album.TotalTracks),
         };
     }
 

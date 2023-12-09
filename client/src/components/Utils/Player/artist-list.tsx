@@ -24,7 +24,7 @@ const ArtistList: FC<ArtistListProps> = ({ artists }) => {
         <span
           key={artist.id}
           onClick={(e) => handleRedirect(e, artist.id)}
-          className="cursor-pointer text-sm text-inactive hover:underline"
+          className="m-0 truncate p-0 text-sm font-light text-[#969696] hover:underline"
         >
           {artist.name}
           {i !== artists.length - 1 ? ',' : ''}

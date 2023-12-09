@@ -1,6 +1,7 @@
 'use server';
 
-import { SearchResults } from '@/types';
+import { getApiRoute } from '@/lib/network/helpers';
+import { FullArtist, SearchResults } from '@/types';
 import axios from 'axios';
 import { revalidatePath } from 'next/cache';
 
@@ -23,5 +24,15 @@ export async function searchQeury(query: string): Promise<SearchResults> {
     return data;
   } catch (err) {
     return empty;
+  }
+}
+
+export async function getArtist(id: string): Promise<FullArtist | null> {
+  try {
+    const { data } = await axios.get(getApiRoute(`/artist/${id}`));
+
+    return data;
+  } catch (err) {
+    return null;
   }
 }

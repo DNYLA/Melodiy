@@ -11,6 +11,7 @@ public class Track : BaseEntity
     public int Id { get; set; }
     public string Slug { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
+    public int Views { get; set; } = 0;
     public string? FilePath { get; set; }
     public string? SpotifyId { get; set; }
     public string? YoutubeId { get; set; }

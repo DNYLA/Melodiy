@@ -84,6 +84,10 @@ static void ConfigureMapster()
         .Map(dest => dest.Id, src => src.Slug)
         .Map(dest => dest.Image, src => src.Image != null ? src.Image.Url : null);
 
+    TypeAdapterConfig<ArtistResponse, GetArtistDetails>.NewConfig()
+        .Map(dest => dest.Id, src => src.Slug)
+        .Map(dest => dest.Image, src => src.Image != null ? src.Image.Url : null);
+
     TypeAdapterConfig<ArtistResponse, GetArtistPreview>.NewConfig()
         .Map(dest => dest.Id, src => src.Slug);
 

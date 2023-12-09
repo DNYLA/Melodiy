@@ -26,4 +26,11 @@ public class ArtistController : ControllerBase
 
         return response.Adapt<GetArtistResponse>();
     }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<GetArtistDetails>> GetArtist(string id)
+    {
+        var response = await _artistService.GetFullArtist(id);
+        return response.Adapt<GetArtistDetails>();
+    }
 }

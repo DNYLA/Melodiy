@@ -2,6 +2,7 @@ global using Mapster;
 using Melodiy.Application.Services.AlbumService;
 using Melodiy.Application.Services.ArtistService;
 using Melodiy.Application.Services.Authentication;
+using Melodiy.Application.Services.BulkInsertService;
 using Melodiy.Application.Services.FileService;
 using Melodiy.Application.Services.PlayerService;
 using Melodiy.Application.Services.Playlist;
@@ -19,6 +20,7 @@ public static class DependencyInjection
         services.AddScoped<IAlbumService, AlbumService>();
         services.AddScoped<IArtistService, ArtistService>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<IBulkInsertService, BulkInsertService>();
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<IPlayerService, PlayerService>();
         services.AddScoped<IPlaylistService, PlaylistService>();

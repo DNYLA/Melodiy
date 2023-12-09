@@ -60,7 +60,7 @@ const ArtistHeader: React.FC<IArtistHeader> = ({
         //     'linear-gradient(180.04deg, rgba(23, 23, 26, 0) 0.04%, rgba(23, 23, 26, 0.7) 99.96%)',
         // }}
       >
-        {Array(3)
+        {Array(1)
           .fill(0)
           .map((_, i) => GenerateImage(i))}
         <div className="absolute bottom-0 z-30 flex w-full items-center justify-between px-5 py-2">

@@ -1,0 +1,25 @@
+meta {
+  name: Get
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:5041/artist?name=Roddy Ricch
+  body: json
+  auth: bearer
+}
+
+query {
+  name: Roddy Ricch
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "name": "Dan"
+  }
+}

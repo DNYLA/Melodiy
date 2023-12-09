@@ -2,14 +2,22 @@
 
 import Image from '@/components/Data/Image';
 import ArtistList from '@/components/Utils/Player/artist-list';
+import { getDefaultImage } from '@/lib/utils';
 import { ArtistPreview } from '@/types';
 import { useRouter } from 'next/navigation';
+
+export enum AlbumCardSize {
+  Small = 150,
+  Medium = 180,
+  Large = 200,
+}
 
 export interface IAlbumCard {
   title: string;
   artists: ArtistPreview[];
-  imageUrl: string;
+  imageUrl?: string;
   redirect?: string;
+  size?: AlbumCardSize;
 }
 
 const AlbumCard: React.FC<IAlbumCard> = ({
@@ -17,6 +25,7 @@ const AlbumCard: React.FC<IAlbumCard> = ({
   artists,
   imageUrl,
   redirect,
+  size = AlbumCardSize.Medium,
 }) => {
   const router = useRouter();
 
@@ -28,21 +37,23 @@ const AlbumCard: React.FC<IAlbumCard> = ({
 
   return (
     <div
-      className="group min-w-[200px] cursor-pointer duration-300 ease-in-out hover:scale-110"
+      className="group flex cursor-pointer flex-col gap-y-1 duration-300 ease-in-out hover:scale-110"
+      style={{ minWidth: size }}
       onClick={handleRedirect}
     >
       <Image
         draggable={false}
-        className={'max-h-[180px] rounded-lg'}
+        className={'rounded-md'}
+        style={{ maxHeight: size }}
         priority={true}
-        src={imageUrl}
-        width={180}
-        height={180}
-        alt="Artist Avatar"
+        src={imageUrl ?? getDefaultImage()}
+        width={size}
+        height={size}
+        alt="Artist Picture"
         quality={100}
       />
-      <div className="mt-1 max-w-[180px]">
-        <p className="cursor-pointer truncate text-lg font-bold hover:underline">
+      <div className="m-0 flex flex-col gap-0 p-0" style={{ maxWidth: size }}>
+        <p className="max-w-[200px] truncate font-bold hover:underline">
           {title}
         </p>
         <ArtistList artists={artists} />

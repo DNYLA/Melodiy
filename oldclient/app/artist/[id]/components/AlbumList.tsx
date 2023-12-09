@@ -6,9 +6,14 @@ import { useRouter } from 'next/navigation';
 export interface IAlbumList {
   header: string;
   albums: Album[];
+  viewMoreRedirect?: string;
 }
 
-const AlbumList: React.FC<IAlbumList> = ({ header, albums }) => {
+const AlbumList: React.FC<IAlbumList> = ({
+  header,
+  albums,
+  viewMoreRedirect,
+}) => {
   const router = useRouter();
 
   const handleRedirect = (id: string) => {
@@ -19,10 +24,13 @@ const AlbumList: React.FC<IAlbumList> = ({ header, albums }) => {
     <div className="">
       <div className="mb-1 flex items-center justify-between align-middle">
         <h1 className="text-xl font-bold">{header}</h1>
-        <span className="cursor-pointer text-center align-middle text-sm font-light uppercase transition-all delay-100 ease-in-out hover:opacity-80">
-          View All
-        </span>
+        {viewMoreRedirect && (
+          <span className="cursor-pointer text-center align-middle text-sm font-light uppercase transition-all delay-100 ease-in-out hover:opacity-80">
+            View All
+          </span>
+        )}
       </div>
+
       <div className="flex gap-x-5 overflow-auto pb-3">
         {albums.map((album) => (
           <div
