@@ -13,12 +13,14 @@ public class SearchService : ISearchService
     private readonly IExternalSearchProvider _searchProvider;
     private readonly IDataContext _context;
     private readonly IArtistService _artistService;
+    private readonly IAlbumService _albumService;
 
-    public SearchService(IDataContext context, IArtistService artistService, IExternalSearchProvider searchProvider)
+    public SearchService(IDataContext context, IArtistService artistService, IExternalSearchProvider searchProvider, IAlbumService albumService)
     {
         _context = context;
         _artistService = artistService;
         _searchProvider = searchProvider;
+        _albumService = albumService;
     }
 
     public async Task<SearchResult> Search(string term, int limit = 10)
@@ -26,8 +28,8 @@ public class SearchService : ISearchService
         ExternalSearchResult externalResult = await _searchProvider.Search(term, 10);
         var result = new SearchResult
         {
-            Artists = await _artistService.BulkInsertExternal(externalResult.Artists),
-            // Albums = "",
+            Artists = (await _artistService.BulkInsertExternal(externalResult.Artists)).Adapt<List<ArtistResponse>>(),
+            Albums = await _albumService.BulkInsertExternal(externalResult.Albums),
             // Tracks = "",
         };
 

@@ -1,4 +1,5 @@
 import { searchQeury } from '@/actions';
+import AlbumCard from '@/components/Cards/Album';
 import ArtistCard from '@/components/Cards/Artist';
 import { Suspense } from 'react';
 
@@ -48,6 +49,21 @@ const Search = async ({ searchParams }: SearchProps) => {
                 imageUrl={artist.image ?? '/images/default_playlist.png'}
                 redirect={`/artist/${artist.id}`}
                 key={artist.id}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="col-span-3 mt-9">
+          <span className="text-lg font-bold">Albums</span>
+          <div className="flex gap-x-1 overflow-x-auto py-4 pl-1">
+            {result.albums.slice(0, 8).map((album) => (
+              <AlbumCard
+                title={album.title}
+                artists={album.artists}
+                imageUrl={album.image ?? '/images/default_playlist.png'}
+                redirect={`/album/${album.id}`}
+                key={album.id}
               />
             ))}
           </div>

@@ -10,7 +10,7 @@ export async function revalidatePathClient(path: string) {
 }
 
 export async function searchQeury(query: string): Promise<SearchResults> {
-  const empty: SearchResults = { songs: [], artists: [] };
+  const empty: SearchResults = { tracks: [], artists: [], albums: [] };
   if (!query) {
     //TODO: Return Popular || Their Favourites || Recently Searched?
     return empty;

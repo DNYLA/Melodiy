@@ -1,4 +1,5 @@
 
+using Melodiy.Application.Common.Entities;
 using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Common.Interfaces.Persistance;
 using Melodiy.Application.Common.Interfaces.Services;
@@ -26,6 +27,54 @@ public class AlbumService : IAlbumService
         _artistService = artistService;
     }
 
+    public async Task<List<AlbumResponse>> BulkInsertExternal(List<ExternalAlbum> albums)
+    {
+        //Fetch already existing albums
+        List<string> ids = albums.Select(a => a.Id).ToList();
+        List<Album> existingAlbums = _context.Albums.Where(a => a.SpotifyId != null && ids.Contains(a.SpotifyId))
+                                                    .Include(a => a.Image)
+                                                    .Include(a => a.Artists)
+                                                    .ToList();
+        List<string> existingIds = existingAlbums.Select(a => a.SpotifyId!).ToList();
+
+        List<ExternalArtist> artists = albums.SelectMany(album => album.Artists).ToList();
+        List<Artist> albumArtists = await _artistService.BulkInsertExternal(artists);
+
+        List<ExternalAlbum> newAlbums = albums.ExceptBy(existingIds, id => id.Id).ToList();
+        var newAlbumsWithImages = newAlbums.Select(album => new Album
+        {
+            Slug = Guid.NewGuid().ToString("N"),
+            Title = album.Title,
+            Image = album.ImageUrl != null ? new Image
+            {
+                Url = album.ImageUrl,
+            } : null,
+            Artists = album.Artists.Select(externalArtist => albumArtists.Find(a => a.SpotifyId == externalArtist.Id)!).ToList(), //Will Automatically relate but won't return related data
+            ReleaseDate = album.ReleaseDate,
+            Type = album.Type,
+            Verified = true,
+            SpotifyId = album.Id,
+        }).ToList();
+
+        //Check if any of theese images already exist.
+        List<string> urls = newAlbumsWithImages.Where(a => a.Image != null).Select(a => a.Image!.Url).ToList();
+        var existingImages = _context.Images.Where(i => urls.Contains(i.Url)).ToList();
+
+        //Relate the existing images with the new artist.
+        foreach (var artist in newAlbumsWithImages)
+        {
+            var existingImage = existingImages.FirstOrDefault(i => i.Url == artist.Image!.Url);
+
+            if (existingImage != null)
+            {
+                artist.Image = existingImage;
+            }
+        }
+        _context.Albums.AddRange(newAlbumsWithImages);
+        await _context.SaveChangesAsync();
+
+        return existingAlbums.Concat(newAlbumsWithImages).ToList().Adapt<List<AlbumResponse>>();
+    }
 
     public async Task<AlbumResponse> Create(string title, string artistId, long timestamp, IFormFile? image, string username, int userId)
     {

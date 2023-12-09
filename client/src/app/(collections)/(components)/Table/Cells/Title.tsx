@@ -1,7 +1,7 @@
 import Image from '@/components/Data/Image';
+import ArtistList from '@/components/Utils/Player/artist-list';
 import { getDefaultImage } from '@/lib/utils';
 import { ArtistPreview } from '@/types';
-import { useRouter } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 
 interface ITitleCell {
@@ -17,16 +17,6 @@ const TitleCell: React.FC<ITitleCell> = ({
   cover,
   isActive,
 }) => {
-  const router = useRouter();
-
-  const handleRedirect = (
-    e: React.MouseEvent<HTMLSpanElement, MouseEvent>,
-    id: string
-  ) => {
-    e.stopPropagation();
-    router.push(`/artist/${id}`);
-  };
-
   return (
     <div className="flex gap-x-2">
       <Image
@@ -48,18 +38,7 @@ const TitleCell: React.FC<ITitleCell> = ({
         >
           {title}
         </span>
-        <div className="flex gap-x-1">
-          {artists.map((artist, i) => (
-            <span
-              key={artist.id}
-              onClick={(e) => handleRedirect(e, artist.id)}
-              className="cursor-pointer text-sm text-inactive hover:underline"
-            >
-              {artist.name}
-              {i !== artists.length - 1 ? ',' : ''}
-            </span>
-          ))}
-        </div>
+        <ArtistList artists={artists} />
       </div>
     </div>
   );

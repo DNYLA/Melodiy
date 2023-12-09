@@ -7,6 +7,6 @@ namespace Melodiy.Application.Services.ArtistService;
 public interface IArtistService
 {
     Task<ArtistResponse> Create(string name, IFormFile? image, string username, int userId);
-    Task<List<ArtistResponse>> BulkInsertExternal(List<ExternalArtist> artists);
+    Task<List<Artist>> BulkInsertExternal(List<ExternalArtist> artists);
     Task<Artist> Get(string id, bool includeImage = false);
 }

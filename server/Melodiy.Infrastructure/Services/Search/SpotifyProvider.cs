@@ -1,5 +1,9 @@
+using System.Globalization;
 using Melodiy.Application.Common.Entities;
 using Melodiy.Application.Common.Interfaces.Search;
+using Melodiy.Application.Common.Interfaces.Services;
+using Melodiy.Domain.Entities;
+using Melodiy.Domain.Enums;
 using Microsoft.Extensions.Options;
 using SpotifyAPI.Web;
 
@@ -28,32 +32,95 @@ public class SpotifyProvider : IExternalSearchProvider
 
         ExternalSearchResult pipedResults = new();
 
-        if (results == null)
+        if (results.Tracks.Items != null && results.Tracks.Items.Any())
         {
-            return pipedResults; //No Results so we can return an empty result;
+            pipedResults.Tracks = results.Tracks.Items.Select(track => new ExternalTrack
+            {
+                Id = track.Id,
+                Artists = track.Artists.Select(SpotifyArtistToExternalArtist).ToList(),
+                Album = SpotifyAlbumToExternalAlbum(track.Album),
+                Title = track.Name,
+                ImageUrl = track.Album.Images.Any() ? track.Album.Images[0].Url : null,
+                Duration = track.DurationMs,
+                ReleaseDate = SpotifyDateToUniversalTime(track.Album.ReleaseDate, track.Album.ReleaseDatePrecision)
+            }).ToList();
         }
 
-        // if (results.Tracks.Items != null && results.Tracks.Items.Count > 0)
-        // {
-        // }
-
-        if (results.Artists.Items != null && results.Artists.Items.Count > 0)
+        if (results.Artists.Items != null && results.Artists.Items.Any())
         {
-            pipedResults.Artists = ConvertArtists(results.Artists.Items);
+            pipedResults.Artists = results.Artists.Items.Select(SpotifyArtistToExternalArtist).ToList();
+        }
+
+        if (results.Albums.Items != null && results.Albums.Items.Any())
+        {
+            pipedResults.Albums = results.Albums.Items.Select(SpotifyAlbumToExternalAlbum).ToList();
         }
 
         return pipedResults;
     }
 
-    private static List<ExternalArtist> ConvertArtists(List<FullArtist> artists)
+    private static ExternalAlbum SpotifyAlbumToExternalAlbum(SimpleAlbum album)
     {
-        List<ExternalArtist> converted = artists.Select(a => new ExternalArtist
+        return new ExternalAlbum
         {
-            Id = a.Id,
-            Name = a.Name,
-            ImageUrl = a.Images.Count > 0 ? a.Images[0].Url : null,
-        }).ToList();
+            Id = album.Id,
+            Artists = album.Artists.Select(SpotifyArtistToExternalArtist).ToList(),
+            Title = album.Name,
+            ImageUrl = album.Images.Any() ? album.Images[0].Url : null,
+            ReleaseDate = SpotifyDateToUniversalTime(album.ReleaseDate, album.ReleaseDatePrecision),
+            Type = SpotifyAlbumTypeToAlbumType(album.AlbumGroup, album.TotalTracks),
+        };
+    }
 
-        return converted;
+    private static ExternalArtist SpotifyArtistToExternalArtist(SimpleArtist artist)
+    {
+        return new ExternalArtist
+        {
+            Id = artist.Id,
+            Name = artist.Name,
+            ImageUrl = null,
+        };
+    }
+
+    private static ExternalArtist SpotifyArtistToExternalArtist(FullArtist artist)
+    {
+        return new ExternalArtist
+        {
+            Id = artist.Id,
+            Name = artist.Name,
+            ImageUrl = artist.Images.Any() ? artist.Images[0].Url : null,
+        };
+    }
+
+    private static AlbumType SpotifyAlbumTypeToAlbumType(string type, int totalTracks)
+    {
+        //Albums are always albums
+        if (type == "album")
+        {
+            return AlbumType.Album;
+        }
+
+        //Singles can considered EP's if there are multiple traks
+        if (totalTracks > 1)
+        {
+            return AlbumType.EP;
+        }
+
+        return AlbumType.Single; //Default anything else to a single
+    }
+
+    private static DateTime SpotifyDateToUniversalTime(string releaseDate, string precision)
+    {
+        //Some results are only accurate to the month or year in this case we default to the start of the period.
+        if (precision == "month")
+        {
+            releaseDate += "-01";
+        }
+        else if (precision == "year")
+        {
+            releaseDate += "-01-01";
+        }
+        DateTime result = DateTime.ParseExact(releaseDate, "yyyy-MM-dd", CultureInfo.InvariantCulture).ToUniversalTime();
+        return result;
     }
 }

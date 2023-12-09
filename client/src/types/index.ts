@@ -11,8 +11,9 @@ export enum SearchType {
 }
 
 export interface SearchResults {
-  songs: Track[];
   artists: Artist[];
+  albums: Album[];
+  tracks: Track[];
 }
 
 export type Artist = {

@@ -19,15 +19,18 @@ public class ArtistService : IArtistService
         _fileRepository = fileRepository;
     }
 
-    public async Task<List<ArtistResponse>> BulkInsertExternal(List<ExternalArtist> data)
+    public async Task<List<Artist>> BulkInsertExternal(List<ExternalArtist> data)
     {
+        //Removes duplicates based on Id
+        List<ExternalArtist> artists = data.GroupBy(a => a.Id).Select(a => a.First()).ToList();
+
         //Fetch Already Existing Artists (Need this as we still want to return them)
-        List<string> ids = data.Select(d => d.Id).ToList(); //Needed for query below (Any isn't translatable to SQL but contains is)
+        List<string> ids = artists.Select(d => d.Id).ToList(); //Needed for query below (Any isn't translatable to SQL but contains is)
         List<Artist> existingArtists = _context.Artists.Where(a => a.SpotifyId != null && ids.Contains(a.SpotifyId)).Include(a => a.Image).ToList();
         List<string> existingIds = existingArtists.Select(a => a.SpotifyId!).ToList(); //SpotifyId can't be null in this case.
 
         //Filters out duplicates theese are the only artists we need to insert
-        List<ExternalArtist> newArtists = data.ExceptBy(existingIds, id => id.Id).ToList();
+        List<ExternalArtist> newArtists = artists.ExceptBy(existingIds, id => id.Id).ToList();
         var newArtistsWithImages = newArtists.Select(artist => new Artist
         {
             Slug = Guid.NewGuid().ToString("N"),
@@ -57,7 +60,7 @@ public class ArtistService : IArtistService
         _context.Artists.AddRange(newArtistsWithImages);
         await _context.SaveChangesAsync();
 
-        return existingArtists.Concat(newArtistsWithImages).ToList().Adapt<List<ArtistResponse>>();
+        return existingArtists.Concat(newArtistsWithImages).ToList();
     }
 
     public async Task<ArtistResponse> Create(string name, IFormFile? image, string username, int userId)
