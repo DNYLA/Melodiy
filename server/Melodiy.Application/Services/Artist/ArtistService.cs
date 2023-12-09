@@ -30,7 +30,7 @@ public class ArtistService : IArtistService
         List<string> existingIds = existingArtists.Select(a => a.SpotifyId!).ToList(); //SpotifyId can't be null in this case.
 
         //Filters out duplicates theese are the only artists we need to insert
-        List<ExternalArtist> newArtists = artists.ExceptBy(existingIds, id => id.Id).ToList();
+        List<ExternalArtist> newArtists = artists.ExceptBy(existingIds, artist => artist.Id).ToList();
         var newArtistsWithImages = newArtists.Select(artist => new Artist
         {
             Slug = Guid.NewGuid().ToString("N"),

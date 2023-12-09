@@ -27,8 +27,11 @@ public class AlbumService : IAlbumService
         _artistService = artistService;
     }
 
-    public async Task<List<AlbumResponse>> BulkInsertExternal(List<ExternalAlbum> albums)
+    public async Task<List<Album>> BulkInsertExternal(List<ExternalAlbum> data)
     {
+        //Removes duplicates based on Id
+        List<ExternalAlbum> albums = data.GroupBy(a => a.Id).Select(a => a.First()).ToList();
+
         //Fetch already existing albums
         List<string> ids = albums.Select(a => a.Id).ToList();
         List<Album> existingAlbums = _context.Albums.Where(a => a.SpotifyId != null && ids.Contains(a.SpotifyId))
@@ -36,11 +39,9 @@ public class AlbumService : IAlbumService
                                                     .Include(a => a.Artists)
                                                     .ToList();
         List<string> existingIds = existingAlbums.Select(a => a.SpotifyId!).ToList();
+        List<Artist> albumArtists = await _artistService.BulkInsertExternal(albums.SelectMany(album => album.Artists).ToList());
 
-        List<ExternalArtist> artists = albums.SelectMany(album => album.Artists).ToList();
-        List<Artist> albumArtists = await _artistService.BulkInsertExternal(artists);
-
-        List<ExternalAlbum> newAlbums = albums.ExceptBy(existingIds, id => id.Id).ToList();
+        List<ExternalAlbum> newAlbums = albums.ExceptBy(existingIds, album => album.Id).ToList();
         var newAlbumsWithImages = newAlbums.Select(album => new Album
         {
             Slug = Guid.NewGuid().ToString("N"),
@@ -61,19 +62,19 @@ public class AlbumService : IAlbumService
         var existingImages = _context.Images.Where(i => urls.Contains(i.Url)).ToList();
 
         //Relate the existing images with the new artist.
-        foreach (var artist in newAlbumsWithImages)
+        foreach (var album in newAlbumsWithImages)
         {
-            var existingImage = existingImages.FirstOrDefault(i => i.Url == artist.Image!.Url);
+            var existingImage = existingImages.FirstOrDefault(i => i.Url == album.Image!.Url);
 
             if (existingImage != null)
             {
-                artist.Image = existingImage;
+                album.Image = existingImage;
             }
         }
         _context.Albums.AddRange(newAlbumsWithImages);
         await _context.SaveChangesAsync();
 
-        return existingAlbums.Concat(newAlbumsWithImages).ToList().Adapt<List<AlbumResponse>>();
+        return existingAlbums.Concat(newAlbumsWithImages).ToList();
     }
 
     public async Task<AlbumResponse> Create(string title, string artistId, long timestamp, IFormFile? image, string username, int userId)

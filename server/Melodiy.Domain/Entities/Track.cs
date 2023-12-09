@@ -22,7 +22,7 @@ public class Track : BaseEntity
 
     //Foreign Keys
     public int? AlbumId { get; set; }
-    public int UserId { get; set; }
+    public int? UserId { get; set; }
     public int? ImageId { get; set; }
 
     //Navigation Properties

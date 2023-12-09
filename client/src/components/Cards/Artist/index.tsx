@@ -20,16 +20,16 @@ const ArtistCard: React.FC<IArtistCard> = ({ name, imageUrl, redirect }) => {
 
   return (
     <div
-      className="flex h-[220px] w-[220px] cursor-pointer flex-col items-center justify-center gap-y-1"
+      className="flex h-[200px] w-[160px] cursor-pointer flex-col items-center justify-center gap-y-1"
       onClick={handleRedirect}
     >
       <Image
         draggable={false}
-        className={'max-h-[180px] max-w-[180px] rounded-full'}
+        className={'max-h-[160px] max-w-[160px] rounded-full'}
         priority={true}
         src={imageUrl}
-        width={180}
-        height={180}
+        width={160}
+        height={160}
         alt="Artist Avatar"
         quality={100}
       />

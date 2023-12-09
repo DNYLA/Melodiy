@@ -3,6 +3,7 @@ using Melodiy.Application.Common.Interfaces.Persistance;
 using Melodiy.Application.Common.Interfaces.Search;
 using Melodiy.Application.Services.AlbumService;
 using Melodiy.Application.Services.ArtistService;
+using Melodiy.Application.Services.TrackService;
 using Melodiy.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,13 +15,15 @@ public class SearchService : ISearchService
     private readonly IDataContext _context;
     private readonly IArtistService _artistService;
     private readonly IAlbumService _albumService;
+    private readonly ITrackService _trackService;
 
-    public SearchService(IDataContext context, IArtistService artistService, IExternalSearchProvider searchProvider, IAlbumService albumService)
+    public SearchService(IDataContext context, IArtistService artistService, IExternalSearchProvider searchProvider, IAlbumService albumService, ITrackService trackService)
     {
         _context = context;
         _artistService = artistService;
         _searchProvider = searchProvider;
         _albumService = albumService;
+        _trackService = trackService;
     }
 
     public async Task<SearchResult> Search(string term, int limit = 10)
@@ -29,8 +32,8 @@ public class SearchService : ISearchService
         var result = new SearchResult
         {
             Artists = (await _artistService.BulkInsertExternal(externalResult.Artists)).Adapt<List<ArtistResponse>>(),
-            Albums = await _albumService.BulkInsertExternal(externalResult.Albums),
-            // Tracks = "",
+            Albums = (await _albumService.BulkInsertExternal(externalResult.Albums)).Adapt<List<AlbumResponse>>(),
+            Tracks = await _trackService.BulkInsertExternal(externalResult.Tracks)
         };
 
         return result;

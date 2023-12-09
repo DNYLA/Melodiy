@@ -41,8 +41,8 @@ const AlbumCard: React.FC<IAlbumCard> = ({
         alt="Artist Avatar"
         quality={100}
       />
-      <div className="mt-1">
-        <p className="max-w-200 cursor-pointer truncate text-lg font-bold hover:underline">
+      <div className="mt-1 max-w-[180px]">
+        <p className="cursor-pointer truncate text-lg font-bold hover:underline">
           {title}
         </p>
         <ArtistList artists={artists} />

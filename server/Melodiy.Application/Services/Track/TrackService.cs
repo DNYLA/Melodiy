@@ -1,5 +1,5 @@
 
-using System.Net;
+using Melodiy.Application.Common.Entities;
 using Melodiy.Application.Common.Enums;
 using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Common.Interfaces.Persistance;
@@ -9,6 +9,7 @@ using Melodiy.Application.Services.ArtistService;
 using Melodiy.Application.Services.FileService;
 using Melodiy.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace Melodiy.Application.Services.TrackService;
 
@@ -26,6 +27,66 @@ public class TrackService : ITrackService
         _albumService = albumService;
         _artistService = artistService;
         _dateTimeProvider = dateTimeProvider;
+    }
+
+    public async Task<List<TrackResponse>> BulkInsertExternal(List<ExternalTrack> data)
+    {
+        //Removes duplicates based on Id
+        List<ExternalTrack> tracks = data.GroupBy(t => t.Id).Select(t => t.First()).ToList();
+
+        //Fetch already existing albums
+        List<string> ids = tracks.Select(a => a.Id).ToList();
+        List<Track> existingTracks = _context.Tracks.Where(t => t.SpotifyId != null && ids.Contains(t.SpotifyId))
+                                                    .Include(t => t.Image)
+                                                    .Include(t => t.TrackArtists)
+                                                    .Include(t => t.Album)
+                                                    .ToList();
+        List<string> existingIds = existingTracks.Select(a => a.SpotifyId!).ToList();
+        List<Artist> trackArtists = await _artistService.BulkInsertExternal(tracks.SelectMany(track => track.Artists).ToList());
+        List<Album> trackAlbums = await _albumService.BulkInsertExternal(tracks.Select(track => track.Album).ToList());
+
+        List<ExternalTrack> newTracks = tracks.ExceptBy(existingIds, track => track.Id).ToList();
+        var newTracksWithImages = newTracks.Select(track => new Track
+        {
+            Slug = Guid.NewGuid().ToString("N"),
+            Title = track.Title,
+            Duration = track.Duration,
+            ReleaseDate = track.ReleaseDate,
+            SpotifyId = track.Id,
+            Image = track.Album.ImageUrl != null ? new Image
+            {
+                Url = track.Album.ImageUrl,
+            } : null,
+            TrackArtists = track.Artists.Select(externalArtist =>
+            {
+                var artist = trackArtists.Find(a => a.SpotifyId == externalArtist.Id)!;
+
+                return new TrackArtist
+                {
+                    ArtistId = artist.Id,
+                };
+            }).ToList(),
+            Album = trackAlbums.Find(album => album.SpotifyId == track.Album.Id),
+        }).ToList();
+
+        //Check if any of theese images already exist.
+        List<string> urls = newTracksWithImages.Where(t => t.Image != null).Select(t => t.Image!.Url).ToList();
+        var existingImages = _context.Images.Where(i => urls.Contains(i.Url)).ToList();
+
+        //Relate the existing images with the new artist.
+        foreach (var track in newTracksWithImages)
+        {
+            var existingImage = existingImages.FirstOrDefault(i => i.Url == track.Image!.Url);
+
+            if (existingImage != null)
+            {
+                track.Image = existingImage;
+            }
+        }
+        _context.Tracks.AddRange(newTracksWithImages);
+        await _context.SaveChangesAsync();
+
+        return existingTracks.Concat(newTracksWithImages).ToList().Adapt<List<TrackResponse>>();
     }
 
     public async Task<TrackResponse> Create(UploadTrackRequest request, string username, int userId)
