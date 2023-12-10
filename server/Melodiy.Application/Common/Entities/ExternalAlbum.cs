@@ -6,6 +6,7 @@ public class ExternalAlbum
 {
     public string Id { get; set; } = null!;
     public List<ExternalArtist> Artists { get; set; } = null!;
+    public List<ExternalTrack> Tracks { get; set; } = new();
     public string Title { get; set; } = null!;
     public string? ImageUrl { get; set; }
     public DateTime ReleaseDate { get; set; }

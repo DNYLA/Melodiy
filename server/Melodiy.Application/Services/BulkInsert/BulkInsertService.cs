@@ -172,6 +172,16 @@ public class BulkInsertService : IBulkInsertService
         _context.Tracks.AddRange(newTracksWithImages);
         await _context.SaveChangesAsync();
 
-        return existingTracks.Concat(newTracksWithImages).ToList().Adapt<List<TrackResponse>>();
+
+        var allTracks = existingTracks.Concat(newTracksWithImages).ToList();
+        foreach (var track in allTracks)
+        {
+            if (track.Album != null)
+            {
+                track.Album.Tracks = new();
+            }
+        }
+
+        return allTracks.Adapt<List<TrackResponse>>();
     }
 }

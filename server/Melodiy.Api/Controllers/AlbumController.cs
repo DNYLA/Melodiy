@@ -26,4 +26,16 @@ public class AlbumController : ControllerBase
         var response = await _albumService.Create(request.Title, request.ArtistId, request.Timestamp, request.Image, user.Username, user.Id);
         return response.Adapt<GetAlbumResponse>();
     }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<GetAlbumResponse>> Get(string id)
+    {
+        Console.WriteLine("Fetching");
+        var response = await _albumService.Get(id, true);
+
+        Console.WriteLine("Returning");
+
+
+        return response.Adapt<GetAlbumResponse>();
+    }
 }

@@ -1,0 +1,30 @@
+meta {
+  name: Get
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:5041/album/
+  body: formUrlEncoded
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "title": "Please Excuse me For Being Antisocial"
+  }
+}
+
+body:form-urlencoded {
+  title: Test%202
+  timestamp: 1669041415
+}
+
+body:multipart-form {
+  title: Roddy Ricch
+}

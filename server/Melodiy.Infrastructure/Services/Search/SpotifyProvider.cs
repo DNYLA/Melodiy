@@ -34,16 +34,7 @@ public class SpotifyProvider : IExternalSearchProvider
 
         if (results.Tracks.Items != null && results.Tracks.Items.Any())
         {
-            pipedResults.Tracks = results.Tracks.Items.Select(track => new ExternalTrack
-            {
-                Id = track.Id,
-                Artists = track.Artists.Select(SpotifyArtistToExternalArtist).ToList(),
-                Album = SpotifyAlbumToExternalAlbum(track.Album),
-                Title = track.Name,
-                ImageUrl = track.Album.Images.Any() ? track.Album.Images[0].Url : null,
-                Duration = track.DurationMs,
-                ReleaseDate = SpotifyDateToUniversalTime(track.Album.ReleaseDate, track.Album.ReleaseDatePrecision)
-            }).ToList();
+            pipedResults.Tracks = results.Tracks.Items.Select(SpotifyTrackToExternalTrack).ToList();
         }
 
         if (results.Artists.Items != null && results.Artists.Items.Any())
@@ -57,6 +48,27 @@ public class SpotifyProvider : IExternalSearchProvider
         }
 
         return pipedResults;
+    }
+    public async Task<ExternalAlbum> GetAlbum(string id)
+    {
+        SpotifyClient spotify = new(_defaultConfig);
+        FullAlbum album = await spotify.Albums.Get(id, new AlbumRequest
+        {
+            Market = "US",
+        });
+
+        var externalAlbum = new ExternalAlbum
+        {
+            Id = album.Id,
+            Artists = album.Artists.Select(SpotifyArtistToExternalArtist).ToList(),
+            Title = album.Name,
+            ImageUrl = album.Images.Any() ? album.Images[0].Url : null,
+            ReleaseDate = SpotifyDateToUniversalTime(album.ReleaseDate, album.ReleaseDatePrecision),
+            Type = SpotifyAlbumTypeToAlbumType(album.AlbumType, album.TotalTracks),
+        };
+        externalAlbum.Tracks = album.Tracks.Items?.Select(track => SpotifyAlbumTrackToExternalTrack(track, externalAlbum)).ToList() ?? new();
+
+        return externalAlbum;
     }
 
     public async Task<ExternalFullArtist> GetArtist(string id)
@@ -112,6 +124,34 @@ public class SpotifyProvider : IExternalSearchProvider
             Id = artist.Id,
             Name = artist.Name,
             ImageUrl = artist.Images.Any() ? artist.Images[0].Url : null,
+        };
+    }
+
+    private static ExternalTrack SpotifyTrackToExternalTrack(FullTrack track)
+    {
+        return new ExternalTrack
+        {
+            Id = track.Id,
+            Artists = track.Artists.Select(SpotifyArtistToExternalArtist).ToList(),
+            Album = SpotifyAlbumToExternalAlbum(track.Album),
+            Title = track.Name,
+            ImageUrl = track.Album.Images.Any() ? track.Album.Images[0].Url : null,
+            Duration = track.DurationMs,
+            ReleaseDate = SpotifyDateToUniversalTime(track.Album.ReleaseDate, track.Album.ReleaseDatePrecision)
+        };
+    }
+
+    private static ExternalTrack SpotifyAlbumTrackToExternalTrack(SimpleTrack track, ExternalAlbum album)
+    {
+        return new ExternalTrack
+        {
+            Id = track.Id,
+            Artists = track.Artists.Select(SpotifyArtistToExternalArtist).ToList(),
+            Album = album,
+            Title = track.Name,
+            ImageUrl = album.ImageUrl,
+            Duration = track.DurationMs,
+            ReleaseDate = album.ReleaseDate
         };
     }
 

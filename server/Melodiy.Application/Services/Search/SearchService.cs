@@ -15,15 +15,13 @@ public class SearchService : ISearchService
     private readonly IExternalSearchProvider _searchProvider;
     private readonly IDataContext _context;
     private readonly IArtistService _artistService;
-    private readonly ITrackService _trackService;
     private readonly IBulkInsertService _bulkInsertService;
 
-    public SearchService(IDataContext context, IArtistService artistService, IExternalSearchProvider searchProvider, ITrackService trackService, IBulkInsertService bulkInsertService)
+    public SearchService(IDataContext context, IArtistService artistService, IExternalSearchProvider searchProvider, IBulkInsertService bulkInsertService)
     {
         _context = context;
         _artistService = artistService;
         _searchProvider = searchProvider;
-        _trackService = trackService;
         _bulkInsertService = bulkInsertService;
     }
 
@@ -34,7 +32,7 @@ public class SearchService : ISearchService
         {
             Artists = (await _bulkInsertService.BulkInsertExternalArtists(externalResult.Artists)).Adapt<List<ArtistResponse>>(),
             Albums = (await _bulkInsertService.BulkInsertExternalAlbums(externalResult.Albums)).Adapt<List<AlbumResponse>>(),
-            Tracks = await _bulkInsertService.BulkInsertExternalTracks(externalResult.Tracks)
+            Tracks = (await _bulkInsertService.BulkInsertExternalTracks(externalResult.Tracks)).Adapt<List<TrackResponse>>(),
         };
 
         return result;
