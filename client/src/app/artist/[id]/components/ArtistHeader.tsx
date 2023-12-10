@@ -50,8 +50,6 @@ export const ArtistHeader: FC<ArtistHeaderProps> = ({
         zIndex: 60,
       }}
     >
-      {/* Blur of image at bottom */}
-
       <div className="">
         <Image
           src={imgUrl}

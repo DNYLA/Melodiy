@@ -34,7 +34,7 @@ public class SearchService : ISearchService
         {
             Artists = (await _bulkInsertService.BulkInsertExternalArtists(externalResult.Artists)).Adapt<List<ArtistResponse>>(),
             Albums = (await _bulkInsertService.BulkInsertExternalAlbums(externalResult.Albums)).Adapt<List<AlbumResponse>>(),
-            Tracks = await _trackService.BulkInsertExternal(externalResult.Tracks)
+            Tracks = await _bulkInsertService.BulkInsertExternalTracks(externalResult.Tracks)
         };
 
         return result;

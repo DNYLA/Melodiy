@@ -1,14 +1,14 @@
-
-using Melodiy.Application.Common.Entities;
 using Melodiy.Application.Common.Enums;
 using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Common.Interfaces.Persistance;
+using Melodiy.Application.Common.Interfaces.Search;
 using Melodiy.Application.Common.Interfaces.Services;
 using Melodiy.Application.Services.AlbumService;
 using Melodiy.Application.Services.ArtistService;
 using Melodiy.Application.Services.BulkInsertService;
 using Melodiy.Application.Services.FileService;
 using Melodiy.Domain.Entities;
+using Melodiy.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
@@ -22,7 +22,8 @@ public class TrackService : ITrackService
     private readonly IArtistService _artistService;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IBulkInsertService _bulkInsertService;
-    public TrackService(IDataContext context, IFileService fileService, IAlbumService albumService, IArtistService artistService, IDateTimeProvider dateTimeProvider, IBulkInsertService bulkInsertService)
+    private readonly IExternalStreamProvider _externalStreamProvider;
+    public TrackService(IDataContext context, IFileService fileService, IAlbumService albumService, IArtistService artistService, IDateTimeProvider dateTimeProvider, IBulkInsertService bulkInsertService, IExternalStreamProvider externalStreamProvider)
     {
         _context = context;
         _fileService = fileService;
@@ -30,66 +31,7 @@ public class TrackService : ITrackService
         _artistService = artistService;
         _dateTimeProvider = dateTimeProvider;
         _bulkInsertService = bulkInsertService;
-    }
-
-    public async Task<List<TrackResponse>> BulkInsertExternal(List<ExternalTrack> data)
-    {
-        //Removes duplicates based on Id
-        List<ExternalTrack> tracks = data.GroupBy(t => t.Id).Select(t => t.First()).ToList();
-
-        //Fetch already existing albums
-        List<string> ids = tracks.Select(a => a.Id).ToList();
-        List<Track> existingTracks = _context.Tracks.Where(t => t.SpotifyId != null && ids.Contains(t.SpotifyId))
-                                                    .Include(t => t.Image)
-                                                    .Include(t => t.TrackArtists)
-                                                    .Include(t => t.Album)
-                                                    .ToList();
-        List<string> existingIds = existingTracks.Select(a => a.SpotifyId!).ToList();
-        List<Artist> trackArtists = await _bulkInsertService.BulkInsertExternalArtists(tracks.SelectMany(track => track.Artists).ToList());
-        List<Album> trackAlbums = await _bulkInsertService.BulkInsertExternalAlbums(tracks.Select(track => track.Album).ToList());
-
-        List<ExternalTrack> newTracks = tracks.ExceptBy(existingIds, track => track.Id).ToList();
-        var newTracksWithImages = newTracks.Select(track => new Track
-        {
-            Slug = Guid.NewGuid().ToString("N"),
-            Title = track.Title,
-            Duration = track.Duration,
-            ReleaseDate = track.ReleaseDate,
-            SpotifyId = track.Id,
-            Image = track.Album.ImageUrl != null ? new Image
-            {
-                Url = track.Album.ImageUrl,
-            } : null,
-            TrackArtists = track.Artists.Select(externalArtist =>
-            {
-                var artist = trackArtists.Find(a => a.SpotifyId == externalArtist.Id)!;
-
-                return new TrackArtist
-                {
-                    ArtistId = artist.Id,
-                };
-            }).ToList(),
-            Album = trackAlbums.Find(album => album.SpotifyId == track.Album.Id),
-        }).ToList();
-
-        //Check if any of theese images already exist.
-        List<string> urls = newTracksWithImages.Where(t => t.Image != null).Select(t => t.Image!.Url).ToList();
-        var existingImages = _context.Images.Where(i => urls.Contains(i.Url)).ToList();
-
-        //Relate the existing images with the new artist.
-        foreach (var track in newTracksWithImages)
-        {
-            var existingImage = existingImages.FirstOrDefault(i => i.Url == track.Image!.Url);
-
-            if (existingImage != null)
-            {
-                track.Image = existingImage;
-            }
-        }
-        _context.Tracks.AddRange(newTracksWithImages);
-        await _context.SaveChangesAsync();
-
-        return existingTracks.Concat(newTracksWithImages).ToList().Adapt<List<TrackResponse>>();
+        _externalStreamProvider = externalStreamProvider;
     }
 
     public async Task<TrackResponse> Create(UploadTrackRequest request, string username, int userId)
@@ -176,22 +118,58 @@ public class TrackService : ITrackService
         {
             throw new ApiError(HttpStatusCode.Unauthorized, $"{slug} is a private track.");
         }
-        track.FilePath = await GetTrackPath(track.FilePath, track.IsPublic);
+        track.FilePath = await GetTrackPath(track.Id, userId);
 
         return track.Adapt<TrackResponse>();
     }
 
-    public async Task<string> GetTrackPath(string? path, bool isPublic)
+    public async Task<string> GetTrackPath(int id, int? userId)
     {
-        var bucket = isPublic ? StorageBucket.TrackPublic : StorageBucket.TracksPrivate;
+        var track = await _context.Tracks.Include(t => t.TrackArtists)
+                                         .ThenInclude(ta => ta.Artist)
+                                         .Include(t => t.Album)
+                                         .FirstOrDefaultAsync(t => t.Id == id) ?? throw new ApiError(HttpStatusCode.NotFound, $"Track Id not found");
 
-        if (path == null || path == string.Empty)
+
+
+        if (!track.IsPublic && track.UserId != userId)
         {
-            throw new ApiError(HttpStatusCode.InternalServerError, $"Unable to find track.");
+            throw new ApiError(HttpStatusCode.Unauthorized, $"{track.Slug} is a private track.");
         }
 
-        var url = await _fileService.GetUrl(path, bucket);
+        if (track.Source == SourceType.Local)
+        {
+            var bucket = track.IsPublic ? StorageBucket.TrackPublic : StorageBucket.TracksPrivate;
 
-        return url;
+            if (track.FilePath == null || track.FilePath == string.Empty)
+            {
+                throw new ApiError(HttpStatusCode.InternalServerError, $"Unable to find track.");
+            }
+
+            var url = await _fileService.GetUrl(track.FilePath, bucket);
+
+            return url;
+        }
+
+        if (track.ExternalStreamId == null)
+        {
+
+            try
+            {
+                var response = await _externalStreamProvider.GetBestMatch(track.Title, track.TrackArtists.Select(t => t.Artist.Name).ToList(), track.Duration);
+
+                track.ExternalStreamId = response.Id;
+                track.Duration = response.DurationMs != 0 ? response.DurationMs : track.Duration;
+                await _context.SaveChangesAsync();
+            }
+            catch (ApiError)
+            {
+                //TODO: Delete/make track invisible as its invalid
+                throw new ApiError(HttpStatusCode.InternalServerError, "Interal Server error occured");
+            }
+        }
+
+        //This is outside try catch as it is possible youtube videos get deleted/privated in which case we would want to refetch GetBestMatch() instead of deleting the track.
+        return await _externalStreamProvider.GetStream(track.ExternalStreamId);
     }
 }

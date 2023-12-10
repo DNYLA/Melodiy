@@ -1,5 +1,3 @@
-using System.Runtime.CompilerServices;
-using System.Text;
 using Melodiy.Application.Common.Interfaces.Authentication;
 using Melodiy.Application.Common.Interfaces.Persistance;
 using Melodiy.Application.Common.Interfaces.Search;
@@ -9,12 +7,14 @@ using Melodiy.Infrastructure.Persistance;
 using Melodiy.Infrastructure.Persistance.File;
 using Melodiy.Infrastructure.Services;
 using Melodiy.Infrastructure.Services.Search;
+using Melodiy.Infrastructure.Services.Stream;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Melodiy.Infrastructure;
 
@@ -31,6 +31,7 @@ public static class DependencyInjection
 
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         services.AddScoped<IHashService, HashService>();
+        services.AddScoped<IExternalStreamProvider, YoutubeProvider>();
 
         // services.AddScoped<IUserRepository, UserRepository>();
 

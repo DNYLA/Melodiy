@@ -1,12 +1,9 @@
-using System.Diagnostics;
-using System.Formats.Tar;
-using System.Net;
-using ATL;
 using Melodiy.Application.Common;
 using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Common.Interfaces.Persistance;
 using Melodiy.Application.Common.Interfaces.Services;
 using Melodiy.Application.Services.TrackService;
+using System.Net;
 
 namespace Melodiy.Application.Services.PlayerService;
 
@@ -24,7 +21,7 @@ public class PlayerService : IPlayerService
         _context = context;
     }
 
-    public async Task<PlayerResponse> Play(int position, CollectionType type, string collectionId, bool shuffle, UserClaims? claims)
+    public async Task<PlayerResponse> Play(string trackId, int position, CollectionType type, string collectionId, bool shuffle, UserClaims? claims)
     {
         if (claims == null)
         {
@@ -40,7 +37,7 @@ public class PlayerService : IPlayerService
             // };
         }
 
-        var queue = await GenerateQueue(collectionId, type, position, shuffle, claims.Id);
+        var queue = await GenerateQueue(trackId, collectionId, type, position, shuffle, claims.Id);
 
         if (queue.Count == 0)
         {
@@ -54,7 +51,7 @@ public class PlayerService : IPlayerService
 
         //TODO: Redo this as you should be refetching the track? although EF Core does cache in memory so this shouldnt be a bad thing?
         var track = queue[position];
-        track.FilePath = await _trackService.GetTrackPath(track.FilePath, track.IsPublic);
+        track.FilePath = await _trackService.GetTrackPath(track.Id, claims?.Id);
 
         var curTrack = new CurrentTrackLog
         {
@@ -90,14 +87,14 @@ public class PlayerService : IPlayerService
         };
     }
 
-    public async Task<PlayerResponse> Previous(string collectionId, CollectionType type, UserClaims claims)
+    public async Task<PlayerResponse> Previous(string trackId, string collectionId, CollectionType type, UserClaims claims)
     {
         _userHistory.TryGetValue(claims.Id, out PlayerHistory? curHistory);
 
         //Generate a new Queue if we have inconsistent values.
         if (curHistory == null || curHistory.CollectionId != collectionId || curHistory.CollectionType != type)
         {
-            return await Play(0, type, collectionId, false, claims);
+            return await Play(trackId, 0, type, collectionId, false, claims);
         }
 
         curHistory.Position--;
@@ -133,14 +130,14 @@ public class PlayerService : IPlayerService
         };
     }
 
-    public async Task<PlayerResponse> Next(string collectionId, CollectionType type, UserClaims claims)
+    public async Task<PlayerResponse> Next(string trackId, string collectionId, CollectionType type, UserClaims claims)
     {
         _userHistory.TryGetValue(claims.Id, out PlayerHistory? curHistory);
 
         //Generate a new Queue if we have inconsistent values.
         if (curHistory == null || curHistory.CollectionId != collectionId || curHistory.CollectionType != type)
         {
-            return await Play(0, type, collectionId, false, claims);
+            return await Play(trackId, 0, type, collectionId, false, claims);
         }
         // Console.WriteLine("Next Pos: " + curHistory.Position);
         curHistory.Position++;
@@ -173,20 +170,35 @@ public class PlayerService : IPlayerService
         };
     }
 
-    private async Task<List<TrackResponse>> GenerateQueue(string collectionId, CollectionType type, int position, bool shuffle, int userId)
+    private async Task<List<TrackResponse>> GenerateQueue(string trackId, string collectionId, CollectionType type, int position, bool shuffle, int userId)
     {
-        if (type != CollectionType.Files)
+        List<TrackResponse> queue = type switch
         {
-            throw new ApiError(HttpStatusCode.NotImplemented, "Not Implemented");
-        }
+            //CollectionType.Album => await GenerateAlbumQueue(),
+            //CollectionType.Playlist => await GeneratePlaylistQueue(),
+            CollectionType.Files => await GenerateFilesQueue(userId),
+            CollectionType.Search => await GenerateSingleTrackQueue(trackId, userId),
+            _ => await GenerateSingleTrackQueue(trackId, userId),
+        };
 
-        var tracks = await _trackService.GetUserTracks(userId);
-
-        if (tracks.Count == 0)
+        if (queue.Count == 0)
         {
             throw new ApiError(HttpStatusCode.InternalServerError, "Unexpected Server Error");
         }
 
-        return tracks;
+        return queue;
+    }
+
+    private async Task<List<TrackResponse>> GenerateFilesQueue(int userId)
+    {
+        return await _trackService.GetUserTracks(userId);
+    }
+
+    private async Task<List<TrackResponse>> GenerateSingleTrackQueue(string trackId, int userId)
+    {
+        return new List<TrackResponse>
+        {
+            await _trackService.Get(trackId, userId)
+        };
     }
 }

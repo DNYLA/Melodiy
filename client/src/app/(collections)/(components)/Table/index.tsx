@@ -38,8 +38,8 @@ const TrackTable: FC<TrackTableProps> = ({
   const player = usePlayer();
   const { onPlay } = useOnPlay(collectionId, type);
 
-  const onRowClick = (position: number) => {
-    onPlay(position);
+  const onRowClick = (id: string, position: number) => {
+    onPlay(id, position);
     return;
     // if (!player.active?.id) {
     // onPlay(track.id);
@@ -95,7 +95,7 @@ const TrackTable: FC<TrackTableProps> = ({
             )}
             onClick={() => row.toggleSelected()}
             onDoubleClick={() => {
-              onRowClick(row.index);
+              onRowClick(row.original.id, row.index);
               row.toggleSelected(true);
             }}
           >

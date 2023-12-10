@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Melodiy.Domain.Entities;
 
-[Index(nameof(SpotifyId), IsUnique = true)]
+[Index(nameof(ExternalSearchId), IsUnique = true)]
 [Index(nameof(Slug), IsUnique = true)]
 public class Album : BaseEntity
 {
@@ -12,7 +12,7 @@ public class Album : BaseEntity
     public string Slug { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
     public bool Verified { get; set; }
-    public string? SpotifyId { get; set; }
+    public string? ExternalSearchId { get; set; }
     public DateTime ReleaseDate { get; set; }
     public AlbumType Type { get; set; }
 

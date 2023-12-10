@@ -1,8 +1,6 @@
-using System.Reflection.Metadata.Ecma335;
 using Melodiy.Api.Attributes;
 using Melodiy.Application.Common;
 using Melodiy.Application.Services.PlayerService;
-using Melodiy.Contracts;
 using Melodiy.Contracts.Player;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +28,7 @@ public class PlayerController : ControllerBase
         }
 
         CollectionType type = req.Type.Adapt<CollectionType>();
-        var response = await _playerService.Play(req.Position, type, req.CollectionId, req.Shuffle, claims);
+        var response = await _playerService.Play(req.TrackId, req.Position, type, req.CollectionId, req.Shuffle, claims);
         return response.Adapt<GetPlayerResponse>();
     }
 
@@ -39,7 +37,7 @@ public class PlayerController : ControllerBase
     public async Task<GetPlayerResponse> Next(NextTrackRequest req, [FromClaims] UserClaims claims)
     {
         CollectionType type = req.Type.Adapt<CollectionType>();
-        var response = await _playerService.Next(req.CollectionId, type, claims);
+        var response = await _playerService.Next(req.TrackId, req.CollectionId, type, claims);
 
         return response.Adapt<GetPlayerResponse>();
     }
@@ -49,7 +47,7 @@ public class PlayerController : ControllerBase
     public async Task<GetPlayerResponse> Previous(NextTrackRequest req, [FromClaims] UserClaims claims)
     {
         CollectionType type = req.Type.Adapt<CollectionType>();
-        var response = await _playerService.Previous(req.CollectionId, type, claims);
+        var response = await _playerService.Previous(req.TrackId, req.CollectionId, type, claims);
 
         return response.Adapt<GetPlayerResponse>();
     }

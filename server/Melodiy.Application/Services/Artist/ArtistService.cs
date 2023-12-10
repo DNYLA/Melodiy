@@ -74,7 +74,7 @@ public class ArtistService : IArtistService
                                            .ThenInclude(ta => ta.Track)
                                            .FirstOrDefaultAsync(artist => artist.Slug == slug) ?? throw new ApiError(System.Net.HttpStatusCode.NotFound, $"Artist Id {slug} not found");
 
-        if (artist.SpotifyId != null)
+        if (artist.ExternalSearchId != null)
         {
             artist = await IndexArtist(artist);
         }
@@ -97,13 +97,13 @@ public class ArtistService : IArtistService
 
     private async Task<Artist> IndexArtist(Artist artist)
     {
-        if (artist.SpotifyId == null)
+        if (artist.ExternalSearchId == null)
         {
             throw new ApiError(HttpStatusCode.InternalServerError, "Internal server error");
         }
 
         //Get External Data
-        var externalArtist = await _externalSearchProvider.GetArtist(artist.SpotifyId);
+        var externalArtist = await _externalSearchProvider.GetArtist(artist.ExternalSearchId);
 
         //Update Image if one doesn't already exist.
         if (artist.Image == null && externalArtist.ImageUrl != null)
