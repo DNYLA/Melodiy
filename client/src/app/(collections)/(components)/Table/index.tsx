@@ -1,4 +1,5 @@
 'use client';
+import TrackTableContextMenu from '@/app/(collections)/(components)/Table/ContextMenu';
 import useOnPlay from '@/hooks/query/player/useOnPlay';
 import usePlayer from '@/hooks/stores/usePlayer';
 
@@ -87,28 +88,36 @@ const TrackTable: FC<TrackTableProps> = ({
           //   key={row.id}
           //   type={type}
           // >
-          <tr
+          <TrackTableContextMenu
+            trackId={row.original.id}
+            artistId={row.original.artists[0].id}
+            albumId={row.original.album?.id}
+            ownerId={row.original.user?.id}
             key={row.id}
-            className={twMerge(
-              'group hover:bg-[#1f1c1c]',
-              row.getIsSelected() && 'bg-[#1f1c1c]'
-            )}
-            onClick={() => row.toggleSelected()}
-            onDoubleClick={() => {
-              onRowClick(row.original.id, row.index);
-              row.toggleSelected(true);
-            }}
+            type={type}
           >
-            {row.getVisibleCells().map((cell) => (
-              <td
-                key={cell.id}
-                className="px-3 py-2 text-left first:rounded-l-lg last:rounded-r-lg"
-              >
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
-            ))}
-          </tr>
-          // </TableContextMenu>
+            <tr
+              key={row.id}
+              className={twMerge(
+                'group hover:bg-[#1f1c1c]',
+                row.getIsSelected() && 'bg-[#1f1c1c]'
+              )}
+              onClick={() => row.toggleSelected()}
+              onDoubleClick={() => {
+                onRowClick(row.original.id, row.index);
+                row.toggleSelected(true);
+              }}
+            >
+              {row.getVisibleCells().map((cell) => (
+                <td
+                  key={cell.id}
+                  className="px-3 py-2 text-left first:rounded-l-lg last:rounded-r-lg"
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          </TrackTableContextMenu>
         ))}
       </tbody>
     </table>

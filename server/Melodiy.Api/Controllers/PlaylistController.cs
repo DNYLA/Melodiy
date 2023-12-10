@@ -2,6 +2,7 @@ using Melodiy.Api.Attributes;
 using Melodiy.Application.Common;
 using Melodiy.Application.Services.Playlist;
 using Melodiy.Contracts.Playlist;
+using Melodiy.Contracts.Track;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,6 +26,22 @@ public class PlaylistController : ControllerBase
         var mapped = response.Adapt<GetPlaylistResponse>();
 
         return mapped;
+    }
+
+    [Authorize]
+    [HttpPost("{id}")]
+    public async Task<ActionResult<GetTrackResponse>> AddTrack(string id, [FromQuery] string trackId, [FromClaims] UserClaims user)
+    {
+        var response = await _playlistService.AddTrack(id, trackId, user.Id);
+        return response.Adapt<GetTrackResponse>();
+    }
+
+    [Authorize]
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<GetTrackResponse>> RemoveTrack(string id, [FromQuery] string trackId, [FromClaims] UserClaims user)
+    {
+        var response = await _playlistService.RemoveTrack(id, trackId, user.Id);
+        return response.Adapt<GetTrackResponse>();
     }
 
     [HttpGet("{id}")]

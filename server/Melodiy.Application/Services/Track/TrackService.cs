@@ -118,7 +118,6 @@ public class TrackService : ITrackService
         {
             throw new ApiError(HttpStatusCode.Unauthorized, $"{slug} is a private track.");
         }
-        track.FilePath = await GetTrackPath(track.Id, userId);
 
         return track.Adapt<TrackResponse>();
     }
