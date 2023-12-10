@@ -27,6 +27,7 @@ export default function useOnPlay(collectionId: string, type: CollectionType) {
     },
     gcTime: 0,
     enabled: !!position || !!trackId,
+    refetchOnWindowFocus: false,
   });
 
   const onPlay = (trackId: string, position: number) => {

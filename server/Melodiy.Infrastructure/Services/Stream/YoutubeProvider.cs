@@ -19,6 +19,8 @@ public partial class YoutubeProvider : IExternalStreamProvider
         YoutubeVideo? bestResult = null;
         int highestScore = 0;
         List<YoutubeVideo> videos = await Search(searchTerm);
+        //videos = videos.Where(video => video.Id == "83xBPCw5hh4" || video.Id == "7-7NqHtpSdQ").ToList();
+        artists = artists.Select(a => a.ToLower()).ToList();
 
         foreach (var video in videos)
         {
@@ -33,11 +35,11 @@ public partial class YoutubeProvider : IExternalStreamProvider
                 bool isSameChannel = video.Author.ToLower().Contains(artist); //Is the artist the owner of the channel
                 bool titleContainsArtist = video.Title.ToLower().Contains(artist); //Is the artist in the title
 
-                score += isSameChannel ? 1 : 0;
+                score += isSameChannel ? 2 : 0; //Correct channel shhould take priority over correct title as search results will already contain a similar result to search term/trackname.
                 score += titleContainsArtist ? 1 : 0;
             }
 
-            score += isCorrectTitle ? 2 : 0;
+            score += isCorrectTitle ? 1 : 0;
             score += isOfficial ? 1 : 0;
             score += isCorrectTitle && isOfficial ? 2 : 0;
 
