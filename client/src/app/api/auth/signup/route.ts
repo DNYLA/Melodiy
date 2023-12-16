@@ -1,4 +1,5 @@
 import { getApiRoute } from '@/lib/network/helpers';
+import { getApiError } from '@/lib/utils';
 import { AuthResult } from '@/types/user';
 import axios from 'axios';
 import { NextRequest, NextResponse } from 'next/server';
@@ -41,12 +42,12 @@ export async function POST(request: NextRequest) {
     });
 
     return response;
-  } catch (err: any) {
-    const message =
-      err?.response?.data?.error ??
-      'Unexpected server error occured. Try Again!';
-    const status = err.response.status ?? 500;
+  } catch (err) {
+    const networkError = getApiError(err);
 
-    return NextResponse.json({ error: message }, { status });
+    return NextResponse.json(
+      { error: networkError.message },
+      { status: networkError.status }
+    );
   }
 }

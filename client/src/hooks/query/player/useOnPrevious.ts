@@ -39,7 +39,7 @@ export default function useOnPrevious() {
       player.active!.type
     );
     // player.setQueue(query.data.queue);
-  }, [query.data]);
+  }, [query.data, player]);
 
   return { query, onPrevious };
 }

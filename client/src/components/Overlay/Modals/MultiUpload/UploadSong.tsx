@@ -15,13 +15,10 @@ import useFilePreview from '@/hooks/useFilePreview';
 import useSession from '@/hooks/useSession';
 import useTrackTags from '@/hooks/useTrackTags';
 import { AXIOS } from '@/lib/network';
-import { addFormFile, convertToComboItem } from '@/lib/utils';
-import { APIError } from '@/types';
+import { addFormFile, convertToComboItem, getApiError } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Dialog from '@radix-ui/react-dialog';
-import { AxiosError } from 'axios';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
@@ -75,7 +72,6 @@ export interface CreateSongForm {
 }
 
 const UploadSong: React.FC = () => {
-  const router = useRouter();
   const { onClose } = useUploadModal();
   const { user } = useSession();
   const {
@@ -85,7 +81,6 @@ const UploadSong: React.FC = () => {
     resetField,
     watch,
     setValue,
-    control,
     formState: { errors, isSubmitting },
   } = useForm<CreateSongForm>({
     defaultValues: {
@@ -106,24 +101,18 @@ const UploadSong: React.FC = () => {
     term: artistTerm,
     loading: loadingArtist,
   } = useArtistSearch(artist.name);
+
   const { query: albumQuery, loading: loadingAlbum } = useAlbumSearch(
     album?.name,
     artist.id
   );
 
-  useEffect(() => {
-    if (!user) onClose();
-  }, [user]);
-
-  useEffect(() => {
-    setTags();
-  }, [tags]);
-
-  const setTags = () => {
+  const setTags = useCallback(() => {
     if (tags?.title) setValue('title', tags.title);
-    if (tags?.album) setValue('album', { id: undefined, name: tags.album });
+    if (tags?.album)
+      setValue('album', { id: undefined, name: tags.album, verified: false });
     if (tags?.artist) {
-      setValue('artist', { id: undefined, name: tags.artist });
+      setValue('artist', { id: undefined, name: tags.artist, verified: false });
       // setValue('albumArtist', tags.artist);
     }
 
@@ -134,7 +123,16 @@ const UploadSong: React.FC = () => {
 
       setValue('cover', list.files);
     }
-  };
+  }, [setValue, tags?.album, tags?.artist, tags?.cover, tags?.title]);
+
+  useEffect(() => {
+    if (!user) onClose();
+  }, [user, onClose]);
+
+  useEffect(() => {
+    setTags();
+  }, [tags, setTags]);
+
   const { setImgSrc: setCoverSrc, imgSrc: coverSrc } =
     useFilePreview(coverFile);
 
@@ -162,9 +160,7 @@ const UploadSong: React.FC = () => {
       revalidatePathClient('/files');
       toast.success('Uploaded Song!');
     } catch (err) {
-      console.log(err);
-      const axiosErr = err as AxiosError<APIError, any>;
-      toast.error(axiosErr.response?.data.error ?? 'Unable to create playlist');
+      toast.error(getApiError(err).message);
     }
   };
 

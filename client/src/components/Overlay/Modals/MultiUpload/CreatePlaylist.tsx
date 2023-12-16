@@ -60,7 +60,7 @@ const CreatePlaylist: FC<ICreatePlaylist> = () => {
 
   useEffect(() => {
     if (!user) onClose();
-  }, [user]);
+  }, [user, onClose]);
 
   const onSubmit = async (data: CreatePlaylistForm) => {
     if (!user) return;

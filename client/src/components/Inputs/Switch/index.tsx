@@ -9,7 +9,7 @@ interface SwitchProps {
 }
 
 const Switch: FC<SwitchProps> = ({ value, children, onChange, htmlFor }) => {
-  const convertValue = () => (value ? 'on' : 'off');
+  // const convertValue = () => (value ? 'on' : 'off');
 
   return (
     <div className="flex items-center justify-between">

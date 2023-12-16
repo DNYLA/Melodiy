@@ -38,7 +38,7 @@ const peopleList: Person[] = [
   { id: 6, name: 'Hellen Schmidt' },
 ];
 
-const SearchSelect: FC<SearchSelectProps> = ({ variant, className }) => {
+const SearchSelect: FC<SearchSelectProps> = () => {
   // const [selectedPerson, setSelectedPerson] = useState(people[0]);
   const [people, setPeople] = useState<Person[]>(peopleList);
   const [selectedPeople, setSelectedPeople] = useState([people[0], people[1]]);

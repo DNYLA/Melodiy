@@ -47,7 +47,7 @@ export default function useAlbumSearch(term = '', artistId?: string) {
     } else {
       setLoading(false);
     }
-  }, [query.isLoading, term, debouncedTerm]);
+  }, [query.isLoading, term, debouncedTerm, queryClient, user?.id]);
 
   return { query, loading };
 }

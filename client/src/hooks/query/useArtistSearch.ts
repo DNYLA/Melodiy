@@ -30,7 +30,7 @@ export default function useArtistSearch(term = '') {
       queryClient.setQueryData(['search-artist', { value: term }], []);
       return;
     }
-  }, [query.isLoading, term, debouncedTerm]);
+  }, [query.isLoading, term, debouncedTerm, queryClient]);
 
   return { query, term, loading };
 }

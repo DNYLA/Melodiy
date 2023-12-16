@@ -41,7 +41,7 @@ export default function useOnPlay(collectionId: string, type: CollectionType) {
     const curTrack = query.data.currentTrack;
     player.setActive(curTrack, collectionId, type);
     player.setQueue(query.data.queue);
-  }, [query.data]);
+  }, [query.data, player, collectionId, type]);
 
   return { query, onPlay };
 }

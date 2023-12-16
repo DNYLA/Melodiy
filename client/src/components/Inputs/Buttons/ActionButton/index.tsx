@@ -23,4 +23,6 @@ const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
   }
 );
 
+ActionButton.displayName = 'ActionButton';
+
 export default ActionButton;

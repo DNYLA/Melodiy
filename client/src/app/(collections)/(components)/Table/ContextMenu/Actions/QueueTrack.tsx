@@ -1,4 +1,3 @@
-import usePlayer from '@/hooks/stores/usePlayer';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import toast from 'react-hot-toast';
 
@@ -6,9 +5,7 @@ interface QueueContextItemProps {
   trackId: string;
 }
 
-const QueueContextItem: React.FC<QueueContextItemProps> = ({ trackId }) => {
-  const player = usePlayer();
-
+const QueueContextItem: React.FC<QueueContextItemProps> = () => {
   const onQueue = () => {
     // const curIds = player.active?.id;
     // curIds.splice(1, 0, trackId);

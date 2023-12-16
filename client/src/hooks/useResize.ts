@@ -1,5 +1,5 @@
 import { clamp } from '@/lib/utils/number';
-import { RefObject, useEffect, useState } from 'react';
+import { RefObject, useCallback, useEffect, useState } from 'react';
 
 export default function useResize(
   parent: RefObject<HTMLDivElement>,
@@ -7,6 +7,26 @@ export default function useResize(
   key: string
 ) {
   const [width, setWidth] = useState(250);
+
+  const resize = useCallback(
+    (xx: number | MouseEvent) => {
+      let x = typeof xx == 'number' ? xx : xx.x;
+      x = clamp(x, 0, 300);
+
+      if (x < 130) {
+        localStorage.setItem(key, String(0));
+        setWidth(0);
+        parent.current!.style.width = `0px`;
+        parent.current!.classList.add('collapsed-sidebar');
+        return;
+      }
+      parent.current!.classList.remove('collapsed-sidebar');
+      parent.current!.style.width = `${x}px`;
+      localStorage.setItem(key, String(x));
+      setWidth(x);
+    },
+    [key, parent]
+  );
 
   // //TODO: Switch to Framer Motion / GSAP / react-spring
   useEffect(() => {
@@ -37,24 +57,7 @@ export default function useResize(
         );
       });
     }
-  }, []);
-
-  const resize = (xx: number | MouseEvent) => {
-    let x = typeof xx == 'number' ? xx : xx.x;
-    x = clamp(x, 0, 300);
-
-    if (x < 130) {
-      localStorage.setItem(key, String(0));
-      setWidth(0);
-      parent.current!.style.width = `0px`;
-      parent.current!.classList.add('collapsed-sidebar');
-      return;
-    }
-    parent.current!.classList.remove('collapsed-sidebar');
-    parent.current!.style.width = `${x}px`;
-    localStorage.setItem(key, String(x));
-    setWidth(x);
-  };
+  }, [dragger, key, parent, resize]);
 
   return { width };
 }

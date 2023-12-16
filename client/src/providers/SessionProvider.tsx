@@ -1,6 +1,7 @@
 'use client';
 
 import { resetAccessToken, setAccessToken } from '@/lib/network';
+import { getApiError } from '@/lib/utils';
 import { IProvider } from '@/providers';
 import { AuthResult, User } from '@/types/user';
 import axios from 'axios';
@@ -30,10 +31,6 @@ export const SessionProvider: React.FC<IProvider> = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  useEffect(() => {
-    getUser();
-  }, []);
-
   const getUser = useCallback(async () => {
     try {
       setLoading(true);
@@ -44,11 +41,16 @@ export const SessionProvider: React.FC<IProvider> = ({ children }) => {
       //Update user context.
       setUser(data.user);
       setAccessToken(data.accessToken);
-    } catch (err: any) {
+    } catch (err) {
+      console.log(err);
     } finally {
       setLoading(false);
     }
   }, []);
+
+  useEffect(() => {
+    getUser();
+  }, [getUser]);
 
   const handleLogin = useCallback(
     async (username: string, password: string) => {
@@ -66,8 +68,8 @@ export const SessionProvider: React.FC<IProvider> = ({ children }) => {
         setAccessToken(data.accessToken);
 
         return true;
-      } catch (err: any) {
-        toast.error(err.response.data.error);
+      } catch (err) {
+        toast.error(getApiError(err).message);
         return false;
       } finally {
         setLoading(false);
@@ -91,8 +93,8 @@ export const SessionProvider: React.FC<IProvider> = ({ children }) => {
         setAccessToken(data.accessToken);
 
         return true;
-      } catch (err: any) {
-        toast.error(err.response.data.error);
+      } catch (err) {
+        toast.error(getApiError(err).message);
         return false;
       } finally {
         setLoading(false);
@@ -108,10 +110,10 @@ export const SessionProvider: React.FC<IProvider> = ({ children }) => {
       resetAccessToken();
       setUser(undefined);
       router.refresh();
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err) {
+      toast.error(getApiError(err).message);
     }
-  }, []);
+  }, [router]);
 
   return (
     <SessionContext.Provider

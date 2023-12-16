@@ -9,7 +9,7 @@ import {
   useTransform,
 } from 'framer-motion';
 import Image from 'next/image';
-import { FC, useContext, useRef, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import { BiShuffle } from 'react-icons/bi';
 import { BsFillPlayFill } from 'react-icons/bs';
 
@@ -21,13 +21,11 @@ export interface ArtistHeaderProps {
 }
 
 export const ArtistHeader: FC<ArtistHeaderProps> = ({
-  id,
   name,
   imageUrl,
   listerners,
 }) => {
   const imgUrl = imageUrl ?? getDefaultImage();
-  const ref = useRef<HTMLDivElement>(null);
   const { scrollY } = useContext(ScrollContext);
 
   const size = useTransform(scrollY!, [50, 500], ['500px', '200px']);

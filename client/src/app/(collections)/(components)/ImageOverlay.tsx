@@ -12,9 +12,8 @@ export interface ImageOverlayProps {
 
 const ImageOverlay: FC<ImageOverlayProps> = ({ src }) => {
   const [filter, setFilter] = useState('');
-  const { scrollY, scrollYProgress } = useContext(ScrollContext);
+  const { scrollY } = useContext(ScrollContext);
   const imageScale = useTransform(scrollY!, [50, 375], ['300px', '150px']);
-  const visible = useTransform(scrollY!, [50, 375], [true, false]);
 
   useEffect(() => {
     setFilter(randomImageFilter());

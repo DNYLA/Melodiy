@@ -29,6 +29,7 @@ const CollectionList: FC<CollectionListProps> = ({
       <div className="flex gap-x-5 overflow-x-auto overflow-y-hidden pb-3">
         {albums.map((album) => (
           <AlbumCard
+            key={album.id}
             title={album.title}
             artists={album.artists}
             imageUrl={album.image}

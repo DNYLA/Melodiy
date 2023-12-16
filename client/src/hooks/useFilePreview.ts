@@ -15,7 +15,7 @@ export default function useFilePreview(file?: FileList) {
         setImgSrc(url);
       }
     }
-  }, [file]);
+  }, [file, imgSrc]);
 
   return { imgSrc, setImgSrc };
 }

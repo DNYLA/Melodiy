@@ -1,6 +1,7 @@
 'use server';
 
 import { getApiRoute, getDataFromToken } from '@/lib/network/helpers';
+import { getApiError } from '@/lib/utils';
 import { APIError } from '@/types';
 import { AuthResult } from '@/types/user';
 import axios from 'axios';
@@ -26,11 +27,8 @@ export async function loginUserAction(
       username: data.username,
       accessToken: data.accessToken,
     };
-  } catch (err: any) {
-    const message =
-      err?.response?.data?.error ?? 'Unable to register account. Try Again!';
-
-    return { error: message };
+  } catch (err) {
+    return { error: getApiError(err).message };
   }
 }
 

@@ -1,6 +1,8 @@
 import { ComboBoxItem } from '@/components/Inputs/SearchComboBox';
+import { APIError } from '@/types';
 import { CollectionType } from '@/types/collections';
 import { Album } from '@/types/playlist';
+import { AxiosError } from 'axios';
 import clsx, { ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -22,7 +24,12 @@ export const convertToComboItem = (albums?: Album[]) => {
   const items: ComboBoxItem[] = [];
 
   albums.forEach((album) => {
-    items.push({ id: album.id, name: album.title, image: album.image });
+    items.push({
+      id: album.id,
+      name: album.title,
+      image: album.image,
+      verified: false,
+    });
   });
 
   return items;
@@ -55,4 +62,18 @@ export function msToMinuteSeconds(duration: number) {
   }
 
   return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+}
+
+export function getApiError(error: unknown) {
+  const fallback = 'Unexpected Error Occured';
+
+  if (error instanceof AxiosError) {
+    const err = error as AxiosError<APIError>;
+    return {
+      message: err.response?.data.error ?? fallback,
+      status: err.response?.status ?? 500,
+    };
+  }
+
+  return { message: fallback, status: 500 };
 }

@@ -55,7 +55,7 @@ export default function useTrackTags(file: FileList) {
 
   useEffect(() => {
     readTags(file);
-  }, [file]);
+  }, [file, readTags]);
 
   return { tags, readTags, isLoading };
 }

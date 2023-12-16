@@ -26,4 +26,6 @@ const Image = React.forwardRef<HTMLDivElement, ImageProps>(
   }
 );
 
+Image.displayName = 'MelodiyImage';
+
 export default Image;

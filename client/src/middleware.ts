@@ -2,7 +2,7 @@ import { getDataFromToken } from '@/lib/network/helpers';
 import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const path = request.nextUrl.pathname;
+  // const path = request.nextUrl.pathname;
   // const isPublicOnlyPath = path == '/login' || path == '/signup';
 
   const token = request.cookies.get('token')?.value ?? undefined;

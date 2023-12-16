@@ -41,17 +41,15 @@ const CollectionHeader: FC<CollectionHeaderProps> = ({
 }) => {
   const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollY, scrollYProgress } = useContext(ScrollContext);
+  const { scrollY } = useContext(ScrollContext);
 
   const size = useTransform(scrollY!, [50, 375], ['400px', '235px']);
-  const isVisibleMotion = useTransform(scrollY!, (value) => value < 175);
   const isFullVisibleMotion = useTransform(scrollY!, (value) => value < 175);
   const isPreviewVisibleMotion = useTransform(scrollY!, (value) => value > 225);
   const [isFullVisible, setIsFullVisible] = useState(true);
   const [isPreviewVisible, setIsPreviewVisible] = useState(false);
 
-  useMotionValueEvent(scrollY!, 'change', (latest) => {
-    console.log('here');
+  useMotionValueEvent(scrollY!, 'change', () => {
     setIsFullVisible(isFullVisibleMotion.get());
     setIsPreviewVisible(isPreviewVisibleMotion.get());
   });

@@ -16,7 +16,6 @@ export default function AlbumTable({ data }: AlbumTableProps) {
     .AddPosition(data.id)
     .AddTitle(data.id)
     .AddAlbum()
-    .AddDate('Date Added')
     .AddDuration()
     .Build();
 

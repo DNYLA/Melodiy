@@ -1,4 +1,5 @@
 import { getApiRoute } from '@/lib/network/helpers';
+import { getApiError } from '@/lib/utils';
 import { User } from '@/types/user';
 import axios from 'axios';
 import { NextRequest, NextResponse } from 'next/server';
@@ -25,13 +26,12 @@ export async function GET(request: NextRequest) {
     });
 
     return response;
-  } catch (err: any) {
-    const message =
-      err?.response?.data?.error ??
-      'Unexpected server error occured. Try Again!';
-    const status = err.response.status ?? 500;
-
-    const response = NextResponse.json({ error: message }, { status });
+  } catch (err) {
+    const networkError = getApiError(err);
+    const response = NextResponse.json(
+      { error: networkError.message },
+      { status: networkError.status }
+    );
     response.cookies.delete('token');
 
     return response;

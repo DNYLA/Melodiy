@@ -10,7 +10,7 @@ export async function GET() {
     response.cookies.delete('token');
 
     return response;
-  } catch (err: any) {
+  } catch (err) {
     return NextResponse.json({ error: 'Unexpected server error occured.' });
   }
 }

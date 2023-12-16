@@ -14,7 +14,7 @@ const AddToPlaylistContextItem: React.FC<AddToPlaylistContextItemProps> = ({
   trackId,
 }) => {
   const [filter, setFilter] = useState('');
-  const { data, isLoading, isPending, error } = usePlaylists();
+  const { data, isLoading } = usePlaylists();
   const searchInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const AddToPlaylistContextItem: React.FC<AddToPlaylistContextItemProps> = ({
 
   const handleAdd = async (id: string, name: string) => {
     try {
-      const { data } = await AXIOS.post(`playlist/${id}?trackId=${trackId}`);
+      await AXIOS.post(`playlist/${id}?trackId=${trackId}`);
       toast.success(`Added to ${name}`);
       await revalidatePathClient(`playlist/${id}`);
     } catch (err) {

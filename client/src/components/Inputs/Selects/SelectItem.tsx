@@ -24,4 +24,6 @@ const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(
   }
 );
 
+SelectItem.displayName = 'SelectItem';
+
 export default SelectItem;

@@ -1,7 +1,6 @@
 'use client';
 import TrackTableContextMenu from '@/app/(collections)/(components)/Table/ContextMenu';
 import useOnPlay from '@/hooks/query/player/useOnPlay';
-import usePlayer from '@/hooks/stores/usePlayer';
 
 import { Track } from '@/types';
 import { CollectionType } from '@/types/collections';
@@ -36,7 +35,6 @@ const TrackTable: FC<TrackTableProps> = ({
     enableMultiRowSelection: false,
   });
 
-  const player = usePlayer();
   const { onPlay } = useOnPlay(collectionId, type);
 
   const onRowClick = (id: string, position: number) => {

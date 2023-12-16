@@ -1,7 +1,6 @@
 'use client';
 
 import usePlaylists from '@/hooks/query/usePlaylist';
-import useSession from '@/hooks/useSession';
 // import usePlaylistStore from '@/hooks/stores/usePlaylistStore';
 // import { Playlist } from '@/types/playlist';
 // import { fetcher } from '@/utils/network/axios';
@@ -18,8 +17,7 @@ export interface ILibraryItem {
 
 //TODO: Conver to Server component
 const LibraryItems = () => {
-  const { user } = useSession();
-  const { data, isLoading, isPending, error } = usePlaylists();
+  const { data, isLoading, error } = usePlaylists();
 
   const router = useRouter();
   const path = usePathname();

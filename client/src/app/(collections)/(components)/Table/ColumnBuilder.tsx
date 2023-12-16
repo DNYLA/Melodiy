@@ -1,3 +1,5 @@
+/* eslint react-hooks/rules-of-hooks: 0 */
+
 import usePlayer from '@/hooks/stores/usePlayer';
 import { getDefaultImage, msToMinuteSeconds } from '@/lib/utils';
 import { Track } from '@/types';

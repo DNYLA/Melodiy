@@ -7,7 +7,7 @@ const CONFIG: AxiosRequestConfig = {
 
 ///Axios Uses .defaults.baseURL to set/call the API this way we can change the API URL outside the library.
 export const AXIOS = axios.create(CONFIG);
-var ACCESS_TOKEN: string | null = '';
+let ACCESS_TOKEN: string | null = '';
 
 export const setAccessToken = (token: string) => {
   ACCESS_TOKEN = token;
