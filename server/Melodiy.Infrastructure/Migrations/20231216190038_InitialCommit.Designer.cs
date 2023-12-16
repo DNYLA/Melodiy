@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Melodiy.Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231216115113_Added-AlbumTrack-Again1")]
-    partial class AddedAlbumTrackAgain1
+    [Migration("20231216190038_InitialCommit")]
+    partial class InitialCommit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,6 +56,9 @@ namespace Melodiy.Infrastructure.Migrations
 
                     b.Property<int?>("ImageId")
                         .HasColumnType("integer");
+
+                    b.Property<bool>("Indexed")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("timestamp with time zone");
@@ -294,9 +297,6 @@ namespace Melodiy.Infrastructure.Migrations
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("boolean");
-
-                    b.Property<int>("Position")
-                        .HasColumnType("integer");
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("timestamp with time zone");

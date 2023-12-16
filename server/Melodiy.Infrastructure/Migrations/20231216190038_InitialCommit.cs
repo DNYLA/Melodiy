@@ -7,28 +7,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Melodiy.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initialmigration : Migration
+    public partial class InitialCommit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Images",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Url = table.Column<string>(type: "text", nullable: false),
-                    Source = table.Column<int>(type: "integer", nullable: false),
-                    StorageId = table.Column<string>(type: "text", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Images", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
@@ -46,18 +29,43 @@ namespace Melodiy.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Images",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Url = table.Column<string>(type: "text", nullable: false),
+                    Path = table.Column<string>(type: "text", nullable: true),
+                    Source = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Images", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Images_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Albums",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Slug = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
                     Verified = table.Column<bool>(type: "boolean", nullable: false),
-                    SpotifyId = table.Column<string>(type: "text", nullable: true),
+                    ExternalSearchId = table.Column<string>(type: "text", nullable: true),
                     ReleaseDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Type = table.Column<int>(type: "integer", nullable: false),
+                    Indexed = table.Column<bool>(type: "boolean", nullable: false),
                     ImageId = table.Column<int>(type: "integer", nullable: true),
+                    UserId = table.Column<int>(type: "integer", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -70,6 +78,11 @@ namespace Melodiy.Infrastructure.Migrations
                         principalTable: "Images",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Albums_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -81,7 +94,8 @@ namespace Melodiy.Infrastructure.Migrations
                     Slug = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Verified = table.Column<bool>(type: "boolean", nullable: false),
-                    SpotifyId = table.Column<string>(type: "text", nullable: true),
+                    ExternalSearchId = table.Column<string>(type: "text", nullable: true),
+                    UserId = table.Column<int>(type: "integer", nullable: true),
                     ImageId = table.Column<int>(type: "integer", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -95,6 +109,11 @@ namespace Melodiy.Infrastructure.Migrations
                         principalTable: "Images",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Artists_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -105,6 +124,7 @@ namespace Melodiy.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Slug = table.Column<string>(type: "text", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
+                    IsPublic = table.Column<bool>(type: "boolean", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false),
                     ImageId = table.Column<int>(type: "integer", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -135,15 +155,15 @@ namespace Melodiy.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Slug = table.Column<string>(type: "text", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
+                    Views = table.Column<int>(type: "integer", nullable: false),
                     FilePath = table.Column<string>(type: "text", nullable: true),
-                    SpotifyId = table.Column<string>(type: "text", nullable: true),
-                    YoutubeId = table.Column<string>(type: "text", nullable: true),
-                    Position = table.Column<int>(type: "integer", nullable: false),
+                    ExternalSearchId = table.Column<string>(type: "text", nullable: true),
+                    ExternalStreamId = table.Column<string>(type: "text", nullable: true),
+                    IsPublic = table.Column<bool>(type: "boolean", nullable: false),
                     Source = table.Column<int>(type: "integer", nullable: false),
-                    Duration = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    Duration = table.Column<int>(type: "integer", nullable: false),
                     ReleaseDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    AlbumId = table.Column<int>(type: "integer", nullable: true),
-                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: true),
                     ImageId = table.Column<int>(type: "integer", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -151,11 +171,6 @@ namespace Melodiy.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tracks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Tracks_Albums_AlbumId",
-                        column: x => x.AlbumId,
-                        principalTable: "Albums",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Tracks_Images_ImageId",
                         column: x => x.ImageId,
@@ -166,8 +181,7 @@ namespace Melodiy.Infrastructure.Migrations
                         name: "FK_Tracks_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -190,6 +204,31 @@ namespace Melodiy.Infrastructure.Migrations
                         name: "FK_AlbumArtist_Artists_ArtistsId",
                         column: x => x.ArtistsId,
                         principalTable: "Artists",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AlbumTrack",
+                columns: table => new
+                {
+                    Position = table.Column<int>(type: "integer", nullable: false),
+                    TrackId = table.Column<int>(type: "integer", nullable: false),
+                    AlbumId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AlbumTrack", x => new { x.TrackId, x.AlbumId, x.Position });
+                    table.ForeignKey(
+                        name: "FK_AlbumTrack_Albums_AlbumId",
+                        column: x => x.AlbumId,
+                        principalTable: "Albums",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AlbumTrack_Tracks_TrackId",
+                        column: x => x.TrackId,
+                        principalTable: "Tracks",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -254,6 +293,12 @@ namespace Melodiy.Infrastructure.Migrations
                 column: "ArtistsId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Albums_ExternalSearchId",
+                table: "Albums",
+                column: "ExternalSearchId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Albums_ImageId",
                 table: "Albums",
                 column: "ImageId");
@@ -265,9 +310,25 @@ namespace Melodiy.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Albums_SpotifyId",
+                name: "IX_Albums_UserId",
                 table: "Albums",
-                column: "SpotifyId",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AlbumTrack_AlbumId",
+                table: "AlbumTrack",
+                column: "AlbumId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AlbumTrack_TrackId",
+                table: "AlbumTrack",
+                column: "TrackId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Artists_ExternalSearchId",
+                table: "Artists",
+                column: "ExternalSearchId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -282,15 +343,25 @@ namespace Melodiy.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Artists_SpotifyId",
+                name: "IX_Artists_UserId",
                 table: "Artists",
-                column: "SpotifyId",
-                unique: true);
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Images_UserId",
+                table: "Images",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Playlists_ImageId",
                 table: "Playlists",
                 column: "ImageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Playlists_Slug",
+                table: "Playlists",
+                column: "Slug",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Playlists_UserId",
@@ -303,9 +374,10 @@ namespace Melodiy.Infrastructure.Migrations
                 column: "PlaylistId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tracks_AlbumId",
+                name: "IX_Tracks_ExternalSearchId",
                 table: "Tracks",
-                column: "AlbumId");
+                column: "ExternalSearchId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tracks_ImageId",
@@ -316,12 +388,6 @@ namespace Melodiy.Infrastructure.Migrations
                 name: "IX_Tracks_Slug",
                 table: "Tracks",
                 column: "Slug",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tracks_SpotifyId",
-                table: "Tracks",
-                column: "SpotifyId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -342,10 +408,16 @@ namespace Melodiy.Infrastructure.Migrations
                 name: "AlbumArtist");
 
             migrationBuilder.DropTable(
+                name: "AlbumTrack");
+
+            migrationBuilder.DropTable(
                 name: "PlaylistTracks");
 
             migrationBuilder.DropTable(
                 name: "TracksArtists");
+
+            migrationBuilder.DropTable(
+                name: "Albums");
 
             migrationBuilder.DropTable(
                 name: "Playlists");
@@ -357,13 +429,10 @@ namespace Melodiy.Infrastructure.Migrations
                 name: "Tracks");
 
             migrationBuilder.DropTable(
-                name: "Albums");
+                name: "Images");
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "Images");
         }
     }
 }
