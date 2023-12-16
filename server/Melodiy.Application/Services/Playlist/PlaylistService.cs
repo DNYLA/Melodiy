@@ -92,7 +92,9 @@ public class PlaylistService : IPlaylistService
                     .ThenInclude(ta => ta.Artist)
                 .Include(p => p.PlaylistTracks)
                     .ThenInclude(pt => pt.Track)
-                    .ThenInclude(track => track.Album)
+                    .ThenInclude(track => track.AlbumTrack)
+#nullable disable
+                    .ThenInclude(at => at.Album)
                 .FirstOrDefaultAsync(p => p.Slug == slug) ?? throw new ApiError(System.Net.HttpStatusCode.NotFound, $"Playlist Id {slug} not found");
 
         if (!playlist.IsPublic && playlist.UserId != userId)

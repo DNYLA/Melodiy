@@ -3,11 +3,13 @@
 import Image from '@/components/Data/Image';
 import { Combobox, Transition } from '@headlessui/react';
 import { FC, Fragment, useEffect, useState } from 'react';
-import { IoMdCheckmark } from 'react-icons/io';
+import { IoIosCheckmarkCircle, IoMdCheckmark } from 'react-icons/io';
+import { twMerge } from 'tailwind-merge';
 
 export type ComboBoxItem = {
   id?: string;
   name: string;
+  verified: boolean;
   image?: string;
 };
 
@@ -47,9 +49,7 @@ const SearchComboBox: FC<ComboBoxProps> = ({
   };
 
   const onInputChange = (name: string) => {
-    console.log(name);
     if (name == '') {
-      console.log('resetting');
       setInputValue('');
       onReset();
       setSelectedValue(null);
@@ -58,7 +58,7 @@ const SearchComboBox: FC<ComboBoxProps> = ({
 
     setInputValue(name);
     // setSelectedValue(null);
-    onChange({ id: undefined, name }); //if value === selectedValue.name that means we forced the update in onSelect
+    onChange({ id: undefined, name, verified: false }); //if value === selectedValue.name that means we forced the update in onSelect
   };
 
   const onBlur = () => {
@@ -74,7 +74,6 @@ const SearchComboBox: FC<ComboBoxProps> = ({
       selectedValue.name !== inputValue &&
       inputValue !== ''
     ) {
-      console.log('cyhage');
       setInputValue(selectedValue.name);
       onChange(selectedValue);
     }
@@ -159,11 +158,21 @@ const SearchComboBox: FC<ComboBoxProps> = ({
                         height={40}
                         className="rounded"
                       />
+
                       <span
-                        className={`my-auto block truncate ${
+                        className={`my-auto flex gap-x-1  truncate ${
                           selected ? 'font-medium' : 'font-normal'
                         }`}
                       >
+                        {item.verified && (
+                          <IoIosCheckmarkCircle
+                            className={twMerge(
+                              'text-primary',
+                              active && 'text-primary-light'
+                            )}
+                            size={18}
+                          />
+                        )}
                         {item.name}
                       </span>
                       {selected ? (

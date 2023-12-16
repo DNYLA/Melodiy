@@ -42,13 +42,6 @@ public class TrackService : ITrackService
         }
 
         var artist = await _artistService.Get(request.ArtistId);
-
-        AlbumResponse? album = null;
-        if (request.AlbumId != null)
-        {
-            album = await _albumService.Get(request.AlbumId);
-        }
-
         var trackPath = await _fileService.UploadAudio(request.Audio, username, request.IsPublic);
         var duration = (int)await _fileService.GetAudioDuration(request.Audio);
 
@@ -69,13 +62,22 @@ public class TrackService : ITrackService
             Slug = Guid.NewGuid().ToString("N"),
             Title = request.Title,
             TrackArtists = new() { trackArtist },
-            AlbumId = album?.Id ?? null,
             FilePath = trackPath,
             Image = uploadedImage,
             Duration = duration,
             UserId = userId,
             ReleaseDate = _dateTimeProvider.UtcNow,
         };
+
+        if (request.AlbumId != null)
+        {
+            var album = await _albumService.Get(request.AlbumId);
+            track.AlbumTrack = new()
+            {
+                Position = 0,
+                AlbumId = album.Id,
+            };
+        }
 
         _context.Tracks.Add(track);
         await _context.SaveChangesAsync();
@@ -89,8 +91,10 @@ public class TrackService : ITrackService
             .Include(t => t.User)
             .Include(t => t.Image)
             .Include(t => t.TrackArtists)
-            .ThenInclude(t => t.Artist)
-            .Include(t => t.Album)
+                .ThenInclude(t => t.Artist)
+                        .Include(t => t.AlbumTrack)
+#nullable disable
+                            .ThenInclude(at => at.Track)
             .Where(t => t.UserId == userId)
             .OrderBy(t => t.CreatedAt)
             .ToListAsync();
@@ -110,8 +114,9 @@ public class TrackService : ITrackService
         var track = await tracks
             .Include(t => t.User)
             .Include(t => t.TrackArtists)
-            .ThenInclude(t => t.Artist)
-            .Include(t => t.Album)
+                .ThenInclude(t => t.Artist)
+            .Include(t => t.AlbumTrack)
+            .ThenInclude(at => at.Album)
             .FirstOrDefaultAsync(track => track.Slug == slug) ?? throw new ApiError(HttpStatusCode.NotFound, $"Track Id {slug} not found");
 
         if (!track.IsPublic && track.UserId != userId)
@@ -125,11 +130,10 @@ public class TrackService : ITrackService
     public async Task<string> GetTrackPath(int id, int? userId)
     {
         var track = await _context.Tracks.Include(t => t.TrackArtists)
-                                         .ThenInclude(ta => ta.Artist)
-                                         .Include(t => t.Album)
+                                            .ThenInclude(ta => ta.Artist)
+                                         .Include(t => t.AlbumTrack)
+                                            .ThenInclude(at => at.Album)
                                          .FirstOrDefaultAsync(t => t.Id == id) ?? throw new ApiError(HttpStatusCode.NotFound, $"Track Id not found");
-
-
 
         if (!track.IsPublic && track.UserId != userId)
         {

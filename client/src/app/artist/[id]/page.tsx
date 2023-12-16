@@ -17,7 +17,7 @@ export default async function Artist({ params }: { params: { id: string } }) {
         listerners={artist.monthlyListeners}
       />
 
-      <div className="z-50 m-5 flex flex-col gap-y-4 px-5">
+      <div className="m-5 flex flex-col gap-y-4 px-5">
         <TopTracksTable tracks={artist.topTracks} />
         {artist.albums.length > 0 && (
           <CollectionList header="Albums" albums={artist.albums} />

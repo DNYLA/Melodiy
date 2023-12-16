@@ -5,6 +5,7 @@ using Melodiy.Application.Common.Interfaces.Services;
 using Melodiy.Application.Services.ArtistService;
 using Melodiy.Application.Services.BulkInsertService;
 using Melodiy.Application.Services.FileService;
+using Melodiy.Application.Services.TrackService;
 using Melodiy.Domain.Entities;
 using Melodiy.Domain.Enums;
 using Microsoft.AspNetCore.Http;
@@ -76,33 +77,42 @@ public class AlbumService : IAlbumService
 
             albums = albums.Include(album => album.Image);
         }
-        var album = await albums.Include(p => p.User)
-                                 .Include(p => p.Image)
-                                 .Include(p => p.Tracks)
+        var album = await albums.Include(a => a.User)
+                                 .Include(a => a.Image)
+                                 .Include(a => a.Artists)
+                                 .Include(a => a.AlbumTracks)
+                                    .ThenInclude(at => at.Track)
                                     .ThenInclude(track => track.Image)
-                                 .Include(p => p.Tracks)
+                                 .Include(a => a.AlbumTracks)
+                                    .ThenInclude(at => at.Track)
                                     .ThenInclude(track => track.TrackArtists)
                                     .ThenInclude(ta => ta.Artist)
                                  .FirstOrDefaultAsync(artist => artist.Slug == slug) ?? throw new ApiError(System.Net.HttpStatusCode.NotFound, $"Album Id {slug} not found");
 
-
-
         //Check if its an album fetched externally.
-        if (album.Verified && album.ExternalSearchId != null)
+        if (album.Verified && album.ExternalSearchId != null && !album.Indexed)
         {
-            //TODO: This is bad as we are fetching everytime which is uneeded instead we can fetch once set a variable called indexed = true to prevent reindexing unless set to false.
             var externalAlbum = await _searchProvider.GetAlbum(album.ExternalSearchId);
             var tracks = await _bulkInsertService.BulkInsertExternalTracks(externalAlbum.Tracks);
-            album.Tracks = new();
+            album.Indexed = true; //No need to fetch the album tracks everytime the album is requested (Only fetch once or if an admin sets index to false)
+            await _context.SaveChangesAsync();
+
+            album.AlbumTracks = new();
             var mappedAlbum = album.Adapt<AlbumResponse>();
-            mappedAlbum.Tracks = tracks;
+
+            //Ordering newly inserted tracks requires us to match data between external and new (internally created) tracks.
+            //We could return Get() again or re-fetch the album here but it 
+            mappedAlbum.Tracks = tracks.OrderBy(t => externalAlbum.Tracks.Find(externalTrack => t.ExternalSearchId == externalTrack.Id)!.Position).ToList();
             return mappedAlbum;
         }
 
 
+        //Without this the Adapt<> causes an infinite loop where it maps album -> track -> album a better soloution than this is to make AlbumResponse reference an AlbumTrack value instead which doesn't include a relationship to the album.
+        var tempTracks = album.AlbumTracks.OrderBy(at => at.Position).Select(at => at.Track).ToList();
+        album.AlbumTracks = new();
+        var responseAlbum = album.Adapt<AlbumResponse>();
+        responseAlbum.Tracks = tempTracks.Adapt<List<TrackResponse>>();
 
-        //album.Tracks = album.Tracks.OrderBy(t => t.Position).ToList();
-
-        return album.Adapt<AlbumResponse>();
+        return responseAlbum;
     }
 }

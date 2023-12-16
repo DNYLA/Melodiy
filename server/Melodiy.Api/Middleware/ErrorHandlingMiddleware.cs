@@ -1,6 +1,6 @@
+using Melodiy.Application.Common.Errors;
 using System.Net;
 using System.Text.Json;
-using Melodiy.Application.Common.Errors;
 
 namespace Melodiy.Api.Middleware;
 
@@ -27,6 +27,7 @@ public class ErrorHandlingMiddleware
         catch (Exception ex)
         {
             Console.WriteLine(ex);
+            Console.WriteLine(ex.Message);
             // _logger.LogError("Something went wrong: {ex}", ex);
             await HandleExceptionAsync(context,
                 new ApiError(HttpStatusCode.InternalServerError, "An error occured while processing your request"));

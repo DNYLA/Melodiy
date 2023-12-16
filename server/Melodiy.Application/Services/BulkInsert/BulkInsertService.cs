@@ -119,10 +119,10 @@ public class BulkInsertService : IBulkInsertService
 
         //Fetch already existing albums
         List<string> ids = tracks.Select(a => a.Id).ToList();
-        List<Track> existingTracks = _context.Tracks.Where(t => t.ExternalSearchId != null && ids.Contains(t.ExternalSearchId))
-                                                    .Include(t => t.Image)
+        List<Track> existingTracks = _context.Tracks.Include(t => t.Image)
                                                     .Include(t => t.TrackArtists)
-                                                    .Include(t => t.Album)
+                                                    .Include(t => t.AlbumTrack)
+                                                    .Where(t => t.ExternalSearchId != null && ids.Contains(t.ExternalSearchId))
                                                     .ToList();
         List<string> existingIds = existingTracks.Select(a => a.ExternalSearchId!).ToList();
         List<Artist> trackArtists = await BulkInsertExternalArtists(tracks.SelectMany(track => track.Artists).ToList());
@@ -152,7 +152,12 @@ public class BulkInsertService : IBulkInsertService
                     ArtistId = artist.Id,
                 };
             }).ToList(),
-            Album = trackAlbums.Find(album => album.ExternalSearchId == track.Album.Id),
+            AlbumTrack = new AlbumTrack
+            {
+                Position = track.Position,
+                AlbumId = trackAlbums.Find(album => album.ExternalSearchId == track.Album.Id)!.Id,
+            }
+            //Album = trackAlbums.Find(album => album.ExternalSearchId == track.Album.Id),
         }).ToList();
 
         //Check if any of theese images already exist.
@@ -172,16 +177,7 @@ public class BulkInsertService : IBulkInsertService
         _context.Tracks.AddRange(newTracksWithImages);
         await _context.SaveChangesAsync();
 
-
         var allTracks = existingTracks.Concat(newTracksWithImages).ToList();
-        foreach (var track in allTracks)
-        {
-            if (track.Album != null)
-            {
-                track.Album.Tracks = new();
-            }
-        }
-
         return allTracks.Adapt<List<TrackResponse>>();
     }
 }

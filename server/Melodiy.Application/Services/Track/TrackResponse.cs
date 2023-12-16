@@ -13,9 +13,8 @@ public class TrackResponse
     public string Title { get; set; } = string.Empty;
     public int Views { get; set; }
     public string? FilePath { get; set; }
-    public string? SpotifyId { get; set; }
-    public string? YoutubeId { get; set; }
-    public int Position { get; set; }
+    public string? ExternalSearchId { get; set; }
+    public string? ExternalStreamId { get; set; }
     public bool IsPublic { get; set; }
     public SourceType Source { get; set; }
     public int Duration { get; set; }

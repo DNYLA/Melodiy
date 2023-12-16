@@ -15,13 +15,14 @@ public class Album : BaseEntity
     public string? ExternalSearchId { get; set; }
     public DateTime ReleaseDate { get; set; }
     public AlbumType Type { get; set; }
+    public bool Indexed { get; set; } = false;
 
     //Foreign Keys
     public int? ImageId { get; set; }
     public int? UserId { get; set; }
 
     //Navigation Properties
-    public List<Track> Tracks { get; set; } = null!;
+    public List<AlbumTrack> AlbumTracks { get; set; } = null!;
     public List<Artist> Artists { get; set; } = null!;
     public Image? Image { get; set; }
     public User? User { get; set; }

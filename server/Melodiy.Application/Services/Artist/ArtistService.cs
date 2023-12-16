@@ -68,11 +68,14 @@ public class ArtistService : IArtistService
     public async Task<ArtistDetails> GetFullArtist(string slug)
     {
         var artist = await _context.Artists.Include(a => a.Image)
-                                           .Include(a => a.Albums)
-                                           .ThenInclude(album => album.Image)
-                                           .Include(a => a.TrackArtists.OrderBy(ta => ta.Track.Views).Take(5)) //Takes Top x tracks by views
-                                           .ThenInclude(ta => ta.Track)
-                                           .FirstOrDefaultAsync(artist => artist.Slug == slug) ?? throw new ApiError(System.Net.HttpStatusCode.NotFound, $"Artist Id {slug} not found");
+                                            .Include(a => a.Albums)
+                                                .ThenInclude(album => album.Image)
+                                            .Include(a => a.TrackArtists.OrderBy(ta => ta.Track.Views).Take(5)) //Takes Top x tracks by views
+                                                .ThenInclude(ta => ta.Track)
+                                                .ThenInclude(ta => ta.AlbumTrack)
+#nullable disable
+                                            //.ThenInclude(at => at.Album)
+                                            .FirstOrDefaultAsync(artist => artist.Slug == slug) ?? throw new ApiError(System.Net.HttpStatusCode.NotFound, $"Artist Id {slug} not found");
 
         if (artist.ExternalSearchId != null)
         {
@@ -90,7 +93,9 @@ public class ArtistService : IArtistService
                                              .Adapt<List<AlbumResponse>>()
                                              .OrderByDescending(a => a.ReleaseDate)
                                              .ToList();
-        artistDetails.TopTracks = artist.TrackArtists.Select(ta => ta.Track).ToList().Adapt<List<TrackResponse>>();
+
+        List<Track> tracks = artist.TrackArtists.Select(ta => ta.Track).ToList();
+        artistDetails.TopTracks = tracks.Adapt<List<TrackResponse>>();
 
         return artistDetails;
     }

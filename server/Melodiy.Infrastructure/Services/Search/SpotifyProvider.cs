@@ -49,6 +49,7 @@ public class SpotifyProvider : IExternalSearchProvider
 
         return pipedResults;
     }
+
     public async Task<ExternalAlbum> GetAlbum(string id)
     {
         SpotifyClient spotify = new(_defaultConfig);
@@ -132,6 +133,7 @@ public class SpotifyProvider : IExternalSearchProvider
         return new ExternalTrack
         {
             Id = track.Id,
+            Position = track.TrackNumber,
             Artists = track.Artists.Select(SpotifyArtistToExternalArtist).ToList(),
             Album = SpotifyAlbumToExternalAlbum(track.Album),
             Title = track.Name,
@@ -146,6 +148,7 @@ public class SpotifyProvider : IExternalSearchProvider
         return new ExternalTrack
         {
             Id = track.Id,
+            Position = track.TrackNumber,
             Artists = track.Artists.Select(SpotifyArtistToExternalArtist).ToList(),
             Album = album,
             Title = track.Name,

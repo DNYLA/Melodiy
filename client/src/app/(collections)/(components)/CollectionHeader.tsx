@@ -12,9 +12,15 @@ import {
   useMotionValueEvent,
   useTransform,
 } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { BiShuffle } from 'react-icons/bi';
 import { BsFillPlayFill } from 'react-icons/bs';
+
+type CollectionOwner = {
+  name: string;
+  redirect: string;
+};
 
 export interface CollectionHeaderProps {
   title: string;
@@ -22,7 +28,7 @@ export interface CollectionHeaderProps {
   cover?: string;
   releaseDate: Date;
   tracks: Track[];
-  owner: { name: string; redirect: string };
+  owner: CollectionOwner | CollectionOwner[];
 }
 
 const CollectionHeader: FC<CollectionHeaderProps> = ({
@@ -33,11 +39,8 @@ const CollectionHeader: FC<CollectionHeaderProps> = ({
   tracks,
   owner,
 }) => {
+  const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
-  // const { scrollY, scrollYProgress } = useScroll({
-  //   target: ref,
-  //   offset: ['0 1', '1.33 1'],
-  // });
   const { scrollY, scrollYProgress } = useContext(ScrollContext);
 
   const size = useTransform(scrollY!, [50, 375], ['400px', '235px']);
@@ -48,6 +51,7 @@ const CollectionHeader: FC<CollectionHeaderProps> = ({
   const [isPreviewVisible, setIsPreviewVisible] = useState(false);
 
   useMotionValueEvent(scrollY!, 'change', (latest) => {
+    console.log('here');
     setIsFullVisible(isFullVisibleMotion.get());
     setIsPreviewVisible(isPreviewVisibleMotion.get());
   });
@@ -75,7 +79,21 @@ const CollectionHeader: FC<CollectionHeaderProps> = ({
     return `${trackAmount} SONGS • ${duration} • ${date.year()}`;
   };
 
-  console.log(cover);
+  const getOwner = () => {
+    if (Array.isArray(owner)) {
+      return owner[0].name;
+    }
+
+    return owner.name;
+  };
+
+  const getRedirect = () => {
+    if (Array.isArray(owner)) {
+      return owner[0].redirect;
+    }
+
+    return owner.redirect;
+  };
 
   return (
     <motion.div
@@ -104,8 +122,11 @@ const CollectionHeader: FC<CollectionHeaderProps> = ({
               <p className="text-xl font-bold md:text-2xl lg:text-3xl">
                 {title}
               </p>
-              <p className="cursor-pointer text-inactive hover:underline">
-                {owner.name}
+              <p
+                className="cursor-pointer text-inactive hover:underline"
+                onClick={() => router.push(getRedirect())}
+              >
+                {getOwner()}
               </p>
               <p className="font-light">{getCollectionDetails()}</p>
             </div>

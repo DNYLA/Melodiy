@@ -1,4 +1,4 @@
-import { getPlaylist } from '@/actions/playlist';
+import { getPlaylist } from '@/actions/collections';
 import { redirect } from 'next/navigation';
 import PlaylistTable from './table';
 

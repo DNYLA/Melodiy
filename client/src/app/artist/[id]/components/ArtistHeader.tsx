@@ -63,7 +63,7 @@ export const ArtistHeader: FC<ArtistHeaderProps> = ({
           quality={100}
           draggable={false}
         />
-        <div className="absolute bottom-0 z-30 flex w-full items-center justify-between px-5 py-2">
+        <div className="absolute bottom-0 flex w-full items-center justify-between px-5 py-2">
           <div className="flex ">
             <div className="">
               <h1 className="text-3xl font-bold">{name}</h1>

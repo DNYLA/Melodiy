@@ -14,6 +14,7 @@ export type Album = {
   id: string;
   title: string;
   artists: Artist[];
+  tracks: Track[];
   verified: boolean;
   type: AlbumType;
   user?: User;

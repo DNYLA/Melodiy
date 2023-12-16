@@ -4,7 +4,6 @@ using Melodiy.Application.Services.UserService;
 using Melodiy.Domain.Enums;
 
 namespace Melodiy.Application.Services.AlbumService;
-
 public class AlbumTrackResponse
 {
     public int Id { get; set; }
@@ -21,7 +20,6 @@ public class AlbumTrackResponse
     public DateTime ReleaseDate { get; set; }
     public DateTime CreatedAt { get; set; }
     public List<ArtistResponse> Artists { get; set; } = new();
-    public AlbumResponse? Album { get; set; }
     public UserResponse? User { get; set; }
     public ImageResponse? Image { get; set; }
 }

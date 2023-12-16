@@ -77,17 +77,18 @@ const AddToPlaylistContextItem: React.FC<AddToPlaylistContextItemProps> = ({
           />
 
           <ContextMenu.Separator className="m-[5px] h-[1px] bg-violet6" />
-
-          {filterPlaylists().map((playlist) => (
-            <ContextMenu.Item
-              onClick={() => handleAdd(playlist.id, playlist.title)}
-              key={playlist.title}
-              className="group relative flex h-[25px] max-w-[250px] items-center rounded-[3px] px-2 py-4 text-sm leading-none outline-none  data-[highlighted]:bg-neutral-700/80"
-            >
-              <span className="truncate">{playlist.title}</span>
-              {/* </div> */}
-            </ContextMenu.Item>
-          ))}
+          <div className="max-h-48 overflow-y-auto">
+            {filterPlaylists().map((playlist) => (
+              <ContextMenu.Item
+                onClick={() => handleAdd(playlist.id, playlist.title)}
+                key={playlist.title}
+                className="group relative flex h-[25px] max-w-[250px] items-center rounded-[3px] px-2 py-4 text-sm leading-none outline-none  data-[highlighted]:bg-neutral-700/80"
+              >
+                <span className="truncate">{playlist.title}</span>
+                {/* </div> */}
+              </ContextMenu.Item>
+            ))}
+          </div>
         </ContextMenu.SubContent>
       </ContextMenu.Portal>
     </ContextMenu.Sub>

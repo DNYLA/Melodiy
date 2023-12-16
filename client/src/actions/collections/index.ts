@@ -3,7 +3,7 @@
 import { getServerSession } from '@/actions/auth';
 import { getApiRoute } from '@/lib/network/helpers';
 import { Track } from '@/types';
-import { Playlist } from '@/types/playlist';
+import { Album, Playlist } from '@/types/playlist';
 import axios from 'axios';
 
 export async function getUserTracks(): Promise<Track[]> {
@@ -25,6 +25,16 @@ export async function getPlaylist(id: string): Promise<Playlist | null> {
     const { data } = await axios.get(getApiRoute(`/playlist/${id}`), {
       headers: { Authorization: `Bearer ${session?.token}` },
     });
+    return data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
+
+export async function getAlbum(id: string): Promise<Album | null> {
+  try {
+    const { data } = await axios.get(getApiRoute(`/album/${id}`));
     return data;
   } catch (err) {
     console.log(err);

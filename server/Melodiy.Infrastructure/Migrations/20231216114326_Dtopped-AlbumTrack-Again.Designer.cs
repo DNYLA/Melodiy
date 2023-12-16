@@ -3,6 +3,7 @@ using System;
 using Melodiy.Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Melodiy.Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231216114326_Dtopped-AlbumTrack-Again")]
+    partial class DtoppedAlbumTrackAgain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,9 +57,6 @@ namespace Melodiy.Infrastructure.Migrations
                     b.Property<int?>("ImageId")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("Indexed")
-                        .HasColumnType("boolean");
-
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -93,27 +93,6 @@ namespace Melodiy.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Albums");
-                });
-
-            modelBuilder.Entity("Melodiy.Domain.Entities.AlbumTrack", b =>
-                {
-                    b.Property<int>("TrackId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("AlbumId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Position")
-                        .HasColumnType("integer");
-
-                    b.HasKey("TrackId", "AlbumId", "Position");
-
-                    b.HasIndex("AlbumId");
-
-                    b.HasIndex("TrackId")
-                        .IsUnique();
-
-                    b.ToTable("AlbumTrack");
                 });
 
             modelBuilder.Entity("Melodiy.Domain.Entities.Artist", b =>
@@ -274,6 +253,9 @@ namespace Melodiy.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AlbumTrackId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -294,6 +276,9 @@ namespace Melodiy.Infrastructure.Migrations
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("boolean");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("timestamp with time zone");
@@ -415,25 +400,6 @@ namespace Melodiy.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Melodiy.Domain.Entities.AlbumTrack", b =>
-                {
-                    b.HasOne("Melodiy.Domain.Entities.Album", "Album")
-                        .WithMany("AlbumTracks")
-                        .HasForeignKey("AlbumId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Melodiy.Domain.Entities.Track", "Track")
-                        .WithOne("AlbumTrack")
-                        .HasForeignKey("Melodiy.Domain.Entities.AlbumTrack", "TrackId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Album");
-
-                    b.Navigation("Track");
-                });
-
             modelBuilder.Entity("Melodiy.Domain.Entities.Artist", b =>
                 {
                     b.HasOne("Melodiy.Domain.Entities.Image", "Image")
@@ -531,11 +497,6 @@ namespace Melodiy.Infrastructure.Migrations
                     b.Navigation("Track");
                 });
 
-            modelBuilder.Entity("Melodiy.Domain.Entities.Album", b =>
-                {
-                    b.Navigation("AlbumTracks");
-                });
-
             modelBuilder.Entity("Melodiy.Domain.Entities.Artist", b =>
                 {
                     b.Navigation("TrackArtists");
@@ -559,8 +520,6 @@ namespace Melodiy.Infrastructure.Migrations
 
             modelBuilder.Entity("Melodiy.Domain.Entities.Track", b =>
                 {
-                    b.Navigation("AlbumTrack");
-
                     b.Navigation("PlaylistTracks");
 
                     b.Navigation("TrackArtists");

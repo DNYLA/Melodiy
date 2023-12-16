@@ -73,6 +73,7 @@ static void ConfigureMapster()
         .Map(dest => dest.Id, src => src.Slug)
         .Map(dest => dest.Image, src => src.Image != null ? src.Image.Url : null);
 
+
     TypeAdapterConfig<AlbumResponse, GetAlbumResponse>.NewConfig()
         .Map(dest => dest.Id, src => src.Slug)
         .Map(dest => dest.Image, src => src.Image != null ? src.Image.Url : null);
@@ -92,7 +93,9 @@ static void ConfigureMapster()
         .Map(dest => dest.Id, src => src.Slug);
 
     TypeAdapterConfig<Track, TrackResponse>.NewConfig()
-        .Map(dest => dest.Artists, src => src.TrackArtists.Select(ta => ta.Artist).ToList());
+        .Map(dest => dest.Artists, src => src.TrackArtists.Select(ta => ta.Artist).ToList())
+        .IgnoreIf((src, dest) => src.AlbumTrack == null || src.AlbumTrack.Album == null, dest => dest.Album)
+        .Map(dest => dest.Album, src => src.AlbumTrack!.Album ?? null);
 
     TypeAdapterConfig<TrackResponse, GetTrackResponse>.NewConfig()
         .Map(dest => dest.Id, src => src.Slug)

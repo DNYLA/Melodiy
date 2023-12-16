@@ -1,5 +1,5 @@
 import { getServerSession } from '@/actions/auth';
-import { getUserTracks } from '@/actions/playlist';
+import { getUserTracks } from '@/actions/collections';
 import FilesTable from '@/app/(collections)/files/table';
 import { redirect } from 'next/navigation';
 

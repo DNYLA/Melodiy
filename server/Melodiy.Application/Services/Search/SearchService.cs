@@ -10,6 +10,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Melodiy.Application.Services.SearchService;
 
+//This service needs re-writing
+//It would be better if each individual function SearchAlbum, SearchArtist, etc fetched the external data (that way we always have the best data) but it should be done in a way where
+//if a user decides to SearchAll via Search() we can search once for Albums, Tracks, artists and pass that down.
 public class SearchService : ISearchService
 {
     private readonly IExternalSearchProvider _searchProvider;
@@ -28,11 +31,24 @@ public class SearchService : ISearchService
     public async Task<SearchResult> Search(string term, int limit = 10)
     {
         ExternalSearchResult externalResult = await _searchProvider.Search(term, 10);
+
+        var externalArtists = (await _bulkInsertService.BulkInsertExternalArtists(externalResult.Artists)).Adapt<List<ArtistResponse>>();
+        var allArtists = (await SearchArtist(term, limit)).Concat(externalArtists).ToList();
+        var sortedArtists = SortList(allArtists, artist => artist.Name, term).ToList();
+
+        var externalAlbums = (await _bulkInsertService.BulkInsertExternalAlbums(externalResult.Albums)).Adapt<List<AlbumResponse>>();
+        var allAlbums = (await SearchAlbums(term, limit)).Concat(externalAlbums).ToList();
+        var sortedAlbums = SortList(allAlbums, album => album.Title, term).ToList();
+
+        var externalTracks = (await _bulkInsertService.BulkInsertExternalTracks(externalResult.Tracks)).Adapt<List<TrackResponse>>().OrderBy(t => t.Title).ToList();
+        var allTracks = (await SearchTracks(term, limit)).Concat(externalTracks).ToList();
+        var sortedTracks = SortList(allTracks, track => track.Title, term).ToList();
+
         var result = new SearchResult
         {
-            Artists = (await _bulkInsertService.BulkInsertExternalArtists(externalResult.Artists)).Adapt<List<ArtistResponse>>(),
-            Albums = (await _bulkInsertService.BulkInsertExternalAlbums(externalResult.Albums)).Adapt<List<AlbumResponse>>(),
-            Tracks = (await _bulkInsertService.BulkInsertExternalTracks(externalResult.Tracks)).Adapt<List<TrackResponse>>(),
+            Artists = sortedArtists.Take(limit).ToList(),
+            Albums = sortedAlbums.Take(limit).ToList(),
+            Tracks = sortedTracks.Take(limit).ToList(),
         };
 
         return result;
@@ -68,7 +84,9 @@ public class SearchService : ISearchService
 
     public async Task<List<ArtistResponse>> SearchArtist(string term, int limit = 5)
     {
-        //TODO: Move to ArtistService (Not needed right now as we aren't using an external search provider).
+        //TODO: Change to Artists only search as we are requesting double what we need.
+        //ExternalSearchResult externalResult = await _searchProvider.Search(term, limit);
+        //var externalArtists = (await _bulkInsertService.BulkInsertExternalArtists(externalResult.Artists)).Adapt<List<ArtistResponse>>();
         term = term.ToLower();
 
         string[] searchTerms = term.Split(' ');
@@ -81,12 +99,61 @@ public class SearchService : ISearchService
 
         var artists = await query.OrderBy(a => a.Name).Include(a => a.Image).Take(limit).ToListAsync();
         var mappedArtists = artists.Adapt<List<ArtistResponse>>();
-        var sortedArtists = SortList(mappedArtists, artist => artist.Name, term).ToList();
+        //var combinedArtists = mappedArtists.Concat(externalArtists).ToList();
+        var sortedArtists = SortList(mappedArtists, artist => artist.Name, term).Take(limit).ToList();
 
-        return sortedArtists;
+        return sortedArtists.OrderByDescending(a => a.Verified).ToList();
     }
 
-    //TODO: Move to Sort Service?
+    public async Task<List<AlbumResponse>> SearchAlbums(string term, int limit = 5)
+    {
+        //TODO: Add Support for searching an album that is by an artist from term.
+        term = term.ToLower();
+
+        string[] searchTerms = term.Split(' ');
+        IQueryable<Album> query = _context.Albums.AsQueryable();
+
+        foreach (string curTerm in searchTerms)
+        {
+            query = query.Where(album => album.Title.ToLower().Contains(curTerm));
+        }
+
+        var albums = await query.OrderBy(a => a.Title)
+                                .Include(a => a.Image)
+                                .Include(a => a.Artists)
+                                .Take(limit).ToListAsync();
+        var mappedAlbums = albums.Adapt<List<AlbumResponse>>();
+        var sortedAlbums = SortList(mappedAlbums, album => album.Title, term).Take(limit).ToList();
+
+        return sortedAlbums.OrderByDescending(a => a.Verified).ToList();
+    }
+
+    public async Task<List<TrackResponse>> SearchTracks(string term, int limit = 5)
+    {
+        //TODO: Add Support for searching a track that is based off an album or artist term. e.g Drake will return a list of tracks with drake in the Album.Title, Artist.Name, Track.Title. (Track.Title should be preffered and weighted higher if its an exact match).
+        term = term.ToLower();
+
+        string[] searchTerms = term.Split(' ');
+        IQueryable<Track> query = _context.Tracks.AsQueryable();
+
+        foreach (string curTerm in searchTerms)
+        {
+            query = query.Where(track => track.Title.ToLower().Contains(curTerm));
+        }
+
+        var tracks = await query.OrderBy(t => t.Title).Include(t => t.Image)
+                                .Include(t => t.AlbumTrack)
+#nullable disable
+                                    .ThenInclude(ta => ta.Album)
+                                .Include(t => t.TrackArtists)
+                                    .ThenInclude(ta => ta.Artist)
+                                .Take(limit).ToListAsync();
+        var mappedTracks = tracks.Adapt<List<TrackResponse>>();
+
+        return SortList(mappedTracks, album => album.Title, term).Take(limit).ToList();
+    }
+
+    //TODO: Move to Sort Service || Make Extension?
     public static List<T> SortList<T>(List<T> list, Func<T, string> keySelector, string term)
     // public List<AlbumResponse> SortList(List<T> list, Func<AlbumResponse, string> keySelector, string term)
     {
@@ -106,7 +173,7 @@ public class SearchService : ISearchService
 
             if (isInTitle)
             {
-                score += 2;
+                score += 5;
             }
 
             score += similarity;

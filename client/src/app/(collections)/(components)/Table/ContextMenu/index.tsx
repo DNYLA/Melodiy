@@ -1,3 +1,4 @@
+import AlbumContextMenu from '@/app/(collections)/(components)/Table/ContextMenu/Album';
 import { CollectionType } from '@/types/collections';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import React from 'react';
@@ -25,8 +26,8 @@ const TrackTableContextMenu = ({
 
   const renderCorrectMenu = () => {
     switch (type) {
-      // case CollectionType.Album:
-      // return <AlbumContextMenu trackId={trackId} ownerId={ownerId} />;
+      case CollectionType.Album:
+        return <AlbumContextMenu trackId={trackId} artistId={artistId} />;
       case CollectionType.Files:
         return (
           <FileContextMenu
@@ -52,7 +53,9 @@ const TrackTableContextMenu = ({
   return (
     <ContextMenu.Root>
       <ContextMenu.Trigger asChild>{children}</ContextMenu.Trigger>
-      <ContextMenu.Portal>{renderCorrectMenu()}</ContextMenu.Portal>
+      <ContextMenu.Portal>
+        <div className="z-[90]">{renderCorrectMenu()}</div>
+      </ContextMenu.Portal>
     </ContextMenu.Root>
   );
 };

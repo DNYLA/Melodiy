@@ -4,7 +4,7 @@ import * as ContextMenu from '@radix-ui/react-context-menu';
 import AddToFavouritesContextItem from '../Actions/AddToFavourites';
 import AddToPlaylistContextItem from '../Actions/AddToPlaylist';
 import QueueContextItem from '../Actions/QueueTrack';
-import TrackParentRedirectsContextItems from '../TrackParentRedirect';
+import TrackParentRedirectsContextItems from '../Actions/TrackParentRedirect';
 
 interface PlaylistContextMenuProps {
   trackId: string;

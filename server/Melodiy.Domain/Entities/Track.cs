@@ -15,21 +15,19 @@ public class Track : BaseEntity
     public string? FilePath { get; set; }
     public string? ExternalSearchId { get; set; }
     public string? ExternalStreamId { get; set; }
-    public int Position { get; set; } = 0; //If its not in an album default is 0
     public bool IsPublic { get; set; }
     public SourceType Source { get; set; }
     public int Duration { get; set; }
     public DateTime ReleaseDate { get; set; }
 
     //Foreign Keys
-    public int? AlbumId { get; set; }
     public int? UserId { get; set; }
     public int? ImageId { get; set; }
 
     //Navigation Properties
     public List<TrackArtist> TrackArtists { get; set; } = null!;
-    public Album? Album { get; set; }
     public List<PlaylistTrack> PlaylistTracks { get; set; } = null!;
+    public AlbumTrack? AlbumTrack { get; set; }
     public User? User { get; set; }
     public Image? Image { get; set; }
 }
