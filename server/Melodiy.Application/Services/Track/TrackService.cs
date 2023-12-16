@@ -67,6 +67,7 @@ public class TrackService : ITrackService
             Duration = duration,
             UserId = userId,
             ReleaseDate = _dateTimeProvider.UtcNow,
+            IsPublic = true,
         };
 
         if (request.AlbumId != null)
@@ -91,10 +92,10 @@ public class TrackService : ITrackService
             .Include(t => t.User)
             .Include(t => t.Image)
             .Include(t => t.TrackArtists)
-                .ThenInclude(t => t.Artist)
-                        .Include(t => t.AlbumTrack)
+            .ThenInclude(t => t.Artist)
+            .Include(t => t.AlbumTrack)
 #nullable disable
-                            .ThenInclude(at => at.Track)
+                .ThenInclude(at => at.Album)
             .Where(t => t.UserId == userId)
             .OrderBy(t => t.CreatedAt)
             .ToListAsync();

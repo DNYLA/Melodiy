@@ -32,16 +32,16 @@ public class SearchService : ISearchService
     {
         ExternalSearchResult externalResult = await _searchProvider.Search(term, 10);
 
-        var externalArtists = (await _bulkInsertService.BulkInsertExternalArtists(externalResult.Artists)).Adapt<List<ArtistResponse>>();
-        var allArtists = (await SearchArtist(term, limit)).Concat(externalArtists).ToList();
-        var sortedArtists = SortList(allArtists, artist => artist.Name, term).ToList();
+        var externalArtists = (await _bulkInsertService.BulkInsertExternalArtists(externalResult.Artists)).Adapt<List<ArtistResponse>>(); //External Search Provider
+        var allArtists = (await SearchArtist(term, limit)).Concat(externalArtists).GroupBy(a => a.Id).Select(a => a.First()).ToList(); //Combines & removes duplicates
+        var sortedArtists = SortList(allArtists, artist => artist.Name, term).ToList(); //Results Sorted by Term
 
         var externalAlbums = (await _bulkInsertService.BulkInsertExternalAlbums(externalResult.Albums)).Adapt<List<AlbumResponse>>();
-        var allAlbums = (await SearchAlbums(term, limit)).Concat(externalAlbums).ToList();
+        var allAlbums = (await SearchAlbums(term, limit)).Concat(externalAlbums).GroupBy(a => a.Id).Select(a => a.First()).ToList();
         var sortedAlbums = SortList(allAlbums, album => album.Title, term).ToList();
 
         var externalTracks = (await _bulkInsertService.BulkInsertExternalTracks(externalResult.Tracks)).Adapt<List<TrackResponse>>().OrderBy(t => t.Title).ToList();
-        var allTracks = (await SearchTracks(term, limit)).Concat(externalTracks).ToList();
+        var allTracks = (await SearchTracks(term, limit)).Concat(externalTracks).GroupBy(t => t.Id).Select(t => t.First()).ToList();
         var sortedTracks = SortList(allTracks, track => track.Title, term).ToList();
 
         var result = new SearchResult
