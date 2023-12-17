@@ -4,6 +4,7 @@ import ActionButton from '@/components/Inputs/Buttons/ActionButton';
 import { Input } from '@/components/Inputs/Input';
 import Switch from '@/components/Inputs/Switch';
 import useUploadModal from '@/hooks/modals/useUploadModal';
+import usePlaylists from '@/hooks/query/usePlaylist';
 import useFilePreview from '@/hooks/useFilePreview';
 import useSession from '@/hooks/useSession';
 import { AXIOS } from '@/lib/network';
@@ -53,6 +54,7 @@ const CreatePlaylist: FC<ICreatePlaylist> = () => {
     },
     resolver: zodResolver(schema),
   });
+  const { refetch: refetchPlaylists } = usePlaylists();
   const coverFile = watch('cover');
   const isPublic = watch('public');
   const { setImgSrc: setCoverSrc, imgSrc: coverSrc } =
@@ -77,6 +79,7 @@ const CreatePlaylist: FC<ICreatePlaylist> = () => {
 
       //TODO: Refresh Playlist Mutation with useQuery
       toast.success('Created new playlist');
+      refetchPlaylists();
       router.push(`/playlist/${res.id}`);
       reset();
       resetCover();

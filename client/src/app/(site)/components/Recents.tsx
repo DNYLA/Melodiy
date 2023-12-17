@@ -1,5 +1,8 @@
 'use client';
 
+import PlaylistList from '@/components/Data/PlaylistList';
+import usePlaylists from '@/hooks/query/usePlaylist';
+
 export default function Trending() {
   // const trending = await getTrending();
 
@@ -7,9 +10,12 @@ export default function Trending() {
   //   return <p className="text-3xl font-bold ">Trending</p>;
   // }
 
+  const { data } = usePlaylists();
+
   return (
     <div>
-      <p className="mb-5 text-3xl font-bold">Recently Created</p>
+      <p className="mb-5 text-3xl font-bold">Your Playlists</p>
+      {data && data.length > 0 && <PlaylistList playlists={data} />}
     </div>
   );
 

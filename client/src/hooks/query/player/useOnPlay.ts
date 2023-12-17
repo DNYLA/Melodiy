@@ -5,6 +5,7 @@ import { PlayerResponse } from '@/types';
 import { CollectionType } from '@/types/collections';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function useOnPlay(collectionId: string, type: CollectionType) {
   const { user } = useSession();
@@ -35,12 +36,15 @@ export default function useOnPlay(collectionId: string, type: CollectionType) {
   };
 
   useEffect(() => {
+    if (query.isLoadingError) {
+      toast.error("Can't play this track");
+    }
     if (query.data === undefined) return;
 
     const curTrack = query.data.currentTrack;
     player.setActive(curTrack, collectionId, type);
     player.setQueue(query.data.queue);
-  }, [query.data]);
+  }, [query.data, query.isLoadingError]);
 
   return { query, onPlay };
 }
