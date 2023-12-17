@@ -29,6 +29,7 @@ export type FullArtist = Artist & {
   description?: string;
   monthlyListeners: number;
   topTracks: Track[];
+  userAlbums: Album[];
   albums: Album[];
   singles: Album[];
   createdAt: string;

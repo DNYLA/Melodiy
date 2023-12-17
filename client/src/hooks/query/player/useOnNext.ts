@@ -39,7 +39,7 @@ export default function useOnNext() {
       player.active!.type
     );
     // player.setQueue(query.data.queue);
-  }, [query.data, player]);
+  }, [query.data]);
 
   return { query, onNext };
 }

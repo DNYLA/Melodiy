@@ -25,6 +25,12 @@ export default async function Artist({ params }: { params: { id: string } }) {
         {artist.singles.length > 0 && (
           <CollectionList header={'Singles & EPs'} albums={artist.singles} />
         )}
+        {artist.userAlbums.length > 0 && (
+          <CollectionList
+            header={'Unofficial Albums'}
+            albums={artist.userAlbums}
+          />
+        )}
       </div>
     </main>
   );

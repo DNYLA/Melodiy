@@ -40,8 +40,8 @@ public class SearchService : ISearchService
         var allAlbums = (await SearchAlbums(term, limit)).Concat(externalAlbums).GroupBy(a => a.Id).Select(a => a.First()).ToList();
         var sortedAlbums = SortList(allAlbums, album => album.Title, term).ToList();
 
-        var externalTracks = (await _bulkInsertService.BulkInsertExternalTracks(externalResult.Tracks)).Adapt<List<TrackResponse>>().OrderBy(t => t.Title).ToList();
-        var allTracks = (await SearchTracks(term, limit)).Concat(externalTracks).GroupBy(t => t.Id).Select(t => t.First()).ToList();
+        var externalTracks = (await _bulkInsertService.BulkInsertExternalTracks(externalResult.Tracks)).Adapt<List<TrackResponse>>().DistinctBy(t => t.Title);
+        var allTracks = (await SearchTracks(term, limit)).Concat(externalTracks).DistinctBy(t => t.Id).ToList();
         var sortedTracks = SortList(allTracks, track => track.Title, term).ToList();
 
         var result = new SearchResult

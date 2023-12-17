@@ -26,15 +26,18 @@ public class PlayerService : IPlayerService
         if (claims == null)
         {
             //Currently only files are implemented which require auth
-            throw new ApiError(HttpStatusCode.Unauthorized, "You must be logged in to play a track");
+            // throw new ApiError(HttpStatusCode.Unauthorized, "You must be logged in to play a track");
             // if (trackId == null) throw new ApiError(HttpStatusCode.BadRequest, "A TrackId must be provided if you aren't logged in");
             // //Guests don't have a track history
             // var guestTrack = await _trackService.Get(trackId, null, true);
-            // return new PlayerResponse
-            // {
-            //     CurrentTrack = guestTrack,
-            //     Queue = new(),
-            // };
+            var guestTrack = await _trackService.Get(trackId, null);
+            guestTrack.FilePath = await _trackService.GetTrackPath(guestTrack.Id, null);
+
+            return new PlayerResponse
+            {
+                CurrentTrack = guestTrack,
+                Queue = new List<TrackPreview> { guestTrack.Adapt<TrackPreview>() }
+            };
         }
 
         var queue = await GenerateQueue(trackId, collectionId, type, position, shuffle, claims.Id);

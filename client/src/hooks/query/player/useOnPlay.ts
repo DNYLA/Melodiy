@@ -22,7 +22,6 @@ export default function useOnPlay(collectionId: string, type: CollectionType) {
         position,
         shuffle: false,
       });
-
       return data;
     },
     gcTime: 0,
@@ -41,7 +40,7 @@ export default function useOnPlay(collectionId: string, type: CollectionType) {
     const curTrack = query.data.currentTrack;
     player.setActive(curTrack, collectionId, type);
     player.setQueue(query.data.queue);
-  }, [query.data, player, collectionId, type]);
+  }, [query.data]);
 
   return { query, onPlay };
 }

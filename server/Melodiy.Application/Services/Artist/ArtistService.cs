@@ -83,16 +83,22 @@ public class ArtistService : IArtistService
         }
 
         var artistDetails = artist.Adapt<ArtistDetails>();
-        artistDetails.Albums = artist.Albums.Where(album => album.Type == AlbumType.Album)
+        artistDetails.Albums = artist.Albums.Where(album => album.Type == AlbumType.Album && album.Verified)
                                             .ToList()
                                             .Adapt<List<AlbumResponse>>()
                                             .OrderByDescending(a => a.ReleaseDate)
                                             .ToList();
-        artistDetails.Singles = artist.Albums.Where(album => album.Type != AlbumType.Album)
+        artistDetails.Singles = artist.Albums.Where(album => album.Type != AlbumType.Album && album.Verified)
                                              .ToList()
                                              .Adapt<List<AlbumResponse>>()
                                              .OrderByDescending(a => a.ReleaseDate)
                                              .ToList();
+
+        artistDetails.UserAlbums = artist.Albums.Where(album => !album.Verified)
+                                            .ToList()
+                                            .Adapt<List<AlbumResponse>>()
+                                            .OrderByDescending(a => a.ReleaseDate)
+                                            .ToList();
 
         List<Track> tracks = artist.TrackArtists.Select(ta => ta.Track).ToList();
         artistDetails.TopTracks = tracks.Adapt<List<TrackResponse>>();
