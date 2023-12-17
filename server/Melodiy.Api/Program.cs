@@ -36,7 +36,7 @@ var builder = WebApplication.CreateBuilder(args);
         options.AddPolicy(name: MyAllowSpecificOrigins, policy =>
         {
             policy
-                .WithOrigins("http://localhost:3000", "http://localhost:3001", "https://melodiy.net")
+                .WithOrigins("http://localhost:3000", "https://melodiy.net")
                 .WithHeaders(HeaderNames.ContentType, "Access-Control-Allow-Headers")
                 .AllowCredentials()
                 .AllowAnyHeader()
