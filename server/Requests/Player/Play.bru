@@ -1,0 +1,24 @@
+meta {
+  name: Play
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:5041/player/play
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "position": 30,
+    "collectionId": "files",
+    "type": 2,
+    "shuffle": false
+  }
+}

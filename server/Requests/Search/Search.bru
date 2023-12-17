@@ -1,0 +1,20 @@
+meta {
+  name: Search
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:5041/search?term=Jim&type=1
+  body: none
+  auth: bearer
+}
+
+query {
+  term: Jim
+  type: 1
+}
+
+auth:bearer {
+  token: {{token}}
+}

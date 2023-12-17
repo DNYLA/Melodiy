@@ -10,6 +10,6 @@ services:
   server:
     image: ghcr.io/dnyla/melodiy-server:latest
     ports:
-      - 5062:5062
+      - 5041:5041
     volumes:
       - ./server/appsettings.production.json:/app/appsettings.json
