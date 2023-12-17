@@ -76,6 +76,7 @@ BEGIN RETURN
 END;
 ```
 <img src="./screenshots/supabase-storage-function.png" alt="Supabase Storage Function" />
+
 4. Leave everything else as default and click confirm.
 5. Everything else (Bucket creation, database migrations, etc) will be handled by the server on every launch so no other setup is needed.
 6. docker compose up to run the server.
