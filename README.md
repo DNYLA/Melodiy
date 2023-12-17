@@ -27,19 +27,19 @@ The official Melodiy.net, which runs on the latest `dev` build (there may be bug
 
 | Homepage                                                   | Your Files                                                              |
 | ---------------------------------------------------------- | ----------------------------------------------------------------------- |
-| <img src="./screenshots/homepage.png" alt="Home Page" /> | <img src="./screenshots/your-files" alt="Your Files" /> |
+| <img src="./screenshots/homepage.png" alt="Home Page" /> | <img src="./screenshots/your-files.png" alt="Your Files" /> |
 
 | Create Playlist                                            | Upload Song                                                             |
 | -----------------------------------------------------------| ----------------------------------------------------------------------- |
-| <img src="./screenshots/create-playlist-modal" alt="Create Playlist Modal" /> | <img src="./screenshots/upload-song-modal" alt="Upload Song Modal" /> |
+| <img src="./screenshots/create-playlist-modal.png" alt="Create Playlist Modal" /> | <img src="./screenshots/upload-song-modal.png" alt="Upload Song Modal" /> |
 
 | Search                                                              | Artist                                                           |
 | ------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| <img src="./screenshots/search-page" alt="Search Page" /> | <img src="./screenshots/artist-page" alt="Artist Page" /> |
+| <img src="./screenshots/search-page.png" alt="Search Page" /> | <img src="./screenshots/artist-page.gif" alt="Artist Page" /> |
 
 | Right Click Menu (Your Files)                                          | Right Click Menu                                              |
 | ---------------------------------------------------------------------- | ------------------------------------------------------------- |
-| <img src="./screenshots/context-menu-files" alt="Context Menu (Your Files)" /> | <img src="./screenshots/context-menu" alt="Context Menu" /> |
+| <img src="./screenshots/context-menu-files.png" alt="Context Menu (Your Files)" /> | <img src="./screenshots/context-menu.png" alt="Context Menu" /> |
 
 </p>
 
