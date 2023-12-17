@@ -46,7 +46,7 @@ const ImageOverlay: FC<ImageOverlayProps> = ({ src }) => {
       </div>
       <div className="">
         <motion.img
-          src={src ?? '/images/default_playlist.png'}
+          src={src ?? getDefaultImage()}
           onError={handleError}
           onClick={changeFilter}
           draggable={false}

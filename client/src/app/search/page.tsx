@@ -1,6 +1,7 @@
 import { searchQeury } from '@/actions';
 import AlbumCard from '@/components/Cards/Album';
 import ArtistCard from '@/components/Cards/Artist';
+import { getDefaultImage } from '@/lib/utils';
 import { Suspense } from 'react';
 import SearchTable from './table';
 
@@ -52,7 +53,7 @@ const Search = async ({ searchParams }: SearchProps) => {
             {result.artists.slice(0, 8).map((artist) => (
               <ArtistCard
                 name={artist.name}
-                imageUrl={artist.image ?? '/images/default_playlist.png'}
+                imageUrl={artist.image ?? getDefaultImage()}
                 redirect={`/artist/${artist.id}`}
                 key={artist.id}
               />
@@ -67,7 +68,7 @@ const Search = async ({ searchParams }: SearchProps) => {
               <AlbumCard
                 title={album.title}
                 artists={album.artists}
-                imageUrl={album.image ?? '/images/default_playlist.png'}
+                imageUrl={album.image ?? getDefaultImage()}
                 redirect={`/album/${album.id}`}
                 key={album.id}
               />

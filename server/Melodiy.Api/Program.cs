@@ -3,6 +3,7 @@ global using Mapster;
 using Melodiy.Api.Bindings;
 using Melodiy.Api.Middleware;
 using Melodiy.Application;
+using Melodiy.Application.Common.Interfaces.Persistance;
 using Melodiy.Application.Services.AlbumService;
 using Melodiy.Application.Services.ArtistService;
 using Melodiy.Application.Services.Playlist;
@@ -13,6 +14,8 @@ using Melodiy.Contracts.Playlist;
 using Melodiy.Contracts.Track;
 using Melodiy.Domain.Entities;
 using Melodiy.Infrastructure;
+using Melodiy.Infrastructure.Persistance;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 
 string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -64,6 +67,18 @@ var app = builder.Build();
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
+
+    //Apply Database migrations automatically on app launch
+    using (var serviceScope = app.Services.CreateScope())
+    {
+        var dbContext = serviceScope.ServiceProvider.GetRequiredService<DataContext>();
+        await dbContext.Database.MigrateAsync();
+
+        var storageProvider = serviceScope.ServiceProvider.GetRequiredService<IFileRepository>();
+        await storageProvider.Initialise();
+    }
+
+
     app.Run();
 }
 

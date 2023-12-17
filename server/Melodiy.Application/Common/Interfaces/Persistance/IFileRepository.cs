@@ -12,4 +12,5 @@ public interface IFileRepository
     // Task<string> GetSignedUrl(StorageBucket bucket, string path, int seconds = 150);
     // Task<string> GetPublicUrl(StorageBucket bucket, string path);
     Task<string> GetUrl(string path, StorageBucket bucket);
+    Task Initialise(); //Check if buckets exist, otherwise create.
 }

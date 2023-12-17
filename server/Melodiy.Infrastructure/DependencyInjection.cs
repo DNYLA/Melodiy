@@ -79,7 +79,7 @@ public static class DependencyInjection
         };
 
         services.AddSingleton(Options.Create(supabaseSettings));
-        services.AddSingleton(provider => new Supabase.Client(supabaseSettings.Url, supabaseSettings.PrivateKey, options));
+        services.AddSingleton(provider => new Supabase.Client(supabaseSettings.Url, supabaseSettings.ServiceRole, options));
         services.AddScoped<IFileRepository, SupabaseRepository>();
 
         return services;

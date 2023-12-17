@@ -1,6 +1,7 @@
 'use client';
 
 import Image from '@/components/Data/Image';
+import { getDefaultImage } from '@/lib/utils';
 import { Combobox, Transition } from '@headlessui/react';
 import { FC, Fragment, useEffect, useState } from 'react';
 import { IoIosCheckmarkCircle, IoMdCheckmark } from 'react-icons/io';
@@ -152,7 +153,7 @@ const SearchComboBox: FC<ComboBoxProps> = ({
                   {({ selected, active }) => (
                     <div className="flex gap-x-2">
                       <Image
-                        src={item.image ?? 'images/default_playlist.png'}
+                        src={item.image ?? getDefaultImage()}
                         alt={`item cover`}
                         width={40}
                         height={40}

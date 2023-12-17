@@ -1,7 +1,4 @@
-using System.Net;
-using System.Runtime.InteropServices;
 using Melodiy.Application.Common.Enums;
-using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Common.Interfaces.Persistance;
 using Melodiy.Application.Common.Interfaces.Services;
 using Melodiy.Domain.Entities;
@@ -152,4 +149,42 @@ public class SupabaseRepository : IFileRepository
         return response.Content != "false";
     }
 
+    public async Task Initialise()
+    {
+        var buckets = await _client.Storage.ListBuckets();
+        var publicImageName = GetBucketName(StorageBucket.Images);
+        var publicTrackName = GetBucketName(StorageBucket.TrackPublic);
+        var privateTrackName = GetBucketName(StorageBucket.TracksPrivate);
+
+
+        if (buckets == null)
+        {
+            //Create All Buckets
+            await CreateBucket(publicImageName, true);
+            await CreateBucket(publicTrackName, true);
+            await CreateBucket(privateTrackName, false);
+            return;
+        }
+
+        //TODO: Re-write to cleaner function (Lambda/Anon function to find + create based off name)
+        if (buckets.Find(b => b.Name == publicImageName) == null)
+        {
+            await CreateBucket(publicImageName, true);
+        }
+
+        if (buckets.Find(b => b.Name == publicTrackName) == null)
+        {
+            await CreateBucket(publicTrackName, true);
+        }
+
+        if (buckets.Find(b => b.Name == privateTrackName) == null)
+        {
+            await CreateBucket(privateTrackName, false);
+        }
+    }
+
+    private async Task CreateBucket(string name, bool isPublic)
+    {
+        await _client.Storage.CreateBucket(name, new Supabase.Storage.BucketUpsertOptions { Public = isPublic });
+    }
 }

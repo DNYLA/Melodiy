@@ -98,7 +98,7 @@ const LoginModal = () => {
         </div>
 
         <button className="mb-4 text-sm" onClick={() => onOpen(false)}>
-          Don&apost have an account? Register now.
+          Don&apos;t have an account? Register now.
         </button>
 
         <ActionButton type="submit" isLoading={isSubmitting}>

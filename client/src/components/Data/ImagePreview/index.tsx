@@ -1,3 +1,4 @@
+import { getDefaultImage } from '@/lib/utils';
 import { FC, useEffect } from 'react';
 import { RxCross2 } from 'react-icons/rx';
 import { twMerge } from 'tailwind-merge';
@@ -41,8 +42,8 @@ const ImagePreview: FC<ImagePreviewProps> = ({
       <Image
         className={twMerge('h-[150px] w-[150px] rounded', className)}
         placeholder="blur"
-        blurDataURL="/images/default_playlist.png"
-        src={src ?? '/images/default_playlist.png'}
+        blurDataURL={getDefaultImage()}
+        src={src ?? getDefaultImage()}
         alt={alt}
         width={150}
         height={150}
