@@ -27,7 +27,7 @@ public static class DependencyInjection
         services.AddDbContext<IDataContext, DataContext>(options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
         services.AddAuth(configuration);
         services.AddSupabase(configuration);
-        services.AddSpotifyProvider(configuration);
+        services.RegisterSearchProvider(configuration);
 
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         services.AddScoped<IHashService, HashService>();
@@ -90,9 +90,33 @@ public static class DependencyInjection
         var spotifySettings = new SpotifySettings();
         configuration.Bind(SpotifySettings.SectionName, spotifySettings);
 
+        if (spotifySettings.ClientSecret.IsNullOrEmpty() || spotifySettings.ClientId.IsNullOrEmpty())
+        {
+            services.AddDefaultSearchProvider();
+            return services;
+        }
+
         services.AddSingleton(Options.Create(spotifySettings));
         services.AddScoped<IExternalSearchProvider, SpotifyProvider>();
 
+        return services;
+    }
+
+    public static IServiceCollection AddDefaultSearchProvider(this IServiceCollection services)
+    {
+        services.AddScoped<IExternalSearchProvider, EmptySearchProvider>();
+        return services;
+    }
+
+    public static IServiceCollection RegisterSearchProvider(this IServiceCollection services, ConfigurationManager configuration)
+    {
+        if (configuration.GetSection(SpotifySettings.SectionName).GetChildren().Any())
+        {
+            services.AddSpotifyProvider(configuration);
+            return services;
+        }
+
+        services.AddDefaultSearchProvider();
         return services;
     }
 }
