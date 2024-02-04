@@ -1,0 +1,8 @@
+{
+  "name": "network",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/network/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {}
+}
