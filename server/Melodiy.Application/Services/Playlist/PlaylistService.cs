@@ -101,8 +101,16 @@ public class PlaylistService : IPlaylistService
         {
             throw new ApiError(HttpStatusCode.Unauthorized, $"Playlist Id {slug} not found");
         }
+
         var mappedPlaylist = playlist.Adapt<PlaylistResponse>();
-        mappedPlaylist.Tracks = playlist.PlaylistTracks.Select(pt => pt.Track.Adapt<TrackResponse>()).ToList();
+        mappedPlaylist.Tracks = playlist.PlaylistTracks.Select(pt => 
+        {
+            //We want createdAt to be the playlistTracks createdAt
+            var track = pt.Track.Adapt<TrackResponse>();
+            track.CreatedAt = pt.CreatedAt;
+            return track;
+        }).ToList();
+        mappedPlaylist.Tracks.Sort((x,y) => DateTime.Compare(x.CreatedAt, y.CreatedAt));
 
         return mappedPlaylist;
     }
