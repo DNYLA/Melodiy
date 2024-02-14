@@ -38,7 +38,7 @@ export default function useOnNext() {
       player.active!.collectionId,
       player.active!.type
     );
-    // player.setQueue(query.data.queue);
+    player.setQueue(query.data.queue);
   }, [query.data]);
 
   return { query, onNext };

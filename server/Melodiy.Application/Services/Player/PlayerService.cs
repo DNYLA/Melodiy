@@ -2,6 +2,8 @@ using Melodiy.Application.Common;
 using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Common.Interfaces.Persistance;
 using Melodiy.Application.Common.Interfaces.Services;
+using Melodiy.Application.Services.AlbumService;
+using Melodiy.Application.Services.Playlist;
 using Melodiy.Application.Services.TrackService;
 using System.Net;
 
@@ -12,13 +14,17 @@ public class PlayerService : IPlayerService
     private readonly ITrackService _trackService;
     private readonly IDateTimeProvider _dateProvider;
     private readonly IDataContext _context;
+    private readonly IPlaylistService _playlistService;
+    private readonly IAlbumService _albumService;
     private static readonly Dictionary<int, PlayerHistory> _userHistory = new(); //Stored as Dictionary<UserId, PlayerHistory>();
 
-    public PlayerService(ITrackService trackService, IDateTimeProvider dateProvider, IDataContext context)
+    public PlayerService(ITrackService trackService, IDateTimeProvider dateProvider, IDataContext context, IPlaylistService playlistService, IAlbumService albumService)
     {
         _trackService = trackService;
         _dateProvider = dateProvider;
         _context = context;
+        _playlistService = playlistService;
+        _albumService = albumService;
     }
 
     public async Task<PlayerResponse> Play(string trackId, int position, CollectionType type, string collectionId, bool shuffle, UserClaims? claims)
@@ -112,6 +118,8 @@ public class PlayerService : IPlayerService
         }
 
         var track = await _trackService.Get(curHistory.Queue[curHistory.Position].Slug, claims.Id, true);
+        track.FilePath = await _trackService.GetTrackPath(track.Id, claims?.Id);
+
         curHistory.CurrentTrack = new CurrentTrackLog
         {
             Id = track.Id,
@@ -125,11 +133,12 @@ public class PlayerService : IPlayerService
         //Validate if StartedTime + Duration >= DateNow.Utc()
         //True: Log to Database
         //False: Ignore
+        var clientQueue = curHistory.Queue.Skip(curHistory.Position + 1).ToList().Adapt<List<TrackPreview>>();
 
         return new PlayerResponse
         {
             CurrentTrack = track,
-            Queue = new(),
+            Queue = clientQueue,
         };
     }
 
@@ -142,7 +151,7 @@ public class PlayerService : IPlayerService
         {
             return await Play(trackId, 0, type, collectionId, false, claims);
         }
-        // Console.WriteLine("Next Pos: " + curHistory.Position);
+
         curHistory.Position++;
         if (curHistory.Position > curHistory.Queue.Count - 1)
         {
@@ -151,6 +160,7 @@ public class PlayerService : IPlayerService
 
         //Log Current Track
         var track = await _trackService.Get(curHistory.Queue[curHistory.Position].Slug, claims.Id, true);
+        track.FilePath = await _trackService.GetTrackPath(track.Id, claims?.Id);
 
         curHistory.CurrentTrack = new CurrentTrackLog
         {
@@ -165,11 +175,12 @@ public class PlayerService : IPlayerService
         //Validate if StartedTime + Duration >= DateNow.Utc()
         //True: Log to Database
         //False: Ignore
+        var clientQueue = curHistory.Queue.Skip(curHistory.Position + 1).ToList().Adapt<List<TrackPreview>>();
 
         return new PlayerResponse
         {
             CurrentTrack = track,
-            Queue = new(),
+            Queue = clientQueue,
         };
     }
 
@@ -177,8 +188,9 @@ public class PlayerService : IPlayerService
     {
         List<TrackResponse> queue = type switch
         {
-            //CollectionType.Album => await GenerateAlbumQueue(),
-            //CollectionType.Playlist => await GeneratePlaylistQueue(),
+            //Causes a weird bug where the album is deleted not sure why.
+            //CollectionType.Album => await GenerateAlbumQueue(collectionId), 
+            CollectionType.Playlist => await GeneratePlaylistQueue(collectionId, userId),
             CollectionType.Files => await GenerateFilesQueue(userId),
             CollectionType.Search => await GenerateSingleTrackQueue(trackId, userId),
             _ => await GenerateSingleTrackQueue(trackId, userId),
@@ -203,5 +215,19 @@ public class PlayerService : IPlayerService
         {
             await _trackService.Get(trackId, userId)
         };
+    }
+
+    private async Task<List<TrackResponse>> GeneratePlaylistQueue(string playlistId, int userId)
+    {
+        var playlist = await _playlistService.Get(playlistId, userId);
+
+        return playlist.Tracks;
+    }
+
+    private async Task<List<TrackResponse>> GenerateAlbumQueue(string playlistId)
+    {
+        var album = await _albumService.Get(playlistId);
+
+        return album.Tracks;
     }
 }

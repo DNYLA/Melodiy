@@ -10,10 +10,12 @@ import usePlayer from '@/hooks/stores/usePlayer';
 import useVolume from '@/hooks/useVolume';
 import { msToMinuteSeconds } from '@/lib/utils';
 import { FullTrack } from '@/types';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { AiFillStepBackward, AiFillStepForward } from 'react-icons/ai';
 import { BsPauseFill, BsPlayFill } from 'react-icons/bs';
 import { HiSpeakerWave, HiSpeakerXMark } from 'react-icons/hi2';
+import { PiQueueFill } from 'react-icons/pi';
 import useSound from 'use-sound';
 
 interface PlayerContentProps {
@@ -26,6 +28,7 @@ function PlayerContent({ track }: PlayerContentProps) {
   const { onPrevious } = useOnPrevious();
   const { volume, update: updateVolume, toggleMute } = useVolume();
   const [curSecond, setCurSecond] = useState(0);
+  const router = useRouter();
   // const [duration, setDuration] = useState(0);
   const { isPlaying, setIsPlaying } = player;
 
@@ -168,7 +171,15 @@ function PlayerContent({ track }: PlayerContentProps) {
         </div>
       </div>
 
-      <div className="row-span-full hidden w-full justify-end pr-2 md:flex">
+      <div className="row-span-full hidden w-full justify-end pr-2 md:flex items-center gap-x-5">
+        <div className="hover:text-inactive duration-200">
+          <PiQueueFill
+            onClick={() => router.push('/queue')}
+            className="cursor-pointer"
+            size={24}
+          />
+        </div>
+
         <div className="flex w-[120px] items-center gap-x-2">
           <VolumeIcon
             onClick={toggleMute}
