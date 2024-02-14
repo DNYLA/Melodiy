@@ -3,6 +3,17 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/network/src",
   "projectType": "library",
-  "tags": [],
-  "targets": {}
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/network",
+        "main": "libs/shared/network/src/index.ts",
+        "tsConfig": "libs/shared/network/tsconfig.lib.json",
+        "assets": ["libs/shared/network/*.md"]
+      }
+    }
+  },
+  "tags": []
 }

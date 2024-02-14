@@ -16,7 +16,9 @@
     "baseUrl": ".",
     "paths": {
       "@melodiy/network": ["libs/shared/network/src/index.ts"],
-      "@melodiy/shared-ui": ["libs/shared/ui/src/index.ts"]
+      "@melodiy/shared-ui": ["libs/shared/ui/src/index.ts"],
+      "@melodiy/types": ["libs/types/src/index.ts"],
+      "@melodiy/util": ["libs/shared/util/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
