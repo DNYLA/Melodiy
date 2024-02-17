@@ -8,12 +8,26 @@ export interface ActiveTrack {
   type: CollectionType;
 }
 
+export enum PlayerType {
+  Normal = 0,
+  Shuffle = 1,
+}
+
+export enum PlayerMode {
+  NoRepeat = 0,
+  Repeat = 1,
+  RepeatTrack = 2,
+}
+
 interface PlayerStore {
   active?: FullTrack & { collectionId: string; type: CollectionType };
   queue: Track[];
+  type: PlayerType;
+  mode: PlayerMode;
   isPlaying: boolean;
   setIsPlaying: (value: boolean) => void;
-  // setActive: (id: string, collectionId: string, type: CollectionType) => void;
+  setType: (type: PlayerType) => void;
+  setMode: (mode: PlayerMode) => void;
   setActive: (
     track: FullTrack,
     collectionId: string,
@@ -25,8 +39,12 @@ interface PlayerStore {
 const usePlayer = create<PlayerStore>((set) => ({
   active: undefined,
   queue: [],
+  type: PlayerType.Shuffle,
+  mode: PlayerMode.NoRepeat,
   isPlaying: false,
   setIsPlaying: (value: boolean) => set({ isPlaying: value }),
+  setType: (type: PlayerType) => set({ type }),
+  setMode: (mode: PlayerMode) => set({ mode }),
   setActive: (track: FullTrack, collectionId: string, type: CollectionType) =>
     set({
       active: { ...track, collectionId, type: type },

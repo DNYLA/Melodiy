@@ -1,21 +1,31 @@
 'use client';
 import Slider from '@/components/Inputs/Slider';
 import TrackMedia from '@/components/Utils/Player/track-media';
+import useMode from '@/hooks/query/player/useMode';
 import useOnNext from '@/hooks/query/player/useOnNext';
 import useOnPrevious from '@/hooks/query/player/useOnPrevious';
+import useShuffle from '@/hooks/query/player/useShuffle';
 // import Slider from './Slider';
 // import LikeButton from './LikeButton';
 // import MediaItem from './MediaItem';
-import usePlayer from '@/hooks/stores/usePlayer';
+import usePlayer, { PlayerMode, PlayerType } from '@/hooks/stores/usePlayer';
 import useVolume from '@/hooks/useVolume';
 import { msToMinuteSeconds } from '@/lib/utils';
 import { FullTrack } from '@/types';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { AiFillStepBackward, AiFillStepForward } from 'react-icons/ai';
-import { BsPauseFill, BsPlayFill } from 'react-icons/bs';
+import {
+  BsArrowRepeat,
+  BsPauseFill,
+  BsPlayFill,
+  BsRepeat,
+  BsRepeat1,
+} from 'react-icons/bs';
+import { FaShuffle } from 'react-icons/fa6';
 import { HiSpeakerWave, HiSpeakerXMark } from 'react-icons/hi2';
 import { PiQueueFill } from 'react-icons/pi';
+import { twMerge } from 'tailwind-merge';
 import useSound from 'use-sound';
 
 interface PlayerContentProps {
@@ -25,6 +35,8 @@ interface PlayerContentProps {
 function PlayerContent({ track }: PlayerContentProps) {
   const player = usePlayer();
   const { onNext } = useOnNext();
+  const { onToggle: onModeToggle } = useMode();
+  const { onToggle: onShuffleToggle } = useShuffle();
   const { onPrevious } = useOnPrevious();
   const { volume, update: updateVolume, toggleMute } = useVolume();
   const [curSecond, setCurSecond] = useState(0);
@@ -32,7 +44,17 @@ function PlayerContent({ track }: PlayerContentProps) {
   // const [duration, setDuration] = useState(0);
   const { isPlaying, setIsPlaying } = player;
 
-  const Icon = isPlaying ? BsPauseFill : BsPlayFill;
+  const PlayIcon = isPlaying ? BsPauseFill : BsPlayFill;
+  const getPlayerModeIcon = (mode: PlayerMode) => {
+    switch (mode) {
+      case PlayerMode.NoRepeat:
+      case PlayerMode.Repeat:
+        return BsRepeat;
+      case PlayerMode.RepeatTrack:
+        return BsRepeat1;
+    }
+  };
+  const PlayerModeIcon = getPlayerModeIcon(player.mode);
 
   const getVolumeIcon = () => {
     if (volume === 0) return HiSpeakerXMark;
@@ -119,6 +141,14 @@ function PlayerContent({ track }: PlayerContentProps) {
     sound?.seek([onTrackSeek(value)]);
   };
 
+  const toggleShuffle = () => {
+    onShuffleToggle();
+  };
+
+  const toggleMode = () => {
+    onModeToggle();
+  };
+
   return (
     <div className="grid h-full grid-cols-2 grid-rows-2 md:grid-cols-3">
       <div className="row-span-full flex w-full justify-start">
@@ -133,12 +163,21 @@ function PlayerContent({ track }: PlayerContentProps) {
           onClick={handlePlay}
           className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white p-1"
         >
-          <Icon size={30} className="text-black" />
+          <PlayIcon size={30} className="text-black" />
         </div>
       </div>
 
       <div className="row-span-full h-full">
         <div className="hidden w-full items-center justify-center gap-x-6 md:flex">
+          <FaShuffle
+            size={23}
+            className={twMerge(
+              'cursor-pointer text-neutral-400 transition hover:text-white hover:scale-110',
+              player.type === PlayerType.Shuffle &&
+                'text-primary-light hover:text-primary-light'
+            )}
+            onClick={toggleShuffle}
+          />
           <AiFillStepBackward
             size={25}
             className="cursor-pointer text-neutral-400 transition hover:text-white"
@@ -148,12 +187,21 @@ function PlayerContent({ track }: PlayerContentProps) {
             onClick={handlePlay}
             className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-white p-1"
           >
-            <Icon size={25} className="text-black" />
+            <PlayIcon size={25} className="text-black" />
           </div>
           <AiFillStepForward
             size={25}
             className="cursor-pointer text-neutral-400 transition hover:text-white"
             onClick={onPlayNext}
+          />
+          <PlayerModeIcon
+            size={23}
+            className={twMerge(
+              'cursor-pointer text-neutral-400 transition hover:text-white hover:scale-110',
+              player.mode !== PlayerMode.NoRepeat &&
+                'text-primary-light hover:text-primary-light'
+            )}
+            onClick={toggleMode}
           />
         </div>
         <div className="flex flex-row items-center gap-x-2 text-sm font-light text-neutral-200">
