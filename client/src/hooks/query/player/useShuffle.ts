@@ -6,23 +6,24 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 export default function useShuffle() {
-  const { user } = useSession();
   const player = usePlayer();
+  const [enabled, setEnabled] = useState(false);
 
   const query = useQuery({
-    queryKey: [
-      'next',
-      { type: player.type, trackId: player.active?.id, userId: user?.id },
-    ],
+    queryKey: ['player-shuffle', { type: player.type }],
     queryFn: async () => {
-      console.log(player.active);
       const { data } = await AXIOS.post<PlayerResponse>(
-        `/player/control?type=${player.type}`
+        `/player/control?type=${player.type}`,
+        {
+          trackId: player.active?.id,
+          collectionId: player.active?.collectionId,
+          type: player.active?.type,
+        }
       );
 
       return data;
     },
-    gcTime: 0,
+    enabled,
   });
 
   const onToggle = () => {
@@ -31,11 +32,14 @@ export default function useShuffle() {
         ? PlayerType.Shuffle
         : PlayerType.Normal;
 
+    setEnabled(true);
     player.setType(newType);
   };
 
   useEffect(() => {
     if (query.data === undefined) return;
+
+    console.log(query.data.queue);
 
     player.setQueue(query.data.queue);
   }, [query.data]);

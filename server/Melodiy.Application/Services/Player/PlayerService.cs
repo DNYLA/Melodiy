@@ -1,3 +1,7 @@
+
+namespace Melodiy.Application.Services.PlayerService;
+using Melodiy.Application.Common.Extensions;
+
 using Melodiy.Application.Common;
 using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Common.Interfaces.Persistance;
@@ -5,9 +9,9 @@ using Melodiy.Application.Common.Interfaces.Services;
 using Melodiy.Application.Services.AlbumService;
 using Melodiy.Application.Services.Playlist;
 using Melodiy.Application.Services.TrackService;
+
 using System.Net;
 
-namespace Melodiy.Application.Services.PlayerService;
 
 public class PlayerService : IPlayerService
 {
@@ -27,7 +31,7 @@ public class PlayerService : IPlayerService
         _albumService = albumService;
     }
 
-    public async Task<PlayerResponse> Play(string trackId, int position, CollectionType collectionType, string collectionId, PlayerType playerType, UserClaims? claims)
+    public async Task<PlayerResponse> Play(string trackId, CollectionType collectionType, string collectionId, PlayerType playerType, PlayerMode mode, UserClaims? claims)
     {
         if (claims == null)
         {
@@ -46,14 +50,23 @@ public class PlayerService : IPlayerService
             };
         }
 
-        var queue = await GenerateQueue(trackId, collectionId, collectionType, position, playerType, claims.Id);
+
+        //TODO: Check if current queue is RepeatTrack
+
+        //TODO: Check if Current queue is at the end and is Repeat
+
+        //TODO: Play the next track in the queue
+
+        var queue = await GenerateQueue(trackId, collectionId, collectionType, claims.Id);
+        var position = queue.FindIndex(t => t.Slug == trackId);
 
         if (queue.Count == 0)
         {
             throw new ApiError(HttpStatusCode.NotFound, "No Tracks found");
         }
 
-        if (position > queue.Count - 1)
+
+        if (position > queue.Count - 1 && mode.Equals(PlayerMode.Repeat))
         {
             position = 0; //Reset to start of queue;
         }
@@ -98,12 +111,12 @@ public class PlayerService : IPlayerService
 
     public async Task<PlayerResponse> Previous(string trackId, string collectionId, CollectionType type, UserClaims claims)
     {
-        _userHistory.TryGetValue(claims.Id, out PlayerHistory? curHistory);
+        _userHistory.TryGetValue(claims.Id, out var curHistory);
 
         //Generate a new Queue if we have inconsistent values.
         if (curHistory == null || curHistory.CollectionId != collectionId || curHistory.CollectionType != type)
         {
-            return await Play(trackId, 0, type, collectionId, PlayerType.Normal, claims);
+            return await Play(trackId, type, collectionId, PlayerType.Normal, PlayerMode.NoRepeat, claims);
         }
 
         curHistory.Position--;
@@ -149,13 +162,41 @@ public class PlayerService : IPlayerService
         //Generate a new Queue if we have inconsistent values.
         if (curHistory == null || curHistory.CollectionId != collectionId || curHistory.CollectionType != type)
         {
-            return await Play(trackId, 0, type, collectionId, PlayerType.Normal, claims);
+            return await Play(trackId, type, collectionId, PlayerType.Normal, PlayerMode.NoRepeat, claims);
         }
 
+        if (curHistory.Mode.Equals(PlayerMode.RepeatTrack))
+        {
+            var curTrack = await _trackService.Get(curHistory.Queue[curHistory.Position].Slug, claims.Id, true);
+            curTrack.FilePath = await _trackService.GetTrackPath(curTrack.Id, claims?.Id);
+
+            return new PlayerResponse
+            {
+                CurrentTrack = curTrack,
+                Queue = curHistory.Queue.Skip(curHistory.Position + 1).ToList().Adapt<List<TrackPreview>>(),
+            };
+        }
+        
         curHistory.Position++;
+
         if (curHistory.Position > curHistory.Queue.Count - 1)
         {
-            curHistory.Position = 0; //Start back from first track.
+            switch (curHistory.Mode)
+            {
+                case PlayerMode.NoRepeat:
+                    //TODO: return empty Queue with prevTrack
+                    var curTrack = await _trackService.Get(curHistory.Queue[curHistory.Position - 1].Slug, claims.Id, true);
+                    curTrack.FilePath = await _trackService.GetTrackPath(curTrack.Id, claims?.Id);
+
+                    return new PlayerResponse
+                    {
+                        CurrentTrack = curTrack,
+                        Queue = new List<TrackPreview>(),
+                    };
+                case PlayerMode.Repeat:
+                    curHistory.Position = 0;
+                    break;
+            }
         }
 
         //Log Current Track
@@ -186,34 +227,32 @@ public class PlayerService : IPlayerService
 
     public async Task<PlayerResponse> Shuffle(string trackId, string collectionId, CollectionType collectionType, PlayerType playerType, UserClaims claims)
     {
-        _userHistory.TryGetValue(claims.Id, out PlayerHistory? curHistory);
+        _userHistory.TryGetValue(claims.Id, out var curHistory);
 
         //Generate a new Queue if we have inconsistent values.
-        if (curHistory == null || curHistory.CollectionId != collectionId || curHistory.CollectionType != collectionType)
+        if (curHistory == null || curHistory.CollectionId != collectionId || curHistory.CollectionType != collectionType || playerType.Equals(PlayerType.Normal))
         {
-            return await Play(trackId, 0, collectionType, collectionId, PlayerType.Normal, claims);
+            return await Play(trackId, collectionType, collectionId, PlayerType.Normal, curHistory?.Mode ?? PlayerMode.NoRepeat, claims);
         }
-
-
 
         //Log Current Track
         var track = await _trackService.Get(curHistory.Queue[curHistory.Position].Slug, claims.Id, true);
         track.FilePath = await _trackService.GetTrackPath(track.Id, claims?.Id);
 
+        var shuffledQueue = curHistory.Queue.Shuffle();
+        var position = shuffledQueue.FindIndex(t => t.Id == track.Id);
+        shuffledQueue.MoveToFirst(position);
 
-        if (curHistory.Type != playerType)
-        {
-            curHistory.Type = playerType;
-            var queue = await GenerateQueue(trackId, collectionId, collectionType, curHistory.Position, playerType, claims.Id);
-            curHistory.Queue = queue.Adapt<List<TrackPreview>>();
-        }
+        curHistory.Queue = shuffledQueue;
+        curHistory.Position = 0;
+        curHistory.Type = playerType;
 
         _userHistory[claims.Id] = curHistory;
 
         //Validate if StartedTime + Duration >= DateNow.Utc()
         //True: Log to Database
         //False: Ignore
-        var clientQueue = curHistory.Queue.Skip(curHistory.Position + 1).ToList().Adapt<List<TrackPreview>>();
+        var clientQueue = curHistory.Queue.Skip(1).ToList().Adapt<List<TrackPreview>>();
 
         return new PlayerResponse
         {
@@ -222,34 +261,21 @@ public class PlayerService : IPlayerService
         };
     }
 
-    public async Task<PlayerResponse> Mode(string trackId, string collectionId, CollectionType type, UserClaims claims)
+    public async Task<PlayerResponse> Mode(string trackId, string collectionId, CollectionType type, PlayerMode mode, UserClaims claims)
     {
         _userHistory.TryGetValue(claims.Id, out PlayerHistory? curHistory);
 
         //Generate a new Queue if we have inconsistent values.
         if (curHistory == null || curHistory.CollectionId != collectionId || curHistory.CollectionType != type)
         {
-            return await Play(trackId, 0, type, collectionId, PlayerType.Normal, claims);
-        }
-
-        curHistory.Position++;
-        if (curHistory.Position > curHistory.Queue.Count - 1)
-        {
-            curHistory.Position = 0; //Start back from first track.
+            return await Play(trackId, type, collectionId, PlayerType.Normal, mode, claims);
         }
 
         //Log Current Track
         var track = await _trackService.Get(curHistory.Queue[curHistory.Position].Slug, claims.Id, true);
         track.FilePath = await _trackService.GetTrackPath(track.Id, claims?.Id);
-
-        curHistory.CurrentTrack = new CurrentTrackLog
-        {
-            Id = track.Id,
-            Slug = track.Slug,
-            Duration = track.Duration,
-            StartedListening = _dateProvider.UtcNow,
-        };
-
+        
+        curHistory.Mode = mode;
         _userHistory[claims.Id] = curHistory;
 
         //Validate if StartedTime + Duration >= DateNow.Utc()
@@ -265,40 +291,21 @@ public class PlayerService : IPlayerService
     }
 
 
-    private async Task<List<TrackResponse>> GenerateQueue(string trackId, string collectionId, CollectionType collectionType, int position, PlayerType playerType, int userId)
+    private async Task<List<TrackResponse>> GenerateQueue(string trackId, string collectionId, CollectionType collectionType, int userId)
     {
         List<TrackResponse> queue = collectionType switch
         {
             //Causes a weird bug where the album is deleted not sure why.
-            //CollectionType.Album => await GenerateAlbumQueue(collectionId), 
+            CollectionType.Album => await GenerateAlbumQueue(collectionId),
             CollectionType.Playlist => await GeneratePlaylistQueue(collectionId, userId),
             CollectionType.Files => await GenerateFilesQueue(userId),
             CollectionType.Search => await GenerateSingleTrackQueue(trackId, userId),
             _ => await GenerateSingleTrackQueue(trackId, userId),
         };
 
-        if (playerType == PlayerType.Shuffle)
-        {
-            return await ShuffleQueue(queue);
-        }
-
         if (queue.Count == 0)
         {
             throw new ApiError(HttpStatusCode.InternalServerError, "Unexpected Server Error");
-        }
-
-        return queue;
-    }
-
-    private async Task<List<TrackResponse>> ShuffleQueue(List<TrackResponse> queue)
-    {
-        for (int i = queue.Count - 1; i > 0; i--)
-        {
-            var rnd = new Random();
-            var k = rnd.Next(i + 1);
-            var value = queue[k];
-            queue[k] = queue[i];
-            queue[i] = value;
         }
 
         return queue;

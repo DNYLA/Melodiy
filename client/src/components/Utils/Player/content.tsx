@@ -64,39 +64,34 @@ function PlayerContent({ track }: PlayerContentProps) {
 
   const VolumeIcon = getVolumeIcon();
 
-  const onPlayNext = () => {
-    if (player.queue.length === 0) {
-      setIsPlaying(false);
-      return;
-    }
-
-    onNext(player.active!.id);
-    // return player.setActive(nextSong.id, 'files', CollectionType.Files);
-  };
-
-  const onPlayPrevious = () => {
-    onPrevious(player.active!.id);
-    // if (player.ids.length === 0) {
-    //   return;
-    // }
-    // const currentIndex = player.ids.findIndex((id) => id === player.activeId);
-    // const prevSong = player.ids[currentIndex - 1];
-    // if (!prevSong) {
-    //   return player.setId(player.ids[player.ids.length - 1]);
-    // }
-    // player.setId(prevSong);
-  };
-
-  const [play, { pause, sound, duration }] = useSound(track.path, {
+  const [play, { pause, stop, sound, duration }] = useSound(track.path, {
     volume,
     onplay: () => setIsPlaying(true),
     onend: () => {
+      console.log('Song Ended');
       setIsPlaying(false);
       onPlayNext();
     },
     onpause: () => setIsPlaying(false),
     format: ['mp3', 'wav'],
   });
+
+  const onPlayNext = () => {
+    console.log(player.mode);
+    if (player.mode == PlayerMode.RepeatTrack) {
+      console.log('here');
+      sound?.stop();
+      setIsPlaying(false);
+      setTimeout(() => sound?.play(), 1500);
+    } else {
+      console.log('Ho');
+      onNext(player.active!.id);
+    }
+  };
+
+  const onPlayPrevious = () => {
+    onPrevious(player.active!.id);
+  };
 
   useEffect(() => {
     sound?.play();
@@ -133,7 +128,6 @@ function PlayerContent({ track }: PlayerContentProps) {
       return;
     }
     setCurSecond(newValue);
-
     return newValue;
   };
 

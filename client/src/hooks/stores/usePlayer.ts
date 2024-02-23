@@ -39,7 +39,7 @@ interface PlayerStore {
 const usePlayer = create<PlayerStore>((set) => ({
   active: undefined,
   queue: [],
-  type: PlayerType.Shuffle,
+  type: PlayerType.Normal,
   mode: PlayerMode.NoRepeat,
   isPlaying: false,
   setIsPlaying: (value: boolean) => set({ isPlaying: value }),

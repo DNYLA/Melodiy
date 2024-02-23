@@ -2,13 +2,13 @@ using Melodiy.Api.Attributes;
 using Melodiy.Application.Common;
 using Melodiy.Application.Common.Errors;
 using Melodiy.Application.Services.PlayerService;
-using Melodiy.Contracts;
 using Melodiy.Contracts.Player;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using SpotifyAPI.Web.Http;
 using System.Net;
 using CollectionType = Melodiy.Application.Services.PlayerService.CollectionType;
+using PlayerMode = Melodiy.Application.Services.PlayerService.PlayerMode;
 
 namespace Melodiy.Api.Controllers;
 
@@ -32,7 +32,7 @@ public class PlayerController : ControllerBase
         }
 
         CollectionType type = req.Type.Adapt<CollectionType>();
-        var response = await _playerService.Play(req.TrackId, req.Position, type, req.CollectionId, Application.Services.PlayerService.PlayerType.Normal, claims);
+        var response = await _playerService.Play(req.TrackId, type, req.CollectionId, Application.Services.PlayerService.PlayerType.Normal, PlayerMode.NoRepeat, claims);
         return response.Adapt<GetPlayerResponse>();
     }
 
@@ -58,23 +58,32 @@ public class PlayerController : ControllerBase
 
     [Authorize]
     [HttpPost("control")]
-    public async Task<string> Control([FromQuery] Contracts.PlayerType? type, [FromQuery] Contracts.PlayerMode? mode, [FromClaims] UserClaims claims)
+    public async Task<GetPlayerResponse> Control(NextTrackRequest req, [FromQuery] Contracts.PlayerType? type, [FromQuery] Contracts.PlayerMode? mode, [FromClaims] UserClaims claims)
     {
+        var response = new PlayerResponse();
         if (!type.HasValue && !mode.HasValue)
         {
             throw new ApiError(HttpStatusCode.BadRequest, "Type and Mode cannot both be empty.");
         }
-        
+
+        CollectionType collectionType = req.Type.Adapt<CollectionType>();
+
         if (mode.HasValue)
         {
-            //Toggle Mode
+            PlayerMode playerMode = mode.Adapt<PlayerMode>();
+            response = await _playerService.Mode(req.TrackId, req.CollectionId, collectionType, playerMode, claims);
         }
 
-        if (type.HasValue)
+        if (type.Equals(Contracts.PlayerType.Normal))
         {
-            //Toggle Type
+            response = await _playerService.Play(req.TrackId, collectionType, req.CollectionId, PlayerType.Normal, PlayerMode.NoRepeat, claims);
+        }
+        else if (type.Equals(Contracts.PlayerType.Shuffle))
+        {
+            PlayerType playerTypeConverted = type.Adapt<PlayerType>();
+            response = await _playerService.Shuffle(req.TrackId, req.CollectionId, collectionType, playerTypeConverted, claims);
         }
 
-        return "None";
+        return response.Adapt<GetPlayerResponse>();
     }
 }

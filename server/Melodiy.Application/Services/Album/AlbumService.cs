@@ -74,9 +74,9 @@ public class AlbumService : IAlbumService
 
         if (includeImage)
         {
-
             albums = albums.Include(album => album.Image);
         }
+
         var album = await albums.Include(a => a.User)
                                  .Include(a => a.Image)
                                  .Include(a => a.Artists)
@@ -97,7 +97,6 @@ public class AlbumService : IAlbumService
             album.Indexed = true; //No need to fetch the album tracks everytime the album is requested (Only fetch once or if an admin sets index to false)
             await _context.SaveChangesAsync();
 
-            album.AlbumTracks = new();
             var mappedAlbum = album.Adapt<AlbumResponse>();
 
             //Ordering newly inserted tracks requires us to match data between external and new (internally created) tracks.
@@ -109,7 +108,6 @@ public class AlbumService : IAlbumService
 
         //Without this the Adapt<> causes an infinite loop where it maps album -> track -> album a better soloution than this is to make AlbumResponse reference an AlbumTrack value instead which doesn't include a relationship to the album.
         var tempTracks = album.AlbumTracks.OrderBy(at => at.Position).Select(at => at.Track).ToList();
-        album.AlbumTracks = new();
         var responseAlbum = album.Adapt<AlbumResponse>();
         responseAlbum.Tracks = tempTracks.Adapt<List<TrackResponse>>();
 
