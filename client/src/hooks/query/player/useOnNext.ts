@@ -27,6 +27,7 @@ export default function useOnNext() {
   });
 
   const onNext = (trackId: string) => {
+    console.log('here');
     setId(trackId);
   };
 
