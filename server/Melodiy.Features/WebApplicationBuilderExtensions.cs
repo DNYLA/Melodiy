@@ -4,8 +4,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 public static class WebApplicationBuilderExtensions
 {
-    public static void AddFeatures(this IServiceCollection services)
+    public static IServiceCollection AddFeatures(this IServiceCollection services)
     {
         services.AddControllers().AddApplicationPart(typeof(WebApplicationBuilderExtensions).Assembly);
+
+        return services;
     }
 }
