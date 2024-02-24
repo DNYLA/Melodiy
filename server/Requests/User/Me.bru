@@ -5,11 +5,7 @@ meta {
 }
 
 get {
-  url: http://localhost:5041/user/
+  url: {{host}}/user/me
   body: none
-  auth: bearer
-}
-
-auth:bearer {
-  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwibmFtZSI6Ikp1bmdhYWwiLCJqdGkiOiI3YjMyOGE0My1jYTcwLTQwNWEtYmZmOS02ZGM0MDBiZWFiMjQiLCJleHAiOjE3MDA2MTE1NzUsImlzcyI6Ik1lbG9kaXkiLCJhdWQiOiJNZWxvZGl5In0.e8cJGuJF7hQWr8rd2SC2UX4s-wKtZOrh8-mYs-YiOgU
+  auth: none
 }
