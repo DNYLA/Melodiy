@@ -6,11 +6,11 @@ public interface IUserService
 {
     Task<UserDetailsModel?> GetUserDetails();
 
-    Task<UserResponseModel?> GetById(int userId);
+    Task<UserDetailsModel?> GetById(int userId);
 
-    Task<UserResponseModel?> GetByName(string username);
+    Task<UserDetailsModel?> GetByName(string username);
 
-    Task<UserResponseModel?> Create(string username, string pHash);
+    Task<UserDetailsModel?> Create(string username, string pHash);
 
     //Task<UserResponseModel> Update(User user);
 }
