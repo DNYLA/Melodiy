@@ -1,5 +1,6 @@
 using Melodiy.Features;
 using Melodiy.Infrastructure.Extensions;
+using Melodiy.Web.Common.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,14 +14,18 @@ builder.Services.AddHttpContextAccessor();
 //Custom Services
 builder.Services
        .AddFeatures()
-       .AddUserModule();
+       .AddMelodiyContext(builder.Configuration)
+       .AddUserModule()
+       .AddAuthenticationModule(builder.Configuration);
 
 var app = builder.Build();
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
+
+//Custom App Initialisations
+app.UseMiddleware<ErrorHandlingMiddleware>();
+app.RegisterMigrations();
 
 app.Run();

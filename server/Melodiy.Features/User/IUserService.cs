@@ -10,7 +10,5 @@ public interface IUserService
 
     Task<UserDetailsModel?> GetByName(string username);
 
-    Task<UserDetailsModel?> Create(string username, string pHash);
-
     //Task<UserResponseModel> Update(User user);
 }

@@ -4,11 +4,13 @@ using Melodiy.Features.User.Entities;
 
 public interface IUserRepository
 {
-    Task AddAsync(string username, string password);
+    Task<User> AddAsync(string username, string password);
 
     Task<bool> ExistsAsync(string username);
 
     Task<User?> GetByIdAsync(int id);
+
+    Task<User?> GetByUsername(string username);
 
     Task UpdateAsync(User user);
 }

@@ -1,5 +1,7 @@
 ﻿namespace Melodiy.Features.User;
 
+using System.IdentityModel.Tokens.Jwt;
+
 using Melodiy.Features.User.Models;
 
 using Microsoft.AspNetCore.Http;
@@ -23,17 +25,17 @@ public sealed class UserService : IUserService
         var user = _httpContextAccessor.HttpContext?.User;
         var model = new UserDetailsModel();
 
-
-        if (!user?.Identity?.IsAuthenticated == false)
+        if (user?.Identity?.IsAuthenticated == false)
         {
             return model;
         }
 
         var userId = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value!;
-        //var username = user.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Name)!.Value!;
+        var username = user.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Name)!.Value!;
 
+        //TODO: Fetch user from DB Cache and return cached data.
         model.Id = int.Parse(userId);
-        model.Username = "Bobster";
+        model.Username = username;
 
         return model;
     }
@@ -44,11 +46,6 @@ public sealed class UserService : IUserService
     }
 
     public async Task<UserDetailsModel?> GetByName(string username)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<UserDetailsModel?> Create(string username, string pHash)
     {
         throw new NotImplementedException();
     }
