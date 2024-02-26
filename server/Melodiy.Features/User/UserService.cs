@@ -1,11 +1,10 @@
 ﻿namespace Melodiy.Features.User;
 
-using System.IdentityModel.Tokens.Jwt;
-
 using Melodiy.Features.User.Models;
 
 using Microsoft.AspNetCore.Http;
 
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 public sealed class UserService : IUserService
@@ -20,12 +19,12 @@ public sealed class UserService : IUserService
         //_userRepository = userRepository;
     }
 
-    public async Task<UserDetailsModel?> GetUserDetails()
+    public async Task<UserResponse?> GetUserDetails()
     {
         var user = _httpContextAccessor.HttpContext?.User;
-        var model = new UserDetailsModel();
+        var model = new UserResponse();
 
-        if (user?.Identity?.IsAuthenticated == false)
+        if (user == null || user?.Identity?.IsAuthenticated == false)
         {
             return model;
         }
@@ -40,12 +39,12 @@ public sealed class UserService : IUserService
         return model;
     }
 
-    public async Task<UserDetailsModel?> GetById(int userId)
+    public async Task<UserResponse?> GetById(int userId)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<UserDetailsModel?> GetByName(string username)
+    public async Task<UserResponse?> GetByName(string username)
     {
         throw new NotImplementedException();
     }

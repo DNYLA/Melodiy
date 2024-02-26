@@ -4,11 +4,11 @@ using Melodiy.Features.User.Models;
 
 public interface IUserService
 {
-    Task<UserDetailsModel?> GetUserDetails();
+    Task<UserResponse?> GetUserDetails();
 
-    Task<UserDetailsModel?> GetById(int userId);
+    Task<UserResponse?> GetById(int userId);
 
-    Task<UserDetailsModel?> GetByName(string username);
+    Task<UserResponse?> GetByName(string username);
 
     //Task<UserResponseModel> Update(User user);
 }

@@ -1,0 +1,31 @@
+meta {
+  name: Get
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{host}}/playlist?title=Bobs Playlist
+  body: multipartForm
+  auth: bearer
+}
+
+query {
+  title: Bobs Playlist
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "Title": "test"
+  }
+}
+
+body:multipart-form {
+  title: test
+  : 
+  : 
+}

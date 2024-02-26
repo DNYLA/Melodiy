@@ -20,7 +20,7 @@ internal class ErrorHandlingMiddleware(RequestDelegate next)
             //TODO: Add Logging
             await HandleExceptionAsync(context, ex);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             //TODO: Add Logging for unknown errors Log ex.Message
             await HandleExceptionAsync(

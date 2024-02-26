@@ -16,11 +16,13 @@ builder.Services
        .AddFeatures()
        .AddMelodiyContext(builder.Configuration)
        .AddUserModule()
-       .AddAuthenticationModule(builder.Configuration);
+       .AddAuthenticationModule(builder.Configuration)
+       .AddPlaylistModule();
 
 var app = builder.Build();
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 

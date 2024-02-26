@@ -1,6 +1,6 @@
 ﻿namespace Melodiy.Features.User.Models;
 
-public sealed class UserDetailsModel
+public sealed class UserViewModel
 {
     public int Id { get; set; }
 

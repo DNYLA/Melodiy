@@ -4,7 +4,7 @@ using Melodiy.Features.User.Models;
 
 public sealed class AuthenticationResponseModel
 {
-    public UserResponseModel User { get; set; } = null!;
+    public UserViewModel User { get; set; } = null!;
 
     public string AccessToken { get; set; } = null!;
 }

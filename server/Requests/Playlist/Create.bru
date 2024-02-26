@@ -1,0 +1,21 @@
+meta {
+  name: Create
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{host}}/playlist/0af27e73b36449cfaa10663c036fdb77
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "Title": "test"
+  }
+}

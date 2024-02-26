@@ -33,7 +33,7 @@ public sealed class AuthenticationService(
 
         return new AuthenticationResponseModel()
         {
-            User = new UserResponseModel
+            User = new UserViewModel
             {
                 Id = user.Id,
                 Username = user.Username,
@@ -55,7 +55,7 @@ public sealed class AuthenticationService(
 
         return new AuthenticationResponseModel()
         {
-            User = new UserResponseModel
+            User = new UserViewModel
             {
                 Id = user.Id,
                 Username = user.Username,
