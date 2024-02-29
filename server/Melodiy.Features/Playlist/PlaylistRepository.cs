@@ -40,14 +40,14 @@ public sealed class PlaylistRepository(MelodiyDbContext context) : IPlaylistRepo
         await context.SaveChangesAsync();
     }
 
-    public PlaylistRepository WithImage()
+    public IPlaylistRepository WithImage()
     {
         _playlists.Include(p => p.Image).Load();
 
         return this;
     }
 
-    public PlaylistRepository WithTracks()
+    public IPlaylistRepository WithTracks()
     {
         _playlists.Include(p => p.PlaylistTracks)
                   .ThenInclude(pt => pt.Track)
@@ -65,7 +65,7 @@ public sealed class PlaylistRepository(MelodiyDbContext context) : IPlaylistRepo
         return this;
     }
 
-    public PlaylistRepository WithUser()
+    public IPlaylistRepository WithUser()
     {
         _playlists.Include(p => p.User).Load();
 

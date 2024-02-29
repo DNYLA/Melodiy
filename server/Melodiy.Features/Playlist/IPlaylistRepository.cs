@@ -12,9 +12,9 @@ public interface IPlaylistRepository
 
     Task SaveAsync(Playlist playlist);
 
-    PlaylistRepository WithImage();
+    IPlaylistRepository WithImage();
 
-    PlaylistRepository WithTracks();
+    IPlaylistRepository WithTracks();
 
-    PlaylistRepository WithUser();
+    IPlaylistRepository WithUser();
 }

@@ -1,6 +1,7 @@
 ﻿namespace Melodiy.Features.User.Entities;
 
 using Melodiy.Features.Common.Context.Entities;
+using Melodiy.Features.User.Models;
 using Microsoft.EntityFrameworkCore;
 
 [Index(nameof(Username), IsUnique = true)]
