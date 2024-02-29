@@ -1,6 +1,9 @@
 ﻿namespace Melodiy.Features;
 
 using Melodiy.Features.Common.Services;
+using Melodiy.Features.File;
+using Melodiy.Features.Image;
+using Melodiy.Integrations.Common;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,6 +16,11 @@ public static class DependencyInjection
         //Register Common Services below otherwise go to Melodiy.Infrastructure.Extensions
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         services.AddScoped<IHashService, HashService>();
+
+        services.AddScoped<IFileService, FileService>();
+
+        services.AddScoped<IImageRepository, ImageRepository>();
+
 
         return services;
     }

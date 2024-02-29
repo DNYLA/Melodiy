@@ -3,9 +3,9 @@
 using Melodiy.Features.Authentication.Jwt;
 using Melodiy.Features.Authentication.Models;
 using Melodiy.Features.Common.Exceptions;
-using Melodiy.Features.Common.Services;
 using Melodiy.Features.User;
 using Melodiy.Features.User.Models;
+using Melodiy.Integrations.Common;
 
 using System.Net;
 

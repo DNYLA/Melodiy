@@ -1,6 +1,9 @@
 ﻿namespace Melodiy.Features.Playlist;
 
 using Melodiy.Features.Common.Exceptions;
+using Melodiy.Features.Common.Extensions;
+using Melodiy.Features.File;
+using Melodiy.Features.Image.Models;
 using Melodiy.Features.Playlist.Entities;
 using Melodiy.Features.Playlist.Models;
 using Melodiy.Features.Track.Models;
@@ -8,16 +11,26 @@ using Melodiy.Features.User;
 
 using System.Net;
 
-public sealed class PlaylistService(IPlaylistRepository playlistRepository, IUserRepository userRepository)
+public sealed class PlaylistService(
+    IPlaylistRepository playlistRepository,
+    IUserRepository userRepository,
+    IFileService fileService)
     : IPlaylistService
 {
     private readonly IPlaylistRepository _playlistRepository = playlistRepository;
 
     private readonly IUserRepository _userRepository = userRepository;
 
+    private readonly IFileService _fileService = fileService;
+
     public async Task<PlaylistResponse> Create(CreatePlaylistRequest request)
     {
-        //TODO: Add Image Uploading
+        ImageResponse? image = null;
+
+        if (request.Image != null)
+        {
+            image = await _fileService.UploadImage(request.Image);
+        }
 
         //TODO: Does this need to be here?
         var user = await _userRepository.GetByIdAsync(request.UserId);
@@ -31,10 +44,11 @@ public sealed class PlaylistService(IPlaylistRepository playlistRepository, IUse
         {
             Title = request.Title,
             Public = request.Public,
-            UserId = request.UserId
+            UserId = request.UserId,
+            ImageId = image?.Id,
         };
 
-        await _playlistRepository.AddAsync(playlist);
+        await _playlistRepository.SaveAsync(playlist);
 
         return new PlaylistResponse
         {
@@ -44,8 +58,7 @@ public sealed class PlaylistService(IPlaylistRepository playlistRepository, IUse
             Public = playlist.Public,
             Tracks = new(),
             UserId = request.UserId,
-            //Image = playlist.Image,
-            //Image = playlist.Image,
+            Image = image,
             CreatedAt = playlist.CreatedAt
         };
     }
@@ -55,6 +68,7 @@ public sealed class PlaylistService(IPlaylistRepository playlistRepository, IUse
         //TODO: Update Once Track & PlaylistTrack is done
 
         var playlist = await _playlistRepository.WithUser()
+                                                .WithImage()
                                                 .GetByIdAsync(slug);
 
         if (playlist == null || (!playlist.Public && playlist.UserId != userId))
@@ -70,7 +84,7 @@ public sealed class PlaylistService(IPlaylistRepository playlistRepository, IUse
             Public = playlist.Public,
             Tracks = new(),
             UserId = playlist.UserId,
-            //Image = playlist.Image,
+            Image = playlist.Image.ConvertToImageResponse(),
             //Image = playlist.Image,
             CreatedAt = playlist.CreatedAt
         };

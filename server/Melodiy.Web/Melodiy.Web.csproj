@@ -12,12 +12,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Melodiy.Features\Melodiy.Features.csproj" />
     <ProjectReference Include="..\Melodiy.Infrastructure\Melodiy.Infrastructure.csproj" />
+    <ProjectReference Include="..\Melodiy.Integrations\Melodiy.Integrations.csproj" />
   </ItemGroup>
 
 </Project>

@@ -6,6 +6,7 @@ using Melodiy.Features.Common.Context.Entities;
 using Melodiy.Features.Playlist.Entities;
 using Melodiy.Features.Track.Entities;
 using Melodiy.Features.User.Entities;
+using Melodiy.Integrations.Common;
 
 public sealed class Image : BaseEntity
 {
@@ -15,7 +16,7 @@ public sealed class Image : BaseEntity
 
     public string? Path { get; set; }
 
-    public ImageSource Source { get; set; }
+    public SourceType Source { get; set; }
 
     public int? UserId { get; set; }
 

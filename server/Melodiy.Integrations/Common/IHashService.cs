@@ -1,4 +1,4 @@
-﻿namespace Melodiy.Features.Common.Services;
+﻿namespace Melodiy.Integrations.Common;
 
 public interface IHashService
 {

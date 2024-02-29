@@ -2,6 +2,8 @@
 
 using BCrypt.Net;
 
+using Melodiy.Integrations.Common;
+
 using System.Security.Cryptography;
 
 public sealed class HashService : IHashService

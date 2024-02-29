@@ -12,8 +12,8 @@ public sealed class PlaylistRepository(MelodiyDbContext context) : IPlaylistRepo
     public async Task AddAsync(Playlist playlist)
     {
         playlist.Slug = Guid.NewGuid().ToString("N");
-
         _playlists.Add(playlist);
+
         await context.SaveChangesAsync();
     }
 
@@ -29,19 +29,40 @@ public sealed class PlaylistRepository(MelodiyDbContext context) : IPlaylistRepo
         return await _playlists.Where(p => p.UserId == userId).ToListAsync();
     }
 
-    public async Task UpdateAsync(Playlist playlist)
+    public async Task SaveAsync(Playlist playlist)
     {
-        throw new NotImplementedException();
+        if (string.IsNullOrEmpty(playlist.Slug))
+        {
+            playlist.Slug = Guid.NewGuid().ToString("N");
+            _playlists.Add(playlist);
+        }
+
+        await context.SaveChangesAsync();
     }
 
     public PlaylistRepository WithImage()
     {
-        throw new NotImplementedException();
+        _playlists.Include(p => p.Image).Load();
+
+        return this;
     }
 
     public PlaylistRepository WithTracks()
     {
-        throw new NotImplementedException();
+        _playlists.Include(p => p.PlaylistTracks)
+                  .ThenInclude(pt => pt.Track)
+                  .ThenInclude(track => track.Image)
+                  .Include(p => p.PlaylistTracks)
+                  .ThenInclude(pt => pt.Track)
+                  .ThenInclude(track => track.TrackArtists)
+                  .ThenInclude(ta => ta.Artist)
+                  .Include(p => p.PlaylistTracks)
+                  .ThenInclude(pt => pt.Track)
+                  .ThenInclude(track => track.AlbumTrack)
+                  .ThenInclude(at => at!.Album)
+                  .Load();
+
+        return this;
     }
 
     public PlaylistRepository WithUser()

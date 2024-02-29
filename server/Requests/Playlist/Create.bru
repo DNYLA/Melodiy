@@ -4,10 +4,15 @@ meta {
   seq: 1
 }
 
-get {
-  url: {{host}}/playlist/0af27e73b36449cfaa10663c036fdb77
+post {
+  url: {{host}}/playlist?title=Bobsters Cool Music&public=true
   body: none
   auth: bearer
+}
+
+query {
+  title: Bobsters Cool Music
+  public: true
 }
 
 auth:bearer {

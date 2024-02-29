@@ -10,7 +10,7 @@ public interface IPlaylistRepository
 
     Task<List<Playlist>> GetByUser(int userId);
 
-    Task UpdateAsync(Playlist playlist);
+    Task SaveAsync(Playlist playlist);
 
     PlaylistRepository WithImage();
 

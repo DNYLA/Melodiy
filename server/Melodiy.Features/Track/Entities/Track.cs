@@ -5,6 +5,7 @@ using Melodiy.Features.Common.Context.Entities;
 using Melodiy.Features.Image.Entities;
 using Melodiy.Features.Playlist.Entities;
 using Melodiy.Features.User.Entities;
+using Melodiy.Integrations.Common;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -28,7 +29,7 @@ public sealed class Track : BaseEntity
 
     public bool Public { get; set; }
 
-    public TrackSource Source { get; set; }
+    public SourceType Source { get; set; }
 
     public int Duration { get; set; }
 

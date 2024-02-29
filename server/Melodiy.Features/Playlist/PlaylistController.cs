@@ -68,9 +68,35 @@ public sealed class PlaylistController(IPlaylistService playlistService, IUserSe
             Public = response.Public,
             Tracks = response.Tracks,
             User = user.ToViewModel(),
-            Image = response.Image?.Path,
+            Image = response.Image?.Url,
             CreatedAt = response.CreatedAt
         };
+    }
+
+    [Authorize]
+    [HttpGet]
+    public async Task<ActionResult<List<PlaylistViewModel>>> GetAll()
+    {
+        var user = await _userService.GetUserDetails();
+
+        //TODO: If Not authorised return guest playlist data (for not auth is required).
+        if (user == null)
+        {
+            throw new ApiException(HttpStatusCode.Unauthorized);
+        }
+
+        var response = await _playlistService.GetAll(user.Id);
+
+        return response.Select(playlist => new PlaylistViewModel
+        {
+            Id = playlist.Slug,
+            Title = playlist.Title,
+            Public = playlist.Public,
+            Tracks = playlist.Tracks,
+            User = user.ToViewModel(),
+            Image = playlist.Image?.Path,
+            CreatedAt = playlist.CreatedAt
+        }).ToList();
     }
 
     //[Authorize]
@@ -96,17 +122,5 @@ public sealed class PlaylistController(IPlaylistService playlistService, IUserSe
     //{
     //    var response = await _playlistService.Get(id, user?.Id);
     //    return response.Adapt<GetPlaylistResponse>();
-    //}
-
-
-    //[Authorize]
-    //[HttpGet]
-    //public async Task<ActionResult<List<GetPlaylistResponse>>> GetAll([FromClaims] UserClaims user)
-    //{
-    //    var response = await _playlistService.GetAll(user.Id);
-
-    //    //TODO: If Not authorised return guest playlist data (for not auth is required).
-
-    //    return response.Adapt<List<GetPlaylistResponse>>();
     //}
 }

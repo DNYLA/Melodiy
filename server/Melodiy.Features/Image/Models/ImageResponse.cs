@@ -1,6 +1,6 @@
 ﻿namespace Melodiy.Features.Image.Models;
 
-using Melodiy.Features.Image.Entities;
+using Melodiy.Integrations.Common;
 
 public sealed class ImageResponse
 {
@@ -10,7 +10,7 @@ public sealed class ImageResponse
 
     public string? Path { get; set; }
 
-    public ImageSource Source { get; set; }
-    
+    public SourceType Source { get; set; }
+
     public int? UserId { get; set; }
 }
