@@ -17,7 +17,7 @@ public sealed class PlaylistRepository(MelodiyDbContext context) : IPlaylistRepo
         await context.SaveChangesAsync();
     }
 
-    public async Task<Playlist?> GetByIdAsync(string slug)
+    public async Task<Playlist?> GetBySlugAsync(string slug)
     {
         var playlist = await _playlists.FirstOrDefaultAsync(p => p.Slug == slug);
 

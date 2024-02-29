@@ -6,7 +6,7 @@ public interface IPlaylistRepository
 {
     Task AddAsync(Playlist playlist);
 
-    Task<Playlist?> GetByIdAsync(string slug);
+    Task<Playlist?> GetBySlugAsync(string slug);
 
     Task<List<Playlist>> GetByUser(int userId);
 

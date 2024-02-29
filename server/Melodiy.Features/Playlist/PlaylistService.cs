@@ -69,7 +69,7 @@ public sealed class PlaylistService(
 
         var playlist = await _playlistRepository.WithUser()
                                                 .WithImage()
-                                                .GetByIdAsync(slug);
+                                                .GetBySlugAsync(slug);
 
         if (playlist == null || (!playlist.Public && playlist.UserId != userId))
         {
