@@ -23,6 +23,7 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
@@ -35,7 +36,8 @@ builder.Services
        .AddMelodiyContext(builder.Configuration)
        .AddUserModule()
        .AddAuthenticationModule(builder.Configuration)
-       .AddPlaylistModule();
+       .AddPlaylistModule()
+       .AddArtistModule();
 
 var app = builder.Build();
 

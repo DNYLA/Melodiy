@@ -19,14 +19,14 @@ public sealed class PlaylistRepository(MelodiyDbContext context) : IPlaylistRepo
 
     public async Task<Playlist?> GetBySlugAsync(string slug)
     {
-        var playlist = await _playlists.FirstOrDefaultAsync(p => p.Slug == slug);
+        var playlist = await _playlists.FirstOrDefaultAsync(playlist => playlist.Slug == slug);
 
         return playlist;
     }
 
     public async Task<List<Playlist>> GetByUser(int userId)
     {
-        return await _playlists.Where(p => p.UserId == userId).ToListAsync();
+        return await _playlists.Where(playlist => playlist.UserId == userId).ToListAsync();
     }
 
     public async Task SaveAsync(Playlist playlist)
@@ -42,24 +42,24 @@ public sealed class PlaylistRepository(MelodiyDbContext context) : IPlaylistRepo
 
     public IPlaylistRepository WithImage()
     {
-        _playlists.Include(p => p.Image).Load();
+        _playlists.Include(playlist => playlist.Image).Load();
 
         return this;
     }
 
     public IPlaylistRepository WithTracks()
     {
-        _playlists.Include(p => p.PlaylistTracks)
-                  .ThenInclude(pt => pt.Track)
+        _playlists.Include(playlist => playlist.PlaylistTracks)
+                  .ThenInclude(playlistTrack => playlistTrack.Track)
                   .ThenInclude(track => track.Image)
-                  .Include(p => p.PlaylistTracks)
-                  .ThenInclude(pt => pt.Track)
+                  .Include(playlist => playlist.PlaylistTracks)
+                  .ThenInclude(playlistTrack => playlistTrack.Track)
                   .ThenInclude(track => track.TrackArtists)
-                  .ThenInclude(ta => ta.Artist)
-                  .Include(p => p.PlaylistTracks)
-                  .ThenInclude(pt => pt.Track)
+                  .ThenInclude(trackArtist => trackArtist.Artist)
+                  .Include(playlist => playlist.PlaylistTracks)
+                  .ThenInclude(playlistTrack => playlistTrack.Track)
                   .ThenInclude(track => track.AlbumTrack)
-                  .ThenInclude(at => at!.Album)
+                  .ThenInclude(albumTrack => albumTrack!.Album)
                   .Load();
 
         return this;
@@ -67,7 +67,7 @@ public sealed class PlaylistRepository(MelodiyDbContext context) : IPlaylistRepo
 
     public IPlaylistRepository WithUser()
     {
-        _playlists.Include(p => p.User).Load();
+        _playlists.Include(playlist => playlist.User).Load();
 
         return this;
     }

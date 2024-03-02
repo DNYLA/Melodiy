@@ -8,7 +8,7 @@ using Melodiy.Features.User.Entities;
 
 using Microsoft.EntityFrameworkCore;
 
-[Index(nameof(YoutubeId), IsUnique = true)]
+[Index(nameof(SpotifyId), IsUnique = true)]
 [Index(nameof(Slug), IsUnique = true)]
 public sealed class Artist : BaseEntity
 {
@@ -20,7 +20,7 @@ public sealed class Artist : BaseEntity
 
     public bool Verified { get; set; }
 
-    public string? YoutubeId { get; set; }
+    public string? SpotifyId { get; set; }
 
     public int? UserId { get; set; }
 

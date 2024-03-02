@@ -1,7 +1,7 @@
 ﻿namespace Melodiy.Features.Track.Models;
 
 using Melodiy.Features.Album.Models;
-using Melodiy.Features.Artist.Artist;
+using Melodiy.Features.Artist.Models;
 using Melodiy.Features.Image.Models;
 using Melodiy.Features.User.Models;
 

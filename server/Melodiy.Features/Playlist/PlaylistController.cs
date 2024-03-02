@@ -49,7 +49,7 @@ public sealed class PlaylistController(IPlaylistService playlistService, IUserSe
             Public = response.Public,
             Tracks = response.Tracks,
             User = user.ToViewModel(),
-            Image = response.Image?.Path,
+            Image = response.Image?.Url,
             CreatedAt = response.CreatedAt
         };
     }
@@ -94,7 +94,7 @@ public sealed class PlaylistController(IPlaylistService playlistService, IUserSe
             Public = playlist.Public,
             Tracks = playlist.Tracks,
             User = user.ToViewModel(),
-            Image = playlist.Image?.Path,
+            Image = playlist.Image?.Url,
             CreatedAt = playlist.CreatedAt
         }).ToList();
     }
