@@ -20,7 +20,7 @@ public sealed class AuthenticationService(
 
     private readonly IUserRepository _userRepository = userRepository;
 
-    public async Task<AuthenticationResponseModel> ValidateLogin(LoginRequestModel loginRequestModel)
+    public async Task<AuthenticationResultViewModel> ValidateLogin(LoginRequestModel loginRequestModel)
     {
         var user = await _userRepository.GetByUsername(loginRequestModel.Username);
 
@@ -31,7 +31,7 @@ public sealed class AuthenticationService(
 
         var token = _jwtTokenGenerator.GenerateToken(user.Id, user.Username);
 
-        return new AuthenticationResponseModel()
+        return new AuthenticationResultViewModel()
         {
             User = new UserViewModel
             {
@@ -42,7 +42,7 @@ public sealed class AuthenticationService(
         };
     }
 
-    public async Task<AuthenticationResponseModel> Register(RegisterRequestModel registerRequestModel)
+    public async Task<AuthenticationResultViewModel> Register(RegisterRequestModel registerRequestModel)
     {
         if (await _userRepository.ExistsAsync(registerRequestModel.Username))
         {
@@ -53,7 +53,7 @@ public sealed class AuthenticationService(
         var user = await _userRepository.AddAsync(registerRequestModel.Username, hashedPassword);
         var token = _jwtTokenGenerator.GenerateToken(user.Id, user.Username);
 
-        return new AuthenticationResponseModel()
+        return new AuthenticationResultViewModel()
         {
             User = new UserViewModel
             {

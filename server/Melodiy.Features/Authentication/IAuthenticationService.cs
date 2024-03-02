@@ -4,7 +4,7 @@ using Melodiy.Features.Authentication.Models;
 
 public interface IAuthenticationService
 {
-    Task<AuthenticationResponseModel> ValidateLogin(LoginRequestModel loginRequestModel);
+    Task<AuthenticationResultViewModel> ValidateLogin(LoginRequestModel loginRequestModel);
 
-    Task<AuthenticationResponseModel> Register(RegisterRequestModel registerRequestModel);
+    Task<AuthenticationResultViewModel> Register(RegisterRequestModel registerRequestModel);
 }

@@ -4,20 +4,15 @@ using MediatR;
 
 using Melodiy.Features.Artist.Command;
 using Melodiy.Features.Artist.Models;
+using Melodiy.Features.Artist.Query;
+using Melodiy.Features.Common.Exceptions;
+using Melodiy.Features.User;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
+
 using System.Net;
-
-using Melodiy.Features.Common.Exceptions;
-using Melodiy.Features.User;
-using Melodiy.Features.Common.Extensions;
-using Melodiy.Features.Playlist.Models;
-using System.Xml.Linq;
-
-using Melodiy.Features.Artist.Query;
 
 [ApiController]
 [Route("[controller]")]

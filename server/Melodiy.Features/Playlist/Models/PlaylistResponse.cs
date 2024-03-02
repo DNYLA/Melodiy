@@ -2,6 +2,7 @@
 
 using Melodiy.Features.Image.Models;
 using Melodiy.Features.Track.Models;
+using Melodiy.Features.User.Models;
 
 public sealed class PlaylistResponse
 {
@@ -13,7 +14,7 @@ public sealed class PlaylistResponse
 
     public bool Public { get; set; }
 
-    public int UserId { get; set; }
+    public UserResponse User { get; set; } = new();
 
     public List<TrackViewModel> Tracks { get; set; } = new();
 

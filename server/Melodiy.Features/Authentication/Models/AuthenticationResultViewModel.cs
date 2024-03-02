@@ -2,7 +2,7 @@
 
 using Melodiy.Features.User.Models;
 
-public sealed class AuthenticationResponseModel
+public sealed class AuthenticationResultViewModel
 {
     public UserViewModel User { get; set; } = null!;
 

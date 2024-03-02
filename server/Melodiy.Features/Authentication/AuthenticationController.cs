@@ -4,25 +4,21 @@ using Melodiy.Features.Authentication.Models;
 
 using Microsoft.AspNetCore.Mvc;
 
-[ApiController]                     
+[ApiController]
 [Route("auth")]
 public sealed class AuthenticationController(IAuthenticationService authenticationService) : ControllerBase
 {
     private readonly IAuthenticationService _authenticationService = authenticationService;
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginRequestModel loginRequestModel)
+    public async Task<ActionResult<AuthenticationResultViewModel>> Login(LoginRequestModel loginRequestModel)
     {
-        var response = await _authenticationService.ValidateLogin(loginRequestModel);
-
-        return Ok(response);
+        return await _authenticationService.ValidateLogin(loginRequestModel);
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register(RegisterRequestModel registerRequestModel)
+    public async Task<ActionResult<AuthenticationResultViewModel>> Register(RegisterRequestModel registerRequestModel)
     {
-        var response = await _authenticationService.Register(registerRequestModel);
-
-        return Ok(response);
+        return await _authenticationService.Register(registerRequestModel);
     }
 }

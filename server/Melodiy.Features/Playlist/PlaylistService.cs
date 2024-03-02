@@ -57,7 +57,7 @@ public sealed class PlaylistService(
             Title = playlist.Title,
             Public = playlist.Public,
             Tracks = new(),
-            UserId = request.UserId,
+            User = playlist.User.ConvertToResponse(),
             Image = image,
             CreatedAt = playlist.CreatedAt
         };
@@ -83,7 +83,7 @@ public sealed class PlaylistService(
             Title = playlist.Title,
             Public = playlist.Public,
             Tracks = new(),
-            UserId = playlist.UserId,
+            User = playlist.User.ConvertToResponse(),
             Image = playlist.Image.ConvertToImageResponse(),
             //Image = playlist.Image,
             CreatedAt = playlist.CreatedAt
@@ -93,7 +93,7 @@ public sealed class PlaylistService(
     public async Task<List<PlaylistResponse>> GetAll(int userId)
     {
         var playlists = await _playlistRepository.WithUser()
-                                                 //.WithImage()
+                                                 .WithImage()
                                                  .GetByUser(userId);
 
         return playlists.Select(playlist => new PlaylistResponse
@@ -102,9 +102,8 @@ public sealed class PlaylistService(
             Slug = playlist.Slug,
             Title = playlist.Title,
             Public = playlist.Public,
-            UserId = playlist.UserId,
-            //Image = playlist.Image,
-            //Image = playlist.Image,
+            User = playlist.User.ConvertToResponse(),
+            Image = playlist.Image.ConvertToImageResponse(),
             CreatedAt = playlist.CreatedAt
         }).ToList();
     }
