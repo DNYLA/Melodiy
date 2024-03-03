@@ -113,10 +113,6 @@ public static class ResponseConverterExtensions
             User = playlist.User.ToResponse(),
             Image = playlist.Image?.ToResponse(),
             CreatedAt = playlist.CreatedAt,
-            Tracks = playlist.PlaylistTracks
-                             .Where(playlistTrack => playlistTrack.Track != null)
-                             .Select(playlistTrack => playlistTrack.Track!.ToResponse())
-                             .ToList(),
         };
     }
 

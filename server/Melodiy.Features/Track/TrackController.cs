@@ -105,12 +105,22 @@ public class TrackController(IUserService userService, IMediator mediator) : Con
         return response.ToViewModel();
     }
 
-    //[Authorize]
-    //[HttpGet]
-    //public async Task<List<GetTrackResponse>> GetUserTracks(UserClaims user)
-    //{
-    //    var tracks = await _trackService.GetUserTracks(user.Id);
+    [Authorize]
+    [HttpGet]
+    public async Task<ActionResult<List<TrackViewModel>>> GetUserTracks()
+    {
+        var user = await _userService.GetUserDetails();
 
-    //    return tracks.Adapt<List<GetTrackResponse>>();
-    //}
+        if (user == null)
+        {
+            throw new ApiException(HttpStatusCode.Unauthorized);
+        }
+
+        var response = await _mediator.Send(new GetUserTracksQuery()
+        {
+            UserId = user.Id,
+        });
+
+        return response.Select(track => track.ToViewModel()).ToList();
+    }
 }

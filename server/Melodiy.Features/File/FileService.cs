@@ -84,10 +84,10 @@ public sealed class FileService(
         using MemoryStream memoryStream = new();
         await file.CopyToAsync(memoryStream);
         memoryStream.Position = 0;
+        
+        ATL.Track track = new(memoryStream);
 
-        //TODO: Install ATL Package to get track duration;
-
-        return 0;
+        return track.DurationMs;
     }
 
     public async Task<string> GetUrl(string path)

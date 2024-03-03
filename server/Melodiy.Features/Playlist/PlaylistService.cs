@@ -66,7 +66,22 @@ public sealed class PlaylistService(
             throw new ApiException(HttpStatusCode.NotFound, $"Playlist Id {slug} not found");
         }
 
-        return playlist.ToResponse();
+        var response = playlist.ToResponse();
+
+        response.Tracks = playlist.PlaylistTracks
+                                  .Where(playlistTrack => playlistTrack.Track != null)
+                                  .Select(playlistTrack =>
+                                  {
+                                      var convertedTrack = playlistTrack.Track!.ToResponse();
+                                      convertedTrack.CreatedAt = playlistTrack.CreatedAt;
+
+                                      return convertedTrack;
+                                  })
+                                  .ToList();
+
+        response.Tracks.Sort((x, y) => DateTime.Compare(x.CreatedAt, y.CreatedAt));
+
+        return response;
     }
 
     public async Task<List<PlaylistResponse>> GetAll(int userId)
