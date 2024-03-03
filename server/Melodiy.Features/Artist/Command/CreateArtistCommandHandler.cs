@@ -34,6 +34,6 @@ public sealed class CreateArtistCommandHandler(IArtistRepository artistRepositor
 
         await _artistRepository.SaveAsync(artist);
 
-        return artist.ConvertToResponse();
+        return artist.ToResponse();
     }
 }

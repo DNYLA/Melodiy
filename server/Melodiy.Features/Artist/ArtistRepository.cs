@@ -25,7 +25,7 @@ public sealed class ArtistRepository(MelodiyDbContext context) : IArtistReposito
         await context.SaveChangesAsync();
     }
 
-    public IArtistRepository WithImage(bool include)
+    public IArtistRepository WithImage(bool include = true)
     {
         if (!include)
         {

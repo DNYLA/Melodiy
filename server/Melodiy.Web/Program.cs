@@ -37,7 +37,8 @@ builder.Services
        .AddUserModule()
        .AddAuthenticationModule(builder.Configuration)
        .AddPlaylistModule()
-       .AddArtistModule();
+       .AddArtistModule()
+       .AddAlbumModule();
 
 var app = builder.Build();
 

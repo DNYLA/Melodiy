@@ -4,7 +4,7 @@ using MediatR;
 
 using Melodiy.Features.Artist.Models;
 
-public sealed class GetArtistQuery : IRequest<ArtistResponse>
+public sealed class GetArtistQuery : IRequest<ArtistResponse?>
 {
     public string Slug { get; set; } = null!;
 

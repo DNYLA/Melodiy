@@ -42,16 +42,7 @@ public sealed class PlaylistController(IPlaylistService playlistService, IUserSe
 
         var response = await _playlistService.Create(request);
 
-        return new PlaylistViewModel
-        {
-            Id = response.Slug,
-            Title = response.Title,
-            Public = response.Public,
-            Tracks = response.Tracks,
-            User = user.ToViewModel(),
-            Image = response.Image?.Url,
-            CreatedAt = response.CreatedAt
-        };
+        return response.ToViewModel();
     }
 
     [HttpGet("{id}")]
@@ -61,16 +52,7 @@ public sealed class PlaylistController(IPlaylistService playlistService, IUserSe
 
         var response = await _playlistService.Get(id, user?.Id);
 
-        return new PlaylistViewModel
-        {
-            Id = response.Slug,
-            Title = response.Title,
-            Public = response.Public,
-            Tracks = response.Tracks,
-            User = user.ToViewModel(),
-            Image = response.Image?.Url,
-            CreatedAt = response.CreatedAt
-        };
+        return response.ToViewModel();
     }
 
     [Authorize]
@@ -87,16 +69,7 @@ public sealed class PlaylistController(IPlaylistService playlistService, IUserSe
 
         var response = await _playlistService.GetAll(user.Id);
 
-        return response.Select(playlist => new PlaylistViewModel
-        {
-            Id = playlist.Slug,
-            Title = playlist.Title,
-            Public = playlist.Public,
-            Tracks = playlist.Tracks,
-            User = user.ToViewModel(),
-            Image = playlist.Image?.Url,
-            CreatedAt = playlist.CreatedAt
-        }).ToList();
+        return response.Select(playlist => playlist.ToViewModel()).ToList();
     }
 
     //[Authorize]

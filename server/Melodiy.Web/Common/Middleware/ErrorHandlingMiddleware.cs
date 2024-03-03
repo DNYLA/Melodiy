@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using System.Net;
 using System.Text.Json;
 
-internal class ErrorHandlingMiddleware(RequestDelegate next)
+public sealed class ErrorHandlingMiddleware(RequestDelegate next)
 {
     public async Task Invoke(HttpContext context)
     {
@@ -23,6 +23,8 @@ internal class ErrorHandlingMiddleware(RequestDelegate next)
         catch (Exception ex)
         {
             //TODO: Add Logging for unknown errors Log ex.Message
+            Console.WriteLine(ex.Message);
+
             await HandleExceptionAsync(
                 context,
                 new ApiException(HttpStatusCode.InternalServerError, "An error occured while processing your request"));

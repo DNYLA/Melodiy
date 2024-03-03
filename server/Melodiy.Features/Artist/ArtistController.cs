@@ -6,6 +6,7 @@ using Melodiy.Features.Artist.Command;
 using Melodiy.Features.Artist.Models;
 using Melodiy.Features.Artist.Query;
 using Melodiy.Features.Common.Exceptions;
+using Melodiy.Features.Common.Extensions;
 using Melodiy.Features.User;
 
 using Microsoft.AspNetCore.Authorization;
@@ -40,14 +41,7 @@ public class ArtistController(IUserService userService, IMediator mediator) : Co
             Image = image
         });
 
-        return new ArtistViewModel
-        {
-            Id = response.Slug,
-            Name = response.Name,
-            Verified = response.Verified,
-            Image = response.Image?.Url,
-            CreatedAt = response.CreatedAt
-        };
+        return response.ToViewModel();
     }
 
     [HttpGet("{id}")]
@@ -59,13 +53,11 @@ public class ArtistController(IUserService userService, IMediator mediator) : Co
             IncludeImage = true
         });
 
-        return new ArtistViewModel
+        if (response == null)
         {
-            Id = response.Slug,
-            Name = response.Name,
-            Verified = response.Verified,
-            Image = response.Image?.Url,
-            CreatedAt = response.CreatedAt
-        };
+            throw new ApiException(HttpStatusCode.NotFound, $"[Artist] Id: {id} not found");
+        }
+
+        return response.ToViewModel();
     }
 }

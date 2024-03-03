@@ -1,0 +1,26 @@
+meta {
+  name: Create
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{host}}/album/
+  body: multipartForm
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "title": "Please Excuse me For Being Antisocial"
+  }
+}
+
+body:multipart-form {
+  title: Test
+  artistId: ef2aca5c563b47f794cb939162cea520
+}

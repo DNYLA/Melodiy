@@ -2,6 +2,7 @@
 
 using Melodiy.Features.Common.Extensions;
 using Melodiy.Features.Track.Models;
+
 using System.Net;
 
 using Melodiy.Features.Common.Exceptions;
@@ -27,10 +28,10 @@ public sealed class TrackService(ITrackRepository trackRepository) : ITrackServi
     public async Task<List<TrackResponse>> GetUserTracks(int userId)
     {
         var tracks = await _trackRepository.WithUser()
-                                     .WithImage()
-                                     .WithAlbum()
-                                     .WithArtists()
-                                     .GetByUser(userId);
+                                           .WithImage()
+                                           .WithAlbum()
+                                           .WithArtists()
+                                           .GetByUser(userId);
 
         var orderedTracks = tracks.OrderBy(track => track.CreatedAt);
 
@@ -52,9 +53,9 @@ public sealed class TrackService(ITrackRepository trackRepository) : ITrackServi
                 Source = track.Source
             },
             //Artists = track.TrackArtists,
-            //Album = track.AlbumTrack,
-            User = track.User.ConvertToResponse(),
-            Image = track.Image.ConvertToImageResponse()
+            //Album = track.CollectionTrack,
+            User = track.User.ToResponse(),
+            Image = track.Image.ToResponse()
         }).ToList();
     }
 

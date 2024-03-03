@@ -1,6 +1,4 @@
-﻿using Melodiy.Features.User.Models;
-
-namespace Melodiy.Features.Artist.Models;
+﻿namespace Melodiy.Features.Artist.Models;
 
 public class ArtistViewModel
 {
@@ -9,8 +7,6 @@ public class ArtistViewModel
     public string Name { get; set; } = string.Empty;
 
     public bool Verified { get; set; }
-
-    public UserViewModel? User { get; set; } = null!;
 
     public string? Image { get; set; }
 

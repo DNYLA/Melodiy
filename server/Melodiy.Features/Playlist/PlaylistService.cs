@@ -50,17 +50,10 @@ public sealed class PlaylistService(
 
         await _playlistRepository.SaveAsync(playlist);
 
-        return new PlaylistResponse
-        {
-            Id = playlist.Id,
-            Slug = playlist.Slug,
-            Title = playlist.Title,
-            Public = playlist.Public,
-            Tracks = new(),
-            User = playlist.User.ConvertToResponse(),
-            Image = image,
-            CreatedAt = playlist.CreatedAt
-        };
+        var res = playlist.ToResponse();
+        res.Image = image;
+
+        return res;
     }
 
     public async Task<PlaylistResponse> Get(string slug, int? userId)
@@ -76,18 +69,7 @@ public sealed class PlaylistService(
             throw new ApiException(HttpStatusCode.NotFound, $"Playlist Id {slug} not found");
         }
 
-        return new PlaylistResponse
-        {
-            Id = playlist.Id,
-            Slug = playlist.Slug,
-            Title = playlist.Title,
-            Public = playlist.Public,
-            Tracks = new(),
-            User = playlist.User.ConvertToResponse(),
-            Image = playlist.Image.ConvertToImageResponse(),
-            //Image = playlist.Image,
-            CreatedAt = playlist.CreatedAt
-        };
+        return playlist.ToResponse();
     }
 
     public async Task<List<PlaylistResponse>> GetAll(int userId)
@@ -96,16 +78,7 @@ public sealed class PlaylistService(
                                                  .WithImage()
                                                  .GetByUser(userId);
 
-        return playlists.Select(playlist => new PlaylistResponse
-        {
-            Id = playlist.Id,
-            Slug = playlist.Slug,
-            Title = playlist.Title,
-            Public = playlist.Public,
-            User = playlist.User.ConvertToResponse(),
-            Image = playlist.Image.ConvertToImageResponse(),
-            CreatedAt = playlist.CreatedAt
-        }).ToList();
+        return playlists.Select(playlist => playlist.ToResponse()).ToList();
     }
 
     public async Task<TrackResponse> AddTrack(string id, string trackId, int userId)

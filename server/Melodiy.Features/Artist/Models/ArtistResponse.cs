@@ -13,7 +13,7 @@ public class ArtistResponse
 
     public bool Verified { get; set; }
 
-    public ExternalArtistDetails ExternalDetails { get; set; }
+    public ExternalArtistDetails ExternalDetails { get; set; } = new();
 
     public UserResponse? User { get; set; } = null!;
 

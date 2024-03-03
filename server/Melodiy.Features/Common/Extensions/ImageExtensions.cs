@@ -5,20 +5,17 @@ using Melodiy.Features.Image.Models;
 
 public static class ImageExtensions
 {
-    public static ImageResponse? ConvertToImageResponse(this Image? image)
+    public static string? GetUrl(this Image? image, bool fallback = true)
     {
-        if (image == null)
-        {
-            return new ImageResponse();
-        }
+        //TODO: Return fallback if null
 
-        return new ImageResponse
-        {
-            Id = image.Id,
-            Url = image.Url,
-            Path = image.Path,
-            Source = image.Source,
-            UserId = image.UserId
-        };
+        return image?.Url;
+    }
+
+    public static string? GetUrl(this ImageResponse? image, bool fallback = true)
+    {
+        //TODO: Return fallback if null
+
+        return image?.Url;
     }
 }
