@@ -3,6 +3,7 @@
 using Melodiy.Features.Common.Exceptions;
 using Melodiy.Features.Common.Extensions;
 using Melodiy.Features.Playlist.Models;
+using Melodiy.Features.Track.Models;
 using Melodiy.Features.User;
 
 using Microsoft.AspNetCore.Authorization;
@@ -37,7 +38,7 @@ public sealed class PlaylistController(IPlaylistService playlistService, IUserSe
             Title = title,
             Public = isPublic,
             Image = image,
-            UserId = user!.Id
+            UserId = user.Id
         };
 
         var response = await _playlistService.Create(request);
@@ -72,28 +73,35 @@ public sealed class PlaylistController(IPlaylistService playlistService, IUserSe
         return response.Select(playlist => playlist.ToViewModel()).ToList();
     }
 
-    //[Authorize]
-    //[HttpPost("{id}")]
-    //public async Task<ActionResult<GetTrackResponse>> AddTrack(string id, [FromQuery] string trackId,
-    //                                                           [FromClaims] UserClaims user)
-    //{
-    //    var response = await _playlistService.AddTrack(id, trackId, user.Id);
-    //    return response.Adapt<GetTrackResponse>();
-    //}
+    [Authorize]
+    [HttpPost("{id}")]
+    public async Task<ActionResult<TrackViewModel>> AddTrack(string id, [FromQuery] string trackId)
+    {
+        var user = await _userService.GetUserDetails();
 
-    //[Authorize]
-    //[HttpDelete("{id}")]
-    //public async Task<ActionResult<GetTrackResponse>> RemoveTrack(string id, [FromQuery] string trackId,
-    //                                                              [FromClaims] UserClaims user)
-    //{
-    //    var response = await _playlistService.RemoveTrack(id, trackId, user.Id);
-    //    return response.Adapt<GetTrackResponse>();
-    //}
+        if (user == null)
+        {
+            throw new ApiException(HttpStatusCode.Unauthorized);
+        }
 
-    //[HttpGet("{id}")]
-    //public async Task<ActionResult<GetPlaylistResponse>> GetPlaylist(string id, [FromClaims] UserClaims? user)
-    //{
-    //    var response = await _playlistService.Get(id, user?.Id);
-    //    return response.Adapt<GetPlaylistResponse>();
-    //}
+        var response = await _playlistService.AddTrack(id, trackId, user.Id);
+
+        return response.ToViewModel();
+    }
+
+    [Authorize]
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<TrackViewModel>> RemoveTrack(string id, [FromQuery] string trackId)
+    {
+        var user = await _userService.GetUserDetails();
+
+        if (user == null)
+        {
+            throw new ApiException(HttpStatusCode.Unauthorized);
+        }
+
+        var response = await _playlistService.RemoveTrack(id, trackId, user.Id);
+
+        return response.ToViewModel();
+    }
 }

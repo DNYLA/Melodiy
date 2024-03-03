@@ -1,5 +1,8 @@
 ﻿namespace Melodiy.Features.File;
 
+using System.Net;
+
+using Melodiy.Features.Common.Exceptions;
 using Melodiy.Features.Common.Extensions;
 using Melodiy.Features.Image;
 using Melodiy.Features.Image.Entities;
@@ -20,13 +23,13 @@ public sealed class FileService(
 
     private readonly IUserService _userService = userService;
 
-    public async Task<ImageResponse?> UploadImage(IFormFile file)
+    public async Task<ImageResponse> UploadImage(IFormFile file)
     {
         var user = await _userService.GetUserDetails();
 
         if (user == null || file.Length == 0 || !file.IsImage())
         {
-            return null;
+            throw new ApiException(HttpStatusCode.BadRequest, "Invalid Image file");
         }
 
         var response = await _fileRepository.UploadFile(file, user.Username, StorageBucket.Images);
@@ -51,17 +54,17 @@ public sealed class FileService(
         };
     }
 
-    public async Task<FileResponse?> UploadAudio(IFormFile file, bool isPublic)
+    public async Task<FileResponse> UploadAudio(IFormFile file, bool isPublic)
     {
         var user = await _userService.GetUserDetails();
 
         if (user == null || file.Length == 0 || !file.IsAudio())
         {
-            return null;
+            throw new ApiException(HttpStatusCode.BadRequest, "Invalid Audio file");
         }
 
         var bucketType = isPublic ? StorageBucket.TrackPublic : StorageBucket.TracksPrivate;
-        var response = await _fileRepository.UploadFile(file, "", bucketType);
+        var response = await _fileRepository.UploadFile(file, user.Username, bucketType);
 
         return response;
     }

@@ -1,5 +1,7 @@
 ﻿namespace Melodiy.Features.Playlist;
 
+using MediatR;
+
 using Melodiy.Features.Common.Exceptions;
 using Melodiy.Features.Common.Extensions;
 using Melodiy.Features.File;
@@ -7,6 +9,7 @@ using Melodiy.Features.Image.Models;
 using Melodiy.Features.Playlist.Entities;
 using Melodiy.Features.Playlist.Models;
 using Melodiy.Features.Track.Models;
+using Melodiy.Features.Track.Query;
 using Melodiy.Features.User;
 
 using System.Net;
@@ -14,7 +17,8 @@ using System.Net;
 public sealed class PlaylistService(
     IPlaylistRepository playlistRepository,
     IUserRepository userRepository,
-    IFileService fileService)
+    IFileService fileService,
+    IMediator mediator)
     : IPlaylistService
 {
     private readonly IPlaylistRepository _playlistRepository = playlistRepository;
@@ -22,6 +26,8 @@ public sealed class PlaylistService(
     private readonly IUserRepository _userRepository = userRepository;
 
     private readonly IFileService _fileService = fileService;
+
+    private readonly IMediator _mediator = mediator;
 
     public async Task<PlaylistResponse> Create(CreatePlaylistRequest request)
     {
@@ -32,20 +38,12 @@ public sealed class PlaylistService(
             image = await _fileService.UploadImage(request.Image);
         }
 
-        //TODO: Does this need to be here?
-        var user = await _userRepository.GetByIdAsync(request.UserId);
-
-        if (user == null)
-        {
-            throw new ApiException(HttpStatusCode.Unauthorized);
-        }
-
         var playlist = new Playlist
         {
             Title = request.Title,
             Public = request.Public,
             UserId = request.UserId,
-            ImageId = image?.Id,
+            ImageId = image?.Id
         };
 
         await _playlistRepository.SaveAsync(playlist);
@@ -58,10 +56,9 @@ public sealed class PlaylistService(
 
     public async Task<PlaylistResponse> Get(string slug, int? userId)
     {
-        //TODO: Update Once Track & PlaylistTrack is done
-
         var playlist = await _playlistRepository.WithUser()
                                                 .WithImage()
+                                                .WithTracks()
                                                 .GetBySlugAsync(slug);
 
         if (playlist == null || (!playlist.Public && playlist.UserId != userId))
@@ -81,13 +78,51 @@ public sealed class PlaylistService(
         return playlists.Select(playlist => playlist.ToResponse()).ToList();
     }
 
-    public async Task<TrackResponse> AddTrack(string id, string trackId, int userId)
+    public async Task<TrackResponse> AddTrack(string slug, string trackId, int userId)
     {
-        throw new NotImplementedException();
+        var playlist = await _playlistRepository.GetBySlugAsync(slug);
+        var track = await _mediator.Send(new GetTrackQuery
+        {
+            Slug = trackId,
+            UserId = userId,
+            IncludeImage = true
+        });
+
+        if (playlist == null || playlist.UserId != userId)
+        {
+            throw new ApiException(HttpStatusCode.NotFound, $"Playlist Id {slug} not found");
+        }
+
+        //TODO: Handle track positions
+        await _playlistRepository.AddTrack(playlist.Id, track.Id);
+
+        return track;
     }
 
-    public async Task<TrackResponse> RemoveTrack(string id, string trackId, int userId)
+    public async Task<TrackResponse> RemoveTrack(string slug, string trackId, int userId)
     {
-        throw new NotImplementedException();
+        //TODO: Remove from position
+
+        var playlist = await _playlistRepository.WithTrack(trackId).GetBySlugAsync(slug);
+        var track = await _mediator.Send(new GetTrackQuery
+        {
+            Slug = trackId,
+            UserId = userId,
+            IncludeImage = true
+        });
+
+        if (playlist == null || playlist.UserId != userId)
+        {
+            throw new ApiException(HttpStatusCode.NotFound, $"Playlist Id {slug} not found");
+        }
+
+        if (!playlist.PlaylistTracks.Any())
+        {
+            return track;
+        }
+
+        await _playlistRepository.RemoveTrack(playlist.PlaylistTracks[0]);
+
+        return track;
     }
 }

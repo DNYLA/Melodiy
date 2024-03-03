@@ -9,10 +9,15 @@ public sealed class PlaylistRepository(MelodiyDbContext context) : IPlaylistRepo
 {
     private readonly DbSet<Playlist> _playlists = context.Set<Playlist>();
 
-    public async Task AddAsync(Playlist playlist)
+    private readonly DbSet<PlaylistTrack> _playlistTracks = context.Set<PlaylistTrack>();
+
+    public async Task AddTrack(int playlistId, int trackId)
     {
-        playlist.Slug = Guid.NewGuid().ToString("N");
-        _playlists.Add(playlist);
+        _playlistTracks.Add(new PlaylistTrack
+        {
+            PlaylistId = playlistId,
+            TrackId = trackId
+        });
 
         await context.SaveChangesAsync();
     }
@@ -27,6 +32,12 @@ public sealed class PlaylistRepository(MelodiyDbContext context) : IPlaylistRepo
     public async Task<List<Playlist>> GetByUser(int userId)
     {
         return await _playlists.Where(playlist => playlist.UserId == userId).ToListAsync();
+    }
+
+    public async Task RemoveTrack(PlaylistTrack track)
+    {
+        _playlistTracks.Remove(track);
+        await context.SaveChangesAsync();
     }
 
     public async Task SaveAsync(Playlist playlist)
@@ -47,6 +58,14 @@ public sealed class PlaylistRepository(MelodiyDbContext context) : IPlaylistRepo
         return this;
     }
 
+    public IPlaylistRepository WithTrack(string slug)
+    {
+        _playlists.Include(playlist => playlist.PlaylistTracks.Where(playlistTrack => playlistTrack.Track.Slug == slug))
+                  .Load();
+
+        return this;
+    }
+
     public IPlaylistRepository WithTracks()
     {
         _playlists.Include(playlist => playlist.PlaylistTracks)
@@ -59,7 +78,8 @@ public sealed class PlaylistRepository(MelodiyDbContext context) : IPlaylistRepo
                   .Include(playlist => playlist.PlaylistTracks)
                   .ThenInclude(playlistTrack => playlistTrack.Track)
                   .ThenInclude(track => track.AlbumTrack)
-                  .ThenInclude(albumTrack => albumTrack!.Album)
+                  #nullable disable
+                  .ThenInclude(albumTrack => albumTrack.Album)
                   .Load();
 
         return this;

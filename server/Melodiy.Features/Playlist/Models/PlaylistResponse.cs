@@ -16,7 +16,7 @@ public sealed class PlaylistResponse
 
     public UserResponse User { get; set; } = new();
 
-    public List<TrackViewModel> Tracks { get; set; } = new();
+    public List<TrackResponse> Tracks { get; set; } = new();
 
     public ImageResponse? Image { get; set; }
 

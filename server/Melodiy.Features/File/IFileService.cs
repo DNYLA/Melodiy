@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Http;
 
 public interface IFileService
 {
-    Task<ImageResponse?> UploadImage(IFormFile file);
+    Task<ImageResponse> UploadImage(IFormFile file);
 
-    Task<FileResponse?> UploadAudio(IFormFile file, bool isPublic);
+    Task<FileResponse> UploadAudio(IFormFile file, bool isPublic);
 
     Task<bool> DeleteFile(string bucket);
 

@@ -24,7 +24,6 @@ public class AlbumController(IUserService userService, IMediator mediator) : Con
 
     [Authorize]
     [HttpPost]
-    // public async Task<ActionResult<GetAlbumResponse>> Create(string title, long releaseTimestamp, [FromForm] IFormFile? image)
     public async Task<ActionResult<AlbumViewModel>> Create([FromForm] CreateAlbumRequest request)
     {
         var user = await _userService.GetUserDetails();
@@ -52,7 +51,7 @@ public class AlbumController(IUserService userService, IMediator mediator) : Con
     {
         var response = await _mediator.Send(new GetAlbumQuery
         {
-            ArtistSlug = id
+            Slug = id
         });
 
         if (response == null)

@@ -37,7 +37,7 @@ public class TrackRepository(MelodiyDbContext context) : ITrackRepository
 
     public ITrackRepository WithAlbum()
     {
-        _tracks.Include(playlist => playlist.AlbumTrack)
+        _tracks.Include(track => track.AlbumTrack)
                .ThenInclude(albumTrack => albumTrack!.Album)
                .Load();
 
@@ -46,23 +46,28 @@ public class TrackRepository(MelodiyDbContext context) : ITrackRepository
 
     public ITrackRepository WithArtists()
     {
-        _tracks.Include(p => p.TrackArtists)
+        _tracks.Include(track => track.TrackArtists)
                .ThenInclude(trackArtist => trackArtist.Artist)
                .Load();
 
         return this;
     }
 
-    public ITrackRepository WithImage()
+    public ITrackRepository WithImage(bool include = true)
     {
-        _tracks.Include(p => p.Image).Load();
+        if (!include)
+        {
+            return this;
+        }
+
+        _tracks.Include(track => track.Image).Load();
 
         return this;
     }
 
     public ITrackRepository WithUser()
     {
-        _tracks.Include(p => p.User).Load();
+        _tracks.Include(track => track.User).Load();
 
         return this;
     }

@@ -6,7 +6,7 @@ using Melodiy.Features.Album.Models;
 
 public sealed class GetAlbumQuery : IRequest<AlbumResponse?>
 {
-    public string ArtistSlug { get; set; }
+    public string Slug { get; set; }
 
     public bool IncludeImage { get; set; }
 }

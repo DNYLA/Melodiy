@@ -16,7 +16,7 @@ public interface ITrackRepository
 
     ITrackRepository WithArtists();
 
-    ITrackRepository WithImage();
+    ITrackRepository WithImage(bool include = true);
 
     ITrackRepository WithUser();
 }

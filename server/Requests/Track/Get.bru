@@ -1,0 +1,15 @@
+meta {
+  name: Get
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{host}}/track/dcbca17405ae43ef85ddd365d5c19534/
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

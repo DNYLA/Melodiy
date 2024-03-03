@@ -45,7 +45,7 @@ public class ArtistController(IUserService userService, IMediator mediator) : Co
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ArtistViewModel>> GetArtist(string id)
+    public async Task<ActionResult<ArtistViewModel>> Get(string id)
     {
         var response = await _mediator.Send(new GetArtistQuery
         {

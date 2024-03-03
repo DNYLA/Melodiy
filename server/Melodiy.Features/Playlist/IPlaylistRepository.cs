@@ -4,15 +4,19 @@ using Melodiy.Features.Playlist.Entities;
 
 public interface IPlaylistRepository
 {
-    Task AddAsync(Playlist playlist);
+    Task AddTrack(int playlistId, int trackId);
 
     Task<Playlist?> GetBySlugAsync(string slug);
 
     Task<List<Playlist>> GetByUser(int userId);
 
+    Task RemoveTrack(PlaylistTrack track);
+
     Task SaveAsync(Playlist playlist);
 
     IPlaylistRepository WithImage();
+
+    IPlaylistRepository WithTrack(string slug);
 
     IPlaylistRepository WithTracks();
 

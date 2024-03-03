@@ -21,9 +21,9 @@ public sealed class Playlist : BaseEntity
 
     public int? ImageId { get; set; }
 
-    public List<PlaylistTrack> PlaylistTracks { get; set; } = null!;
+    public List<PlaylistTrack> PlaylistTracks { get; set; } = new();
 
-    public User User { get; set; } = null!;
+    public User? User { get; set; }
 
     public Image? Image { get; set; }
 }

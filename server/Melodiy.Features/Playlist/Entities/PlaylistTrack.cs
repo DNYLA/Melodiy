@@ -14,7 +14,7 @@ public class PlaylistTrack : BaseEntity
 
     public int PlaylistId { get; set; }
 
-    public Track Track { get; set; } = null!;
+    public Track? Track { get; set; }
 
-    public Playlist Playlist { get; set; } = null!;
+    public Playlist? Playlist { get; set; }
 }

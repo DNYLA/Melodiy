@@ -14,7 +14,7 @@ public sealed class GetAlbumQueryHandler(IAlbumRepository albumRepository)
     {
         var album = await _albumRepository.WithImage(request.IncludeImage)
                                           .WithArtist()
-                                          .GetBySlugAsync(request.ArtistSlug);
+                                          .GetBySlugAsync(request.Slug);
 
         return album?.ToResponse();
     }

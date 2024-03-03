@@ -8,6 +8,8 @@ using Melodiy.Features.Image.Entities;
 using Melodiy.Features.Image.Models;
 using Melodiy.Features.Playlist.Entities;
 using Melodiy.Features.Playlist.Models;
+using Melodiy.Features.Track.Entities;
+using Melodiy.Features.Track.Models;
 using Melodiy.Features.User.Entities;
 using Melodiy.Features.User.Models;
 
@@ -25,13 +27,41 @@ public static class ResponseConverterExtensions
             ReleaseDate = album.ReleaseDate,
             CreatedAt = album.CreatedAt,
             Artists = album.Artists.Select(artist => artist.ToResponse()).ToList(),
-            //Tracks = new(),
+            //Tracks = album.AlbumTracks.Select(albumTrack => albumTrack.Track.ToResponse()).ToList(),
             User = album.User?.ToResponse(),
             Image = album.Image?.ToResponse(),
             ExternalDetails = new ExternalAlbumDetails
             {
                 SpotifyId = album.SpotifyId
             }
+        };
+    }
+
+    public static ArtistResponse ToResponse(this TrackArtist trackArtist)
+    {
+        if (trackArtist.Artist == null)
+        {
+            return new ArtistResponse
+            {
+                Id = trackArtist.ArtistId
+            };
+        }
+
+        return new ArtistResponse
+        {
+            Id = trackArtist.ArtistId,
+            Slug = trackArtist.Artist.Slug,
+            Name = trackArtist.Artist.Name,
+            Verified = trackArtist.Artist.Verified,
+            User = trackArtist.Artist.User?.ToResponse(),
+            Image = trackArtist.Artist.Image?.ToResponse(),
+            CreatedAt = trackArtist.Artist.CreatedAt,
+            //Description = artist.Description
+            //MonthlyListeners = artist.MonthlyListeners,
+            ExternalDetails = new ExternalArtistDetails
+            {
+                SpotifyId = trackArtist.Artist.SpotifyId
+            },
         };
     }
 
@@ -80,10 +110,39 @@ public static class ResponseConverterExtensions
             Slug = playlist.Slug,
             Title = playlist.Title,
             Public = playlist.Public,
-            Tracks = new(),
             User = playlist.User.ToResponse(),
             Image = playlist.Image?.ToResponse(),
-            CreatedAt = playlist.CreatedAt
+            CreatedAt = playlist.CreatedAt,
+            Tracks = playlist.PlaylistTracks
+                             .Where(playlistTrack => playlistTrack.Track != null)
+                             .Select(playlistTrack => playlistTrack.Track!.ToResponse())
+                             .ToList(),
+        };
+    }
+
+    public static TrackResponse ToResponse(this Track track)
+    {
+        return new TrackResponse
+        {
+            Id = track.Id,
+            Slug = track.Slug,
+            Title = track.Title,
+            Views = track.Views,
+            Public = track.Public,
+            Duration = track.Duration,
+            ReleaseDate = track.ReleaseDate,
+            CreatedAt = track.CreatedAt,
+            Album = track.AlbumTrack?.Album.ToResponse(),
+            Artists = track.TrackArtists.Select(artist => artist.ToResponse()).ToList(),
+            User = track.User?.ToResponse(),
+            Image = track.Image?.ToResponse(),
+            ExternalDetails = new ExternalTrackDetails()
+            {
+                Path = track.Path,
+                SpotifyId = track.SpotifyId,
+                YoutubeId = track.YoutubeId,
+                Source = track.Source
+            }
         };
     }
 

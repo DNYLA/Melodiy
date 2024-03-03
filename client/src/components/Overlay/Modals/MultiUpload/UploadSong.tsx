@@ -147,11 +147,13 @@ const UploadSong: React.FC = () => {
     if (!data.artist || !data.artist.id) {
       toast.error('Invalid Artist selected');
       return;
-    } else if (data.artist.id == 'new') url += `artist=${data.artist.name}`;
+    } else if (data.artist.id == 'new')
+      formData.append('artistName', data.artist.name);
     else formData.append('artistId', data.artist.id);
 
     if (data.album && data.album.id) {
-      if (data.album.id === 'new') url += `&album=${data.album.name}`;
+      if (data.album.id === 'new')
+        formData.append('albumTitle', data.album.name);
       else formData.append('albumId', data.album.id);
     }
 

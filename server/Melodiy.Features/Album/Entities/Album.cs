@@ -31,9 +31,9 @@ public sealed class Album : BaseEntity
 
     public int? UserId { get; set; }
 
-    public List<AlbumTrack> AlbumTracks { get; set; } = null!;
+    public List<AlbumTrack> AlbumTracks { get; set; } = new();
 
-    public List<Artist> Artists { get; set; } = null!;
+    public List<Artist> Artists { get; set; } = new();
 
     public Image? Image { get; set; }
 
