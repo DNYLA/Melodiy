@@ -128,7 +128,7 @@ public static class ResponseConverterExtensions
             Duration = track.Duration,
             ReleaseDate = track.ReleaseDate,
             CreatedAt = track.CreatedAt,
-            Album = track.AlbumTrack?.Album.ToResponse(),
+            Album = track.AlbumTrack?.Album?.ToResponse(),
             Artists = track.TrackArtists.Select(artist => artist.ToResponse()).ToList(),
             User = track.User?.ToResponse(),
             Image = track.Image?.ToResponse(),

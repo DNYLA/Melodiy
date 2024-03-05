@@ -27,6 +27,8 @@ public sealed class Track : BaseEntity
 
     public string? YoutubeId { get; set; }
 
+    public bool Explicit { get; set; }
+
     public bool Public { get; set; }
 
     public SourceType Source { get; set; }

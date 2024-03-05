@@ -59,6 +59,7 @@ public class CreateTrackCommandHandler(
         Track track = new()
         {
             Title = request.Title,
+            Explicit = request.Explicit,
             TrackArtists = new() { trackArtist },
             Path = trackFile.Path,
             Source = trackFile.Source,

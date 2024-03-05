@@ -14,6 +14,8 @@ public sealed class CreateTrackCommand : IRequest<TrackResponse>
 
     public string Title { get; set; }
 
+    public bool Explicit { get; set; }
+
     public bool Public { get; set; }
 
     public string ArtistId { get; set; }

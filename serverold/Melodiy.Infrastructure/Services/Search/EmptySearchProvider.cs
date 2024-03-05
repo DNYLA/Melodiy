@@ -2,6 +2,7 @@
 using Melodiy.Application.Common.Interfaces.Search;
 
 namespace Melodiy.Infrastructure.Services.Search;
+
 public class EmptySearchProvider : IExternalSearchProvider
 {
     public Task<ExternalAlbum> GetAlbum(string id)

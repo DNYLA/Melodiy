@@ -9,6 +9,11 @@ public class TrackRepository(MelodiyDbContext context) : ITrackRepository
 {
     private readonly DbSet<Track> _tracks = context.Set<Track>();
 
+    public IQueryable<Track> AsQueryable()
+    {
+        return _tracks.AsQueryable();
+    }
+
     public async Task<Track?> GetByIdAsync(int id)
     {
         return await _tracks.FindAsync(id);
@@ -27,6 +32,17 @@ public class TrackRepository(MelodiyDbContext context) : ITrackRepository
     public async Task SaveAsync(Track track)
     {
         if (string.IsNullOrEmpty(track.Slug))
+        {
+            track.Slug = Guid.NewGuid().ToString("N");
+            _tracks.Add(track);
+        }
+
+        await context.SaveChangesAsync();
+    }
+
+    public async Task SaveAsync(List<Track> tracks)
+    {
+        foreach (var track in tracks.Where(track => string.IsNullOrEmpty(track.Slug)))
         {
             track.Slug = Guid.NewGuid().ToString("N");
             _tracks.Add(track);

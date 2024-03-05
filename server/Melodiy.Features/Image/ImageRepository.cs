@@ -9,6 +9,11 @@ public sealed class ImageRepository(MelodiyDbContext context) : IImageRepository
 {
     private readonly DbSet<Image> _images = context.Set<Image>();
 
+    public IQueryable<Image> AsQueryable()
+    {
+        return _images.AsQueryable();
+    }
+
     public async Task<Image?> GetByIdAsync(int id)
     {
         return await _images.FindAsync(id);

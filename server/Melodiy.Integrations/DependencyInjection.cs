@@ -1,6 +1,8 @@
 ﻿namespace Melodiy.Integrations;
 
 using Melodiy.Integrations.Common.File;
+using Melodiy.Integrations.Common.Search;
+using Melodiy.Integrations.Spotify;
 using Melodiy.Integrations.Supabasee;
 
 using Microsoft.AspNetCore.Builder;
@@ -35,5 +37,38 @@ public static class DependencyInjection
         using var serviceScope = app.Services.CreateScope();
         var storageProvider = serviceScope.ServiceProvider.GetRequiredService<IFileRepository>();
         storageProvider.Initialise();
+    }
+
+    private static IServiceCollection AddSpotifyProvider(this IServiceCollection services, ConfigurationManager configuration)
+    {
+        var spotifySettings = new SpotifySettings();
+        configuration.Bind(SpotifySettings.SectionName, spotifySettings);
+
+        if (string.IsNullOrWhiteSpace(spotifySettings.ClientSecret) ||  string.IsNullOrWhiteSpace(spotifySettings.ClientId))
+        {
+            services.AddDefaultSearchProvider();
+            return services;
+        }
+
+        services.AddSingleton(Options.Create(spotifySettings));
+        services.AddScoped<ISearchProvider, SpotifySearchProvider>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddDefaultSearchProvider(this IServiceCollection services)
+    {
+        services.AddScoped<ISearchProvider, EmptySearchProvider>();
+        return services;
+    }
+
+    public static IServiceCollection RegisterSearchProvider(this IServiceCollection services, ConfigurationManager configuration)
+    {
+        if (configuration.GetSection(SpotifySettings.SectionName).GetChildren().Any())
+        {
+            return services.AddSpotifyProvider(configuration);
+        }
+
+        return services.AddDefaultSearchProvider();
     }
 }

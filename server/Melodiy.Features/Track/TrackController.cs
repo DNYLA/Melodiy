@@ -79,9 +79,10 @@ public class TrackController(IUserService userService, IMediator mediator) : Con
 
         var response = await _mediator.Send(new CreateTrackCommand
         {
+            Title = request.Title,
+            Explicit = true,
             Audio = request.Audio,
             Image = request.Image,
-            Title = request.Title,
             Public = request.Public,
             ArtistId = request.ArtistId!,
             AlbumId = request.AlbumId,

@@ -9,6 +9,11 @@ public sealed class ArtistRepository(MelodiyDbContext context) : IArtistReposito
 {
     private readonly DbSet<Artist> _artists = context.Set<Artist>();
 
+    public IQueryable<Artist> AsQueryable()
+    {
+        return _artists.AsQueryable();
+    }
+
     public async Task<Artist?> GetBySlugAsync(string slug)
     {
         return await _artists.FirstOrDefaultAsync(artist => artist.Slug == slug);
@@ -17,6 +22,17 @@ public sealed class ArtistRepository(MelodiyDbContext context) : IArtistReposito
     public async Task SaveAsync(Artist artist)
     {
         if (string.IsNullOrEmpty(artist.Slug))
+        {
+            artist.Slug = Guid.NewGuid().ToString("N");
+            _artists.Add(artist);
+        }
+
+        await context.SaveChangesAsync();
+    }
+
+    public async Task SaveAsync(List<Artist> artists)
+    {
+        foreach (var artist in artists.Where(artist => string.IsNullOrEmpty(artist.Slug)))
         {
             artist.Slug = Guid.NewGuid().ToString("N");
             _artists.Add(artist);

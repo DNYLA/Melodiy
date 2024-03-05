@@ -4,6 +4,8 @@ using Melodiy.Features.Track.Entities;
 
 public interface ITrackRepository
 {
+    IQueryable<Track> AsQueryable();
+
     Task<Track?> GetByIdAsync(int id);
 
     Task<Track?> GetBySlugAsync(string slug);
@@ -11,6 +13,8 @@ public interface ITrackRepository
     Task<List<Track>> GetByUser(int userId);
 
     Task SaveAsync(Track track);
+
+    Task SaveAsync(List<Track> tracks);
 
     ITrackRepository WithAlbum();
 

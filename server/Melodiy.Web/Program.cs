@@ -32,6 +32,7 @@ builder.Services.AddHttpContextAccessor();
 //Custom Services
 builder.Services
        .AddSupabase(builder.Configuration)
+       .RegisterSearchProvider(builder.Configuration)
        .AddFeatures()
        .AddMelodiyContext(builder.Configuration)
        .AddUserModule()
@@ -39,7 +40,8 @@ builder.Services
        .AddPlaylistModule()
        .AddArtistModule()
        .AddAlbumModule()
-       .AddTrackModule();
+       .AddTrackModule()
+       .AddSearchModule();
 
 var app = builder.Build();
 
