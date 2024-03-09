@@ -27,7 +27,6 @@ public static class ResponseConverterExtensions
             ReleaseDate = album.ReleaseDate,
             CreatedAt = album.CreatedAt,
             Artists = album.Artists.Select(artist => artist.ToResponse()).ToList(),
-            //Tracks = album.AlbumTracks.Select(albumTrack => albumTrack.Track.ToResponse()).ToList(),
             User = album.User?.ToResponse(),
             Image = album.Image?.ToResponse(),
             ExternalDetails = new ExternalAlbumDetails

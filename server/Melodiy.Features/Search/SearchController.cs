@@ -1,5 +1,9 @@
 ﻿namespace Melodiy.Features.Search;
 
+using MediatR;
+
+using Melodiy.Features.Album.Query;
+using Melodiy.Features.Artist.Query;
 using Melodiy.Features.Common.Exceptions;
 using Melodiy.Features.Common.Extensions;
 using Melodiy.Features.Search.Models;
@@ -12,11 +16,14 @@ using System.Net;
 
 [ApiController]
 [Route("[controller]")]
-public class SearchController(ISearchService searchService, IUserService userService) : ControllerBase
+public class SearchController(ISearchService searchService, IUserService userService, IMediator mediator)
+    : ControllerBase
 {
     private readonly ISearchService _searchService = searchService;
 
     private readonly IUserService _userService = userService;
+
+    private readonly IMediator _mediator = mediator;
 
     [Authorize]
     [HttpGet("me")]
@@ -30,24 +37,22 @@ public class SearchController(ISearchService searchService, IUserService userSer
             throw new ApiException(HttpStatusCode.Unauthorized);
         }
 
-        type ??= SearchType.All;
-        if (term.Length < 3)
-            throw new ApiException(HttpStatusCode.BadRequest, "Search term must contain a minimum of three characters");
-
+        type = ValidateSearchRequest(term, type);
         var result = new SearchResultViewModel();
 
-        if (type == SearchType.Album)
+        switch (type)
         {
-            if (string.IsNullOrWhiteSpace(artistId))
+            case SearchType.Album when string.IsNullOrWhiteSpace(artistId):
                 throw new ApiException(HttpStatusCode.BadRequest,
                                        "ArtistId is required when searching for your albums created by an artist");
-
-            var response = await _searchService.SearchAlbumsCreatedByUser(term, artistId, user.Id);
-            result.Albums = response.Select(album => album.ToViewModel()).ToList();
-        }
-        else
-        {
-            throw new ApiException(HttpStatusCode.NotImplemented, $"SearchType: {type} currently not accepted.");
+            case SearchType.Album:
+            {
+                var response = await _mediator.Send(new SearchAlbumsQuery(term, 5, artistId, user.Id));
+                result.Albums = response.Select(album => album.ToViewModel()).ToList();
+                break;
+            }
+            default:
+                throw new ApiException(HttpStatusCode.NotImplemented, $"SearchType: {type} currently not accepted.");
         }
 
         return result;
@@ -56,10 +61,7 @@ public class SearchController(ISearchService searchService, IUserService userSer
     [HttpGet]
     public async Task<ActionResult<SearchResultViewModel>> Search([FromQuery] string term, [FromQuery] SearchType? type)
     {
-        type ??= SearchType.All;
-        if (term.Length < 3)
-            throw new ApiException(HttpStatusCode.BadRequest, "Search term must contain a minimum of three characters");
-
+        type = ValidateSearchRequest(term, type);
         var results = new SearchResultViewModel();
 
         switch (type)
@@ -77,7 +79,7 @@ public class SearchController(ISearchService searchService, IUserService userSer
             }
             case SearchType.Artist:
             {
-                var response = await _searchService.SearchArtist(term);
+                var response = await _mediator.Send(new SearchArtistsQuery(term, 5, true));
                 results.Artists = response.Select(artist => artist.ToViewModel()).ToList();
                 break;
             }
@@ -86,5 +88,13 @@ public class SearchController(ISearchService searchService, IUserService userSer
         }
 
         return results;
+    }
+
+    private static SearchType ValidateSearchRequest(string? term, SearchType? type)
+    {
+        if (string.IsNullOrWhiteSpace(term) || term.Length < 3)
+            throw new ApiException(HttpStatusCode.BadRequest, "Search term must contain a minimum of three characters");
+
+        return type ?? SearchType.All;
     }
 }

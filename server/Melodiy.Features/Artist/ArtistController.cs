@@ -45,19 +45,28 @@ public class ArtistController(IUserService userService, IMediator mediator) : Co
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ArtistViewModel>> Get(string id)
+    public async Task<ActionResult<FullArtistViewModel>> Get(string id)
     {
-        var response = await _mediator.Send(new GetArtistQuery
-        {
-            Slug = id,
-            IncludeImage = true
-        });
+        var response = await _mediator.Send(new GetArtistDetailsQuery(id, true));
 
         if (response == null)
         {
             throw new ApiException(HttpStatusCode.NotFound, $"[Artist] Id: {id} not found");
         }
 
-        return response.ToViewModel();
+        return new FullArtistViewModel
+        {
+            Id = response.Slug,
+            Name = response.Name,
+            Verified = response.Verified,
+            Image = response.Image.GetUrl(),
+            CreatedAt = response.CreatedAt,
+            Description = response.Description,
+            MonthlyListeners = response.MonthlyListeners,
+            Albums = response.Albums.Select(album => album.ToViewModel()).ToList(),
+            UserAlbums = response.UserAlbums.Select(album => album.ToViewModel()).ToList(),
+            Singles = response.Singles.Select(album => album.ToViewModel()).ToList(),
+            TopTracks = response.TopTracks.Select(track => track.ToViewModel()).ToList()
+        };
     }
 }

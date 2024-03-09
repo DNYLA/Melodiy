@@ -41,6 +41,13 @@ public sealed class ArtistRepository(MelodiyDbContext context) : IArtistReposito
         await context.SaveChangesAsync();
     }
 
+    public IArtistRepository WithAlbums()
+    {
+        _artists.Include(artist => artist.Albums).ThenInclude(album => album.Image).Load();
+
+        return this;
+    }
+
     public IArtistRepository WithImage(bool include = true)
     {
         if (!include)
@@ -55,6 +62,11 @@ public sealed class ArtistRepository(MelodiyDbContext context) : IArtistReposito
 
     public IArtistRepository WithTracks()
     {
-        throw new NotImplementedException();
+        _artists.Include(artist => artist.TrackArtists.OrderBy(trackArtist => trackArtist.Track.Views).Take(5))
+                .ThenInclude(trackArtist => trackArtist.Track)
+                .ThenInclude(trackArtist => trackArtist.AlbumTrack)
+                .Load();
+
+        return this;
     }
 }

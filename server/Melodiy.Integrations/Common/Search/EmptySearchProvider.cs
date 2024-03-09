@@ -24,4 +24,9 @@ public class EmptySearchProvider : ISearchProvider
             Tracks = new(),
         };
     }
+
+    public SourceType GetSourceType()
+    {
+        return SourceType.Local;
+    }
 }

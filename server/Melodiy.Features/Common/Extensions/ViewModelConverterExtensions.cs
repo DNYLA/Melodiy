@@ -46,7 +46,6 @@ public static class ViewModelConverterExtensions
             ReleaseDate = album.ReleaseDate,
             CreatedAt = album.CreatedAt,
             Artists = album.Artists.Select(artist => artist.ToPreview()).ToList(),
-            //Tracks = album.Tracks.Select(track => track.ToViewModel()).ToList(),
             Image = album.Image.GetUrl(),
         };
     }

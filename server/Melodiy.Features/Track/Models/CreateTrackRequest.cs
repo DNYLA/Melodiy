@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿namespace Melodiy.Features.Track.Models;
 
-namespace Melodiy.Features.Track.Models;
+using Microsoft.AspNetCore.Http;
 
 public sealed class CreateTrackRequest
 {

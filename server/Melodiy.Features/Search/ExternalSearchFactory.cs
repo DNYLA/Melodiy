@@ -4,12 +4,14 @@ using Melodiy.Features.Album;
 using Melodiy.Features.Album.Entities;
 using Melodiy.Features.Artist;
 using Melodiy.Features.Artist.Entities;
+using Melodiy.Features.Common.Exceptions;
 using Melodiy.Features.Common.Extensions;
 using Melodiy.Features.Image;
 using Melodiy.Features.Image.Entities;
 using Melodiy.Features.Search.Models;
 using Melodiy.Features.Track;
 using Melodiy.Features.Track.Entities;
+using Melodiy.Features.Track.Models;
 using Melodiy.Integrations.Common;
 using Melodiy.Integrations.Common.Search;
 using Melodiy.Integrations.Common.Search.Models;
@@ -17,6 +19,7 @@ using Melodiy.Integrations.Common.Search.Models;
 using Microsoft.EntityFrameworkCore;
 
 using System.Linq.Expressions;
+using System.Net;
 
 public class ExternalSearchFactory(
     ISearchProvider searchProvider,
@@ -64,7 +67,64 @@ public class ExternalSearchFactory(
         return model;
     }
 
-    public List<Album> GetAlbumsBySourceType(List<string> ids, SourceType source)
+    public async Task<List<TrackResponse>> GetAlbumTracks(string id)
+    {
+        var source = _searchProvider.GetSourceType();
+        var album = await _searchProvider.GetAlbum(id);
+        var tracks = await BulkCreateTracks(album.Tracks, source);
+
+        //Ordering newly inserted tracks requires us to match data between external and new (internally created) tracks.
+        //We could re-fetch the data to include AlbumTrack.Position but that requires additional db calls.
+        return source switch
+        {
+            SourceType.Spotify => tracks
+                                  .OrderBy(track => album.Tracks.Find(
+                                               externalTrack => track.SpotifyId == externalTrack.Id)!.Position)
+                                  .Select(track => track.ToResponse()).ToList(),
+            _ => new List<TrackResponse>()
+        };
+    }
+
+    public async Task<Artist> UpdateArtist(Artist artist, string externalId)
+    {
+        if (string.IsNullOrWhiteSpace(externalId))
+        {
+            throw new ApiException(HttpStatusCode.InternalServerError, "Internal server error");
+        }
+
+        //Get External Data
+        var externalArtist = await _searchProvider.GetArtist(externalId);
+        if (externalArtist == null)
+        {
+            return artist;
+        }
+
+        //Update Image if one doesn't already exist.
+        if (artist.Image == null && externalArtist.ImageUrl != null)
+        {
+            var existingImage = await _imageRepository.AsQueryable()
+                                                      .FirstOrDefaultAsync(i => i.Url == externalArtist.ImageUrl);
+            artist.Image = existingImage ?? new Image
+            {
+                Url = externalArtist.ImageUrl,
+            };
+
+            await _artistRepository
+                .SaveAsync(artist); //Save changes here as we don't want tracked changes to affect album inserting.
+        }
+
+        var albums = await BulkCreateAlbums(externalArtist.Albums, _searchProvider.GetSourceType());
+        artist.Albums = artist.Albums.Concat(albums).DistinctBy(album => album.Id).ToList();
+
+        return artist;
+    }
+
+    public SourceType GetSourceType()
+    {
+        return _searchProvider.GetSourceType();
+    }
+
+    private List<Album> GetAlbumsBySourceType(IEnumerable<string> ids, SourceType source)
     {
         // Define the predicate
         Expression<Func<Album, bool>> predicate;

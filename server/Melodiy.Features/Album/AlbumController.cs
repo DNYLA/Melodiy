@@ -7,6 +7,7 @@ using Melodiy.Features.Album.Models;
 using Melodiy.Features.Album.Query;
 using Melodiy.Features.Common.Exceptions;
 using Melodiy.Features.Common.Extensions;
+using Melodiy.Features.Track.Models;
 using Melodiy.Features.User;
 
 using Microsoft.AspNetCore.Authorization;
@@ -59,6 +60,22 @@ public class AlbumController(IUserService userService, IMediator mediator) : Con
             throw new ApiException(HttpStatusCode.NotFound, $"[Album] Id {id} not found");
         }
 
-        return response.ToViewModel();
+        var model = response.ToViewModel();
+        model.Tracks = response.Tracks.Select(track => new TrackViewModel
+        {
+            Id = track.Slug,
+            Title = track.Title,
+            Views = track.Views,
+            //Public = track.Public,
+            Duration = track.Duration,
+            ReleaseDate = track.ReleaseDate,
+            CreatedAt = track.CreatedAt,
+            Album = response.ToPreview(),
+            Artists = track.Artists.Select(artist => artist.ToPreview()).ToList(),
+            User = track.User?.ToViewModel(),
+            Image = track.Image.GetUrl(),
+        }).ToList();
+
+        return model;
     }
 }

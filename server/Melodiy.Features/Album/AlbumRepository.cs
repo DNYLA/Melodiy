@@ -62,6 +62,15 @@ public sealed class AlbumRepository(MelodiyDbContext context) : IAlbumRepository
 
     public IAlbumRepository WithTracks()
     {
-        throw new NotImplementedException();
+        _albums.Include(album => album.AlbumTracks)
+               .ThenInclude(albumTrack => albumTrack.Track)
+               .ThenInclude(track => track.Image)
+               .Include(album => album.AlbumTracks)
+               .ThenInclude(albumTrack => albumTrack.Track)
+               .ThenInclude(track => track.TrackArtists)
+               .ThenInclude(trackArtist => trackArtist.Artist)
+               .Load();
+
+        return this;
     }
 }

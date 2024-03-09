@@ -46,12 +46,6 @@ public class TrackController(IUserService userService, IMediator mediator) : Con
                                    "Provide an ArtistId or a new artist both cannot be chosen at the same time.");
         }
 
-        if (string.IsNullOrWhiteSpace(request.AlbumId) && string.IsNullOrWhiteSpace(request.ArtistName))
-        {
-            throw new ApiException(HttpStatusCode.BadRequest,
-                                   "Provide an AlbumId or a new album both cannot be chosen at the same time.");
-        }
-
         if (!string.IsNullOrWhiteSpace(request.ArtistName))
         {
             var createdArtist = await _mediator.Send(new CreateArtistCommand
@@ -75,6 +69,12 @@ public class TrackController(IUserService userService, IMediator mediator) : Con
             });
 
             request.AlbumId = createdAlbum.Slug;
+        }
+
+        if (string.IsNullOrWhiteSpace(request.AlbumId) && string.IsNullOrWhiteSpace(request.ArtistId))
+        {
+            throw new ApiException(HttpStatusCode.BadRequest,
+                                   "Provide an AlbumId or a new album both cannot be chosen at the same time.");
         }
 
         var response = await _mediator.Send(new CreateTrackCommand

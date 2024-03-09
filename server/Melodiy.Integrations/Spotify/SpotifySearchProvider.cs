@@ -14,7 +14,7 @@ internal class SpotifySearchProvider(IOptions<SpotifySettings> spotifySettings) 
 {
     private readonly SpotifyClientConfig _defaultConfig = SpotifyClientConfig.CreateDefault().WithAuthenticator(new ClientCredentialsAuthenticator(spotifySettings.Value.ClientId, spotifySettings.Value.ClientSecret));
 
-    public async Task<ExternalAlbum> GetAlbum(string id)
+    public async Task<ExternalAlbum?> GetAlbum(string id)
     {
         SpotifyClient spotify = new(_defaultConfig);
         var album = await spotify.Albums.Get(id, new AlbumRequest
@@ -32,13 +32,15 @@ internal class SpotifySearchProvider(IOptions<SpotifySettings> spotifySettings) 
             Type = SpotifyAlbumTypeToAlbumType(album.AlbumType, album.TotalTracks),
         };
 
-        externalAlbum.Tracks = album.Tracks.Items?.Select(track => SpotifyAlbumTrackToExternalTrack(track, externalAlbum)).ToList() ?? new();
+        externalAlbum.Tracks =
+            album.Tracks.Items?.Select(track => SpotifyAlbumTrackToExternalTrack(track, externalAlbum)).ToList() ??
+            new();
 
         return externalAlbum;
     }
 
 
-    public async Task<ExternalArtist> GetArtist(string id)
+    public async Task<ExternalArtist?> GetArtist(string id)
     {
         var client = new SpotifyClient(_defaultConfig);
         var artist = await client.Artists.Get(id);
@@ -65,7 +67,8 @@ internal class SpotifySearchProvider(IOptions<SpotifySettings> spotifySettings) 
         var client = new SpotifyClient(_defaultConfig);
         var pipedResults = new ExternalSearchResult();
         var results = await client.Search.Item(
-                          new SearchRequest(SearchRequest.Types.Artist | SearchRequest.Types.Album | SearchRequest.Types.Track, term)
+                          new SearchRequest(
+                              SearchRequest.Types.Artist | SearchRequest.Types.Album | SearchRequest.Types.Track, term)
                           {
                               Type = SearchRequest.Types.Artist | SearchRequest.Types.Album | SearchRequest.Types.Track,
                               Query = term,
@@ -90,6 +93,11 @@ internal class SpotifySearchProvider(IOptions<SpotifySettings> spotifySettings) 
         pipedResults.Source = SourceType.Spotify;
 
         return pipedResults;
+    }
+
+    public SourceType GetSourceType()
+    {
+        return SourceType.Spotify;
     }
 
     private static ExternalAlbum SpotifyAlbumToExternalAlbum(SimpleAlbum album)

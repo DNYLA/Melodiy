@@ -5,7 +5,7 @@ using MediatR;
 using Melodiy.Features.Artist.Models;
 using Melodiy.Features.Common.Extensions;
 
-internal class GetArtistQueryHandler(IArtistRepository artistRepository)
+public sealed class GetArtistQueryHandler(IArtistRepository artistRepository)
     : IRequestHandler<GetArtistQuery, ArtistResponse?>
 {
     private readonly IArtistRepository _artistRepository = artistRepository;

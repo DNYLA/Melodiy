@@ -4,7 +4,6 @@ using MediatR;
 
 using Melodiy.Features.Album.Models;
 using Melodiy.Features.Album.Query;
-using Melodiy.Features.Artist.Models;
 using Melodiy.Features.Artist.Query;
 using Melodiy.Features.Search.Models;
 using Melodiy.Features.Track.Query;
@@ -21,15 +20,19 @@ public sealed class SearchService(
 
     public async Task<SearchResult> Search(string term, int limit = 10)
     {
-        //This will insert into DB and will be fetched if they are in the results.
-        await _externalSearchFactory.Search(term, limit);
+        var externalResults = await _externalSearchFactory.Search(term, limit);
 
-        return new SearchResult
+        var allResults = new SearchResult
         {
             Albums = await _mediator.Send(new SearchAlbumsQuery(term)),
             Artists = await _mediator.Send(new SearchArtistsQuery(term)),
             Tracks = await _mediator.Send(new SearchTracksQuery(term)),
         };
+
+        //Local search algorithm currently wisn't as good as spotify so if we search for Roddy ricch it will return songs only
+        //with the titles that include roddy ricch not songs made by roddy ricch resulting in significantly less results.
+        //TODO: Remove once local search algorithm is better
+        return CombineResults(allResults, externalResults, limit);
     }
 
     public async Task<List<AlbumResponse>> SearchAlbumsCreatedByUser(string term, string artistSlug, int userId,
@@ -38,8 +41,17 @@ public sealed class SearchService(
         throw new NotImplementedException();
     }
 
-    public async Task<List<ArtistResponse>> SearchArtist(string term, int limit = 5)
+    private static SearchResult CombineResults(SearchResult localSearch, SearchResult externalSearch, int limit)
     {
-        throw new NotImplementedException();
+        localSearch.Albums.AddRange(externalSearch.Albums);
+        localSearch.Artists.AddRange(externalSearch.Artists);
+        localSearch.Tracks.AddRange(externalSearch.Tracks);
+
+        return new SearchResult
+        {
+            Albums = localSearch.Albums.Take(limit).DistinctBy(x => x.Id).ToList(),
+            Artists = localSearch.Artists.Take(limit).DistinctBy(x => x.Id).ToList(),
+            Tracks = localSearch.Tracks.Take(limit).DistinctBy(x => x.Id).ToList()
+        };
     }
 }

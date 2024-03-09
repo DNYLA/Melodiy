@@ -27,15 +27,12 @@ public class CreateTrackCommandHandler(
 
     private readonly IDateTimeProvider _dateTimeProvider = dateTimeProvider;
 
-    //TODO: Find another solution as this can be dangerous
+    //TODO: Find another solution as this can be dangerous?
     private readonly IMediator _mediator = mediator;
 
     public async Task<TrackResponse> Handle(CreateTrackCommand request, CancellationToken cancellationToken)
     {
-        var artist = await _mediator.Send(new GetArtistQuery
-        {
-            Slug = request.ArtistId
-        });
+        var artist = await _mediator.Send(new GetArtistQuery(request.ArtistId), cancellationToken);
 
         if (artist == null)
         {
