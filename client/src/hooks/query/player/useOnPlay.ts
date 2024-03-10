@@ -19,7 +19,7 @@ export default function useOnPlay(collectionId: string, type: CollectionType) {
       const { data } = await AXIOS.post<PlayerResponse>(`/player/play/`, {
         trackId,
         collectionId: collectionId,
-        type: type,
+        collection: type,
         position,
         shuffle: false,
       });

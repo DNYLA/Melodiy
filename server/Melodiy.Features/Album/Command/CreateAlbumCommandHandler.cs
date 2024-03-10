@@ -50,7 +50,7 @@ public sealed class CreateAlbumCommandHandler(
             Title = request.Title,
             Verified = request.Verified,
             ReleaseDate = _dateTimeProvider.UnixTimeStampToUtc(request.Timestamp),
-            Type = request.CollectionType,
+            Type = request.AlbumType,
             ImageId = uploadedImage?.Id,
             UserId = request.UserId,
             Artists = new() { artist },

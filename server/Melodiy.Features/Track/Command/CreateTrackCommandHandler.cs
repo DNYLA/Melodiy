@@ -69,10 +69,7 @@ public class CreateTrackCommandHandler(
 
         if (!string.IsNullOrWhiteSpace(request.AlbumId))
         {
-            var album = await _mediator.Send(new GetAlbumQuery
-            {
-                Slug = request.AlbumId
-            });
+            var album = await _mediator.Send(new GetAlbumQuery(request.AlbumId), cancellationToken);
 
             if (album != null)
             {

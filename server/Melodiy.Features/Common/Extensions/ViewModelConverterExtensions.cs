@@ -119,6 +119,25 @@ public static class ViewModelConverterExtensions
         };
     }
 
+    public static FullTrackViewModel ToFullViewModel(this TrackResponse track)
+    {
+        return new FullTrackViewModel
+        {
+            Id = track.Slug,
+            Title = track.Title,
+            Views = track.Views,
+            //Public = track.Public,
+            Duration = track.Duration,
+            ReleaseDate = track.ReleaseDate,
+            CreatedAt = track.CreatedAt,
+            Album = track.Album?.ToPreview(),
+            Artists = track.Artists.Select(artist => artist.ToPreview()).ToList(),
+            User = track.User?.ToViewModel(),
+            Image = track.Image.GetUrl(),
+            Path = track.ExternalDetails.Path
+        };
+    }
+
     public static UserViewModel ToViewModel(this UserResponse user)
     {
         return new UserViewModel

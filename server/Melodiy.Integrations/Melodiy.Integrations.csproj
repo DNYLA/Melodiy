@@ -10,5 +10,7 @@
 		<PackageReference Include="SpotifyAPI.Web" Version="7.1.1" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 		<PackageReference Include="supabase-csharp" Version="0.15.0" />
+		<PackageReference Include="YoutubeExplode" Version="6.3.9" />
+		<PackageReference Include="YoutubeSearchApi.Net" Version="1.1.1" />
 	</ItemGroup>
 </Project>

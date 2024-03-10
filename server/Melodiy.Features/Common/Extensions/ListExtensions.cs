@@ -2,6 +2,31 @@
 
 public static class ListExtensions
 {
+    public static void MoveToFirst<T>(this List<T> list, int index)
+    {
+        var item = list[index];
+        for (var i = index; i > 0; i--)
+        {
+            list[i] = list[i - 1];
+        }
+
+        list[0] = item;
+    }
+
+    public static List<T> Shuffle<T>(this List<T>? list)
+    {
+        if (list == null) return new List<T>();
+
+        for (var i = list.Count - 1; i > 0; i--)
+        {
+            var rnd = new Random();
+            var k = rnd.Next(i + 1);
+            (list[k], list[i]) = (list[i], list[k]);
+        }
+
+        return list;
+    }
+
     public static List<T> Sort<T>(this List<T> list, Func<T, string> keySelector, string term)
     {
         //Dictionary of List<T> as some items can have the same score. 

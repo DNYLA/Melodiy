@@ -8,9 +8,10 @@ using Melodiy.Features.Artist.Models;
 using Melodiy.Features.Common.Extensions;
 using Melodiy.Features.Search;
 using Melodiy.Integrations.Common;
-using Melodiy.Integrations.Common.Search;
 
-public sealed class GetArtistDetailsQueryHandler(IArtistRepository artistRepository, IExternalSearchFactory externalExternalSearchFactory)
+public sealed class GetArtistDetailsQueryHandler(
+    IArtistRepository artistRepository,
+    IExternalSearchFactory externalExternalSearchFactory)
     : IRequestHandler<GetArtistDetailsQuery, ArtistDetails?>
 {
     private readonly IArtistRepository _artistRepository = artistRepository;
@@ -60,13 +61,13 @@ public sealed class GetArtistDetailsQueryHandler(IArtistRepository artistReposit
     private static ArtistDetails GenerateArtistDetails(Artist artist)
     {
         var albums = artist.Albums
-                           .Where(album => album is { Type: CollectionType.Album, Verified: true })
+                           .Where(album => album is { Type: AlbumType.Album, Verified: true })
                            .Select(album => album.ToResponse())
                            .OrderByDescending(a => a.ReleaseDate)
                            .ToList();
 
         var singles = artist.Albums
-                            .Where(album => album is { Type: not CollectionType.Album, Verified: true })
+                            .Where(album => album is { Type: not AlbumType.Album, Verified: true })
                             .Select(album => album.ToResponse())
                             .OrderByDescending(a => a.ReleaseDate)
                             .ToList();

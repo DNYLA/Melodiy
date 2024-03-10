@@ -16,7 +16,7 @@ public sealed class AlbumResponse
 
     public bool Verified { get; set; }
 
-    public CollectionType Type { get; set; }
+    public AlbumType Type { get; set; }
 
     public DateTime ReleaseDate { get; set; }
 

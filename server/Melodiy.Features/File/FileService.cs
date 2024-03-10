@@ -90,8 +90,9 @@ public sealed class FileService(
         return track.DurationMs;
     }
 
-    public async Task<string> GetUrl(string path)
+    public async Task<string> GetTrackUrl(string path, bool isPublic)
     {
-        return await _fileRepository.GetUrl(path, StorageBucket.TracksPrivate);
+        var bucket = isPublic ? StorageBucket.TrackPublic : StorageBucket.TracksPrivate;
+        return await _fileRepository.GetUrl(path, bucket);
     }
 }

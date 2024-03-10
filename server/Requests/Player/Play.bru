@@ -1,0 +1,25 @@
+meta {
+  name: Play
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{host}}/player/play
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "trackId": "dcbca17405ae43ef85ddd365d5c19534",
+    "position": 30,
+    "collectionId": "files",
+    "collection": 2,
+    "shuffle": false
+  }
+}

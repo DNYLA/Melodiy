@@ -68,7 +68,7 @@ namespace Melodiy.Features.Common.Context.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Type")
+                    b.Property<int>("Collection")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAt")

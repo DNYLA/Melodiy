@@ -1,6 +1,6 @@
 ﻿namespace Melodiy.Features.Album.Entities;
 
-public enum CollectionType
+public enum AlbumType
 {
     Album,
     Ep,

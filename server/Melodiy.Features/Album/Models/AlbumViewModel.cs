@@ -12,7 +12,7 @@ public sealed class AlbumViewModel
 
     public bool Verified { get; set; }
 
-    public CollectionType Type { get; set; }
+    public AlbumType Type { get; set; }
 
     public List<ArtistPreview> Artists { get; set; } = new();
 

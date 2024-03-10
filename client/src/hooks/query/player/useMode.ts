@@ -18,7 +18,7 @@ export default function useMode() {
         {
           trackId: player.active?.id,
           collectionId: player.active?.collectionId,
-          type: player.active?.type,
+          collection: player.active?.type,
         }
       );
 

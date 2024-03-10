@@ -33,6 +33,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services
        .AddSupabase(builder.Configuration)
        .RegisterSearchProvider(builder.Configuration)
+       .RegisterStreamProvider(builder.Configuration)
        .AddFeatures()
        .AddMelodiyContext(builder.Configuration)
        .AddUserModule()
@@ -41,7 +42,8 @@ builder.Services
        .AddArtistModule()
        .AddAlbumModule()
        .AddTrackModule()
-       .AddSearchModule();
+       .AddSearchModule()
+       .AddPlayerModule();
 
 var app = builder.Build();
 

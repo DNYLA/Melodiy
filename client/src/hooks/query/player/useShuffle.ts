@@ -13,11 +13,11 @@ export default function useShuffle() {
     queryKey: ['player-shuffle', { type: player.type }],
     queryFn: async () => {
       const { data } = await AXIOS.post<PlayerResponse>(
-        `/player/control?type=${player.type}`,
+        `/player/control?shuffle=${player.type}`,
         {
           trackId: player.active?.id,
           collectionId: player.active?.collectionId,
-          type: player.active?.type,
+          collection: player.active?.type,
         }
       );
 

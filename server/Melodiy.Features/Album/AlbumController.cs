@@ -50,10 +50,7 @@ public class AlbumController(IUserService userService, IMediator mediator) : Con
     [HttpGet("{id}")]
     public async Task<ActionResult<AlbumViewModel>> Get(string id)
     {
-        var response = await _mediator.Send(new GetAlbumQuery
-        {
-            Slug = id
-        });
+        var response = await _mediator.Send(new GetAlbumQuery(id));
 
         if (response == null)
         {

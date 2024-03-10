@@ -5,4 +5,5 @@ public enum SourceType
     Local,
     Supabase,
     Spotify,
+    Youtube
 }

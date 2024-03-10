@@ -40,7 +40,6 @@ public sealed class PlaylistController(IPlaylistService playlistService, IUserSe
             Image = image,
             UserId = user.Id
         };
-
         var response = await _playlistService.Create(request);
 
         return response.ToViewModel();
@@ -50,7 +49,6 @@ public sealed class PlaylistController(IPlaylistService playlistService, IUserSe
     public async Task<ActionResult<PlaylistViewModel>> Get(string id)
     {
         var user = await _userService.GetUserDetails();
-
         var response = await _playlistService.Get(id, user?.Id);
 
         return response.ToViewModel();

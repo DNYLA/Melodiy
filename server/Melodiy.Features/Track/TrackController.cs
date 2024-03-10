@@ -117,10 +117,7 @@ public class TrackController(IUserService userService, IMediator mediator) : Con
             throw new ApiException(HttpStatusCode.Unauthorized);
         }
 
-        var response = await _mediator.Send(new GetUserTracksQuery()
-        {
-            UserId = user.Id,
-        });
+        var response = await _mediator.Send(new GetUserTracksQuery(user.Id));
 
         return response.Select(track => track.ToViewModel()).ToList();
     }

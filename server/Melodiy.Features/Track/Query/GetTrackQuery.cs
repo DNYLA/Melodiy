@@ -4,11 +4,22 @@ using MediatR;
 
 using Melodiy.Features.Track.Models;
 
-public sealed class GetTrackQuery : IRequest<TrackResponse>
+public sealed class GetTrackQuery(string slug, int? userId, bool includeImage = true, bool includePath = false)
+    : IRequest<TrackResponse>
 {
-    public string Slug { get; set; }
+    public GetTrackQuery(string slug) : this(slug, null)
+    {
+    }
 
-    public int? UserId { get; set; } = null;
+    public GetTrackQuery() : this(string.Empty, -1, true, false)
+    {
+    }
 
-    public bool IncludeImage { get; set; }
+    public string Slug { get; set; } = slug;
+
+    public int? UserId { get; set; } = userId;
+
+    public bool IncludeImage { get; set; } = includeImage;
+
+    public bool IncludePath { get; set; } = includePath;
 }

@@ -329,14 +329,14 @@ public class ExternalSearchFactory(
         return existingTracks.Concat(newTracksWithImages).ToList();
     }
 
-    private CollectionType GetLocalCollectionType(ExternalAlbumType externalType)
+    private AlbumType GetLocalCollectionType(ExternalAlbumType externalType)
     {
         return externalType switch
         {
-            ExternalAlbumType.Album => CollectionType.Album,
-            ExternalAlbumType.Ep => CollectionType.Ep,
-            ExternalAlbumType.Single => CollectionType.Single,
-            _ => CollectionType.Album
+            ExternalAlbumType.Album => AlbumType.Album,
+            ExternalAlbumType.Ep => AlbumType.Ep,
+            ExternalAlbumType.Single => AlbumType.Single,
+            _ => AlbumType.Album
         };
     }
 }

@@ -21,7 +21,7 @@ public sealed class Album : BaseEntity
 
     public DateTime ReleaseDate { get; set; }
 
-    public CollectionType Type { get; set; }
+    public AlbumType Type { get; set; }
 
     public bool Indexed { get; set; } = false;
 

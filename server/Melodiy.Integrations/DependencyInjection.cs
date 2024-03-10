@@ -2,8 +2,10 @@
 
 using Melodiy.Integrations.Common.File;
 using Melodiy.Integrations.Common.Search;
+using Melodiy.Integrations.Common.Stream;
 using Melodiy.Integrations.Spotify;
 using Melodiy.Integrations.Supabasee;
+using Melodiy.Integrations.Youtube;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -44,7 +46,8 @@ public static class DependencyInjection
         var spotifySettings = new SpotifySettings();
         configuration.Bind(SpotifySettings.SectionName, spotifySettings);
 
-        if (string.IsNullOrWhiteSpace(spotifySettings.ClientSecret) ||  string.IsNullOrWhiteSpace(spotifySettings.ClientId))
+        if (string.IsNullOrWhiteSpace(spotifySettings.ClientSecret) ||
+            string.IsNullOrWhiteSpace(spotifySettings.ClientId))
         {
             services.AddDefaultSearchProvider();
             return services;
@@ -70,5 +73,11 @@ public static class DependencyInjection
         }
 
         return services.AddDefaultSearchProvider();
+    }
+
+    public static IServiceCollection RegisterStreamProvider(this IServiceCollection services, ConfigurationManager configuration)
+    {
+        //TODO: Add configs/settings to get preferred stream provider;
+        return services.AddScoped<IStreamProvider, YoutubeStreamProvider>();
     }
 }

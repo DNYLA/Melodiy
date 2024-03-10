@@ -4,7 +4,7 @@ using Melodiy.Features.Album.Models;
 using Melodiy.Features.Artist.Models;
 using Melodiy.Features.User.Models;
 
-public sealed class TrackViewModel
+public class TrackViewModel
 {
     public string Id { get; set; }
 

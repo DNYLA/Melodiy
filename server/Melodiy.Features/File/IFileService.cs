@@ -15,5 +15,5 @@ public interface IFileService
 
     Task<double> GetAudioDuration(IFormFile file);
 
-    Task<string> GetUrl(string path);
+    Task<string> GetTrackUrl(string path, bool isPublic);
 }

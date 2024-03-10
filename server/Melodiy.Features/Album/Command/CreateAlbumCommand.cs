@@ -15,7 +15,7 @@ public sealed class CreateAlbumCommand : IRequest<AlbumResponse>
 
     public long Timestamp { get; set; }
 
-    public CollectionType CollectionType { get; set; }
+    public AlbumType AlbumType { get; set; }
 
     public bool Verified { get; set; }
 

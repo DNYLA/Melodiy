@@ -4,9 +4,9 @@ using MediatR;
 
 using Melodiy.Features.Album.Models;
 
-public sealed class GetAlbumQuery : IRequest<AlbumResponse?>
+public sealed class GetAlbumQuery(string slug, bool includeImage = true) : IRequest<AlbumResponse?>
 {
-    public string Slug { get; set; }
+    public string Slug { get; set; } = slug;
 
-    public bool IncludeImage { get; set; }
+    public bool IncludeImage { get; set; } = includeImage;
 }
