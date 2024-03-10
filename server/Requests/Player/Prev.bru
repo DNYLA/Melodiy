@@ -1,0 +1,22 @@
+meta {
+  name: Prev
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{host}}/player/play
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "collectionId": "files",
+    "collection": 2
+  }
+}

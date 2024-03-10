@@ -1,0 +1,19 @@
+meta {
+  name: AddTrack
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{host}}/playlist/c446044f21e041fcb8381095de15a705?trackId=599942eb3cd14d9db313244206c1389c
+  body: none
+  auth: bearer
+}
+
+query {
+  trackId: 599942eb3cd14d9db313244206c1389c
+}
+
+auth:bearer {
+  token: {{token}}
+}
