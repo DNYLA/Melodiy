@@ -141,8 +141,13 @@ public static class ResponseConverterExtensions
         };
     }
 
-    public static UserResponse ToResponse(this User user)
+    public static UserResponse ToResponse(this User? user)
     {
+        if (user == null)
+        {
+            return new UserResponse();
+        }
+
         return new UserResponse
         {
             Id = user.Id,

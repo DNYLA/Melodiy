@@ -26,9 +26,10 @@ public class TrackController(IUserService userService, IMediator mediator) : Con
 
     [Authorize]
     [HttpPost]
-    public async Task<ActionResult<TrackViewModel>> Create([FromForm] CreateTrackRequest request)
+    public async Task<ActionResult<TrackViewModel>> Create([FromForm] CreateTrackRequest request, [FromQuery(Name = "public")] bool isPublic)
     {
         var user = await _userService.GetUserDetails();
+        request.Public = isPublic;
 
         if (user == null)
         {
