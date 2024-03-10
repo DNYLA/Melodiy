@@ -1,11 +1,11 @@
 meta {
   name: SearchByUser
   type: http
-  seq: 1
+  seq: 2
 }
 
 get {
-  url: http://localhost:5041/search/me?term=Roddy&type=0
+  url: {{host}}/search/me?term=Roddy&type=0
   body: none
   auth: bearer
 }

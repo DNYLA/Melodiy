@@ -5,13 +5,13 @@ meta {
 }
 
 post {
-  url: http://localhost:5041/artist?name=Roddy Ricch
-  body: json
+  url: {{host}}/artist?name=Draaake
+  body: none
   auth: bearer
 }
 
 query {
-  name: Roddy Ricch
+  name: Draaake
 }
 
 auth:bearer {
@@ -20,6 +20,6 @@ auth:bearer {
 
 body:json {
   {
-    "name": "Dan"
+    "name": "bob"
   }
 }

@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: http://localhost:5041/player/play
+  url: {{host}}/player/play
   body: json
   auth: bearer
 }
@@ -16,9 +16,10 @@ auth:bearer {
 
 body:json {
   {
+    "trackId": "dcbca17405ae43ef85ddd365d5c19534",
     "position": 30,
     "collectionId": "files",
-    "type": 2,
+    "collection": 2,
     "shuffle": false
   }
 }

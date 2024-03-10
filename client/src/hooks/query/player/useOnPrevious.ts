@@ -16,7 +16,7 @@ export default function useOnPrevious() {
       const { data } = await AXIOS.post<PlayerResponse>(`/player/previous/`, {
         trackId: id,
         collectionId: player.active!.collectionId,
-        type: player.active!.type,
+        collection: player.active!.type,
       });
 
       return data;

@@ -1,20 +1,16 @@
 meta {
   name: Search
   type: http
-  seq: 2
+  seq: 1
 }
 
 get {
-  url: http://localhost:5041/search?term=Jim&type=1
+  url: {{host}}/search?term=Roddy
   body: none
-  auth: bearer
+  auth: none
 }
 
 query {
-  term: Jim
-  type: 1
-}
-
-auth:bearer {
-  token: {{token}}
+  term: Roddy
+  ~type: 0
 }

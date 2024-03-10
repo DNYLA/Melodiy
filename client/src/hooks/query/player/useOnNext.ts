@@ -17,7 +17,7 @@ export default function useOnNext() {
       const { data } = await AXIOS.post<PlayerResponse>(`/player/next/`, {
         trackId: id,
         collectionId: player.active!.collectionId, //OnNext will never be called when no current track is playing / available
-        type: player.active!.type,
+        collection: player.active!.type,
       });
 
       return data;

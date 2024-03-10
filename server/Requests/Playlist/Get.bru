@@ -5,11 +5,17 @@ meta {
 }
 
 get {
-  url: http://localhost:5041/playlist/
-  body: none
+  url: {{host}}/playlist/96c5f3d28e5c440aa81da3a6fa2a8299/
+  body: multipartForm
   auth: bearer
 }
 
 auth:bearer {
   token: {{token}}
+}
+
+body:json {
+  {
+    "Title": "test"
+  }
 }

@@ -5,8 +5,8 @@ meta {
 }
 
 post {
-  url: http://localhost:5041/album
-  body: formUrlEncoded
+  url: {{host}}/album/
+  body: multipartForm
   auth: bearer
 }
 
@@ -20,11 +20,7 @@ body:json {
   }
 }
 
-body:form-urlencoded {
-  title: Test%202
-  timestamp: 1669041415
-}
-
 body:multipart-form {
-  title: Roddy Ricch
+  title: Test
+  artistId: ef2aca5c563b47f794cb939162cea520
 }

@@ -8,6 +8,7 @@ import { Input } from '@/components/Inputs/Input';
 import SearchComboBox, {
   ComboBoxItem,
 } from '@/components/Inputs/SearchComboBox';
+import Switch from '@/components/Inputs/Switch';
 import useUploadModal from '@/hooks/modals/useUploadModal';
 import useAlbumSearch from '@/hooks/query/useAlbumSearch';
 import useArtistSearch from '@/hooks/query/useArtistSearch';
@@ -44,7 +45,7 @@ const schema = z.object({
       name: z.string().min(3, 'Album must contain at least 3 character(s)'),
     })
     .optional(),
-  isPublic: z.boolean(),
+  public: z.boolean().default(true),
   track:
     typeof window === 'undefined'
       ? z.any()
@@ -68,7 +69,7 @@ export interface CreateSongForm {
   albumArtist?: string;
   cover?: FileList;
   track: FileList;
-  isPublic: boolean;
+  public: boolean;
 }
 
 const UploadSong: React.FC = () => {
@@ -87,7 +88,7 @@ const UploadSong: React.FC = () => {
       title: '',
       artist: { id: undefined, name: '' },
       albumArtist: '',
-      isPublic: true,
+      public: true,
     },
     resolver: zodResolver(schema),
   });
@@ -95,6 +96,7 @@ const UploadSong: React.FC = () => {
   const trackFile = watch('track');
   const artist = watch('artist');
   const album = watch('album');
+  const isPublic = watch('public');
   const { tags: tags, isLoading: isReadingTags } = useTrackTags(trackFile);
   const {
     query: artistQuery,
@@ -138,20 +140,23 @@ const UploadSong: React.FC = () => {
 
   const onSubmit = async (data: CreateSongForm) => {
     if (!user) return;
-    let url = `track?&`;
+    let url = `track?public=${data.public}`;
 
     const formData = new FormData();
     addFormFile(formData, 'image', coverFile);
     addFormFile(formData, 'audio', trackFile);
     formData.append('title', data.title);
+
     if (!data.artist || !data.artist.id) {
       toast.error('Invalid Artist selected');
       return;
-    } else if (data.artist.id == 'new') url += `artist=${data.artist.name}`;
+    } else if (data.artist.id == 'new')
+      formData.append('artistName', data.artist.name);
     else formData.append('artistId', data.artist.id);
 
     if (data.album && data.album.id) {
-      if (data.album.id === 'new') url += `&album=${data.album.name}`;
+      if (data.album.id === 'new')
+        formData.append('albumTitle', data.album.name);
       else formData.append('albumId', data.album.id);
     }
 
@@ -256,6 +261,16 @@ const UploadSong: React.FC = () => {
         </>
 
         <div className="flex flex-col">
+          <Switch
+            value={isPublic}
+            onChange={(value) => setValue('public', value)}
+            // {...register('public')}
+          >
+            Public
+          </Switch>
+        </div>
+
+        <div className="flex flex-col">
           <p className="text-xs opacity-80">{errors.track?.message}</p>
           <div className="pb-1">Select a track</div>
           <Input
@@ -281,6 +296,7 @@ const UploadSong: React.FC = () => {
             })}
           />
         </div>
+
         <div className="mt-2 flex gap-x-4">
           {/* <Button onClick={() => readTags(trackFile)}>Read Tags</Button> */}
           <ActionButton
@@ -292,6 +308,7 @@ const UploadSong: React.FC = () => {
           </ActionButton>
           <Button onClick={resetForm}>Clear</Button>
         </div>
+
         <ActionButton type="submit" isLoading={isSubmitting}>
           Create
         </ActionButton>

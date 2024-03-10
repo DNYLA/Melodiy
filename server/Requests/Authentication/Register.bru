@@ -5,14 +5,14 @@ meta {
 }
 
 post {
-  url: http://localhost:5041/auth/register
+  url: {{host}}/auth/register
   body: json
   auth: none
 }
 
 body:json {
   {
-    "username": "Jungaal",
-    "password": "123"
+    "username": "{{username}}",
+    "password": "{{password}}"
   }
 }
