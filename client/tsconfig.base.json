@@ -14,7 +14,12 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@melodiy/api": ["libs/shared/api/src/index.ts"],
+      "@melodiy/collections": ["libs/collections/src/index.ts"],
+      "@melodiy/player": ["libs/player/src/index.ts"],
+      "@melodiy/shared-ui": ["libs/shared/ui/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
