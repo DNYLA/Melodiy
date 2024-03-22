@@ -28,14 +28,14 @@ export default function SidebarNav() {
   ];
 
   return (
-    <div className="relative h-full w-[250px] min-w-[100px] max-w-[400px] select-none flex-col gap-y-2 bg-sidebar-background px-4 py-2 md:flex">
-      <div className="relative flex flex-row items-center justify-center">
+    <div className="sidebar-header">
+      <div>
         <p>Melodiy</p>
       </div>
 
-      <div className="flex flex-col gap-y-1 py-4">
-        <p className="truncate text-lg font-semibold">Browse</p>
-        <div className="mx-2">
+      <div className="sidebar-nav-container">
+        <p>Browse</p>
+        <div>
           {routes.map((item) => (
             <NavItem key={item.label} {...item} />
           ))}

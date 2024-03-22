@@ -1,3 +1,3 @@
 export default function ModalProvider() {
-  return <div>ModalProvider</div>;
+  return <div></div>;
 }

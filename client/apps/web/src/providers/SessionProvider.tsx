@@ -1,6 +1,5 @@
-import { User } from '../types/user';
 import { createContext } from 'react';
-import { IProvider } from './index';
+import { IContainer, User } from '@melodiy/types';
 
 type SessionContextType = {
   user?: User;
@@ -19,7 +18,7 @@ export const SessionContext = createContext<SessionContextType>({
   logout: async () => Promise<void>,
 });
 
-export default function SessionProvider({ children }: IProvider) {
+export default function SessionProvider({ children }: IContainer) {
   // return (
   //   <SessionContext.Provider
   //     value={{

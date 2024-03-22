@@ -7,15 +7,15 @@ interface SidebarProps {
 
 export function Sidebar({ children }: SidebarProps) {
   return (
-    <div className="flex h-full w-full">
+    <div className="sidebar">
       <SidebarNav />
 
       {/* <ScrollContext.Provider
         value={{ scrollX, scrollY, scrollXProgress, scrollYProgress }}
       > */}
-      <main className="h-full w-full flex-1 overflow-y-auto pb-2">
+      <main className="page--container">
         {/* <Navbar /> */}
-        <div className="w-full">{children}</div>
+        <div>{children}</div>
       </main>
       {/* </ScrollContext.Provider> */}
     </div>

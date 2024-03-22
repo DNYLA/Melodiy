@@ -1,14 +1,10 @@
+import { IContainer } from '@melodiy/types';
 import ModalProvider from './ModalProvider';
 import SessionProvider from './SessionProvider';
 import TanstackProvider from './TanstackProvider';
 import ToasterProvider from './ToasterProvider';
-import React from 'react';
 
-export interface IProvider {
-  children: React.ReactNode;
-}
-
-export default function Providers({ children }: IProvider) {
+export default function Providers({ children }: IContainer) {
   return (
     <>
       <ToasterProvider />
