@@ -1,1 +1,1 @@
-export * from './lib/shared-ui';
+export { Sidebar } from './Layout/Sidebar';

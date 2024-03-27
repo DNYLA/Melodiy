@@ -3,6 +3,13 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/web/src",
   "projectType": "application",
-  "targets": {},
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "options": {
+        "postcssConfig": "apps/web/postcss.config.js"
+      }
+    }
+  },
   "tags": []
 }

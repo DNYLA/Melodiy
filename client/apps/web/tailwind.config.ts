@@ -1,10 +1,15 @@
 import { mauve, violet } from '@radix-ui/colors';
 import type { Config } from 'tailwindcss';
+import { join } from 'path';
+import { createGlobPatternsForDependencies } from '@nx/react/tailwind';
 
 const config: Config = {
   content: [
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    join(
+      __dirname,
+      '{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}'
+    ),
+    ...createGlobPatternsForDependencies(__dirname),
   ],
   theme: {
     extend: {

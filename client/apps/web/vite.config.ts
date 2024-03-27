@@ -7,14 +7,6 @@ import { TanStackRouterVite } from '@tanstack/router-vite-plugin';
 export default defineConfig({
   root: __dirname,
   cacheDir: '../../node_modules/.vite/apps/web',
-
-  css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: `@import "./utils/mixins.scss";`,
-      },
-    },
-  },
   server: {
     port: 4200,
     host: 'localhost',
