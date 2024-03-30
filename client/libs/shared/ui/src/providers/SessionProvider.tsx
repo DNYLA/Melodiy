@@ -1,28 +1,34 @@
 import { createContext, useCallback, useEffect, useState } from 'react';
 import { IContainer, User } from '@melodiy/types';
-import { fetchUser, getApiError, login, logout, register } from '@melodiy/api';
+import {
+  fetchUser,
+  getApiError,
+  initialiseAxios,
+  login,
+  logout,
+  register,
+} from '@melodiy/api';
 import toast from 'react-hot-toast';
-import { createRouter, useNavigate } from '@tanstack/react-router';
-import { routeTree } from '../routeTree.gen';
+import { useNavigate } from '@tanstack/react-router';
 
 type SessionContextType = {
   user?: User;
   isLoading: boolean;
-  login: (username: string, password: string) => void;
-  register: (username: string, password: string) => void;
+  login: (username: string, password: string) => Promise<boolean>;
+  register: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
   // update: () => void;
 };
 
-export const SessionContext = createContext<SessionContextType>({
+const SessionContext = createContext<SessionContextType>({
   user: undefined,
   isLoading: true,
-  login: async () => Promise<void>,
-  register: async () => Promise<void>,
+  login: async () => false,
+  register: async () => false,
   logout: async () => Promise<void>,
 });
 
-export default function SessionProvider({ children }: IContainer) {
+function SessionProvider({ children }: IContainer) {
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -106,3 +112,5 @@ export default function SessionProvider({ children }: IContainer) {
     </SessionContext.Provider>
   );
 }
+
+export { SessionContext, SessionProvider };

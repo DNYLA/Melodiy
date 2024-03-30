@@ -12,7 +12,7 @@ export async function fetchUser(): Promise<User> {
 }
 
 export async function login(username: string, password: string): Promise<User> {
-  const { data } = await AXIOS.post<AuthResult>('/api/auth/login', {
+  const { data } = await AXIOS.post<AuthResult>('/auth/login', {
     username,
     password,
   });
@@ -29,7 +29,7 @@ export async function register(
   username: string,
   password: string
 ): Promise<User> {
-  const { data } = await AXIOS.post<AuthResult>('/api/auth/signup', {
+  const { data } = await AXIOS.post<AuthResult>('/auth/register', {
     username,
     password,
   });
@@ -43,6 +43,5 @@ export async function register(
 }
 
 export async function logout() {
-  await AXIOS.get('/api/auth/logout');
   resetAccessToken();
 }

@@ -4,6 +4,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router';
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
+import { initialiseAxios } from '@melodiy/api';
 
 // Create a new router instance
 const router = createRouter({ routeTree });
@@ -14,6 +15,10 @@ declare module '@tanstack/react-router' {
     router: typeof router;
   }
 }
+
+const apiUrl = import.meta.env.VITE_API_URL;
+if (!apiUrl) throw Error('Invalid API URL');
+initialiseAxios(apiUrl);
 
 // Render the app
 const rootElement = document.getElementById('root')!;

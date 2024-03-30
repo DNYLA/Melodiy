@@ -1,11 +1,11 @@
 import { Button } from '../../Inputs';
 import { UserMenu } from './UserMenu';
-import useAuthModal from '../../Modals/Auth/useAuthModal';
+import { useAuthModal } from '../../Modals/Auth/useAuthModal';
+import useSession from '../../hooks/useSession';
 
 export function AuthSection() {
   const { onOpen } = useAuthModal();
-  // const { user } = useSession();
-  const user = null;
+  const { user } = useSession();
 
   return (
     <div className="flex items-center justify-between gap-x-1">
