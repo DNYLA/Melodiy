@@ -3,6 +3,7 @@ using System;
 using Melodiy.Features.Common.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Melodiy.Features.Common.Context.Migrations
 {
     [DbContext(typeof(MelodiyDbContext))]
-    partial class MelodiyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240330110501_RefreshTokensOnUserTable")]
+    partial class RefreshTokensOnUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,7 +168,7 @@ namespace Melodiy.Features.Common.Context.Migrations
                     b.ToTable("Artists");
                 });
 
-            modelBuilder.Entity("Melodiy.Features.Authentication.Entities.RefreshToken", b =>
+            modelBuilder.Entity("Melodiy.Features.Authentication.Entities.RefreshTokens", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -176,11 +179,11 @@ namespace Melodiy.Features.Common.Context.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("Expires")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Token")
+                    b.Property<string>("RefreshToken")
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("RefreshTokenExpiry")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -188,14 +191,18 @@ namespace Melodiy.Features.Common.Context.Migrations
                     b.Property<string>("UserAgent")
                         .HasColumnType("text");
 
-                    b.Property<int>("UserId")
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId1")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
-                    b.ToTable("RefreshToken");
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Melodiy.Features.Image.Entities.Image", b =>
@@ -495,11 +502,11 @@ namespace Melodiy.Features.Common.Context.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Melodiy.Features.Authentication.Entities.RefreshToken", b =>
+            modelBuilder.Entity("Melodiy.Features.Authentication.Entities.RefreshTokens", b =>
                 {
                     b.HasOne("Melodiy.Features.User.Entities.User", "User")
                         .WithMany("RefreshTokens")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

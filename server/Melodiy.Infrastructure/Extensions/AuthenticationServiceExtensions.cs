@@ -11,6 +11,8 @@ using Microsoft.IdentityModel.Tokens;
 
 using System.Text;
 
+using Melodiy.Features.Authentication.Repository;
+
 public static class AuthenticationServiceExtensions
 {
     public static IServiceCollection AddAuthenticationModule(this IServiceCollection services,
@@ -18,14 +20,15 @@ public static class AuthenticationServiceExtensions
     {
         services.RegisterJwt(configurationManager);
         services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
         return services;
     }
 
     private static void RegisterJwt(this IServiceCollection services, ConfigurationManager configurationManager)
     {
-        var jwtSettings = new JwtSettings();
-        configurationManager.Bind(JwtSettings.SectionName, jwtSettings);
+        var jwtSettings = new AuthenticationSettings();
+        configurationManager.Bind(AuthenticationSettings.SectionName, jwtSettings);
         services.AddSingleton(Options.Create(jwtSettings));
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
