@@ -1,5 +1,5 @@
-import useSession from '../../hooks/useSession';
-import { Image } from '../../Data';
+import useSession from '../../../hooks/useSession';
+import { Image } from '../../../components/Data';
 import * as HoverCard from '@radix-ui/react-hover-card';
 
 export function UserMenu() {

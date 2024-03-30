@@ -1,7 +1,7 @@
 import { Button } from '../../Inputs';
 import { UserMenu } from './UserMenu';
 import { useAuthModal } from '../../Modals/Auth/useAuthModal';
-import useSession from '../../hooks/useSession';
+import useSession from '../../../hooks/useSession';
 
 export function AuthSection() {
   const { onOpen } = useAuthModal();

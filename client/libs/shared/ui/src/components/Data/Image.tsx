@@ -1,4 +1,4 @@
-import { getDefaultImage } from '../utils';
+import { getDefaultImage } from '../../utils';
 import { ImgHTMLAttributes, SyntheticEvent, forwardRef } from 'react';
 
 interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {

@@ -1,8 +1,9 @@
 import { AiOutlineHome } from 'react-icons/ai';
 import { MdOutlineAudioFile, MdOutlineFavorite } from 'react-icons/md';
 import NavItem from './NavItem';
+import Library from './Library';
 
-export default function SidebarNav() {
+export default function SidebarHeader() {
   const routes = [
     {
       icon: AiOutlineHome,
@@ -42,7 +43,7 @@ export default function SidebarNav() {
         </div>
       </div>
 
-      {/* <Library /> */}
+      <Library />
     </div>
   );
 }

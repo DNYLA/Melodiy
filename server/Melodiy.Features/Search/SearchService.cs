@@ -29,8 +29,8 @@ public sealed class SearchService(
             Tracks = await _mediator.Send(new SearchTracksQuery(term)),
         };
 
-        //Local search algorithm currently wisn't as good as spotify so if we search for Roddy ricch it will return songs only
-        //with the titles that include roddy ricch not songs made by roddy ricch resulting in significantly less results.
+        //Local search algorithm currently isn't as good as spotify so if we search for Drake it will return songs only
+        //with the titles that include Drake not songs made by Drake resulting in significantly fewer results that are accurate.
         //TODO: Remove once local search algorithm is better
         return CombineResults(allResults, externalResults, limit);
     }

@@ -1,7 +1,7 @@
 'use client';
 
 import { Input } from '../../Inputs';
-import useDebounce from '../../hooks/useDebounce';
+import useDebounce from '../../../hooks/useDebounce';
 import qs from 'query-string';
 import React, { useCallback, useEffect, useState } from 'react';
 
