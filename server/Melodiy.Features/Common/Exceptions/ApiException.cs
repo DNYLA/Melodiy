@@ -11,7 +11,7 @@ public sealed class ApiException : Exception
         StatusCode = statusCode;
     }
 
-    public ApiException(int statusCode)
+    public ApiException(int statusCode) : base(string.Empty)
     {
         StatusCode = statusCode;
     }
@@ -21,7 +21,7 @@ public sealed class ApiException : Exception
         StatusCode = (int)statusCode;
     }
 
-    public ApiException(HttpStatusCode statusCode)
+    public ApiException(HttpStatusCode statusCode) : base(string.Empty)
     {
         StatusCode = (int)statusCode;
     }

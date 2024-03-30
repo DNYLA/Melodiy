@@ -20,11 +20,14 @@ export const setAccessToken = (token: string) => {
 
 export const resetAccessToken = () => (ACCESS_TOKEN = null);
 
-const refreshToken = () => {
+export async function refreshToken(): Promise<AuthResult> {
   const instance = axios.create(CONFIG); //Dont want to use Interceptors when refreshing token
   instance.defaults.baseURL = AXIOS.defaults.baseURL;
-  return instance.get<AuthResult>(`/auth/refresh_token`);
-};
+  const { data } = await instance.get<AuthResult>(`/auth/refresh_token`);
+  setAccessToken(data.accessToken);
+
+  return data;
+}
 
 //Adds JWT token to each request
 //TODO: Find out type
@@ -42,19 +45,22 @@ AXIOS.interceptors.response.use(
   },
   async (err) => {
     const originalRequest = err.config;
-    // const refreshExpired = originalRequest.url.includes('auth/refresh_token');
+    const refreshExpired = originalRequest.url.includes('auth/refresh_token');
 
-    if (err.response.status === 401 && !originalRequest._retry) {
+    if (
+      err.response.status === 401 &&
+      !originalRequest._retry &&
+      !refreshExpired
+    ) {
       originalRequest._retry = true;
-      refreshToken()
-        .then(({ data }) => {
-          axios.defaults.headers.common['Authorization'] =
-            'Bearer ' + data.accessToken;
-        })
-        .catch((err) => {
-          console.log('An Error Occured whilst trying to authenticate');
-          console.log(err);
-        });
+      try {
+        const data = await refreshToken();
+        axios.defaults.headers.common['Authorization'] =
+          'Bearer ' + data.accessToken;
+      } catch (err) {
+        console.log('An Error Occured whilst trying to authenticate');
+        console.log(err);
+      }
 
       return axios(originalRequest);
     }

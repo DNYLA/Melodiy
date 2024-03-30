@@ -25,9 +25,5 @@ const rootElement = document.getElementById('root')!;
 
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
-  root.render(
-    <StrictMode>
-      <RouterProvider router={router} />
-    </StrictMode>
-  );
+  root.render(<RouterProvider router={router} />);
 }

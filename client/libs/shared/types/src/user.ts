@@ -5,7 +5,6 @@ export type User = {
 };
 
 export type AuthResult = {
-  id: number;
-  username: string;
+  user: User;
   accessToken: string;
 };

@@ -68,7 +68,7 @@ public sealed class AuthenticationController(IAuthenticationService authenticati
         }
     }
 
-    [HttpPost("refresh_token")]
+    [HttpGet("refresh_token")]
     public async Task<ActionResult<AuthenticationResultViewModel>> RefreshToken()
     {
         var refreshToken = Request.Cookies["refreshToken"];

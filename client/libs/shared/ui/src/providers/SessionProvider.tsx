@@ -6,6 +6,7 @@ import {
   initialiseAxios,
   login,
   logout,
+  refreshToken,
   register,
 } from '@melodiy/api';
 import toast from 'react-hot-toast';
@@ -34,16 +35,18 @@ function SessionProvider({ children }: IContainer) {
   const navigate = useNavigate();
 
   const getUser = useCallback(async () => {
+    if (user) return;
+
     try {
       setLoading(true);
-      const user = await fetchUser();
-      setUser(user);
+      const data = await refreshToken();
+      setUser(data.user);
     } catch (err) {
       console.log(err);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     getUser();
@@ -54,7 +57,6 @@ function SessionProvider({ children }: IContainer) {
       try {
         setLoading(true);
         const user = await login(username, password);
-
         toast.success('Succesfully created user');
         setUser({ id: user.id, username: user.username });
         return true;

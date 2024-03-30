@@ -2,9 +2,7 @@ import { AuthResult, User } from '@melodiy/types';
 import { AXIOS, resetAccessToken, setAccessToken } from '../axios';
 
 export async function fetchUser(): Promise<User> {
-  const { data } = await AXIOS.get<{ user: User; accessToken: string }>(
-    `/api/me`
-  );
+  const { data } = await AXIOS.get<AuthResult>(`/api/me`);
 
   setAccessToken(data.accessToken);
 
@@ -18,11 +16,7 @@ export async function login(username: string, password: string): Promise<User> {
   });
 
   setAccessToken(data.accessToken);
-
-  return {
-    id: data.id,
-    username: data.username,
-  };
+  return data.user;
 }
 
 export async function register(
@@ -35,13 +29,10 @@ export async function register(
   });
 
   setAccessToken(data.accessToken);
-
-  return {
-    id: data.id,
-    username: data.username,
-  };
+  return data.user;
 }
 
 export async function logout() {
+  await AXIOS.post('/auth/logout');
   resetAccessToken();
 }

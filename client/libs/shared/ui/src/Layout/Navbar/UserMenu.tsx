@@ -1,9 +1,9 @@
+import useSession from '../../hooks/useSession';
 import { Image } from '../../Data';
-// import useSession from '@/hooks/useSession';
 import * as HoverCard from '@radix-ui/react-hover-card';
 
 export function UserMenu() {
-  // const { user, signOut } = useSession();
+  const { user, signOut } = useSession();
   const defaultAvatar = '/images/default_avatar.jpg';
 
   return (
@@ -11,7 +11,7 @@ export function UserMenu() {
       <HoverCard.Trigger asChild className="cursor-pointer">
         <Image
           className="block h-[45px] w-[45px] rounded-full"
-          // src={user?.avatar ?? defaultAvatar}
+          src={user?.avatar ?? defaultAvatar}
           fallback={defaultAvatar}
           alt="Avatar"
           width={45}
@@ -29,7 +29,7 @@ export function UserMenu() {
               <div>
                 <span
                   className="cursor-pointer hover:text-neutral-600"
-                  // onClick={() => signOut()}
+                  onClick={() => signOut()}
                 >
                   Sign Out
                 </span>
