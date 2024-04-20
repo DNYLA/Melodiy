@@ -34,7 +34,7 @@ export async function refreshToken(): Promise<AuthResult> {
 /* eslint-disable @typescript-eslint/no-explicit-any */
 AXIOS.interceptors.request.use((req: any) => {
   if (!req.headers) return;
-  req.headers['Authorization'] = 'Bearer ' + ACCESS_TOKEN;
+  if (ACCESS_TOKEN) req.headers['Authorization'] = 'Bearer ' + ACCESS_TOKEN;
   return req;
 });
 

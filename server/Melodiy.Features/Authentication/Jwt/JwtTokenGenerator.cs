@@ -32,7 +32,7 @@ public sealed class JwtTokenGenerator(IDateTimeProvider dateTimeProvider, IOptio
         var securityToken = new JwtSecurityToken(
             issuer: _authenticationSettings.Issuer,
             audience: _authenticationSettings.Audience,
-            expires: dateTimeProvider.UtcNow.AddDays(_authenticationSettings.ExpiryMinutesJwt),
+            expires: dateTimeProvider.UtcNow.AddMinutes(_authenticationSettings.ExpiryMinutesJwt),
             claims: claims,
             signingCredentials: signingCredentials);
 
