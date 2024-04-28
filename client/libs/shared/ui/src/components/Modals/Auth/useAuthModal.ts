@@ -11,7 +11,10 @@ interface AuthModalStore {
 const useAuthModal = create<AuthModalStore>((set: any) => ({
   isOpen: false,
   isLogin: true,
-  onOpen: (loginModal = true) => set({ isOpen: true, isLogin: loginModal }),
+  onOpen: (loginModal = true) => {
+    console.log('opening');
+    set({ isOpen: true, isLogin: loginModal });
+  },
   onClose: () => set({ isOpen: false, isLogin: true }),
 }));
 

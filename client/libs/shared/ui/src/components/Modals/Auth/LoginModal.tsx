@@ -33,6 +33,8 @@ const LoginModal = () => {
     if (user && isOpen) {
       onClose();
     }
+
+    console.log(isOpen);
   }, [onClose, user, isOpen]);
 
   const onChange = (open: boolean) => {

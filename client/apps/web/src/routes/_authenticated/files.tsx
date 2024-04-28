@@ -19,7 +19,7 @@ function Files() {
   );
 }
 
-export const Route = createFileRoute('/files')({
+export const Route = createFileRoute('/_authenticated/files')({
   loader: () => fetchUserTracks(),
   component: Files,
 });

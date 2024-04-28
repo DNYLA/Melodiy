@@ -2,13 +2,16 @@ import { AiOutlineHome } from 'react-icons/ai';
 import { MdOutlineAudioFile, MdOutlineFavorite } from 'react-icons/md';
 import NavItem from './NavItem';
 import Library from './Library';
+import { useSession } from '../../../hooks/useSession';
 
 export default function SidebarHeader() {
+  const session = useSession();
   const routes = [
     {
       icon: AiOutlineHome,
       label: 'Home',
       href: '/',
+      authentication: false,
     },
     // {
     //   icon: AiOutlineCompass,
@@ -20,11 +23,13 @@ export default function SidebarHeader() {
       icon: MdOutlineFavorite,
       label: 'Favourites',
       href: '/liked',
+      authentication: false,
     },
     {
       icon: MdOutlineAudioFile,
       label: 'Your Files',
-      href: '/files	',
+      href: '/files',
+      authentication: true,
     },
   ];
 
@@ -37,9 +42,11 @@ export default function SidebarHeader() {
       <div className="flex flex-col gap-y-1 py-4">
         <p className="truncate text-lg font-semibold">Browse</p>
         <div className="mx-2">
-          {routes.map((item) => (
-            <NavItem key={item.label} {...item} />
-          ))}
+          {session.user == null
+            ? routes
+                .filter((item) => !item.authentication)
+                .map((item) => <NavItem key={item.label} {...item} />)
+            : routes.map((item) => <NavItem key={item.label} {...item} />)}
         </div>
       </div>
 

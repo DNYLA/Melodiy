@@ -4,15 +4,18 @@
 @tailwind components;
 @tailwind utilities;
 
+#root {
+  height: 100dvh;
+}
+
 html,
 body,
 :root {
   user-select: none;
-  height: 100%;
   background-color: #131111;
   color: white;
   color-scheme: dark;
-
+  height: 100%;
   font-family: 'Figtree', sans-serif;
   font-style: normal;
 }
