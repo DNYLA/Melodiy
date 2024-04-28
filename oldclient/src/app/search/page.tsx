@@ -16,18 +16,23 @@ export const revalidate = 0;
 const Search = async ({ searchParams }: SearchProps) => {
   // const songs = await getSongsByTitle(searchParams.title);
   const result = await searchQeury(searchParams.title);
-  // if (!result || (result.songs.length === 0 && result.artists.length === 0))
-  //   return (
-  //     <div className="relative left-5 right-0 w-full items-center gap-y-2 self-center px-6 pr-5 pt-2 text-center align-middle font-bold">
-  //       <p className="text-xl">
-  //         No results found for <q>{searchParams.title}</q>
-  //       </p>
-  //       <span className="text-lg">
-  //         Make sure you spelled everything correctly or use a different search
-  //         term.
-  //       </span>
-  //     </div>
-  //   );
+  if (
+    !result ||
+    (result.tracks.length === 0 &&
+      result.artists.length === 0 &&
+      result.albums.length === 0)
+  )
+    return (
+      <div className="relative left-5 right-0 w-full items-center gap-y-2 self-center px-6 pr-5 pt-2 text-center align-middle font-bold">
+        <p className="text-xl">
+          No results found for <q>{searchParams.title}</q>
+        </p>
+        <span className="text-lg">
+          Make sure you spelled everything correctly or use a different search
+          term.
+        </span>
+      </div>
+    );
 
   return (
     <Suspense key={searchParams.title} fallback={<div>Loading...</div>}>

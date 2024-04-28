@@ -3,6 +3,7 @@ import { SearchTable } from '@melodiy/collections';
 import { AlbumCard, ArtistCard } from '@melodiy/shared-ui';
 import { Await, createFileRoute, defer } from '@tanstack/react-router';
 import { Suspense } from 'react';
+import { FaSpinner } from 'react-icons/fa';
 import { z } from 'zod';
 
 const searchSchema = z.object({
@@ -10,16 +11,38 @@ const searchSchema = z.object({
 });
 
 function Search() {
+  const { title } = Route.useSearch();
   const results = Route.useLoaderData();
 
+  //TODO: Move Loading & NoResults to seperate file
   return (
     <Suspense
       fallback={
-        <div className="base-container p-2 pb-4 pt-8 mt-9">Loading...</div>
+        <div className="absolute translate-y-1/2 top-50 left-0.5 right-0 w-full items-center gap-y-2 gap-x-0 self-center px-6 pr-5 pt-2 text-center align-middle font-bold h-full">
+          <FaSpinner size={23} className="animate-spin w-full" />
+        </div>
       }
     >
       <Await promise={results.results}>
         {(result) => {
+          if (
+            !result ||
+            (result.tracks.length === 0 &&
+              result.artists.length === 0 &&
+              result.albums.length === 0)
+          )
+            return (
+              <div className="absolute translate-y-1/2 top-50 left-0.5 right-0 w-full items-center gap-y-2 self-center px-6 pr-5 pt-2 text-center align-middle font-bold h-full">
+                <p className="text-xl">
+                  No results found for <q>{title}</q>
+                </p>
+                <span className="text-lg">
+                  Make sure you spelled everything correctly or use a different
+                  search term.
+                </span>
+              </div>
+            );
+
           return (
             <div className="base-container p-2 pb-4 pt-8">
               <div className="mt-9">
@@ -67,7 +90,6 @@ export const Route = createFileRoute('/search')({
   loaderDeps: ({ search: { title } }) => ({ title }),
   loader: async ({ deps: { title } }) => {
     const tracks = searchQeury(title);
-
     return { results: defer(tracks) };
   },
   component: Search,
