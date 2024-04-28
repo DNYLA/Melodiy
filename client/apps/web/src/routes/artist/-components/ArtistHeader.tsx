@@ -12,9 +12,9 @@ import { BsFillPlayFill } from 'react-icons/bs';
 
 export interface ArtistHeaderProps {
   id: string;
-  name: string;
+  name: string | React.ReactNode;
   imageSrc?: string;
-  listerners: number;
+  listerners?: number;
 }
 
 function ArtistHeader({ name, imageSrc, listerners }: ArtistHeaderProps) {
@@ -41,27 +41,31 @@ function ArtistHeader({ name, imageSrc, listerners }: ArtistHeaderProps) {
       }}
     >
       <div className="">
-        <img
-          src={imageSrc}
-          style={{
-            objectFit: 'cover',
-            filter: isFullVisible ? 'blur(4px)' : 'blur(6px)',
-            position: 'absolute',
-            height: '100%',
-            width: '100%',
-            inset: '0px',
-            color: 'transparent',
-          }}
-          draggable={false}
-          alt={'Artist Cover'}
-        />
+        {imageSrc && (
+          <img
+            src={imageSrc}
+            style={{
+              objectFit: 'cover',
+              filter: isFullVisible ? 'blur(4px)' : 'blur(6px)',
+              position: 'absolute',
+              height: '100%',
+              width: '100%',
+              inset: '0px',
+              color: 'transparent',
+            }}
+            draggable={false}
+            alt={'Artist Cover'}
+          />
+        )}
         <div className="absolute bottom-0 flex w-full items-center justify-between px-5 py-2">
           <div className="flex ">
             <div className="">
               <h1 className="text-3xl font-bold">{name}</h1>
-              <span className="hidden text-base font-medium md:block">
-                {listerners.toLocaleString()} Monthly Listerners
-              </span>
+              {listerners != null && (
+                <span className="hidden text-base font-medium md:block">
+                  {listerners.toLocaleString()} Monthly Listerners
+                </span>
+              )}
             </div>
             <AnimatePresence mode="popLayout">
               <div className="mx-10  flex items-center gap-x-4 align-middle ">

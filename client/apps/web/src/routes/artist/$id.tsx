@@ -4,6 +4,7 @@ import { Await, createFileRoute, defer } from '@tanstack/react-router';
 import { ArtistHeader } from './-components/ArtistHeader';
 import { CollectionList, getDefaultImage } from '@melodiy/shared-ui';
 import { Suspense } from 'react';
+import { FaSpinner } from 'react-icons/fa';
 
 function Artist() {
   const navigate = Route.useNavigate();
@@ -15,8 +16,7 @@ function Artist() {
         fallback={
           <ArtistHeader
             id={''}
-            name={''}
-            imageSrc={getDefaultImage()}
+            name={<FaSpinner size={23} className="animate-spin mb-2" />}
             listerners={0}
           />
         }
