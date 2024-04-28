@@ -125,3 +125,4 @@ export { AlbumTable } from './AlbumTable';
 export { FilesTable } from './FilesTable';
 export { PlaylistTable } from './PlaylistTable';
 export { SearchTable } from './SearchTable';
+export { TopTracksTable } from './TopTracksTable';

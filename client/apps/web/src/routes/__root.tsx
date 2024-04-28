@@ -17,7 +17,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         <Outlet />
       </Sidebar>
       <Player />
-      {/* {process.env.NODE_ENV === 'development' && <TanStackRouterDevtools />} */}
+      {process.env.NODE_ENV === 'development' && <TanStackRouterDevtools />}
     </Providers>
   ),
 });

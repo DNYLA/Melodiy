@@ -1,1 +1,7 @@
-export { AlbumTable, FilesTable, PlaylistTable, SearchTable } from './Table/';
+export {
+  AlbumTable,
+  FilesTable,
+  PlaylistTable,
+  SearchTable,
+  TopTracksTable,
+} from './Table/';

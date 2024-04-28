@@ -10,7 +10,9 @@ export { Sidebar } from './components/Layout/Sidebar';
 export * from './utils/';
 export { ScrollContext } from './providers/ScrollProvider';
 export { Image } from './components/Data/Image';
+export { CollectionList } from './components/Data/CollectionList';
 export { ArtistList } from './components/Data/ArtistList';
+export * from './components/Inputs';
 
 //Player
 export { usePlayer } from './components/Player/hooks/usePlayer';
