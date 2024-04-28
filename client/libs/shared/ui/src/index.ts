@@ -1,3 +1,5 @@
+import { createRouter } from '@tanstack/react-router';
+
 export { SessionContext, SessionProvider } from './providers/SessionProvider';
 
 //TODO: Barrel Index files to specific slices
@@ -16,3 +18,6 @@ export { useOnPlay } from './components/Player/hooks/useOnPlay';
 export { useSession } from './hooks/useSession';
 
 export { usePlaylists } from './hooks/query/usePlaylist';
+export { Player } from './components/Player';
+
+export { ArtistCard, AlbumCard, PlaylistCard } from './components/Cards/';

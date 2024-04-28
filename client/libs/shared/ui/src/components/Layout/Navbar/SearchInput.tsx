@@ -4,9 +4,10 @@ import { Input } from '../../Inputs';
 import useDebounce from '../../../hooks/useDebounce';
 import qs from 'query-string';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from '@tanstack/react-router';
 
 export function SearchInput() {
-  // const router = useRouter();
+  const navigate = useNavigate();
   const [value, setValue] = useState<string>('');
   const debouncedValue = useDebounce<string>(value, 500);
 
@@ -23,9 +24,8 @@ export function SearchInput() {
     };
 
     const url = qs.stringifyUrl({ url: '/search', query });
-    // router.push(url);
-    // redirect(url, RedirectType.push);
-  }, [debouncedValue]);
+    navigate({ to: url });
+  }, [debouncedValue, navigate]);
 
   useEffect(() => {
     handleReRoute();

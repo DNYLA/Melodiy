@@ -1,6 +1,6 @@
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
-import { Sidebar } from '@melodiy/shared-ui';
+import { Player, Sidebar } from '@melodiy/shared-ui';
 import Providers from '../providers';
 import { User } from '@melodiy/types';
 
@@ -16,7 +16,8 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       <Sidebar>
         <Outlet />
       </Sidebar>
-      {process.env.NODE_ENV === 'development' && <TanStackRouterDevtools />}
+      <Player />
+      {/* {process.env.NODE_ENV === 'development' && <TanStackRouterDevtools />} */}
     </Providers>
   ),
 });

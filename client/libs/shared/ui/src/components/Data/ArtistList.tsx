@@ -7,7 +7,6 @@ export interface ArtistListProps {
 }
 
 function ArtistList({ artists }: ArtistListProps) {
-  console.log(artists);
   return (
     <div className="flex gap-x-1">
       {artists.map((artist, i) => (
