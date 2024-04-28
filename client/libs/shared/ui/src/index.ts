@@ -21,3 +21,5 @@ export { usePlaylists } from './hooks/query/usePlaylist';
 export { Player } from './components/Player';
 
 export { ArtistCard, AlbumCard, PlaylistCard } from './components/Cards/';
+
+export { Recents } from './components/Data/Recents';

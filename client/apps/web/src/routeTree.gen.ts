@@ -16,6 +16,7 @@ import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
 import { Route as PlaylistIdImport } from './routes/playlist/$id'
 import { Route as ArtistIdImport } from './routes/artist/$id'
+import { Route as AlbumIdImport } from './routes/album/$id'
 import { Route as AuthenticatedFilesImport } from './routes/_authenticated/files'
 
 // Create/Update Routes
@@ -45,6 +46,11 @@ const ArtistIdRoute = ArtistIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AlbumIdRoute = AlbumIdImport.update({
+  path: '/album/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const AuthenticatedFilesRoute = AuthenticatedFilesImport.update({
   path: '/files',
   getParentRoute: () => AuthenticatedRoute,
@@ -70,6 +76,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedFilesImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/album/$id': {
+      preLoaderRoute: typeof AlbumIdImport
+      parentRoute: typeof rootRoute
+    }
     '/artist/$id': {
       preLoaderRoute: typeof ArtistIdImport
       parentRoute: typeof rootRoute
@@ -87,6 +97,7 @@ export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AuthenticatedRoute.addChildren([AuthenticatedFilesRoute]),
   SearchRoute,
+  AlbumIdRoute,
   ArtistIdRoute,
   PlaylistIdRoute,
 ])

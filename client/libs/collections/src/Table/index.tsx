@@ -121,6 +121,7 @@ const TrackTable: FC<TrackTableProps> = ({
 
 export default TrackTable;
 
+export { AlbumTable } from './AlbumTable';
 export { FilesTable } from './FilesTable';
 export { PlaylistTable } from './PlaylistTable';
 export { SearchTable } from './SearchTable';
