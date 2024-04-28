@@ -1,5 +1,5 @@
-import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
-import usePlaylists from '../../../hooks/usePlaylist';
+import { Link } from '@tanstack/react-router';
+import { usePlaylists } from '../../../hooks/query/usePlaylist';
 import { twMerge } from 'tailwind-merge';
 
 export interface ILibraryItem {
@@ -8,15 +8,10 @@ export interface ILibraryItem {
   redirect?: string;
 }
 
-//TODO: Conver to Server component
 const LibraryItems = () => {
   const { data, isLoading, error } = usePlaylists();
-  const path = useRouterState();
 
   if (error || isLoading) {
-    // console.log(error);
-    // console.log()
-
     return <div></div>;
   }
 
@@ -28,10 +23,12 @@ const LibraryItems = () => {
             key={playlist.id}
             to={'/playlist/$playlistId'}
             params={{ playlistId: playlist.id }}
-            className={twMerge(
-              `... cursor-pointer truncate hover:text-white`
-              // path === `/playlist/${playlist.id}` && 'text-white'
-            )}
+            className={twMerge(`... cursor-pointer truncate hover:text-white`)}
+            activeProps={{
+              style: {
+                color: 'white',
+              },
+            }}
           >
             {playlist.title}
           </Link>

@@ -1,9 +1,7 @@
 import { createContext, useCallback, useEffect, useState } from 'react';
 import { IContainer, User } from '@melodiy/types';
 import {
-  fetchUser,
   getApiError,
-  initialiseAxios,
   login,
   logout,
   refreshToken,

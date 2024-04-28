@@ -1,4 +1,4 @@
-import useSession from '../../../hooks/useSession';
+import { useSession } from '../../../hooks/useSession';
 import { Image } from '../../../components/Data';
 import * as HoverCard from '@radix-ui/react-hover-card';
 

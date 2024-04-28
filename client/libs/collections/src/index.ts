@@ -1,1 +1,1 @@
-export * from './lib/collections';
+export { PlaylistTable, FilesTable } from './Table/';

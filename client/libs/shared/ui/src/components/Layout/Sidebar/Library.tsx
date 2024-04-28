@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { FaSpinner } from 'react-icons/fa';
 import LibraryItems from './LibraryItems';
-import useSession from '../../../hooks/useSession';
+import { useSession } from '../../../hooks/useSession';
 import { useAuthModal } from '../../Modals/Auth/useAuthModal';
 
 function Library() {

@@ -1,22 +1,11 @@
-import { CollectionType, FullTrack, Track } from '@melodiy/types';
+import {
+  CollectionType,
+  FullTrack,
+  PlayerMode,
+  PlayerType,
+  Track,
+} from '@melodiy/types';
 import { create } from 'zustand';
-
-export interface ActiveTrack {
-  id: string;
-  collectionId: string;
-  type: CollectionType;
-}
-
-export enum PlayerType {
-  Normal = 0,
-  Shuffle = 1,
-}
-
-export enum PlayerMode {
-  NoRepeat = 0,
-  Repeat = 1,
-  RepeatTrack = 2,
-}
 
 interface PlayerStore {
   active?: FullTrack & { collectionId: string; type: CollectionType };
@@ -52,4 +41,4 @@ const usePlayer = create<PlayerStore>((set) => ({
   setQueue: (tracks: Track[]) => set({ queue: tracks }),
 }));
 
-export default usePlayer;
+export { usePlayer };

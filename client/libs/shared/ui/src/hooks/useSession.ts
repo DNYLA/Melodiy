@@ -13,4 +13,4 @@ function useSession() {
   };
 }
 
-export default useSession;
+export { useSession };

@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Modal } from '../Modal';
 import { useAuthModal } from './useAuthModal';
-import useSession from '../../../hooks/useSession';
+import { useSession } from '../../../hooks/useSession';
 import { Input, ActionButton } from '../../Inputs';
 
 const schema = z.object({

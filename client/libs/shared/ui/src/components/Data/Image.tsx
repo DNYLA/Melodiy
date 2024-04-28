@@ -5,7 +5,7 @@ interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   fallback?: string;
 }
 
-//Wrapper around nextimage to handle fallbacks by default
+//Wrapper around image to handle fallbacks by default
 const Image = forwardRef<HTMLImageElement, ImageProps>(
   ({ src, fallback, alt, style, ...props }, ref) => {
     const handleError = (e: SyntheticEvent<HTMLImageElement, Event>) => {

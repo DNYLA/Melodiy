@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import SidebarHeader from './SidebarHeader';
 import { twMerge } from 'tailwind-merge';
 import { Navbar } from '../Navbar';
-import usePlayer from '../../Player/hooks/usePlayer';
+import { usePlayer } from '../../Player/hooks/usePlayer';
 import { useScroll } from 'framer-motion';
 import { ScrollContext } from '../../../providers/ScrollProvider';
 

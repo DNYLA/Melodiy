@@ -11,18 +11,30 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as FilesImport } from './routes/files'
 import { Route as IndexImport } from './routes/index'
-import { Route as PlaylistPlaylistIdImport } from './routes/playlist/$playlistId'
+import { Route as PlaylistIdImport } from './routes/playlist/$id'
+import { Route as ArtistIdImport } from './routes/artist/$id'
 
 // Create/Update Routes
+
+const FilesRoute = FilesImport.update({
+  path: '/files',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const PlaylistPlaylistIdRoute = PlaylistPlaylistIdImport.update({
-  path: '/playlist/$playlistId',
+const PlaylistIdRoute = PlaylistIdImport.update({
+  path: '/playlist/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ArtistIdRoute = ArtistIdImport.update({
+  path: '/artist/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -34,8 +46,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/playlist/$playlistId': {
-      preLoaderRoute: typeof PlaylistPlaylistIdImport
+    '/files': {
+      preLoaderRoute: typeof FilesImport
+      parentRoute: typeof rootRoute
+    }
+    '/artist/$id': {
+      preLoaderRoute: typeof ArtistIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/playlist/$id': {
+      preLoaderRoute: typeof PlaylistIdImport
       parentRoute: typeof rootRoute
     }
   }
@@ -45,7 +65,9 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
-  PlaylistPlaylistIdRoute,
+  FilesRoute,
+  ArtistIdRoute,
+  PlaylistIdRoute,
 ])
 
 /* prettier-ignore-end */
