@@ -1,5 +1,6 @@
 import { Playlist, Track } from '@melodiy/types';
 import { AXIOS } from '../axios';
+import { getApiError } from '../utils';
 
 export async function deleteTrack(id: string): Promise<Playlist | undefined> {
   try {
@@ -19,4 +20,18 @@ export async function fetchUserTracks(): Promise<Track[]> {
     console.log(err);
     return [];
   }
+}
+
+export async function UpoloadTrack(
+  formData: FormData,
+  isPublic: boolean
+): Promise<boolean> {
+  try {
+    await AXIOS.post(`track?public=${isPublic}`, formData);
+    return true;
+  } catch (err) {
+    throw getApiError(err).message;
+  }
+
+  return false;
 }

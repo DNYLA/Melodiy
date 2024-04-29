@@ -1,4 +1,4 @@
-import { LoginModal } from '@melodiy/shared-ui';
+import { LoginModal, MultiUploadModal } from '@melodiy/shared-ui';
 import { useEffect, useState } from 'react';
 
 /*
@@ -20,7 +20,7 @@ const ModalProvider = () => {
     <>
       <LoginModal />
       {/* <RegisterModal /> */}
-      {/* <MultiUploadModal /> */}
+      <MultiUploadModal />
     </>
   );
 };

@@ -1,6 +1,7 @@
-import { searchQeury } from '@melodiy/api';
+import { SearchQuery } from '@melodiy/api';
 import { SearchTable } from '@melodiy/collections';
 import { AlbumCard, ArtistCard } from '@melodiy/shared-ui';
+import { SearchType } from '@melodiy/types';
 import { Await, createFileRoute, defer } from '@tanstack/react-router';
 import { Suspense } from 'react';
 import { FaSpinner } from 'react-icons/fa';
@@ -89,7 +90,7 @@ export const Route = createFileRoute('/search')({
   validateSearch: (search) => searchSchema.parse(search),
   loaderDeps: ({ search: { title } }) => ({ title }),
   loader: async ({ deps: { title } }) => {
-    const tracks = searchQeury(title);
+    const tracks = SearchQuery(title, SearchType.All);
     return { results: defer(tracks) };
   },
   component: Search,

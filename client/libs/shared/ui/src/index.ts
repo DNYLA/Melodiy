@@ -5,6 +5,7 @@ export { SessionContext, SessionProvider } from './providers/SessionProvider';
 //TODO: Barrel Index files to specific slices
 
 export { LoginModal } from './components/Modals/Auth/LoginModal';
+export { MultiUploadModal } from './components/Modals/MultiUpload';
 export { useAuthModal } from './components/Modals/Auth/useAuthModal';
 export { Sidebar } from './components/Layout/Sidebar';
 export * from './utils/';

@@ -5,10 +5,11 @@ import { createFileRoute } from '@tanstack/react-router';
 function Playlist() {
   const { id } = Route.useParams();
   const playlist = Route.useLoaderData();
+  const navigate = Route.useNavigate();
 
   if (!playlist) {
-    //TODO: Redirect out
-    return <div>None</div>;
+    navigate({ to: '/' });
+    return;
   }
 
   return (

@@ -2,7 +2,7 @@ import { fetchArtist } from '@melodiy/api';
 import { TopTracksTable } from '@melodiy/collections';
 import { Await, createFileRoute, defer } from '@tanstack/react-router';
 import { ArtistHeader } from './-components/ArtistHeader';
-import { CollectionList, getDefaultImage } from '@melodiy/shared-ui';
+import { CollectionList } from '@melodiy/shared-ui';
 import { Suspense } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 

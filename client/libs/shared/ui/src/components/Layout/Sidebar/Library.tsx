@@ -4,14 +4,15 @@ import { FaSpinner } from 'react-icons/fa';
 import LibraryItems from './LibraryItems';
 import { useSession } from '../../../hooks/useSession';
 import { useAuthModal } from '../../Modals/Auth/useAuthModal';
+import useUploadModal from '../../Modals/MultiUpload/useUploadModal';
 
 function Library() {
   const { user, loading } = useSession();
-  // const { onOpen: onOpenUpload } = useUploadModal();
+  const { onOpen: onOpenUpload } = useUploadModal();
   const { onOpen: onOpenAuth } = useAuthModal();
 
   const handleOpen = () => {
-    if (user) onOpenAuth();
+    if (user) onOpenUpload();
     else onOpenAuth();
   };
 

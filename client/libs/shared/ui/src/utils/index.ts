@@ -20,3 +20,9 @@ export function msToMinuteSeconds(duration: number) {
 }
 
 export const getDefaultImage = () => '/images/default_playlist.png';
+
+export function addFormFile(form: FormData, key: string, file?: FileList) {
+  if (file && file.length > 0) {
+    form.append(key, file[0]);
+  }
+}

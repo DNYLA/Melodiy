@@ -124,5 +124,6 @@ export default TrackTable;
 export { AlbumTable } from './AlbumTable';
 export { FilesTable } from './FilesTable';
 export { PlaylistTable } from './PlaylistTable';
+export { QueueTable } from './QueueTable';
 export { SearchTable } from './SearchTable';
 export { TopTracksTable } from './TopTracksTable';
