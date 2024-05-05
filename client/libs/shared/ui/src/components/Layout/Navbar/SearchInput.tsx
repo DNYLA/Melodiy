@@ -1,15 +1,15 @@
 'use client';
 
-import { Input } from '../../Inputs';
-import useDebounce from '../../../hooks/useDebounce';
+import { useNavigate } from '@tanstack/react-router';
 import qs from 'query-string';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from '@tanstack/react-router';
+import useDebounce from '../../../hooks/useDebounce';
+import { Input } from '../../Inputs';
 
 export function SearchInput() {
   const navigate = useNavigate();
   const [value, setValue] = useState<string>('');
-  const debouncedValue = useDebounce<string>(value, 500);
+  const debouncedValue = useDebounce<string>(value, 250);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
