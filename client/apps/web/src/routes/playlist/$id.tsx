@@ -3,7 +3,6 @@ import { PlaylistTable } from '@melodiy/collections';
 import { createFileRoute } from '@tanstack/react-router';
 
 function Playlist() {
-  const { id } = Route.useParams();
   const playlist = Route.useLoaderData();
   const navigate = Route.useNavigate();
 
