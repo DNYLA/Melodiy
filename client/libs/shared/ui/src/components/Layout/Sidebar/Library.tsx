@@ -1,10 +1,10 @@
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { FaSpinner } from 'react-icons/fa';
-import LibraryItems from './LibraryItems';
 import { useSession } from '../../../hooks/useSession';
 import { useAuthModal } from '../../Modals/Auth/useAuthModal';
 import useUploadModal from '../../Modals/MultiUpload/useUploadModal';
+import LibraryItems from './LibraryItems';
 
 function Library() {
   const { user, loading } = useSession();
@@ -17,9 +17,9 @@ function Library() {
   };
 
   return (
-    <div className="flex flex-col gap-y-1 py-0">
+    <div className="flex flex-col py-0 gap-y-1">
       <div className="flex items-center justify-between">
-        <p className="truncate text-lg font-semibold">Playlists</p>
+        <p className="text-lg font-semibold truncate">Playlists</p>
         {loading ? (
           <FaSpinner size={18} className="animate-spin" />
         ) : (

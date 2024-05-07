@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { getCollectionName } from '../util';
+import { ScrollContext } from '@melodiy/shared-ui';
+import { CollectionType, Track } from '@melodiy/types';
+import { useNavigate } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import {
   AnimatePresence,
@@ -10,10 +12,8 @@ import {
 import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { BiShuffle } from 'react-icons/bi';
 import { BsFillPlayFill } from 'react-icons/bs';
-import { CollectionType, Track } from '@melodiy/types';
-import { ScrollContext } from '@melodiy/shared-ui';
+import { getCollectionName } from '../util';
 import ImageOverlay from './ImageOverlay';
-import { useNavigate } from '@tanstack/react-router';
 
 type CollectionOwner = {
   name: string;
@@ -126,12 +126,12 @@ const CollectionHeader: FC<CollectionHeaderProps> = ({
               <p className="font-light">{getCollectionDetails()}</p>
             </div>
 
-            <div className="mt-8 flex gap-x-6">
-              <button className="group flex items-center gap-x-1 rounded bg-white px-4 py-2 text-center font-bold text-black hover:bg-opacity-80 disabled:cursor-not-allowed disabled:opacity-50">
+            <div className="flex mt-8 gap-x-6">
+              <button className="flex items-center px-4 py-2 font-bold text-center text-black bg-white rounded group gap-x-1 hover:bg-opacity-80 disabled:cursor-not-allowed disabled:opacity-50">
                 <BsFillPlayFill size={25} className="" />
                 Play
               </button>
-              <button className="group flex items-center gap-x-1 rounded bg-white px-4 py-2 text-center font-bold text-black hover:bg-opacity-80 disabled:cursor-not-allowed disabled:opacity-50">
+              <button className="flex items-center px-4 py-2 font-bold text-center text-black bg-white rounded group gap-x-1 hover:bg-opacity-80 disabled:cursor-not-allowed disabled:opacity-50">
                 <BiShuffle size={25} className="" />
                 Shuffle
               </button>
@@ -146,15 +146,15 @@ const CollectionHeader: FC<CollectionHeaderProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="my-auto flex flex-col gap-y-4 text-5xl font-bold"
+            className="flex flex-col my-auto text-5xl font-bold gap-y-4"
           >
             {title}
-            <div className="flex gap-x-6 text-base">
-              <button className="group flex items-center gap-x-1 rounded bg-white px-4 py-2 text-center font-bold text-black hover:bg-opacity-80 disabled:cursor-not-allowed disabled:opacity-50">
+            <div className="flex text-base gap-x-6">
+              <button className="flex items-center px-4 py-2 font-bold text-center text-black bg-white rounded group gap-x-1 hover:bg-opacity-80 disabled:cursor-not-allowed disabled:opacity-50">
                 <BsFillPlayFill size={25} className="" />
                 Play
               </button>
-              <button className="group flex items-center gap-x-1 rounded bg-white px-4 py-2 text-center font-bold text-black hover:bg-opacity-80 disabled:cursor-not-allowed disabled:opacity-50">
+              <button className="flex items-center px-4 py-2 font-bold text-center text-black bg-white rounded group gap-x-1 hover:bg-opacity-80 disabled:cursor-not-allowed disabled:opacity-50">
                 <BiShuffle size={25} className="" />
                 Shuffle
               </button>

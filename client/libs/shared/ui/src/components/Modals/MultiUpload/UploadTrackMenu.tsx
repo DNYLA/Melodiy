@@ -1,21 +1,21 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { UpoloadTrack, getApiError } from '@melodiy/api';
+import { Album } from '@melodiy/types';
 import * as Dialog from '@radix-ui/react-dialog';
-import { ComboBoxItem, SearchComboBox } from '../../Inputs/SearchComboBox';
-import useUploadModal from './useUploadModal';
-import { useSession } from '../../../hooks/useSession';
-import { addFormFile } from '../../../utils';
 import { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
-import useArtistSearch from '../../../hooks/query/useArtistSearch';
 import useAlbumSearch from '../../../hooks/query/useAlbumSearch';
+import useArtistSearch from '../../../hooks/query/useArtistSearch';
+import useFilePreview from '../../../hooks/useFilePreview';
+import { useSession } from '../../../hooks/useSession';
+import useTrackTags from '../../../hooks/useTrackTags';
+import { addFormFile } from '../../../utils';
 import { ImagePreview } from '../../Data';
 import { ActionButton, Button, Input, Switch } from '../../Inputs';
-import { Album } from '@melodiy/types';
-import useFilePreview from '../../../hooks/useFilePreview';
-import useTrackTags from '../../../hooks/useTrackTags';
-import { UpoloadTrack, getApiError } from '@melodiy/api';
+import { ComboBoxItem, SearchComboBox } from '../../Inputs/SearchComboBox';
+import useUploadModal from './useUploadModal';
 
 const schema = z.object({
   title: z
@@ -90,7 +90,7 @@ function UploadTrackMenu() {
   const artist = watch('artist');
   const album = watch('album');
   const isPublic = watch('public');
-  const { tags: tags, isLoading: isReadingTags } = useTrackTags(trackFile);
+  const { tags, isLoading: isReadingTags } = useTrackTags(trackFile);
   const {
     query: artistQuery,
     term: artistTerm,
@@ -174,10 +174,10 @@ function UploadTrackMenu() {
 
   return (
     <>
-      <Dialog.Title className="mb-4 text-center text-xl font-bold">
+      <Dialog.Title className="mb-4 text-xl font-bold text-center">
         Upload Song
       </Dialog.Title>
-      <Dialog.Description className="mb-5 text-center text-sm leading-normal">
+      <Dialog.Description className="mb-5 text-sm leading-normal text-center">
         Enter the details for the new song.
       </Dialog.Description>
 
@@ -195,61 +195,59 @@ function UploadTrackMenu() {
         </div>
 
         {/* Inputs */}
-        <>
-          <div>
-            <p className="text-xs opacity-80">{errors.title?.message}</p>
-            <Input
-              {...register('title')}
-              disabled={isSubmitting}
-              id="title"
-              placeholder="Title"
-            />
-          </div>
+        <div>
+          <p className="text-xs opacity-80">{errors.title?.message}</p>
+          <Input
+            {...register('title')}
+            disabled={isSubmitting}
+            id="title"
+            placeholder="Title"
+          />
+        </div>
 
-          <div>
-            <p className="text-xs opacity-80">{errors.artist?.id?.message}</p>
-            <p className="text-xs opacity-80">{errors.artist?.message}</p>
-            <SearchComboBox
-              data={artistQuery.data}
-              loading={loadingArtist}
-              term={artistTerm}
-              onChange={(value) => setValue('artist', value)}
-              // onReset={() => setValue('artist', { id: undefined, name: '' })}
-              onReset={() => resetField('artist')}
-              placeholder="Artist"
-            />
-          </div>
+        <div>
+          <p className="text-xs opacity-80">{errors.artist?.id?.message}</p>
+          <p className="text-xs opacity-80">{errors.artist?.message}</p>
+          <SearchComboBox
+            data={artistQuery.data}
+            loading={loadingArtist}
+            term={artistTerm}
+            onChange={(value) => setValue('artist', value)}
+            // onReset={() => setValue('artist', { id: undefined, name: '' })}
+            onReset={() => resetField('artist')}
+            placeholder="Artist"
+          />
+        </div>
 
-          <div>
-            <p className="text-xs opacity-80">{errors.album?.id?.message}</p>
-            <SearchComboBox
-              data={convertToComboItem(albumQuery.data)}
-              loading={loadingAlbum}
-              term={album?.name ?? ''}
-              onChange={(value) => setValue('album', value)}
-              onReset={() => {
-                console.log('resetting');
-                resetField('album');
-              }}
-              disabled={isSubmitting || !artist || !artist.id}
-              placeholder={!artist ? 'Select an artist first' : 'Album'}
-            />
-          </div>
+        <div>
+          <p className="text-xs opacity-80">{errors.album?.id?.message}</p>
+          <SearchComboBox
+            data={convertToComboItem(albumQuery.data)}
+            loading={loadingAlbum}
+            term={album?.name ?? ''}
+            onChange={(value) => setValue('album', value)}
+            onReset={() => {
+              console.log('resetting');
+              resetField('album');
+            }}
+            disabled={isSubmitting || !artist || !artist.id}
+            placeholder={!artist ? 'Select an artist first' : 'Album'}
+          />
+        </div>
 
-          <div>
-            <p className="text-xs opacity-80">{errors.albumArtist?.message}</p>
-            <SearchComboBox
-              // disabled={isSubmitting || !album || album.id == -1}
-              disabled={true}
-              data={artistQuery.data}
-              loading={loadingArtist}
-              term={artistTerm}
-              onChange={(value) => setValue('artist', value)}
-              onReset={() => resetField('artist')}
-              placeholder={!album ? 'Select an album first' : 'Album Artist'}
-            />
-          </div>
-        </>
+        <div>
+          <p className="text-xs opacity-80">{errors.albumArtist?.message}</p>
+          <SearchComboBox
+            // disabled={isSubmitting || !album || album.id == -1}
+            disabled={true}
+            data={artistQuery.data}
+            loading={loadingArtist}
+            term={artistTerm}
+            onChange={(value) => setValue('artist', value)}
+            onReset={() => resetField('artist')}
+            placeholder={!album ? 'Select an album first' : 'Album Artist'}
+          />
+        </div>
 
         <div className="flex flex-col">
           <Switch
@@ -288,7 +286,7 @@ function UploadTrackMenu() {
           />
         </div>
 
-        <div className="mt-2 flex gap-x-4">
+        <div className="flex mt-2 gap-x-4">
           {/* <Button onClick={() => readTags(trackFile)}>Read Tags</Button> */}
           <ActionButton
             disabled={!trackFile || trackFile.length == 0}

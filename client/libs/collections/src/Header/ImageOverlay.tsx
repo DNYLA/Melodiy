@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { ScrollContext, getDefaultImage } from '@melodiy/shared-ui';
 import { motion, useTransform } from 'framer-motion';
 import { FC, SyntheticEvent, useContext, useEffect, useState } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
 import { twMerge } from 'tailwind-merge';
-import { ScrollContext, getDefaultImage } from '@melodiy/shared-ui';
 
 export interface ImageOverlayProps {
   src?: string;
@@ -30,12 +30,12 @@ const ImageOverlay: FC<ImageOverlayProps> = ({ src }) => {
   return (
     <motion.div
       style={{ height: imageScale }}
-      className="group relative cursor-pointer"
+      className="relative cursor-pointer group"
     >
-      <div className="absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 transform cursor-pointer flex-col place-items-center text-white group-hover:flex ">
+      <div className="absolute z-10 flex-col hidden text-white transform -translate-x-1/2 -translate-y-1/2 cursor-pointer left-1/2 top-1/2 place-items-center group-hover:flex ">
         <FiEdit2
           size={30}
-          className="center flex snap-center place-items-center content-center justify-center object-center align-middle"
+          className="flex content-center justify-center object-center align-middle center snap-center place-items-center"
         />
         <span className="text-md">Select Photo</span>
       </div>

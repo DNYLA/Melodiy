@@ -10,16 +10,16 @@ export interface CollectionListProps {
 function CollectionList({ header, albums, redirect }: CollectionListProps) {
   return (
     <div>
-      <div className="mb-1 flex items-center justify-between align-middle">
+      <div className="flex items-center justify-between mb-1 align-middle">
         <h1 className="text-xl font-bold">{header}</h1>
         {redirect && (
-          <span className="cursor-pointer text-center align-middle text-sm font-light uppercase transition-all delay-100 ease-in-out hover:opacity-80">
+          <span className="text-sm font-light text-center uppercase align-middle transition-all ease-in-out delay-100 cursor-pointer hover:opacity-80">
             View All
           </span>
         )}
       </div>
 
-      <div className="flex gap-x-5 overflow-x-auto overflow-y-hidden pb-3">
+      <div className="flex pb-3 overflow-x-auto overflow-y-hidden gap-x-5">
         {albums.map((album) => (
           <AlbumCard
             id={album.id}

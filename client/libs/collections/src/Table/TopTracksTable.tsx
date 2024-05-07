@@ -1,6 +1,6 @@
 import { CollectionType, Track } from '@melodiy/types';
-import { ColumnBuilder } from './Helpers/ColumnBuilder';
 import TrackTable from '.';
+import { ColumnBuilder } from './Helpers/ColumnBuilder';
 
 export interface TopTracksTableProps {
   tracks: Track[];

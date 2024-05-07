@@ -1,10 +1,10 @@
-import { usePlayer } from './usePlayer';
-import { useSession } from '../../../hooks/useSession';
+import { fetchFullTrack } from '@melodiy/api';
+import { CollectionType } from '@melodiy/types';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { CollectionType } from '@melodiy/types';
-import { fetchFullTrack } from '@melodiy/api';
+import { useSession } from '../../../hooks/useSession';
+import { usePlayer } from './usePlayer';
 
 export function useOnPlay(collectionId: string, type: CollectionType) {
   const { user } = useSession();

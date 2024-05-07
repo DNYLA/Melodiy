@@ -1,7 +1,7 @@
-import { useSession } from '../../../hooks/useSession';
+import { fetchPreviousTrack } from '@melodiy/api';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { fetchPreviousTrack } from '@melodiy/api';
+import { useSession } from '../../../hooks/useSession';
 import { usePlayer } from './usePlayer';
 
 export function useOnPrevious() {

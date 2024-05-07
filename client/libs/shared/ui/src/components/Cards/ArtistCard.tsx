@@ -19,7 +19,7 @@ function ArtistCard({ id, name, imageSrc }: ArtistCardProps) {
           height={160}
           alt="Artist Avatar"
         />
-        <p className="truncate text-center font-bold hover:underline">{name}</p>
+        <p className="font-bold text-center truncate hover:underline">{name}</p>
       </div>
     </Link>
   );

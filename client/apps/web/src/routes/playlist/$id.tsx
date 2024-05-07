@@ -13,7 +13,7 @@ function Playlist() {
   }
 
   return (
-    <main className="flex w-full flex-col gap-y-5">
+    <main className="flex flex-col w-full gap-y-5">
       <PlaylistTable data={playlist} />
     </main>
   );

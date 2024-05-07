@@ -1,11 +1,9 @@
-import ReactDOM from 'react-dom/client';
-import { RouterProvider, createRouter } from '@tanstack/react-router';
-import './styles.css';
-
-// Import the generated route tree
-import { routeTree } from './routeTree.gen';
 import { initialiseAxios } from '@melodiy/api';
 import { useAuthModal, useSession } from '@melodiy/shared-ui';
+import { RouterProvider, createRouter } from '@tanstack/react-router';
+import ReactDOM from 'react-dom/client';
+import { routeTree } from './routeTree.gen';
+import './styles.css';
 
 // Create a new router instance
 const router = createRouter({

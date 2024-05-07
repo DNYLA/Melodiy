@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
-import { usePlaylists } from '../../../hooks/query/usePlaylist';
 import { twMerge } from 'tailwind-merge';
+import { usePlaylists } from '../../../hooks/query/usePlaylist';
 
 export interface ILibraryItem {
   name: string;
@@ -16,7 +16,7 @@ const LibraryItems = () => {
   }
 
   return (
-    <div className="mx-2 flex flex-col gap-y-1 overflow-hidden text-sm font-light text-inactive">
+    <div className="flex flex-col mx-2 overflow-hidden text-sm font-light gap-y-1 text-inactive">
       {data &&
         data.map((playlist) => (
           <Link

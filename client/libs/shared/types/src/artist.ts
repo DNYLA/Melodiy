@@ -1,6 +1,5 @@
 import { Album } from './collections';
 import { Track } from './track';
-import { User } from './user';
 
 export type Artist = {
   id: string;

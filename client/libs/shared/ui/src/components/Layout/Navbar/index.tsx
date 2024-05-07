@@ -1,7 +1,7 @@
-import { SearchInput } from './SearchInput';
-import { AuthSection } from './AuthSection';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { twMerge } from 'tailwind-merge';
+import { AuthSection } from './AuthSection';
+import { SearchInput } from './SearchInput';
 
 export function Navbar() {
   //TODO: Handle with tanstack router

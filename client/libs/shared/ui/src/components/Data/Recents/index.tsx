@@ -1,5 +1,5 @@
-import PlaylistList from './PlaylistList';
 import { usePlaylists } from '../../../hooks/query/usePlaylist';
+import PlaylistList from './PlaylistList';
 
 export function Recents() {
   const { data } = usePlaylists();

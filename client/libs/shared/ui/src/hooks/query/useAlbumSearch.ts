@@ -1,10 +1,10 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import useDebounce from '../useDebounce';
-import { useSession } from '../useSession';
-import { useEffect, useState } from 'react';
 import { SearchUserCreatedContent, getApiError } from '@melodiy/api';
 import { SearchType } from '@melodiy/types';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import useDebounce from '../useDebounce';
+import { useSession } from '../useSession';
 
 const MIN_SEARCH_LENGTH = 3;
 

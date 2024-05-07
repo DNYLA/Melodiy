@@ -1,5 +1,5 @@
 import { ArtistPreview } from '@melodiy/types';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import { Image } from '../Data';
 import { ArtistList } from '../Data/ArtistList';
 
@@ -27,7 +27,7 @@ function AlbumCard({
   return (
     <Link to={'/album/$id'} params={{ id }}>
       <div
-        className="group flex cursor-pointer flex-col gap-y-1 duration-300 ease-in-out hover:scale-110"
+        className="flex flex-col duration-300 ease-in-out cursor-pointer group gap-y-1 hover:scale-110"
         style={{ minWidth: size }}
       >
         <Image
@@ -39,7 +39,7 @@ function AlbumCard({
           height={size}
           alt="Artist Picture"
         />
-        <div className="m-0 flex flex-col gap-0 p-0" style={{ maxWidth: size }}>
+        <div className="flex flex-col gap-0 p-0 m-0" style={{ maxWidth: size }}>
           <p className="max-w-[180px] truncate font-bold hover:underline">
             {title}
           </p>

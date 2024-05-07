@@ -1,5 +1,4 @@
 import * as SwitchRadix from '@radix-ui/react-switch';
-import { FC } from 'react';
 
 interface SwitchProps {
   value: boolean;

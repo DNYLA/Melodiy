@@ -1,7 +1,7 @@
 import { Track } from '@melodiy/types';
-import { Image } from '../Data';
-import React from 'react';
 import { Link } from '@tanstack/react-router';
+import React from 'react';
+import { Image } from '../Data';
 
 interface TrackMediaProps {
   data: Track;
@@ -26,20 +26,20 @@ const TrackMedia: React.FC<TrackMediaProps> = ({ data, onClick }) => {
     // >
     <div
       onClick={handleClick}
-      className="cursor-poiner flex w-full cursor-pointer items-center gap-x-3 rounded-md p-2 hover:bg-neutral-600/25"
+      className="flex items-center w-full p-2 rounded-md cursor-pointer cursor-poiner gap-x-3 hover:bg-neutral-600/25"
     >
       <div className="relative h-[48px] w-[48px] overflow-hidden rounded-md">
         <Image src={data.image} alt="Media Item" className="object-cover" />
       </div>
-      <div className="flex flex-col gap-y-1 overflow-hidden">
-        <p className="flex truncate text-white hover:underline">{data.title}</p>
+      <div className="flex flex-col overflow-hidden gap-y-1">
+        <p className="flex text-white truncate hover:underline">{data.title}</p>
         <Link to="/artist/$id" params={{ id: 15 }}></Link>
         <div className="flex gap-x-1">
           {data.artists.map(({ id, name }, i) => (
             <Link to={'/artist/$id'} params={{ id }}>
               <span
                 key={id}
-                className="cursor-pointer text-sm text-inactive hover:underline"
+                className="text-sm cursor-pointer text-inactive hover:underline"
               >
                 {name}
                 {i !== data.artists.length - 1 ? ',' : ''}

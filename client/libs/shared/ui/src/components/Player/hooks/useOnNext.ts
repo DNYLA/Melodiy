@@ -1,8 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
-import { useSession } from '../../../hooks/useSession';
-import { useEffect, useState } from 'react';
-import { usePlayer } from './usePlayer';
 import { fetchNextTrack } from '@melodiy/api';
+import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import { useSession } from '../../../hooks/useSession';
+import { usePlayer } from './usePlayer';
 
 export function useOnNext() {
   const { user } = useSession();

@@ -73,7 +73,7 @@ function AddToPlaylistContextItem({ trackId }: AddToPlaylistContextItemProps) {
           />
 
           <ContextMenu.Separator className="m-[5px] h-[1px] bg-violet6" />
-          <div className="max-h-48 overflow-y-auto">
+          <div className="overflow-y-auto max-h-48">
             {filterPlaylists().map((playlist) => (
               <ContextMenu.Item
                 onClick={() => handleAdd(playlist.id, playlist.title)}

@@ -1,8 +1,8 @@
 import { Combobox, Transition } from '@headlessui/react';
-import { Image } from '../Data';
 import { Fragment, useEffect, useState } from 'react';
 import { IoIosCheckmarkCircle, IoMdCheckmark } from 'react-icons/io';
 import { twMerge } from 'tailwind-merge';
+import { Image } from '../Data';
 
 export type ComboBoxItem = {
   id?: string;
@@ -83,7 +83,7 @@ function SearchComboBox({
   }, [term]);
 
   return (
-    <div className="relative w-full cursor-default overflow-hidden rounded bg-neutral-700 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+    <div className="relative w-full overflow-hidden text-left rounded cursor-default bg-neutral-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
       <Combobox
         disabled={disabled}
         value={selectedValue}
@@ -94,7 +94,7 @@ function SearchComboBox({
             e.stopPropagation();
             e.preventDefault();
           }}
-          className="inset-y-0 right-0 flex w-full items-center"
+          className="inset-y-0 right-0 flex items-center w-full"
         >
           <Combobox.Input
             autoComplete={'off'}
@@ -125,9 +125,9 @@ function SearchComboBox({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Combobox.Options className="mt-1 max-h-60 w-full overflow-auto rounded-md bg-neutral-700 py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+          <Combobox.Options className="w-full py-1 mt-1 overflow-auto text-base rounded-md shadow-lg max-h-60 bg-neutral-700 ring-1 ring-black/5 focus:outline-none sm:text-sm">
             {!data || data.length === 0 || term === '' || loading ? (
-              <div className="relative cursor-default select-none px-4 py-2 text-white">
+              <div className="relative px-4 py-2 text-white cursor-default select-none">
                 {loading ? (
                   <>Loading...</>
                 ) : term.length > 3 && (!data || data?.length == 0) ? (
@@ -180,7 +180,7 @@ function SearchComboBox({
                           }`}
                         >
                           <IoMdCheckmark
-                            className="h-5 w-5"
+                            className="w-5 h-5"
                             aria-hidden="true"
                           />
                         </span>

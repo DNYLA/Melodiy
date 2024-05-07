@@ -6,7 +6,7 @@ function Queue() {
   const player = usePlayer();
 
   return (
-    <main className="base-container p-2 pb-4 pt-20">
+    <main className="p-2 pt-20 pb-4 base-container">
       <h1 className="text-2xl font-bold">Queue</h1>
 
       {player.queue.length === 0 && !player.active && (

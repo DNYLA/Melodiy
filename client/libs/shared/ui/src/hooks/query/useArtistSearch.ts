@@ -1,8 +1,8 @@
 import { SearchQuery } from '@melodiy/api';
 import { SearchType } from '@melodiy/types';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import useDebounce from '../useDebounce';
 import { useEffect, useState } from 'react';
+import useDebounce from '../useDebounce';
 
 const MIN_SEARCH_LENGTH = 3;
 

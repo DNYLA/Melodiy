@@ -1,9 +1,9 @@
+import { CollectionType } from '@melodiy/types';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import React from 'react';
+import AlbumContextMenu from './Album';
 import FileContextMenu from './File';
 import PlaylistContextMenu from './Playlist';
-import { CollectionType } from '@melodiy/types';
-import AlbumContextMenu from './Album';
 
 interface TableContextProps {
   trackId: string;

@@ -1,7 +1,7 @@
-import { Button } from './Button';
 import { ButtonHTMLAttributes, forwardRef } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import { twMerge } from 'tailwind-merge';
+import { Button } from './Button';
 
 interface ActionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading: boolean;

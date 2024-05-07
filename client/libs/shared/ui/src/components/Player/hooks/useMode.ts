@@ -1,8 +1,8 @@
+import { mutatePlayerMode } from '@melodiy/api';
 import { PlayerMode } from '@melodiy/types';
 import { useQuery } from '@tanstack/react-query';
-import { usePlayer } from './usePlayer';
 import { useState } from 'react';
-import { mutatePlayerMode } from '@melodiy/api';
+import { usePlayer } from './usePlayer';
 
 export function useMode() {
   const player = usePlayer();

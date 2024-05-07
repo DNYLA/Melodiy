@@ -1,5 +1,5 @@
-import { getDefaultImage } from '../../utils';
 import { ImgHTMLAttributes, SyntheticEvent, forwardRef } from 'react';
+import { getDefaultImage } from '../../utils';
 
 interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   fallback?: string;

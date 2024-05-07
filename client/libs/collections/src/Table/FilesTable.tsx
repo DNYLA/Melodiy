@@ -1,6 +1,6 @@
 import { CollectionType, Track } from '@melodiy/types';
-import TrackTable from './';
 import CollectionHeader from '../Header/CollectionHeader';
+import TrackTable from './';
 import { ColumnBuilder } from './Helpers/ColumnBuilder';
 
 interface FilesTableProps {
@@ -20,7 +20,7 @@ export function FilesTable({ data, username }: FilesTableProps) {
     .Build();
 
   return (
-    <div className="flex w-full flex-col gap-y-5">
+    <div className="flex flex-col w-full gap-y-5">
       <CollectionHeader
         title={'Your Files'}
         type={CollectionType.Files}
@@ -31,7 +31,7 @@ export function FilesTable({ data, username }: FilesTableProps) {
           redirect: `/user/${username}`,
         }}
       />
-      <div className="px-6 py-3 pr-5 pt-2">
+      <div className="px-6 py-3 pt-2 pr-5">
         <TrackTable
           data={data}
           columns={columns}

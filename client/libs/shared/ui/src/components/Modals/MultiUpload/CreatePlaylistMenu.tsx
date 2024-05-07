@@ -1,19 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { CreatePlaylist } from '@melodiy/api';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useNavigate } from '@tanstack/react-router';
-import { AxiosError } from 'axios';
-import useUploadModal from './useUploadModal';
-import { useSession } from '../../../hooks/useSession';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { z } from 'zod';
 import { usePlaylists } from '../../../hooks/query/usePlaylist';
 import useFilePreview from '../../../hooks/useFilePreview';
+import { useSession } from '../../../hooks/useSession';
 import { addFormFile } from '../../../utils';
-import { ActionButton, Input, Switch } from '../../Inputs';
 import { ImagePreview } from '../../Data';
-import { CreatePlaylist } from '@melodiy/api';
+import { ActionButton, Input, Switch } from '../../Inputs';
+import useUploadModal from './useUploadModal';
 
 const schema = z.object({
   title: z
@@ -88,10 +87,10 @@ function CreatePlaylistMenu() {
 
   return (
     <>
-      <Dialog.Title className="mb-4 text-center text-xl font-bold">
+      <Dialog.Title className="mb-4 text-xl font-bold text-center">
         New Playlist
       </Dialog.Title>
-      <Dialog.Description className="mb-5 text-center text-sm leading-normal">
+      <Dialog.Description className="mb-5 text-sm leading-normal text-center">
         Enter the details for the new playlist.
       </Dialog.Description>
       <form

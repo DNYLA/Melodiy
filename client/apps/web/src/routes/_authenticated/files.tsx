@@ -13,7 +13,7 @@ function Files() {
   }
 
   return (
-    <main className="flex w-full flex-col gap-y-5">
+    <main className="flex flex-col w-full gap-y-5">
       <FilesTable data={tracks} username={session.user?.username} />
     </main>
   );

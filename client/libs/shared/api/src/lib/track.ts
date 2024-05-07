@@ -32,6 +32,4 @@ export async function UpoloadTrack(
   } catch (err) {
     throw getApiError(err).message;
   }
-
-  return false;
 }

@@ -1,5 +1,4 @@
-import { Image, ScrollContext } from '@melodiy/shared-ui';
-import ControlPanel from './ControlPanel';
+import { ScrollContext } from '@melodiy/shared-ui';
 import {
   AnimatePresence,
   motion,
@@ -9,6 +8,7 @@ import {
 import { useContext, useState } from 'react';
 import { BiShuffle } from 'react-icons/bi';
 import { BsFillPlayFill } from 'react-icons/bs';
+import ControlPanel from './ControlPanel';
 
 export interface ArtistHeaderProps {
   id: string;
@@ -57,7 +57,7 @@ function ArtistHeader({ name, imageSrc, listerners }: ArtistHeaderProps) {
             alt={'Artist Cover'}
           />
         )}
-        <div className="absolute bottom-0 flex w-full items-center justify-between px-5 py-2">
+        <div className="absolute bottom-0 flex items-center justify-between w-full px-5 py-2">
           <div className="flex ">
             <div className="">
               <h1 className="text-3xl font-bold">{name}</h1>
@@ -68,13 +68,13 @@ function ArtistHeader({ name, imageSrc, listerners }: ArtistHeaderProps) {
               )}
             </div>
             <AnimatePresence mode="popLayout">
-              <div className="mx-10  flex items-center gap-x-4 align-middle ">
-                <button className="group flex items-center gap-x-1 rounded bg-white px-4 py-2 text-center font-bold text-black hover:bg-opacity-80 disabled:cursor-not-allowed disabled:opacity-50">
+              <div className="flex items-center mx-10 align-middle gap-x-4 ">
+                <button className="flex items-center px-4 py-2 font-bold text-center text-black bg-white rounded group gap-x-1 hover:bg-opacity-80 disabled:cursor-not-allowed disabled:opacity-50">
                   <BsFillPlayFill size={25} className="" />
                   Play
                 </button>
 
-                <button className="group flex items-center gap-x-1 rounded bg-white px-4 py-2 text-center font-bold text-black hover:bg-opacity-80 disabled:cursor-not-allowed disabled:opacity-50">
+                <button className="flex items-center px-4 py-2 font-bold text-center text-black bg-white rounded group gap-x-1 hover:bg-opacity-80 disabled:cursor-not-allowed disabled:opacity-50">
                   <BiShuffle size={25} className="" />
                   Shuffle
                 </button>
@@ -82,7 +82,7 @@ function ArtistHeader({ name, imageSrc, listerners }: ArtistHeaderProps) {
             </AnimatePresence>
           </div>
 
-          <div className="flex h-full gap-x-8 pr-48">
+          <div className="flex h-full pr-48 gap-x-8">
             <ControlPanel isPlayVisible={false} />
           </div>
         </div>

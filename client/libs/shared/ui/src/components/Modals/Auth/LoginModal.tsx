@@ -2,10 +2,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useSession } from '../../../hooks/useSession';
+import { ActionButton, Input } from '../../Inputs';
 import { Modal } from '../Modal';
 import { useAuthModal } from './useAuthModal';
-import { useSession } from '../../../hooks/useSession';
-import { Input, ActionButton } from '../../Inputs';
 
 const schema = z.object({
   username: z.string().min(3, 'Please enter a valid username'),

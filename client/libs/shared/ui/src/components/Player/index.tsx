@@ -1,5 +1,5 @@
-import { usePlayer } from './hooks/usePlayer';
 import PlayerContent from './Content';
+import { usePlayer } from './hooks/usePlayer';
 
 function Player() {
   const player = usePlayer();

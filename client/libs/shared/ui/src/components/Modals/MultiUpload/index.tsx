@@ -23,7 +23,7 @@ function MultiUploadModal() {
             defaultValue={isUploadTab === true ? 'tab2' : 'tab1'}
           >
             <Tabs.List
-              className="flex shrink-0 border-b border-mauve6 font-bold"
+              className="flex font-bold border-b shrink-0 border-mauve6"
               aria-label="Manage your account"
               tabIndex={1}
             >

@@ -1,7 +1,7 @@
-import { Playlist } from '@melodiy/types';
-import { useSession } from '../useSession';
-import { useQuery } from '@tanstack/react-query';
 import { AXIOS } from '@melodiy/api';
+import { Playlist } from '@melodiy/types';
+import { useQuery } from '@tanstack/react-query';
+import { useSession } from '../useSession';
 
 export function usePlaylists() {
   const { user } = useSession();

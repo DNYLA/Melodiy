@@ -11,7 +11,7 @@ export interface CounterCellProps {
 
 function CounterCell({ position, isActive }: CounterCellProps) {
   return (
-    <div className="flex items-center justify-center self-center bg-center object-center text-center align-middle">
+    <div className="flex items-center self-center justify-center object-center text-center align-middle bg-center">
       <span className="w-[15px]">
         {isActive ? (
           <BsMusicNoteBeamed

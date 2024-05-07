@@ -1,8 +1,8 @@
-import { PlayerResponse, PlayerType } from '@melodiy/types';
-import { usePlayer } from './usePlayer';
+import { mutateShuffle } from '@melodiy/api';
+import { PlayerType } from '@melodiy/types';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { mutateShuffle } from '@melodiy/api';
+import { usePlayer } from './usePlayer';
 
 export function useShuffle() {
   const player = usePlayer();

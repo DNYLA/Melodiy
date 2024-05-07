@@ -1,3 +1,4 @@
+import { useOnPlay } from '@melodiy/shared-ui';
 import { CollectionType, Track } from '@melodiy/types';
 import {
   ColumnDef,
@@ -5,10 +6,9 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import TrackTableContextMenu from './Context';
 import { FC } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { useOnPlay } from '@melodiy/shared-ui';
+import TrackTableContextMenu from './Context';
 
 export interface TrackTableProps {
   data: Track[];

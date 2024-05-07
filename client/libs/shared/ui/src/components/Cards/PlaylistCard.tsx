@@ -1,6 +1,6 @@
 import { User } from '@melodiy/types';
-import { Image } from '../Data';
 import { Link } from '@tanstack/react-router';
+import { Image } from '../Data';
 
 export enum PlaylistCardSize {
   Small = 150,
@@ -26,7 +26,7 @@ function PlaylistCard({
   return (
     <Link to={'/playlist/$id'} params={{ id }}>
       <div
-        className="group flex cursor-pointer flex-col gap-y-1 duration-300 ease-in-out hover:scale-110"
+        className="flex flex-col duration-300 ease-in-out cursor-pointer group gap-y-1 hover:scale-110"
         style={{ minWidth: size }}
       >
         <Image
@@ -38,7 +38,7 @@ function PlaylistCard({
           height={size}
           alt="Artist Picture"
         />
-        <div className="m-0 flex flex-col gap-0 p-0" style={{ maxWidth: size }}>
+        <div className="flex flex-col gap-0 p-0 m-0" style={{ maxWidth: size }}>
           <p className="max-w-[200px] truncate font-bold hover:underline">
             {title}
           </p>

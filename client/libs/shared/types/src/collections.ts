@@ -1,6 +1,6 @@
-import { User } from './user';
-import { Artist, ArtistPreview } from './artist';
+import { ArtistPreview } from './artist';
 import { Track } from './track';
+import { User } from './user';
 
 export enum CollectionType {
   Album = 0,

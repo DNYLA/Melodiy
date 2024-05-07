@@ -1,6 +1,6 @@
-import { useSession } from '../../../hooks/useSession';
-import { Image } from '../../../components/Data';
 import * as HoverCard from '@radix-ui/react-hover-card';
+import { Image } from '../../../components/Data';
+import { useSession } from '../../../hooks/useSession';
 
 export function UserMenu() {
   const { user, signOut } = useSession();

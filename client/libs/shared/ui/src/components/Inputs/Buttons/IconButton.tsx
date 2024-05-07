@@ -27,7 +27,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IIconButton>(
         ref={ref}
         {...props}
       >
-        <div className="flex h-full w-full flex-col items-center justify-center">
+        <div className="flex flex-col items-center justify-center w-full h-full">
           <div className="opacity-80">{icon}</div>
           <span
             data-wave-color="textDefault"

@@ -20,7 +20,7 @@ function Search() {
     <Suspense
       fallback={
         <div className="absolute translate-y-1/2 top-50 left-0.5 right-0 w-full items-center gap-y-2 gap-x-0 self-center px-6 pr-5 pt-2 text-center align-middle font-bold h-full">
-          <FaSpinner size={23} className="animate-spin w-full" />
+          <FaSpinner size={23} className="w-full animate-spin" />
         </div>
       }
     >
@@ -45,14 +45,14 @@ function Search() {
             );
 
           return (
-            <div className="base-container p-2 pb-4 pt-8">
+            <div className="p-2 pt-8 pb-4 base-container">
               <div className="mt-9">
                 <SearchTable data={result.tracks} />
               </div>
 
               <div className="mt-6">
                 <span className="text-lg font-bold">Artists</span>
-                <div className="flex gap-x-6 overflow-x-auto">
+                <div className="flex overflow-x-auto gap-x-6">
                   {result.artists.slice(0, 8).map((artist) => (
                     <ArtistCard
                       id={artist.id}
@@ -66,7 +66,7 @@ function Search() {
 
               <div className="mt-6">
                 <span className="text-lg font-bold">Albums</span>
-                <div className="flex gap-x-4 overflow-x-auto py-4 pl-1">
+                <div className="flex py-4 pl-1 overflow-x-auto gap-x-4">
                   {result.albums.slice(0, 8).map((album) => (
                     <AlbumCard
                       id={album.id}

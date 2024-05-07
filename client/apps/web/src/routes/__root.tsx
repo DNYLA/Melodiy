@@ -1,8 +1,8 @@
+import { Player, Sidebar } from '@melodiy/shared-ui';
+import { User } from '@melodiy/types';
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
-import { Player, Sidebar } from '@melodiy/shared-ui';
 import Providers from '../providers';
-import { User } from '@melodiy/types';
 
 type RouterContext = {
   user?: User;

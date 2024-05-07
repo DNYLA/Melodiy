@@ -1,5 +1,5 @@
 import { FullTrack, PlayerMode, PlayerType } from '@melodiy/types';
-import { usePlayer } from './hooks/usePlayer';
+import { Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { AiFillStepBackward, AiFillStepForward } from 'react-icons/ai';
 import { BsPauseFill, BsPlayFill, BsRepeat, BsRepeat1 } from 'react-icons/bs';
@@ -8,15 +8,15 @@ import { HiSpeakerWave, HiSpeakerXMark } from 'react-icons/hi2';
 import { PiQueueFill } from 'react-icons/pi';
 import { twMerge } from 'tailwind-merge';
 import useSound from 'use-sound';
-import { useOnNext } from './hooks/useOnNext';
-import { useMode } from './hooks/useMode';
-import { useShuffle } from './hooks/useShuffle';
-import { useOnPrevious } from './hooks/useOnPrevious';
-import { useVolume } from './hooks/useVolume';
-import TrackMedia from './TrackMedia';
 import { msToMinuteSeconds } from '../../utils';
 import { Slider } from '../Inputs';
-import { Link } from '@tanstack/react-router';
+import TrackMedia from './TrackMedia';
+import { useMode } from './hooks/useMode';
+import { useOnNext } from './hooks/useOnNext';
+import { useOnPrevious } from './hooks/useOnPrevious';
+import { usePlayer } from './hooks/usePlayer';
+import { useShuffle } from './hooks/useShuffle';
+import { useVolume } from './hooks/useVolume';
 
 interface PlayerContentProps {
   track: FullTrack;
@@ -134,24 +134,24 @@ function PlayerContent({ track }: PlayerContentProps) {
 
   return (
     <div className="grid h-full grid-cols-2 grid-rows-2 md:grid-cols-3">
-      <div className="row-span-full flex w-full justify-start">
+      <div className="flex justify-start w-full row-span-full">
         <div className="flex items-center gap-x-4">
           <TrackMedia data={track} />
           {/* <LikeButton songId={song.id} /> */}
         </div>
       </div>
 
-      <div className="col-auto flex w-full items-center justify-end md:hidden">
+      <div className="flex items-center justify-end w-full col-auto md:hidden">
         <div
           onClick={handlePlay}
-          className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white p-1"
+          className="flex items-center justify-center w-10 h-10 p-1 bg-white rounded-full cursor-pointer"
         >
           <PlayIcon size={30} className="text-black" />
         </div>
       </div>
 
-      <div className="row-span-full h-full">
-        <div className="hidden w-full items-center justify-center gap-x-6 md:flex">
+      <div className="h-full row-span-full">
+        <div className="items-center justify-center hidden w-full gap-x-6 md:flex">
           <FaShuffle
             size={23}
             className={twMerge(
@@ -163,18 +163,18 @@ function PlayerContent({ track }: PlayerContentProps) {
           />
           <AiFillStepBackward
             size={25}
-            className="cursor-pointer text-neutral-400 transition hover:text-white"
+            className="transition cursor-pointer text-neutral-400 hover:text-white"
             onClick={onPlayPrevious}
           />
           <div
             onClick={handlePlay}
-            className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-white p-1"
+            className="flex items-center justify-center p-1 bg-white rounded-full cursor-pointer h-9 w-9"
           >
             <PlayIcon size={25} className="text-black" />
           </div>
           <AiFillStepForward
             size={25}
-            className="cursor-pointer text-neutral-400 transition hover:text-white"
+            className="transition cursor-pointer text-neutral-400 hover:text-white"
             onClick={onPlayNext}
           />
           <PlayerModeIcon
@@ -187,7 +187,7 @@ function PlayerContent({ track }: PlayerContentProps) {
             onClick={toggleMode}
           />
         </div>
-        <div className="flex flex-row items-center gap-x-2 text-sm font-light text-neutral-200">
+        <div className="flex flex-row items-center text-sm font-light gap-x-2 text-neutral-200">
           {/* <p>{sound?.seek()}</p> */}
           {/* <span>{sound?.seek() ?? 0}</span> */}
           <span>{msToMinuteSeconds(curSecond * 1000)}</span>
@@ -202,8 +202,8 @@ function PlayerContent({ track }: PlayerContentProps) {
         </div>
       </div>
 
-      <div className="row-span-full hidden w-full justify-end pr-2 md:flex items-center gap-x-5">
-        <div className="hover:text-inactive duration-200">
+      <div className="items-center justify-end hidden w-full pr-2 row-span-full md:flex gap-x-5">
+        <div className="duration-200 hover:text-inactive">
           <Link to={'/queue'}>
             <PiQueueFill className="cursor-pointer" size={24} />
           </Link>

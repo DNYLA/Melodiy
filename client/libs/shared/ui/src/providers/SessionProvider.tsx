@@ -1,5 +1,3 @@
-import { createContext, useCallback, useEffect, useState } from 'react';
-import { IContainer, User } from '@melodiy/types';
 import {
   getApiError,
   login,
@@ -7,8 +5,10 @@ import {
   refreshToken,
   register,
 } from '@melodiy/api';
-import toast from 'react-hot-toast';
+import { IContainer, User } from '@melodiy/types';
 import { useNavigate } from '@tanstack/react-router';
+import { createContext, useCallback, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 type SessionContextType = {
   user?: User;

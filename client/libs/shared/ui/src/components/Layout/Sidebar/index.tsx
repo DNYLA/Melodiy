@@ -1,10 +1,10 @@
-import React, { useRef } from 'react';
-import SidebarHeader from './SidebarHeader';
-import { twMerge } from 'tailwind-merge';
-import { Navbar } from '../Navbar';
-import { usePlayer } from '../../Player/hooks/usePlayer';
 import { useScroll } from 'framer-motion';
+import React, { useRef } from 'react';
+import { twMerge } from 'tailwind-merge';
 import { ScrollContext } from '../../../providers/ScrollProvider';
+import { usePlayer } from '../../Player/hooks/usePlayer';
+import { Navbar } from '../Navbar';
+import SidebarHeader from './SidebarHeader';
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -30,7 +30,7 @@ export function Sidebar({ children }: SidebarProps) {
         value={{ scrollX, scrollY, scrollXProgress, scrollYProgress }}
       >
         <main
-          className="h-full w-full flex-1 overflow-y-auto pb-2"
+          className="flex-1 w-full h-full pb-2 overflow-y-auto"
           ref={pageRef}
         >
           <Navbar />

@@ -1,7 +1,7 @@
 import { Playlist } from '@melodiy/types';
+import { AxiosError } from 'axios';
 import { AXIOS } from '../../axios';
 import { APIError } from '../../utils/types';
-import { AxiosError } from 'axios';
 
 export async function fetchPlaylist(id: string): Promise<Playlist | undefined> {
   try {

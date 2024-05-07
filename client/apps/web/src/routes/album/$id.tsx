@@ -12,7 +12,7 @@ function Artist({ params }: { params: { id: string } }) {
   }
 
   return (
-    <main className="flex w-full flex-col gap-y-5">
+    <main className="flex flex-col w-full gap-y-5">
       <AlbumTable data={album} />
     </main>
   );
