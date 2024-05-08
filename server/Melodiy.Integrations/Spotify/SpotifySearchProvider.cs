@@ -39,7 +39,6 @@ internal class SpotifySearchProvider(IOptions<SpotifySettings> spotifySettings) 
         return externalAlbum;
     }
 
-
     public async Task<ExternalArtist?> GetArtist(string id)
     {
         var client = new SpotifyClient(_defaultConfig);
@@ -62,37 +61,51 @@ internal class SpotifySearchProvider(IOptions<SpotifySettings> spotifySettings) 
         };
     }
 
-    public async Task<ExternalSearchResult> Search(string term, int limit)
+    public async Task<ExternalSearchResult> Search(string term, int limit, ExternalSearchType? type)
     {
         var client = new SpotifyClient(_defaultConfig);
         var pipedResults = new ExternalSearchResult();
         var results = await client.Search.Item(
-                          new SearchRequest(
-                              SearchRequest.Types.Artist | SearchRequest.Types.Album | SearchRequest.Types.Track, term)
+                          new SearchRequest(ConvertType(type), term)
                           {
-                              Type = SearchRequest.Types.Artist | SearchRequest.Types.Album | SearchRequest.Types.Track,
+                              Type = ConvertType(type),
                               Query = term,
                               Limit = limit
                           });
 
-        if (results.Tracks.Items != null && results.Tracks.Items.Any())
+        if (results.Tracks?.Items != null && results.Tracks.Items.Any())
         {
+            Console.WriteLine("Tracks");
             pipedResults.Tracks = results.Tracks.Items.Select(SpotifyTrackToExternalTrack).ToList();
         }
 
-        if (results.Artists.Items != null && results.Artists.Items.Any())
+        if (results.Artists?.Items != null && results.Artists.Items.Any())
         {
+            Console.WriteLine("Artists");
             pipedResults.Artists = results.Artists.Items.Select(SpotifyArtistToExternalArtist).ToList();
         }
 
-        if (results.Albums.Items != null && results.Albums.Items.Any())
+        if (results.Albums?.Items != null && results.Albums.Items.Any())
         {
+            Console.WriteLine("Albums");
             pipedResults.Albums = results.Albums.Items.Select(SpotifyAlbumToExternalAlbum).ToList();
         }
 
         pipedResults.Source = SourceType.Spotify;
 
         return pipedResults;
+    }
+
+    private static SearchRequest.Types ConvertType(ExternalSearchType? type)
+    {
+        //TODO: handle bitwise operations for album && artist search
+        return type switch
+        {
+            ExternalSearchType.Album => SearchRequest.Types.Album,
+            ExternalSearchType.Artist => SearchRequest.Types.Artist,
+            ExternalSearchType.Track => SearchRequest.Types.Track,
+            _ => SearchRequest.Types.Album | SearchRequest.Types.Artist | SearchRequest.Types.Track
+        };
     }
 
     public SourceType GetSourceType()

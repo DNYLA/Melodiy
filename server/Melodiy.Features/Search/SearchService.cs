@@ -20,7 +20,7 @@ public sealed class SearchService(
 
     public async Task<SearchResult> Search(string term, int limit = 10)
     {
-        var externalResults = await _externalSearchFactory.Search(term, limit);
+        var externalResults = await _externalSearchFactory.Search(term, null, limit);
 
         var allResults = new SearchResult
         {

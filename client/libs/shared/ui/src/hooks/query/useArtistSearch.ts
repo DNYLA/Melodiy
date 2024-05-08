@@ -31,5 +31,5 @@ export default function useArtistSearch(term = '') {
     }
   }, [query.isLoading, term, debouncedTerm, queryClient]);
 
-  return { query, term, loading };
+  return { query, term, loading: loading || query.isLoading };
 }

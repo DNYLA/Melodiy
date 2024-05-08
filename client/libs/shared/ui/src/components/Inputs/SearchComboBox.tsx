@@ -130,7 +130,7 @@ function SearchComboBox({
               <div className="relative px-4 py-2 text-white cursor-default select-none">
                 {loading ? (
                   <>Loading...</>
-                ) : term.length > 3 && (!data || data?.length == 0) ? (
+                ) : term.length > 3 && (!data || data?.length === 0) ? (
                   `${inputValue} not found`
                 ) : (
                   `Enter three character(s) to search`

@@ -46,11 +46,11 @@ public class SearchController(ISearchService searchService, IUserService userSer
                 throw new ApiException(HttpStatusCode.BadRequest,
                                        "ArtistId is required when searching for your albums created by an artist");
             case SearchType.Album:
-            {
-                var response = await _mediator.Send(new SearchAlbumsQuery(term, 5, artistId, user.Id));
-                result.Albums = response.Select(album => album.ToViewModel()).ToList();
-                break;
-            }
+                {
+                    var response = await _mediator.Send(new SearchAlbumsQuery(term, 5, artistId, user.Id));
+                    result.Albums = response.Select(album => album.ToViewModel()).ToList();
+                    break;
+                }
             default:
                 throw new ApiException(HttpStatusCode.NotImplemented, $"SearchType: {type} currently not accepted.");
         }
@@ -67,22 +67,22 @@ public class SearchController(ISearchService searchService, IUserService userSer
         switch (type)
         {
             case SearchType.All:
-            {
-                var response = await _searchService.Search(term);
-
-                return new SearchResultViewModel
                 {
-                    Albums = response.Albums.Select(album => album.ToViewModel()).ToList(),
-                    Artists = response.Artists.Select(artist => artist.ToViewModel()).ToList(),
-                    Tracks = response.Tracks.Select(track => track.ToViewModel()).ToList()
-                };
-            }
+                    var response = await _searchService.Search(term);
+
+                    return new SearchResultViewModel
+                    {
+                        Albums = response.Albums.Select(album => album.ToViewModel()).ToList(),
+                        Artists = response.Artists.Select(artist => artist.ToViewModel()).ToList(),
+                        Tracks = response.Tracks.Select(track => track.ToViewModel()).ToList()
+                    };
+                }
             case SearchType.Artist:
-            {
-                var response = await _mediator.Send(new SearchArtistsQuery(term, 5, true));
-                results.Artists = response.Select(artist => artist.ToViewModel()).ToList();
-                break;
-            }
+                {
+                    var response = await _mediator.Send(new SearchArtistsQuery(term, 5, true));
+                    results.Artists = response.Select(artist => artist.ToViewModel()).ToList();
+                    break;
+                }
             default:
                 throw new ApiException(HttpStatusCode.NotImplemented, $"SearchType: {type} currently not accepted.");
         }

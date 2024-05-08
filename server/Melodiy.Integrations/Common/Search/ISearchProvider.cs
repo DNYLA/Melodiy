@@ -8,7 +8,7 @@ public interface ISearchProvider
 
     Task<ExternalArtist?> GetArtist(string id);
 
-    Task<ExternalSearchResult> Search(string term, int limit);
+    Task<ExternalSearchResult> Search(string term, int limit, ExternalSearchType? type);
 
     SourceType GetSourceType();
 }

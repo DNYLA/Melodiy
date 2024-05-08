@@ -6,17 +6,22 @@ using Melodiy.Features.Album.Entities;
 using Melodiy.Features.Album.Models;
 using Melodiy.Features.Artist.Query;
 using Melodiy.Features.Common.Extensions;
-
+using Melodiy.Integrations.Common.Search;
 using Microsoft.EntityFrameworkCore;
 
 using System.Collections.Generic;
 
-public sealed class SearchAlbumsQueryHandler(IAlbumRepository albumRepository, IMediator mediator)
+public sealed class SearchAlbumsQueryHandler(
+        IAlbumRepository albumRepository,
+        IMediator mediator,
+        ISearchProvider searchProvider)
     : IRequestHandler<SearchAlbumsQuery, List<AlbumResponse>>
 {
     private readonly IAlbumRepository _albumRepository = albumRepository;
 
     private readonly IMediator _mediator = mediator;
+
+    private readonly ISearchProvider _searchProvider = searchProvider;
 
     public async Task<List<AlbumResponse>> Handle(SearchAlbumsQuery request, CancellationToken cancellationToken)
     {
@@ -25,9 +30,10 @@ public sealed class SearchAlbumsQueryHandler(IAlbumRepository albumRepository, I
             return new();
         }
 
-        //TODO: Add Support for searching an album that is by an artist from term.
+        //TODO: Add Support for searching an album that is by an artist from term. e.g Kendrick lamar should show kendricks albums.
         var term = request.Term.ToLower();
 
+        //TODO: Search Spotify
         var searchTerms = term.Split(' ');
         var query = await GenerateQuery(searchTerms, request.ArtistSlug, request.UserId);
 

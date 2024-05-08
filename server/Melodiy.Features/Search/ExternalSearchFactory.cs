@@ -38,9 +38,9 @@ public class ExternalSearchFactory(
 
     private readonly IImageRepository _imageRepository = imageRepository;
 
-    public async Task<SearchResult> Search(string term, int limit = 10)
+    public async Task<SearchResult> Search(string term, ExternalSearchType? type, int limit = 10)
     {
-        var result = await _searchProvider.Search(term, 10);
+        var result = await _searchProvider.Search(term, limit, type);
         var model = new SearchResult
         {
             Source = result.Source
@@ -64,6 +64,7 @@ public class ExternalSearchFactory(
             model.Tracks = createdTracks.Select(track => track.ToResponse()).ToList();
         }
 
+        Console.WriteLine(model.Artists.Count);
         return model;
     }
 
