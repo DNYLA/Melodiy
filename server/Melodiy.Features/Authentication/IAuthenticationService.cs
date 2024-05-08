@@ -4,7 +4,11 @@ using Melodiy.Features.Authentication.Models;
 
 public interface IAuthenticationService
 {
-    Task<AuthenticationResultViewModel> ValidateLogin(LoginRequestModel loginRequestModel);
+    Task<AuthenticationResult> ValidateLogin(LoginRequestModel request);
 
-    Task<AuthenticationResultViewModel> Register(RegisterRequestModel registerRequestModel);
+    Task<AuthenticationResult> Register(RegisterRequestModel request);
+
+    Task<AuthenticationResult> RefreshToken(string refreshToken);
+
+    Task RemoveRefreshToken(string refreshToken, int userId);
 }

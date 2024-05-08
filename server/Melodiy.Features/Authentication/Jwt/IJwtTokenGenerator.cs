@@ -1,6 +1,10 @@
 ﻿namespace Melodiy.Features.Authentication.Jwt;
 
+using Melodiy.Features.Authentication.Models;
+
 public interface IJwtTokenGenerator
 {
-    string GenerateToken(int id, string username);
+    string GenerateAccessToken(int id, string username);
+
+    RefreshTokenModel GenerateRefreshToken();
 }

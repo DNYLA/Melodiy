@@ -26,4 +26,6 @@ public sealed class Playlist : BaseEntity
     public User? User { get; set; }
 
     public Image? Image { get; set; }
+    
+    public bool Step1Completedw { get; set; }
 }

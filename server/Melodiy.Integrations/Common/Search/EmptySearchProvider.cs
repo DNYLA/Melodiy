@@ -6,16 +6,17 @@ public class EmptySearchProvider : ISearchProvider
 {
     public async Task<ExternalAlbum> GetAlbum(string id)
     {
-        throw new NotImplementedException();
+        //TODO: Fix async task issue
+        return null;
     }
 
     public async Task<ExternalArtist> GetArtist(string id)
     {
-        throw new NotImplementedException();
+        //TODO: Fix async task issue
+        return null;
     }
 
-
-    public async Task<ExternalSearchResult> Search(string term, int limit)
+    public async Task<ExternalSearchResult> Search(string term, int limit, ExternalSearchType? type)
     {
         return new ExternalSearchResult
         {

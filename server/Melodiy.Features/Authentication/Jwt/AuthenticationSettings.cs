@@ -1,12 +1,14 @@
 ﻿namespace Melodiy.Features.Authentication.Jwt;
 
-public class JwtSettings
+public class AuthenticationSettings
 {
-    public const string SectionName = "JwtSettings";
+    public const string SectionName = "Authentication";
 
     public string Secret { get; init; } = null!;
 
-    public int ExpiryMinutes { get; init; }
+    public int ExpiryMinutesJwt { get; init; }
+
+    public int ExpiryDaysRefresh { get; init; }
 
     public string Issuer { get; init; } = null!;
 

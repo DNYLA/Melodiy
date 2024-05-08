@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#root {
+  height: 100dvh;
+}
+
+html,
+body,
+:root {
+  user-select: none;
+  background-color: #131111;
+  color: white;
+  color-scheme: dark;
+  height: 100%;
+  font-family: 'Figtree', sans-serif;
+  font-style: normal;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+tr {
+  border-radius: 25px;
+  /* background-color: red; */
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 3px;
+  height: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 5px;
+}
+
+/* Track Hover */
+::-webkit-scrollbar-track:hover {
+  background: #ccc;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

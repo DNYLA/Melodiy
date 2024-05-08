@@ -68,7 +68,7 @@ namespace Melodiy.Features.Common.Context.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Collection")
+                    b.Property<int>("Type")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -165,6 +165,39 @@ namespace Melodiy.Features.Common.Context.Migrations
                     b.ToTable("Artists");
                 });
 
+            modelBuilder.Entity("Melodiy.Features.Authentication.Entities.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserAgent")
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshToken");
+                });
+
             modelBuilder.Entity("Melodiy.Features.Image.Entities.Image", b =>
                 {
                     b.Property<int>("Id")
@@ -219,6 +252,9 @@ namespace Melodiy.Features.Common.Context.Migrations
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("Step1Completedw")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -459,6 +495,17 @@ namespace Melodiy.Features.Common.Context.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Melodiy.Features.Authentication.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("Melodiy.Features.User.Entities.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Melodiy.Features.Image.Entities.Image", b =>
                 {
                     b.HasOne("Melodiy.Features.User.Entities.User", "User")
@@ -573,6 +620,11 @@ namespace Melodiy.Features.Common.Context.Migrations
                     b.Navigation("PlaylistTracks");
 
                     b.Navigation("TrackArtists");
+                });
+
+            modelBuilder.Entity("Melodiy.Features.User.Entities.User", b =>
+                {
+                    b.Navigation("RefreshTokens");
                 });
 #pragma warning restore 612, 618
         }

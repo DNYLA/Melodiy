@@ -1,5 +1,6 @@
 ﻿namespace Melodiy.Features.User.Entities;
 
+using Melodiy.Features.Authentication.Entities;
 using Melodiy.Features.Common.Context.Entities;
 using Melodiy.Features.User.Models;
 using Microsoft.EntityFrameworkCore;
@@ -14,4 +15,6 @@ public sealed class User : BaseEntity
     public string Password { get; set; } = string.Empty;
 
     public string? Avatar { get; set; }
+
+    public List<RefreshToken> RefreshTokens { get; set; } = new();
 }

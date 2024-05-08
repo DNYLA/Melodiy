@@ -3,6 +3,7 @@
 using MediatR;
 
 using Melodiy.Features.Album.Entities;
+using Melodiy.Features.Album.Models;
 using Melodiy.Features.Artist.Entities;
 using Melodiy.Features.Artist.Models;
 using Melodiy.Features.Common.Extensions;
@@ -60,23 +61,9 @@ public sealed class GetArtistDetailsQueryHandler(
 
     private static ArtistDetails GenerateArtistDetails(Artist artist)
     {
-        var albums = artist.Albums
-                           .Where(album => album is { Type: AlbumType.Album, Verified: true })
-                           .Select(album => album.ToResponse())
-                           .OrderByDescending(a => a.ReleaseDate)
-                           .ToList();
-
-        var singles = artist.Albums
-                            .Where(album => album is { Type: not AlbumType.Album, Verified: true })
-                            .Select(album => album.ToResponse())
-                            .OrderByDescending(a => a.ReleaseDate)
-                            .ToList();
-
-        var userAlbums = artist.Albums
-                               .Where(album => !album.Verified)
-                               .Select(album => album.ToResponse())
-                               .OrderByDescending(a => a.ReleaseDate)
-                               .ToList();
+        var albums = FilterAlbum(artist.Albums, x => x is { Type: AlbumType.Album, Verified: true });
+        var singles = FilterAlbum(artist.Albums, x => x is { Type: not AlbumType.Album, Verified: true });
+        var userAlbums = FilterAlbum(artist.Albums, x => !x.Verified);
 
         return new ArtistDetails
         {
@@ -87,8 +74,8 @@ public sealed class GetArtistDetailsQueryHandler(
             User = artist.User?.ToResponse(),
             Image = artist.Image?.ToResponse(),
             CreatedAt = artist.CreatedAt,
-            //Description = artist.Description
-            MonthlyListeners = 15000,
+            //Description = artist.Description,
+            MonthlyListeners = 0,
             Albums = albums,
             UserAlbums = userAlbums,
             Singles = singles,
@@ -98,5 +85,13 @@ public sealed class GetArtistDetailsQueryHandler(
                 SpotifyId = artist.SpotifyId
             },
         };
+    }
+
+    private static List<AlbumResponse> FilterAlbum(List<Album> albums, Func<Album, bool> delgate)
+    {
+        return albums.Where(delgate)
+                     .Select(album => album.ToResponse())
+                     .OrderByDescending(a => a.ReleaseDate)
+                     .ToList();
     }
 }

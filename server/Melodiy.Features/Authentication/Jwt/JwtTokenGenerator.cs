@@ -1,5 +1,6 @@
 ﻿namespace Melodiy.Features.Authentication.Jwt;
 
+using Melodiy.Features.Authentication.Models;
 using Melodiy.Features.Common.Services;
 
 using Microsoft.Extensions.Options;
@@ -7,17 +8,18 @@ using Microsoft.IdentityModel.Tokens;
 
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
-public sealed class JwtTokenGenerator(IDateTimeProvider dateTimeProvider, IOptions<JwtSettings> jwtOptions)
+public sealed class JwtTokenGenerator(IDateTimeProvider dateTimeProvider, IOptions<AuthenticationSettings> jwtOptions)
     : IJwtTokenGenerator
 {
-    private readonly JwtSettings _jwtSettings = jwtOptions.Value;
+    private readonly AuthenticationSettings _authenticationSettings = jwtOptions.Value;
 
-    public string GenerateToken(int id, string username)
+    public string GenerateAccessToken(int id, string username)
     {
         var signingCredentials = new SigningCredentials(
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret)),
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.Secret)),
             SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
@@ -28,12 +30,21 @@ public sealed class JwtTokenGenerator(IDateTimeProvider dateTimeProvider, IOptio
         };
 
         var securityToken = new JwtSecurityToken(
-            issuer: _jwtSettings.Issuer,
-            audience: _jwtSettings.Audience,
-            expires: dateTimeProvider.UtcNow.AddDays(_jwtSettings.ExpiryMinutes),
+            issuer: _authenticationSettings.Issuer,
+            audience: _authenticationSettings.Audience,
+            expires: dateTimeProvider.UtcNow.AddMinutes(_authenticationSettings.ExpiryMinutesJwt),
             claims: claims,
             signingCredentials: signingCredentials);
 
         return new JwtSecurityTokenHandler().WriteToken(securityToken);
+    }
+
+    public RefreshTokenModel GenerateRefreshToken()
+    {
+        return new RefreshTokenModel
+        {
+            Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+            Expires = dateTimeProvider.UtcNow.AddDays(_authenticationSettings.ExpiryDaysRefresh)
+        };
     }
 }
