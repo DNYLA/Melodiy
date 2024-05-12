@@ -78,7 +78,6 @@
     "jest-environment-node": "^29.4.1",
     "jsdom": "~22.1.0",
     "nx": "19.0.2",
-    "nx-electron": "^18.0.0-alpha.0",
     "postcss": "^8.4.38",
     "prettier": "^2.6.2",
     "sass": "^1.72.0",

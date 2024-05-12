@@ -24,7 +24,6 @@
     "src/**/*.jsx",
     "src/**/*.ts",
     "src/**/*.tsx",
-    "postcss.c2onfig.js",
-    "../../libs/shared/ui/src/providers/SessionProvider.tsx"
+    "postcss.config.js"
   ]
 }
