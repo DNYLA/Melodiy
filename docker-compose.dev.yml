@@ -1,12 +1,21 @@
-version: '3.4'
-
 services:
+  web:
+    image: melodiy-web
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        - API_HOST=http://localhost:5129/
+    ports:
+      - 3000:3000
+    volumes:
+      - ./client/.env.production:/app/.env
   server:
     image: melodiy-server
     build:
       context: ./server
-      dockerfile: ./Melodiy.Api/Dockerfile
+      dockerfile: ./Melodiy.Web/Dockerfile
     ports:
-      - 5041:5041
+      - 5129:5129
     volumes:
-      - ./server/Melodiy.Api/appsettings.production.json:/app/appsettings.json
+      - ./server/Melodiy.Web/appsettings.production.json:/app/appsettings.json
