@@ -9,6 +9,8 @@
   "dependencies": {
     "@headlessui/react": "^1.7.19",
     "@hookform/resolvers": "^3.3.4",
+    "@nx-tools/nx-container": "^6.0.0",
+    "@nx/node": "^19.0.2",
     "@radix-ui/colors": "^3.0.0",
     "@radix-ui/react-context-menu": "^2.1.5",
     "@radix-ui/react-dialog": "^1.0.5",

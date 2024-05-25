@@ -18,7 +18,7 @@ public sealed class SupabaseFileRepository(Client client, IOptions<SupabaseSetti
 
     private readonly IHashService _hashService = hashService;
 
-    public async Task<FileResponse> UploadFile(IFormFile file, string path, StorageBucket bucket)
+    public async Task<FileResponse> UploadFile(IFormFile file, string subPath, StorageBucket bucket)
     {
         var bucketName = BucketName(bucket);
 
@@ -27,48 +27,47 @@ public sealed class SupabaseFileRepository(Client client, IOptions<SupabaseSetti
 
         var fileHash = _hashService.File(memoryStream);
         var fileName = fileHash + Path.GetExtension(file.FileName);
-        var fullPath = $"{path}/{fileName}";
+        var fullPath = $"{subPath}/{fileName}";
 
-        var model = new FileResponse()
+        var model = new FileResponse
         {
             Url = string.Empty,
             Path = fullPath,
             Source = SourceType.Supabase
         };
 
-        if (await IsDuplicate(fullPath, bucket))
+        if (!await IsDuplicate(fullPath, bucket))
         {
-            model.Url = await GetUrl(fullPath, bucket);
+            var res = await _client.Storage
+                .From(bucketName)
+                .Upload(memoryStream.ToArray(), fullPath);
             return model;
         }
 
-        var res = await _client.Storage
-                               .From(bucketName)
-                               .Upload(memoryStream.ToArray(), fullPath);
-
         model.Url = await GetUrl(fullPath, bucket);
+
         return model;
     }
 
-    public async Task<bool> DeleteFile(string path, StorageBucket bucket)
+    public async Task<bool> DeleteFile(string subPath, StorageBucket bucket)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<string> GetUrl(string path, StorageBucket bucket)
+    public async Task<string> GetUrl(string subPath, StorageBucket bucket)
     {
         var bucketName = BucketName(bucket);
 
         if (bucket != StorageBucket.TracksPrivate)
         {
             var url = $"{_settings.Url}/storage/v1/object/public";
-            var fileUrl = $"{url}/{bucketName}/{path}";
+            var fileUrl = $"{url}/{bucketName}/{subPath}";
             return fileUrl;
         }
 
         try
         {
-            return await _client.Storage.From(bucketName).CreateSignedUrl(path, 120);
+            return await _client.Storage.From(bucketName).CreateSignedUrl(subPath, 120);
         }
         catch (SupabaseStorageException ex)
         {
@@ -139,4 +138,6 @@ public sealed class SupabaseFileRepository(Client client, IOptions<SupabaseSetti
 
         return response.Content != "false";
     }
+
+    public SourceType GetSourceType() => SourceType.Supabase;
 }

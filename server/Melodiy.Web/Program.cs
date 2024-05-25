@@ -27,11 +27,12 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddMemoryCache();
 
 
 //Custom Services
 builder.Services
-       .AddSupabase(builder.Configuration)
+       .RegisterFileRepository(builder.Configuration)
        .RegisterSearchProvider(builder.Configuration)
        .RegisterStreamProvider(builder.Configuration)
        .AddFeatures()
@@ -56,6 +57,7 @@ app.MapControllers();
 //Custom App Initialisations
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.RegisterMigrations();
-app.InitialiseStorageProvider();
+app.InitialiseFileRepository();
+app.UseStaticFiles();
 
 app.Run();

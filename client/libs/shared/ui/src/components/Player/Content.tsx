@@ -5,7 +5,7 @@ import { AiFillStepBackward, AiFillStepForward } from 'react-icons/ai';
 import { BsPauseFill, BsPlayFill, BsRepeat, BsRepeat1 } from 'react-icons/bs';
 import { FaShuffle } from 'react-icons/fa6';
 import { HiSpeakerWave, HiSpeakerXMark } from 'react-icons/hi2';
-import { PiQueueFill } from 'react-icons/pi';
+import { PiQueue } from 'react-icons/pi';
 import { twMerge } from 'tailwind-merge';
 import useSound from 'use-sound';
 import { msToMinuteSeconds } from '../../utils';
@@ -20,9 +20,10 @@ import { useVolume } from './hooks/useVolume';
 
 interface PlayerContentProps {
   track: FullTrack;
+  trackPath: string;
 }
 
-function PlayerContent({ track }: PlayerContentProps) {
+function PlayerContent({ track, trackPath }: PlayerContentProps) {
   const player = usePlayer();
   const { onNext } = useOnNext();
   const { onToggle: onModeToggle } = useMode();
@@ -53,7 +54,7 @@ function PlayerContent({ track }: PlayerContentProps) {
 
   const VolumeIcon = getVolumeIcon();
 
-  const [play, { pause, stop, sound, duration }] = useSound(track.path, {
+  const [play, { pause, stop, sound, duration }] = useSound(trackPath, {
     volume,
     onplay: () => setIsPlaying(true),
     onend: () => {
@@ -205,7 +206,7 @@ function PlayerContent({ track }: PlayerContentProps) {
       <div className="items-center justify-end hidden w-full pr-2 row-span-full md:flex gap-x-5">
         <div className="duration-200 hover:text-inactive">
           <Link to={'/queue'}>
-            <PiQueueFill className="cursor-pointer" size={24} />
+            <PiQueue className="cursor-pointer" size={24} />
           </Link>
         </div>
 

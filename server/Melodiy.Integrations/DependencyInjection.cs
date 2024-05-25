@@ -1,4 +1,6 @@
-﻿namespace Melodiy.Integrations;
+﻿using Melodiy.Integrations.Local;
+
+namespace Melodiy.Integrations;
 
 using Melodiy.Integrations.Common.File;
 using Melodiy.Integrations.Common.Search;
@@ -14,7 +16,40 @@ using Microsoft.Extensions.Options;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddSupabase(
+    public static IServiceCollection RegisterFileRepository(this IServiceCollection services, ConfigurationManager configuration)
+    {
+        if (configuration.GetSection(SupabaseSettings.SectionName).GetChildren().Any())
+        {
+            return services.AddSupabaseFileRepository(configuration);
+        }
+
+        return services.AddDefaultFileProvider();
+    }
+
+    public static IServiceCollection RegisterSearchProvider(this IServiceCollection services, ConfigurationManager configuration)
+    {
+        if (configuration.GetSection(SpotifySettings.SectionName).GetChildren().Any())
+        {
+            return services.AddSpotifyProvider(configuration);
+        }
+
+        return services.AddDefaultSearchProvider();
+    }
+
+    public static IServiceCollection RegisterStreamProvider(this IServiceCollection services, ConfigurationManager configuration)
+    {
+        //TODO: Add configs/settings to get preferred stream provider;
+        return services.AddScoped<IStreamProvider, YoutubeStreamProvider>();
+    }
+
+    public static void InitialiseFileRepository(this WebApplication app)
+    {
+        using var serviceScope = app.Services.CreateScope();
+        var storageProvider = serviceScope.ServiceProvider.GetRequiredService<IFileRepository>();
+        storageProvider.Initialise();
+    }
+
+    private static IServiceCollection AddSupabaseFileRepository(
         this IServiceCollection services,
         ConfigurationManager configuration)
     {
@@ -32,13 +67,6 @@ public static class DependencyInjection
         services.AddScoped<IFileRepository, SupabaseFileRepository>();
 
         return services;
-    }
-
-    public static void InitialiseStorageProvider(this WebApplication app)
-    {
-        using var serviceScope = app.Services.CreateScope();
-        var storageProvider = serviceScope.ServiceProvider.GetRequiredService<IFileRepository>();
-        storageProvider.Initialise();
     }
 
     private static IServiceCollection AddSpotifyProvider(this IServiceCollection services, ConfigurationManager configuration)
@@ -65,19 +93,11 @@ public static class DependencyInjection
         return services;
     }
 
-    public static IServiceCollection RegisterSearchProvider(this IServiceCollection services, ConfigurationManager configuration)
+    private static IServiceCollection AddDefaultFileProvider(this IServiceCollection services)
     {
-        if (configuration.GetSection(SpotifySettings.SectionName).GetChildren().Any())
-        {
-            return services.AddSpotifyProvider(configuration);
-        }
-
-        return services.AddDefaultSearchProvider();
+        services.AddScoped<IFileRepository, LocalFileRepository>();
+        return services;
     }
 
-    public static IServiceCollection RegisterStreamProvider(this IServiceCollection services, ConfigurationManager configuration)
-    {
-        //TODO: Add configs/settings to get preferred stream provider;
-        return services.AddScoped<IStreamProvider, YoutubeStreamProvider>();
-    }
+
 }

@@ -33,3 +33,19 @@ export async function UpoloadTrack(
     throw getApiError(err).message;
   }
 }
+
+export async function DownloadTrack(url: string): Promise<Blob | null> {
+  try {
+    const { data } = await AXIOS.get(url, {
+      responseType: 'arraybuffer',
+    });
+
+    const blob = new Blob([data], {
+      type: 'audio/wav',
+    });
+
+    return blob;
+  } catch (err) {
+    return null;
+  }
+}
