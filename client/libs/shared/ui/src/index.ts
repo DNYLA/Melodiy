@@ -8,6 +8,7 @@ export { Image } from './components/Data/Image';
 export * from './components/Inputs';
 export { Sidebar } from './components/Layout/Sidebar';
 export { LoginModal } from './components/Modals/Auth/LoginModal';
+export { RegisterModal } from './components/Modals/Auth/RegisterModal';
 export { useAuthModal } from './components/Modals/Auth/useAuthModal';
 export { MultiUploadModal } from './components/Modals/MultiUpload';
 export { ScrollContext } from './providers/ScrollProvider';
