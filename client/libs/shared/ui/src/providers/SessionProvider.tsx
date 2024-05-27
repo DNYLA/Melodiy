@@ -38,7 +38,13 @@ function SessionProvider({ children }: IContainer) {
     try {
       setLoading(true);
       const data = await refreshToken();
-      setUser(data.user);
+
+      if ('setup' in data) {
+        navigate({ to: '/setup' });
+        //TODO: Redirect
+      } else {
+        setUser(data.user);
+      }
     } catch (err) {
       console.log(err);
     } finally {

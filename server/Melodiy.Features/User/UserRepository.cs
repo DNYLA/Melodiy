@@ -9,12 +9,18 @@ public sealed class UserRepository(MelodiyDbContext context) : IUserRepository
 {
     private readonly DbSet<User> _users = context.Set<User>();
 
-    public async Task<User> AddAsync(string username, string password)
+    public IQueryable<User> AsQueryable()
+    {
+        return _users.AsQueryable();
+    }
+
+    public async Task<User> AddAsync(string username, string password, Role role)
     {
         var user = new User
         {
             Username = username,
             Password = password,
+            Role = role
         };
 
         _users.Add(user);

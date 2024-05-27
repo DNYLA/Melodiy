@@ -7,17 +7,9 @@ using Microsoft.AspNetCore.Http;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-public sealed class UserService : IUserService
+public sealed class UserService(IHttpContextAccessor httpContextAccessor) : IUserService
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    //private readonly IUserRepository _userRepository;
-
-    public UserService(IHttpContextAccessor httpContextAccessor)
-    {
-        _httpContextAccessor = httpContextAccessor;
-        //_userRepository = userRepository;
-    }
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
     public async Task<UserResponse?> GetUserDetails()
     {

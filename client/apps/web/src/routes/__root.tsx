@@ -1,6 +1,10 @@
 import { Player, Sidebar } from '@melodiy/shared-ui';
 import { User } from '@melodiy/types';
-import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
+import {
+  Outlet,
+  createRootRouteWithContext,
+  useMatchRoute,
+} from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import Providers from '../providers';
 
@@ -10,8 +14,15 @@ type RouterContext = {
   open: () => void;
 };
 
-export const Route = createRootRouteWithContext<RouterContext>()({
-  component: () => (
+function RooutLayout() {
+  const matchRoute = useMatchRoute();
+  const isValid = matchRoute({ to: '/setup' });
+
+  if (isValid !== false) {
+    return <Outlet />;
+  }
+
+  return (
     <Providers>
       <Sidebar>
         <Outlet />
@@ -19,5 +30,9 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       <Player />
       {process.env.NODE_ENV === 'development' && <TanStackRouterDevtools />}
     </Providers>
-  ),
+  );
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({
+  component: RooutLayout,
 });

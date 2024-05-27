@@ -59,5 +59,6 @@ app.UseMiddleware<ErrorHandlingMiddleware>();
 app.RegisterMigrations();
 app.InitialiseFileRepository();
 app.UseStaticFiles();
+app.UseMiddleware<FirstTimeSetupMiddleware>();
 
 app.Run();

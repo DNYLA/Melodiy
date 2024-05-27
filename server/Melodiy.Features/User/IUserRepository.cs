@@ -4,7 +4,9 @@ using Melodiy.Features.User.Entities;
 
 public interface IUserRepository
 {
-    Task<User> AddAsync(string username, string password);
+    IQueryable<User> AsQueryable();
+
+    Task<User> AddAsync(string username, string password, Role role);
 
     Task<bool> ExistsAsync(string username);
 

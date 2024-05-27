@@ -2,7 +2,7 @@
 
 using Melodiy.Features.Authentication.Entities;
 using Melodiy.Features.Common.Context.Entities;
-using Melodiy.Features.User.Models;
+
 using Microsoft.EntityFrameworkCore;
 
 [Index(nameof(Username), IsUnique = true)]
@@ -15,6 +15,8 @@ public sealed class User : BaseEntity
     public string Password { get; set; } = string.Empty;
 
     public string? Avatar { get; set; }
+
+    public Role Role { get; set; }
 
     public List<RefreshToken> RefreshTokens { get; set; } = new();
 }

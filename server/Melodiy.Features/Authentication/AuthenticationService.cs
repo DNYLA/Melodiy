@@ -6,6 +6,7 @@ using Melodiy.Features.Authentication.Models;
 using Melodiy.Features.Authentication.Repository;
 using Melodiy.Features.Common.Exceptions;
 using Melodiy.Features.User;
+using Melodiy.Features.User.Entities;
 using Melodiy.Features.User.Models;
 using Melodiy.Integrations.Common;
 
@@ -57,11 +58,11 @@ public sealed class AuthenticationService(
         }
 
         var hashedPassword = _hashService.Secure(request.Password);
-        var user = await _userRepository.AddAsync(request.Username, hashedPassword);
+        var user = await _userRepository.AddAsync(request.Username, hashedPassword, Role.User);
         var token = _jwtTokenGenerator.GenerateAccessToken(user.Id, user.Username);
         var refreshToken = await CreateRefreshToken(user.Id, request.UserAgent);
 
-        return new AuthenticationResult()
+        return new AuthenticationResult
         {
             User = new UserViewModel
             {
@@ -84,6 +85,7 @@ public sealed class AuthenticationService(
         else if (tokenDetails.Expires < DateTime.UtcNow)
         {
             await _refreshTokenRepository.DeleteAsync(tokenDetails.UserId, DateTime.UtcNow);
+
             throw new ApiException(HttpStatusCode.Unauthorized);
         }
 
