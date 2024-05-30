@@ -1,4 +1,4 @@
-import { IconButton } from '@melodiy/shared-ui';
+import { IconButton } from '@melodiy/ui';
 import { AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { AiOutlineUserAdd } from 'react-icons/ai';

@@ -1,6 +1,6 @@
 import { fetchUserTracks } from '@melodiy/api';
 import { FilesTable } from '@melodiy/collections';
-import { useSession } from '@melodiy/shared-ui';
+import { useSession } from '@melodiy/ui';
 import { createFileRoute } from '@tanstack/react-router';
 
 function Files() {

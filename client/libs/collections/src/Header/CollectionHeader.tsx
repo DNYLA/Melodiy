@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { ScrollContext } from '@melodiy/shared-ui';
+import { ScrollContext } from '@melodiy/ui';
 import { CollectionType, Track } from '@melodiy/types';
 import { useNavigate } from '@tanstack/react-router';
 import dayjs from 'dayjs';

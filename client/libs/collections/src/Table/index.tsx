@@ -1,4 +1,4 @@
-import { useOnPlay } from '@melodiy/shared-ui';
+import { useOnPlay } from '@melodiy/ui';
 import { CollectionType, Track } from '@melodiy/types';
 import {
   ColumnDef,

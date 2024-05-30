@@ -1,4 +1,4 @@
-import { Recents } from '@melodiy/shared-ui';
+import { Recents } from '@melodiy/ui';
 import { createFileRoute } from '@tanstack/react-router';
 
 function Homepage() {

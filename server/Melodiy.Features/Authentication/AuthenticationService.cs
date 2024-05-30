@@ -50,7 +50,7 @@ public sealed class AuthenticationService(
         };
     }
 
-    public async Task<AuthenticationResult> Register(RegisterRequestModel request)
+    public async Task<AuthenticationResult> Register(RegisterRequestModel request, Role role)
     {
         if (await _userRepository.ExistsAsync(request.Username))
         {
@@ -58,7 +58,7 @@ public sealed class AuthenticationService(
         }
 
         var hashedPassword = _hashService.Secure(request.Password);
-        var user = await _userRepository.AddAsync(request.Username, hashedPassword, Role.User);
+        var user = await _userRepository.AddAsync(request.Username, hashedPassword, role);
         var token = _jwtTokenGenerator.GenerateAccessToken(user.Id, user.Username);
         var refreshToken = await CreateRefreshToken(user.Id, request.UserAgent);
 

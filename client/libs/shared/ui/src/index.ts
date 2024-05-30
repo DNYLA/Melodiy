@@ -22,6 +22,9 @@ export { useSession } from './hooks/useSession';
 export { Player } from './components/Player';
 export { usePlaylists } from './hooks/query/usePlaylist';
 
+export { AdminPanel } from './components/Admin/AdminPanel';
+export { AdminRegistration } from './components/Admin/Register';
+
 export { AlbumCard, ArtistCard, PlaylistCard } from './components/Cards/';
 
 export { Recents } from './components/Data/Recents';

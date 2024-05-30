@@ -1,5 +1,5 @@
 import { QueueTable } from '@melodiy/collections';
-import { usePlayer } from '@melodiy/shared-ui';
+import { usePlayer } from '@melodiy/ui';
 import { createFileRoute } from '@tanstack/react-router';
 
 function Queue() {

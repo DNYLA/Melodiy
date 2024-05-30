@@ -55,7 +55,7 @@ const RegisterModal = () => {
   };
 
   const onSubmit = async (data: FormValues) => {
-    const success = await signUp(data.username, data.password);
+    const success = await signUp(data.username, data.password, false);
     if (success) reset();
   };
 

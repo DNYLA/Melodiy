@@ -35,7 +35,7 @@ function ImagePreview({ className, src, alt, onReset }: ImagePreviewProps) {
       />
       <Image
         className={twMerge('h-[150px] w-[150px] rounded', className)}
-        placeholder="blur"
+        // placeholder="blur" //TODO: Fix
         src={src}
         alt={alt}
         width={150}

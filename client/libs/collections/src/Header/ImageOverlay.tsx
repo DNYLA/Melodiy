@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { ScrollContext, getDefaultImage } from '@melodiy/shared-ui';
+import { ScrollContext, getDefaultImage } from '@melodiy/ui';
 import { motion, useTransform } from 'framer-motion';
 import { FC, SyntheticEvent, useContext, useEffect, useState } from 'react';
 import { FiEdit2 } from 'react-icons/fi';

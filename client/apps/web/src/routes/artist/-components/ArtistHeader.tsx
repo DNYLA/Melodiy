@@ -1,4 +1,4 @@
-import { ScrollContext } from '@melodiy/shared-ui';
+import { ScrollContext } from '@melodiy/ui';
 import {
   AnimatePresence,
   motion,

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 using Melodiy.Features.User;
+using Melodiy.Features.User.Entities;
 
 using Microsoft.AspNetCore.Authorization;
 
@@ -36,7 +37,7 @@ public sealed class AuthenticationController(IAuthenticationService authenticati
     [HttpPost("register")]
     public async Task<ActionResult<AuthenticationResultViewModel>> Register(RegisterRequestModel registerRequestModel)
     {
-        var response = await _authenticationService.Register(registerRequestModel);
+        var response = await _authenticationService.Register(registerRequestModel, Role.User);
         SetRefreshToken(response.RefreshToken);
 
         return new AuthenticationResultViewModel

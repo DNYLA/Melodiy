@@ -1,10 +1,6 @@
 /* eslint react-hooks/rules-of-hooks: 0 */
 
-import {
-  getDefaultImage,
-  msToMinuteSeconds,
-  usePlayer,
-} from '@melodiy/shared-ui';
+import { getDefaultImage, msToMinuteSeconds, usePlayer } from '@melodiy/ui';
 import { Track } from '@melodiy/types';
 import { Link } from '@tanstack/react-router';
 import { ColumnHelper, createColumnHelper } from '@tanstack/react-table';

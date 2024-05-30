@@ -1,8 +1,4 @@
-import {
-  LoginModal,
-  MultiUploadModal,
-  RegisterModal,
-} from '@melodiy/shared-ui';
+import { LoginModal, MultiUploadModal, RegisterModal } from '@melodiy/ui';
 import { useEffect, useState } from 'react';
 
 /*

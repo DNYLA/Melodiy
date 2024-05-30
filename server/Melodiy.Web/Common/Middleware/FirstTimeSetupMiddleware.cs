@@ -12,7 +12,7 @@ public class FirstTimeSetupMiddleware(RequestDelegate next)
     {
         var alreadySetup = AlreadyInitialised(httpContext);
 
-        if (!alreadySetup && httpContext.Request.Path is not { Value: "/setup" })
+        if (!alreadySetup && !(httpContext.Request.Path.HasValue && httpContext.Request.Path.StartsWithSegments("/setup") ))
         {
             httpContext.Response.Redirect("/setup", false);
             await httpContext.Response.CompleteAsync();

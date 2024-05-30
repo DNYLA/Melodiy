@@ -2,7 +2,7 @@ import { IContainer } from '@melodiy/types';
 import ModalProvider from './ModalProvider';
 import TanstackProvider from './TanstackProvider';
 import ToasterProvider from './ToasterProvider';
-import { SessionProvider } from '@melodiy/shared-ui';
+import { SessionProvider } from '@melodiy/ui';
 
 export default function Providers({ children }: IContainer) {
   return (

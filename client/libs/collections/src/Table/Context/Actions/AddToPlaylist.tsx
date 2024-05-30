@@ -1,5 +1,5 @@
 import { addTrackToPlaylist } from '@melodiy/api';
-import { usePlaylists } from '@melodiy/shared-ui';
+import { usePlaylists } from '@melodiy/ui';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import { ChevronRightIcon } from '@radix-ui/react-icons';
 import { useEffect, useRef, useState } from 'react';

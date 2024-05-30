@@ -1,4 +1,4 @@
-import { useSession } from '@melodiy/shared-ui';
+import { useSession } from '@melodiy/ui';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import AddToFavouritesContextItem from '../Actions/AddToFavourites';
 import AddToPlaylistContextItem from '../Actions/AddToPlaylist';

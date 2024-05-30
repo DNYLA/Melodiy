@@ -4,16 +4,6 @@
   "sourceRoot": "apps/web/src",
   "projectType": "application",
   "tags": [],
-  "targets": {
-    "build": {
-      "executor": "@nx/vite:build",
-      "options": {
-        "postcssConfig": "apps/web/postcss.config.js"
-      }
-    },
-    "docker-build": {
-      "dependsOn": ["build"],
-      "command": "docker build -f apps/web/Dockerfile . -t web"
-    }
-  }
+  "// targets": "to see all targets run: nx show project web --web",
+  "targets": {}
 }

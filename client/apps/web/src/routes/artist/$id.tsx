@@ -1,6 +1,6 @@
 import { fetchArtist } from '@melodiy/api';
 import { TopTracksTable } from '@melodiy/collections';
-import { CollectionList } from '@melodiy/shared-ui';
+import { CollectionList } from '@melodiy/ui';
 import { Await, createFileRoute, defer } from '@tanstack/react-router';
 import { Suspense } from 'react';
 import { FaSpinner } from 'react-icons/fa';

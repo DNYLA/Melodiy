@@ -1,4 +1,4 @@
-import { Player, Sidebar } from '@melodiy/shared-ui';
+import { Player, Sidebar } from '@melodiy/ui';
 import { User } from '@melodiy/types';
 import {
   Outlet,
@@ -16,10 +16,14 @@ type RouterContext = {
 
 function RooutLayout() {
   const matchRoute = useMatchRoute();
-  const isValid = matchRoute({ to: '/setup' });
+  const isValid = matchRoute({ to: '/setup' }) || matchRoute({ to: '/admin' });
 
   if (isValid !== false) {
-    return <Outlet />;
+    return (
+      <Providers>
+        <Outlet />
+      </Providers>
+    );
   }
 
   return (

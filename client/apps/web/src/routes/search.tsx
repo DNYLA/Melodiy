@@ -1,6 +1,6 @@
 import { SearchQuery } from '@melodiy/api';
 import { SearchTable } from '@melodiy/collections';
-import { AlbumCard, ArtistCard } from '@melodiy/shared-ui';
+import { AlbumCard, ArtistCard } from '@melodiy/ui';
 import { SearchType } from '@melodiy/types';
 import { Await, createFileRoute, defer } from '@tanstack/react-router';
 import { Suspense } from 'react';

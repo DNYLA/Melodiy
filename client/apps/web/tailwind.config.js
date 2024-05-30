@@ -1,9 +1,9 @@
-import { mauve, violet } from '@radix-ui/colors';
-import type { Config } from 'tailwindcss';
-import { join } from 'path';
-import { createGlobPatternsForDependencies } from '@nx/react/tailwind';
+const { mauve, violet } = require('@radix-ui/colors');
+const { createGlobPatternsForDependencies } = require('@nx/react/tailwind');
+const { join } = require('path');
 
-const config: Config = {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   content: [
     join(
       __dirname,
@@ -37,5 +37,3 @@ const config: Config = {
   },
   plugins: [],
 };
-
-export default config;

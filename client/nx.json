@@ -1,5 +1,6 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "defaultBase": "master",
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
@@ -19,9 +20,9 @@
       "plugin": "@nx/vite/plugin",
       "options": {
         "buildTargetName": "build",
-        "previewTargetName": "preview",
         "testTargetName": "test",
         "serveTargetName": "serve",
+        "previewTargetName": "preview",
         "serveStaticTargetName": "serve-static"
       }
     },
@@ -29,6 +30,12 @@
       "plugin": "@nx/eslint/plugin",
       "options": {
         "targetName": "lint"
+      }
+    },
+    {
+      "plugin": "@nx/playwright/plugin",
+      "options": {
+        "targetName": "e2e"
       }
     },
     {
@@ -42,27 +49,26 @@
     "@nx/react": {
       "application": {
         "babel": true,
-        "style": "css",
+        "style": "tailwind",
         "linter": "eslint",
         "bundler": "vite"
       },
       "component": {
-        "style": "css"
+        "style": "tailwind"
       },
       "library": {
-        "style": "css",
+        "style": "tailwind",
         "linter": "eslint",
-        "unitTestRunner": "none"
+        "unitTestRunner": "jest"
       }
     }
   },
+  "nxCloudAccessToken": "MDQ1MDRhOWUtYmQ4Ny00YzZjLWE1OWQtN2E5ZTVmNTczMGE3fHJlYWQtd3JpdGU=",
   "targetDefaults": {
-    "@nx/js:tsc": {
+    "@nx/vite:build": {
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
     }
-  },
-  "neverConnectToCloud": true,
-  "defaultBase": "master"
+  }
 }

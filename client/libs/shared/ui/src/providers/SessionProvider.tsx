@@ -1,4 +1,5 @@
 import {
+  RegisterMasterAdmin,
   getApiError,
   login,
   logout,
@@ -14,7 +15,11 @@ type SessionContextType = {
   user?: User;
   isLoading: boolean;
   login: (username: string, password: string) => Promise<boolean>;
-  register: (username: string, password: string) => Promise<boolean>;
+  register: (
+    username: string,
+    password: string,
+    setup: boolean
+  ) => Promise<boolean>;
   logout: () => void;
   // update: () => void;
 };
@@ -75,13 +80,22 @@ function SessionProvider({ children }: IContainer) {
   );
 
   const handleSignUp = useCallback(
-    async (username: string, password: string) => {
+    async (username: string, password: string, setup: boolean) => {
+      console.log('jhere');
+
       try {
         setLoading(true);
-        const user = await register(username, password);
+        console.log(setup);
+        if (setup) {
+          const user = await RegisterMasterAdmin(username, password);
+          toast.success(`Created Admin Account ${user.username}`);
+          setUser({ id: user.id, username: user.username });
+        } else {
+          const user = await register(username, password);
+          toast.success('Successfully regisetered account');
+          setUser({ id: user.id, username: user.username });
+        }
 
-        toast.success('Successfully regisetered account');
-        setUser({ id: user.id, username: user.username });
         return true;
       } catch (err) {
         toast.error(getApiError(err).message);

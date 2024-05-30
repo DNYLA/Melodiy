@@ -1,4 +1,4 @@
-import { read } from 'jsmediatags';
+// import { read } from 'jsmediatags';
 import { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -19,34 +19,37 @@ export default function useTrackTags(file: FileList) {
       setTags(null);
       return;
     }
-    setIsLoading(true);
-    read(file[0], {
-      onSuccess: (values) => {
-        if (!values || !values.tags) return;
-        const tags = values.tags;
-        const loadedTags: TrackTags = {};
+    // setIsLoading(true);
+    toast.error(
+      'The auto-fill metadata feature is currently disabled due to an issue with the package. Please enter the track details manually'
+    );
+    // read(file[0], {
+    //   onSuccess: (values) => {
+    //     if (!values || !values.tags) return;
+    //     const tags = values.tags;
+    //     const loadedTags: TrackTags = {};
 
-        if (tags.title) loadedTags.title = tags.title;
-        if (tags.album) loadedTags.album = tags.album;
-        if (tags.artist) loadedTags.artist = tags.artist;
-        if (tags.picture) {
-          const byteArray = new Uint8Array(tags.picture.data);
-          const blob = new Blob([byteArray], { type: tags.picture.format });
-          const file = new File([blob], 'cover');
+    //     if (tags.title) loadedTags.title = tags.title;
+    //     if (tags.album) loadedTags.album = tags.album;
+    //     if (tags.artist) loadedTags.artist = tags.artist;
+    //     if (tags.picture) {
+    //       const byteArray = new Uint8Array(tags.picture.data);
+    //       const blob = new Blob([byteArray], { type: tags.picture.format });
+    //       const file = new File([blob], 'cover');
 
-          loadedTags.cover = file;
-        }
-        setTags(loadedTags);
-        setIsLoading(false);
-      },
-      onError: (error) => {
-        toast('No Tags Found', {
-          icon: '⚠️',
-        });
-        setIsLoading(false);
-        console.log(error);
-      },
-    });
+    //       loadedTags.cover = file;
+    //     }
+    //     setTags(loadedTags);
+    //     setIsLoading(false);
+    //   },
+    //   onError: (error) => {
+    //     toast('No Tags Found', {
+    //       icon: '⚠️',
+    //     });
+    //     setIsLoading(false);
+    //     console.log(error);
+    //   },
+    // });
   }, []);
 
   // const visibleTodos = useMemo(() => readTags(), [file]);

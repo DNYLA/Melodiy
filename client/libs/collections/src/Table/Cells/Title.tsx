@@ -1,4 +1,4 @@
-import { ArtistList, Image } from '@melodiy/shared-ui';
+import { ArtistList, Image } from '@melodiy/ui';
 import { ArtistPreview } from '@melodiy/types';
 import { twMerge } from 'tailwind-merge';
 
