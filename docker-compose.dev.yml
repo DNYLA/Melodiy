@@ -30,5 +30,4 @@ services:
       - 5129:5129
     volumes:
       - ./server/Melodiy.Web/appsettings.production.json:/app/appsettings.json
-      - /usr/share/Melodiy:/files
       - ./files:/usr/share/Melodiy
