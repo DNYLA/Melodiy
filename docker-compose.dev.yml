@@ -7,11 +7,9 @@ services:
       args:
         - API_HOST=http://localhost:5129/
     ports:
-      - 3000:3000
+      - 4200:80
     volumes:
       - ./client/.env.production:/app/.env
-      - .:/app
-      - /app/node_modules
   # web:
   #   image: melodiy-web
   #   build:
@@ -32,3 +30,5 @@ services:
       - 5129:5129
     volumes:
       - ./server/Melodiy.Web/appsettings.production.json:/app/appsettings.json
+      - /usr/share/Melodiy:/files
+      - ./files:/usr/share/Melodiy

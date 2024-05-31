@@ -48,7 +48,7 @@ function AdminRegistration() {
     const success = await signUp(data.username, data.password, true);
     if (success) {
       reset();
-      navigate({ to: '/admin' });
+      navigate({ to: '/' });
     }
   };
 
@@ -74,7 +74,7 @@ function AdminRegistration() {
           />
         </div>
 
-        <div className="mb-3 flex flex-col gap-y-1">
+        <div className="flex flex-col mb-3 gap-y-1">
           <div className="flex items-center justify-between">
             <label className="font-medium" htmlFor="password">
               Password

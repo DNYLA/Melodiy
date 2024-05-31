@@ -4,21 +4,35 @@
 # Tip: Modify "docker-build" options in project.json to change docker build args.
 #
 # Run the container with `docker run -p 3000:3000 -t web`.
-FROM docker.io/node:lts-alpine
-
-ENV HOST=0.0.0.0
-ENV PORT=3000
-
+FROM node:20-alpine as development
+RUN addgroup --system web && \
+          adduser --system -G web web
 WORKDIR /app
+
+COPY ./package*.json ./
+
+RUN npm install
+
+COPY . .
+RUN npx nx build web
+
+FROM nginx:alpine as production
+WORKDIR /app
+ENV HOST=0.0.0.0
+ENV PORT=4200
 
 RUN addgroup --system web && \
           adduser --system -G web web
 
-COPY web .
+# COPY ../../dist/apps/web web/
+# COPY ../../dist/apps/web /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=development /app/dist/apps/web /usr/share/nginx/html
+
 RUN chown -R web:web .
 
 # You can remove this install step if you build with `--bundle` option.
 # The bundled output will include external dependencies.
-RUN npm --prefix web --omit=dev -f install
+# RUN npm --prefix web --omit=dev -f install
 
-CMD [ "node", "web" ]
+EXPOSE 80

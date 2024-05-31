@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Melodiy.Features.Common.Context.Migrations
 {
     [DbContext(typeof(MelodiyDbContext))]
-    [Migration("20240525153000_UserRoles")]
-    partial class UserRoles
+    [Migration("20240531094345_InitialSetup")]
+    partial class InitialSetup
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

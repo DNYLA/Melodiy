@@ -1,6 +1,0 @@
-@Melodiy.Web_HostAddress = http://localhost:5129
-
-GET {{Melodiy.Web_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

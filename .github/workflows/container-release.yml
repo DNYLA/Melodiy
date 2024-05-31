@@ -8,11 +8,11 @@ on:
 
 env:
   image: ghcr.io/dnyla/melodiy
-   
+
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
-    
+
     strategy:
       fail-fast: false
       matrix:
@@ -20,9 +20,9 @@ jobs:
           - dockerfile: ./server/Melodiy.Api/Dockerfile
             image: ghcr.io/dnyla/melodiy-server
             context: ./server
-          # - dockerfile: ./client/Dockerfile
-          #   image: ghcr.io/dnyla/melodiy-web
-          #   context: ./client
+          - dockerfile: ./client/Dockerfile
+            image: ghcr.io/dnyla/melodiy-web
+            context: ./client
     permissions:
       contents: read
       packages: write
@@ -37,13 +37,13 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-        
+
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v4
         with:
           images: ${{ matrix.image }}
-        
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
