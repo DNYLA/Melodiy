@@ -1,4 +1,4 @@
-name: Release Melodiy Server Image
+name: Release Melodiy Images
 
 on:
   workflow_dispatch:
@@ -20,7 +20,7 @@ jobs:
           - dockerfile: ./server/Melodiy.Web/Dockerfile
             image: ghcr.io/dnyla/melodiy-server
             context: ./server
-          - dockerfile: ./client/Dockerfile
+          - dockerfile: ./client/apps/web/Dockerfile
             image: ghcr.io/dnyla/melodiy-web
             context: ./client
     permissions:
