@@ -18,7 +18,7 @@ public sealed class UserService(IHttpContextAccessor httpContextAccessor) : IUse
 
         if (user == null || user?.Identity?.IsAuthenticated == false)
         {
-            return model;
+            return null;
         }
 
         var userId = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value!;

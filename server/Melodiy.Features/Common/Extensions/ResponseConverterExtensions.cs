@@ -131,6 +131,7 @@ public static class ResponseConverterExtensions
             Artists = track.TrackArtists.Select(artist => artist.ToResponse()).ToList(),
             User = track.User?.ToResponse(),
             Image = track.Image?.ToResponse(),
+            Source = track.Source,
             ExternalDetails = new ExternalTrackDetails()
             {
                 Path = track.Path,

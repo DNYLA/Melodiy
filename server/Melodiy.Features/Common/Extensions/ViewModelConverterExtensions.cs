@@ -7,6 +7,7 @@ using Melodiy.Features.Artist.Models;
 using Melodiy.Features.Playlist.Models;
 using Melodiy.Features.Track.Models;
 using Melodiy.Features.User.Models;
+using Melodiy.Integrations.Common;
 
 public static class ViewModelConverterExtensions
 {
@@ -134,7 +135,8 @@ public static class ViewModelConverterExtensions
             Artists = track.Artists.Select(artist => artist.ToPreview()).ToList(),
             User = track.User?.ToViewModel(),
             Image = track.Image.GetUrl(),
-            Path = track.ExternalDetails.Path
+            Path = track.ExternalDetails.Path,
+            LocalCdnRequestRequired = track is { Public: false, Source: SourceType.Local }
         };
     }
 

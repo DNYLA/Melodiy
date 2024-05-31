@@ -353,7 +353,8 @@ public sealed class PlayerService(IDateTimeProvider dateProvider, IPlaylistServi
                 Artists = guestTrack.Artists.Select(artist => artist.ToPreview()).ToList(),
                 User = guestTrack.User?.ToViewModel(),
                 Image = guestTrack.Image.GetUrl(),
-                Path = guestTrack.ExternalDetails.Path
+                Path = guestTrack.ExternalDetails.Path,
+                LocalCdnRequestRequired = false
             },
             Queue = new List<TrackViewModel> { guestTrack.ToViewModel() }
         };

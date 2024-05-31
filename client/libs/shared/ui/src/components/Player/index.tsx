@@ -10,9 +10,7 @@ function Player() {
   useEffect(() => {
     (async () => {
       if (!player.active || !player.active.path) return;
-
-      //TODO: ALl of below should be re-written when we switch directly to howler.js or an alternative system.
-      if (player.active.path.includes('supabase.co')) {
+      if (!player.active.localCdnRequestRequired) {
         setTrackPath(player.active.path);
         return;
       }

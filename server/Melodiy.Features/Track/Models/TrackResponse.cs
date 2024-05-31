@@ -4,6 +4,7 @@ using Melodiy.Features.Album.Models;
 using Melodiy.Features.Artist.Models;
 using Melodiy.Features.Image.Models;
 using Melodiy.Features.User.Models;
+using Melodiy.Integrations.Common;
 
 public sealed class TrackResponse
 {
@@ -18,6 +19,8 @@ public sealed class TrackResponse
     public bool Public { get; set; }
 
     public int Duration { get; set; }
+
+    public SourceType Source { get; set; }
 
     public DateTime ReleaseDate { get; set; }
 

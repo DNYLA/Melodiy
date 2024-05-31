@@ -17,4 +17,5 @@ export type Track = {
 
 export type FullTrack = Track & {
   path: string;
+  localCdnRequestRequired: boolean;
 };

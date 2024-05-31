@@ -63,7 +63,7 @@ public class AlbumController(IUserService userService, IMediator mediator) : Con
             Id = track.Slug,
             Title = track.Title,
             Views = track.Views,
-            //Public = track.Public,
+            // Public = track.Public,
             Duration = track.Duration,
             ReleaseDate = track.ReleaseDate,
             CreatedAt = track.CreatedAt,
