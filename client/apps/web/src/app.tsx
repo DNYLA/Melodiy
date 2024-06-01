@@ -2,7 +2,6 @@
 import { initialiseAxios } from '@melodiy/api';
 import { useAuthModal, useSession } from '@melodiy/ui';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
-import ReactDOM from 'react-dom/client';
 import { routeTree } from './routeTree.gen';
 import './styles.css';
 
@@ -19,8 +18,8 @@ declare module '@tanstack/react-router' {
   }
 }
 
-const apiUrl = import.meta.env.VITE_API_URL;
-if (!apiUrl) throw Error('Invalid API URL');
+const apiUrl =
+  import.meta.env.MODE === 'development' ? 'http://127.0.0.1:5129/' : '/api';
 initialiseAxios(apiUrl);
 
 export function App() {
