@@ -19,7 +19,7 @@ declare module '@tanstack/react-router' {
 }
 
 const apiUrl =
-  import.meta.env.MODE === 'development' ? 'http://127.0.0.1:5129/' : '/api';
+  import.meta.env.MODE === 'development' ? 'http://127.0.0.1:5129/api' : '/api';
 initialiseAxios(apiUrl);
 
 export function App() {

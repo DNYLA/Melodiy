@@ -61,7 +61,7 @@ public class LocalFileRepository(IHashService hashService, IHttpContextAccessor 
             throw new Exception("No valid host found");
         }
 
-        var location = new Uri($"{request.Scheme}://{request.Host}/cdn");
+        var location = new Uri($"{request.Scheme}://{request.Host}/api/cdn");
         var url = location.AbsoluteUri;
         var path = Path.Join(url, BucketName(bucket), subPath);
 

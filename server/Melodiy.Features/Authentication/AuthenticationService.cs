@@ -82,9 +82,10 @@ public sealed class AuthenticationService(
         {
             throw new ApiException(HttpStatusCode.Unauthorized);
         }
-        else if (tokenDetails.Expires < DateTime.UtcNow)
+        
+        if (tokenDetails.Expires < DateTime.UtcNow)
         {
-            await _refreshTokenRepository.DeleteAsync(tokenDetails.UserId, DateTime.UtcNow);
+            await _refreshTokenRepository.DeleteExpiredAsync(tokenDetails.UserId, DateTime.UtcNow);
 
             throw new ApiException(HttpStatusCode.Unauthorized);
         }

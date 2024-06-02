@@ -6,7 +6,7 @@ public interface IRefreshTokenRepository
 {
     Task<RefreshToken> AddAsync(RefreshToken token);
 
-    Task DeleteAsync(int userId, DateTime expiryDate);
+    Task DeleteExpiredAsync(int userId, DateTime expiryDate);
 
     Task DeleteAsync(RefreshToken token);
 

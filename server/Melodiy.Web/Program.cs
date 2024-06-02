@@ -3,7 +3,10 @@ using Melodiy.Features;
 using Melodiy.Infrastructure.Extensions;
 using Melodiy.Integrations;
 using Melodiy.Web.Common.Middleware;
+
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
 const string myAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -30,7 +33,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddMemoryCache();
-
 
 //Custom Services
 builder.Services

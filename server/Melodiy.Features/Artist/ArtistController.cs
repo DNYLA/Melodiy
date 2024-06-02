@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class ArtistController(IUserService userService, IMediator mediator) : ControllerBase
 {
     private readonly IUserService _userService = userService;

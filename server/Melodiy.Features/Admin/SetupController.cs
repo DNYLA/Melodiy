@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 [DisableSetupControllerFilter]
 public sealed class SetupController(IMemoryCache memoryCache, IAuthenticationService authenticationService)
     : ControllerBase

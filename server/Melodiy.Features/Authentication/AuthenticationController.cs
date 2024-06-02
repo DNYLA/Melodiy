@@ -14,7 +14,7 @@ using Melodiy.Features.User.Entities;
 using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
-[Route("auth")]
+[Route("api/auth")]
 public sealed class AuthenticationController(IAuthenticationService authenticationService, IUserService userService) : ControllerBase
 {
     private readonly IAuthenticationService _authenticationService = authenticationService;

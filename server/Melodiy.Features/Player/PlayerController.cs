@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class PlayerController(IPlayerService playerService, IUserService userService) : ControllerBase
 {
     private readonly IPlayerService _playerService = playerService;

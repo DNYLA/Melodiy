@@ -1,7 +1,5 @@
 ﻿namespace Melodiy.Features.ContentNetworkDelivery;
 
-using System.Net;
-
 using Melodiy.Features.Common.Exceptions;
 using Melodiy.Features.Track;
 using Melodiy.Features.User;
@@ -12,11 +10,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
-using SpotifyAPI.Web;
+using System.Net;
 
 [ApiController]
-[Route("cdn")]
-public class ContentNetworkDeliveryController(IMemoryCache cache, ITrackRepository trackRepository, IUserService userService) : ControllerBase
+[Route("api/cdn")]
+public class ContentNetworkDeliveryController(
+    IMemoryCache cache,
+    ITrackRepository trackRepository,
+    IUserService userService) : ControllerBase
 {
     private readonly IMemoryCache _cache = cache;
 
@@ -34,7 +35,7 @@ public class ContentNetworkDeliveryController(IMemoryCache cache, ITrackReposito
 
         var bucket = GetBucketType(subPath);
         content = await LoadContentFromDisk(subPath, bucket);
-        
+
         if (content == null)
         {
             return NotFound();
@@ -64,8 +65,6 @@ public class ContentNetworkDeliveryController(IMemoryCache cache, ITrackReposito
         {
             return StorageBucket.TrackPublic;
         }
-        
-
 
         throw new ApiException(HttpStatusCode.NotFound);
     }
@@ -79,7 +78,8 @@ public class ContentNetworkDeliveryController(IMemoryCache cache, ITrackReposito
                 return null;
             }
 
-            var filePath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Melodiy", fileName);
+            var filePath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                "Melodiy", fileName);
 
             //TODO: FIX The .Replace()
             return await System.IO.File.ReadAllBytesAsync(filePath);
@@ -95,6 +95,7 @@ public class ContentNetworkDeliveryController(IMemoryCache cache, ITrackReposito
         var strippedPath = fileName.Replace("tracks-private/", string.Empty);
 
         var user = await _userService.GetUserDetails();
+
         if (user == null) return false;
 
         return await _trackRepository.AsQueryable().AnyAsync(x =>

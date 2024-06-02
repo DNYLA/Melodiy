@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class SearchController(ISearchService searchService, IUserService userService, IMediator mediator)
     : ControllerBase
 {

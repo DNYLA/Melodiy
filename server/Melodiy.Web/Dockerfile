@@ -1,4 +1,37 @@
 # Use the official .NET Core SDK as a parent image
+FROM node:20-alpine as development
+RUN addgroup --system web && \
+          adduser --system -G web web
+WORKDIR /app
+
+COPY ./package*.json ./
+
+RUN npm install
+
+COPY . .
+RUN npx nx build web
+
+FROM nginx:alpine as production
+WORKDIR /app
+ENV HOST=0.0.0.0
+ENV PORT=4200
+
+RUN addgroup --system web && \
+          adduser --system -G web web
+
+# COPY ../../dist/apps/web web/
+# COPY ../../dist/apps/web /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=development /app/dist/apps/web /usr/share/nginx/html
+
+RUN chown -R web:web .
+
+# You can remove this install step if you build with `--bundle` option.
+# The bundled output will include external dependencies.
+# RUN npm --prefix web --omit=dev -f install
+
+EXPOSE 80
+
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS base
 WORKDIR /app
 EXPOSE 5129

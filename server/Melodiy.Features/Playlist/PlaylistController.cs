@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public sealed class PlaylistController(IPlaylistService playlistService, IUserService userService) : ControllerBase
 {
     private readonly IPlaylistService _playlistService = playlistService;

@@ -16,7 +16,7 @@ public sealed class RefreshTokenRepository(MelodiyDbContext context) : IRefreshT
         return token;
     }
 
-    public async Task DeleteAsync(int userId, DateTime expiryDate)
+    public async Task DeleteExpiredAsync(int userId, DateTime expiryDate)
     {
         var expired = await _refreshTokens.Where(x => x.UserId == userId && x.Expires < expiryDate).ToListAsync();
         _refreshTokens.RemoveRange(expired);
