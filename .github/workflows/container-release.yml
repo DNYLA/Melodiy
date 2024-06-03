@@ -18,11 +18,11 @@ jobs:
       matrix:
         include:
           - dockerfile: ./server/Melodiy.Web/Dockerfile
-            image: ghcr.io/dnyla/melodiy-server
-            context: ./server
-          - dockerfile: ./client/apps/web/Dockerfile
-            image: ghcr.io/dnyla/melodiy-web
-            context: ./client
+            image: ghcr.io/dnyla/melodiy
+            # context: ./
+          # - dockerfile: ./client/apps/web/Dockerfile
+          #   image: ghcr.io/dnyla/melodiy-web
+          #   context: ./client
     permissions:
       contents: read
       packages: write
@@ -49,8 +49,6 @@ jobs:
         with:
           context: ${{ matrix.context}}
           file: ${{ matrix.dockerfile }}
-          build-args: |
-            API_HOST=https://api.melodiy.net/
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
