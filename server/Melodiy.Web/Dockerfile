@@ -4,11 +4,11 @@ RUN addgroup --system web && \
           adduser --system -G web web
 WORKDIR /app
 
-COPY ./package*.json ./
+COPY ./client/package*.json ./
 
 RUN npm install
 
-COPY . .
+COPY ./client/ .
 RUN npx nx build web
 
 FROM nginx:alpine as production
@@ -18,19 +18,6 @@ ENV PORT=4200
 
 RUN addgroup --system web && \
           adduser --system -G web web
-
-# COPY ../../dist/apps/web web/
-# COPY ../../dist/apps/web /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=development /app/dist/apps/web /usr/share/nginx/html
-
-RUN chown -R web:web .
-
-# You can remove this install step if you build with `--bundle` option.
-# The bundled output will include external dependencies.
-# RUN npm --prefix web --omit=dev -f install
-
-EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS base
 WORKDIR /app
@@ -42,20 +29,22 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG configuration=Release
 WORKDIR /src
 
-COPY ../*.sln .
-COPY ../Melodiy.Features/*.csproj ./Melodiy.Features/
-COPY ../Melodiy.Infrastructure/*.csproj ./Melodiy.Infrastructure/
-COPY ../Melodiy.Integrations/*.csproj ./Melodiy.Integrations/
-COPY ../Melodiy.Web/*.csproj ./Melodiy.Web/
+COPY ./server/*.sln .
+COPY ./server/Melodiy.Features/*.csproj ./Melodiy.Features/
+COPY ./server/Melodiy.Infrastructure/*.csproj ./Melodiy.Infrastructure/
+COPY ./server/Melodiy.Integrations/*.csproj ./Melodiy.Integrations/
+COPY ./server/Melodiy.Web/*.csproj ./Melodiy.Web/
+COPY --from=development /app/dist/apps/web ./Melodiy.Web/wwwroot/
+
 
 WORKDIR /src/Melodiy.Web/
 RUN dotnet restore "Melodiy.Web.csproj"
 
 WORKDIR /src/
-COPY ../Melodiy.Web/. ./Melodiy.Web/
-COPY ../Melodiy.Features ./Melodiy.Features/
-COPY ../Melodiy.Infrastructure/. ./Melodiy.Infrastructure/
-COPY ../Melodiy.Integrations/. ./Melodiy.Integrations/
+COPY ./server/Melodiy.Web/. ./Melodiy.Web/
+COPY ./server/Melodiy.Features ./Melodiy.Features/
+COPY ./server/Melodiy.Infrastructure/. ./Melodiy.Infrastructure/
+COPY ./server/Melodiy.Integrations/. ./Melodiy.Integrations/
 
 WORKDIR /src/Melodiy.Web/.
 RUN dotnet build "Melodiy.Web.csproj" -c $configuration -o /app/build

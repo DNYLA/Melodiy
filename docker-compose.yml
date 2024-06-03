@@ -1,12 +1,6 @@
 services:
-  web:
-    image: ghcr.io/dnyla/melodiy-web:latest
-    ports:
-      - 4200:80
-    volumes:
-      - ./client/.env.production:/app/.env
-  server:
-    image: ghcr.io/dnyla/melodiy-server:latest
+  melodiy:
+    image: ghcr.io/dnyla/melodiy:latest
     ports:
       - 5129:5129
     volumes:

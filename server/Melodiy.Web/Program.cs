@@ -1,12 +1,9 @@
-using AngleSharp;
 using Melodiy.Features;
 using Melodiy.Infrastructure.Extensions;
 using Melodiy.Integrations;
 using Melodiy.Web.Common.Middleware;
 
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Net.Http.Headers;
-using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
 const string myAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -36,19 +33,19 @@ builder.Services.AddMemoryCache();
 
 //Custom Services
 builder.Services
-       .RegisterFileRepository(builder.Configuration)
-       .RegisterSearchProvider(builder.Configuration)
-       .RegisterStreamProvider(builder.Configuration)
-       .AddFeatures()
-       .AddMelodiyContext(builder.Configuration)
-       .AddUserModule()
-       .AddAuthenticationModule(builder.Configuration)
-       .AddPlaylistModule()
-       .AddArtistModule()
-       .AddAlbumModule()
-       .AddTrackModule()
-       .AddSearchModule()
-       .AddPlayerModule();
+    .RegisterFileRepository(builder.Configuration)
+    .RegisterSearchProvider(builder.Configuration)
+    .RegisterStreamProvider(builder.Configuration)
+    .AddFeatures()
+    .AddMelodiyContext(builder.Configuration)
+    .AddUserModule()
+    .AddAuthenticationModule(builder.Configuration)
+    .AddPlaylistModule()
+    .AddArtistModule()
+    .AddAlbumModule()
+    .AddTrackModule()
+    .AddSearchModule()
+    .AddPlayerModule();
 
 var app = builder.Build();
 
@@ -57,6 +54,11 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+if (!app.Environment.IsDevelopment())
+{
+    app.MapFallbackToFile("/index.html");
+}
 
 //Custom App Initialisations
 app.UseMiddleware<ErrorHandlingMiddleware>();
