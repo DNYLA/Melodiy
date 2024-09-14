@@ -1,4 +1,8 @@
-export const {{ pascalCase name }} = ({ children }: { children: React.ReactNode }) => {
+interface {{ pascalCase name }}Props {
+  children: React.ReactNode
+}
+
+function {{ pascalCase name }}({ children }: {{ pascalCase name }}Props) {
   return (
     <div>
       <h1>{{ pascalCase name }} Component</h1>
@@ -6,3 +10,5 @@ export const {{ pascalCase name }} = ({ children }: { children: React.ReactNode 
     </div>
   );
 };
+
+export { {{ pascalCase name }} };
