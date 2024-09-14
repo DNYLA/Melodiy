@@ -70,5 +70,6 @@
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
     }
-  }
+  },
+  "defaultProject": "desktop"
 }

@@ -1,0 +1,1 @@
+export const ELECTRON_WEB_API_KEY = 'ELECTRON_WEB_API';

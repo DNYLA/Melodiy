@@ -14,13 +14,14 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as SetupImport } from './routes/setup'
 import { Route as SearchImport } from './routes/search'
 import { Route as QueueImport } from './routes/queue'
+import { Route as ElectronSetupImport } from './routes/electron-setup'
 import { Route as AdminImport } from './routes/admin'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
 import { Route as PlaylistIdImport } from './routes/playlist/$id'
 import { Route as ArtistIdImport } from './routes/artist/$id'
 import { Route as AlbumIdImport } from './routes/album/$id'
-import { Route as AuthenticatedFilesImport } from './routes/_authenticated/files'
+import { Route as AuthenticatedFilesImport } from './r./routes/electron-setup
 
 // Create/Update Routes
 
@@ -36,6 +37,11 @@ const SearchRoute = SearchImport.update({
 
 const QueueRoute = QueueImport.update({
   path: '/queue',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ElectronSetupRoute = ElectronSetupImport.update({
+  path: '/electron-setup',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -99,6 +105,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminImport
       parentRoute: typeof rootRoute
     }
+    '/electron-setup': {
+      id: '/electron-setup'
+      path: '/electron-setup'
+      fullPath: '/electron-setup'
+      preLoaderRoute: typeof ElectronSetupImport
+      parentRoute: typeof rootRoute
+    }
     '/queue': {
       id: '/queue'
       path: '/queue'
@@ -159,6 +172,7 @@ export const routeTree = rootRoute.addChildren({
     AuthenticatedFilesRoute,
   }),
   AdminRoute,
+  ElectronSetupRoute,
   QueueRoute,
   SearchRoute,
   SetupRoute,
@@ -178,6 +192,7 @@ export const routeTree = rootRoute.addChildren({
         "/",
         "/_authenticated",
         "/admin",
+        "/electron-setup",
         "/queue",
         "/search",
         "/setup",
@@ -197,6 +212,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/admin": {
       "filePath": "admin.tsx"
+    },
+    "/electron-setup": {
+      "filePath": "electron-setup.tsx"
     },
     "/queue": {
       "filePath": "queue.tsx"

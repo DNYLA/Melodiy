@@ -16,7 +16,10 @@ type RouterContext = {
 
 function RooutLayout() {
   const matchRoute = useMatchRoute();
-  const isValid = matchRoute({ to: '/setup' }) || matchRoute({ to: '/admin' });
+  const isValid =
+    matchRoute({ to: '/setup' }) ||
+    matchRoute({ to: '/admin' }) ||
+    matchRoute({ to: '/electron-setup' });
 
   if (isValid !== false) {
     return (
