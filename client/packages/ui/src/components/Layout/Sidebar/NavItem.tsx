@@ -13,13 +13,9 @@ function NavItem({ icon: Icon, label, href }: NavItemProps) {
     <Link
       draggable={false}
       to={href}
-      className="flex items-center self-stretch justify-between text-sm gap-x-2 text-base-accent group hover:text-content"
+      className="flex items-center self-stretch justify-between text-sm font-medium gap-x-2 text-base-accent group hover:text-content"
     >
-      <Icon
-        width={55}
-        height={55}
-        className="group-hover:stroke-content h-[50%]"
-      />
+      <Icon width={55} height={55} className="group-hover:stroke-content" />
       <span className="w-full truncate">{label}</span>
     </Link>
   );

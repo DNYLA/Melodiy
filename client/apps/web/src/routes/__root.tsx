@@ -6,7 +6,7 @@ import {
   useMatchRoute,
 } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
-// import Providers from '../providers';
+import Providers from '../providers';
 
 type RouterContext = {
   user?: User;
@@ -28,13 +28,13 @@ function RooutLayout() {
 
   return (
     <>
-      {/* <Providers> */}
-      <Sidebar>
-        <Outlet />
-      </Sidebar>
-      {/* <Player /> */}
-      {process.env.NODE_ENV === 'development' && <TanStackRouterDevtools />}
-      {/* </Providers> */}
+      <Providers>
+        <Sidebar>
+          <Outlet />
+        </Sidebar>
+        {/* <Player /> */}
+        {process.env.NODE_ENV === 'development' && <TanStackRouterDevtools />}
+      </Providers>
     </>
   );
 }

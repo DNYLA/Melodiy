@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { initialiseAxios } from '@melodiy/api';
-// import { useAuthModal, useSession } from '@melodiy/ui/hooks';
+import { useAuthModal, useSession } from '@melodiy/ui/hooks';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { routeTree } from './routeTree.gen';
 import './styles.css';
@@ -23,17 +23,17 @@ const apiUrl =
 initialiseAxios(apiUrl);
 
 export function App() {
-  // const session = useSession();
-  // const modal = useAuthModal();
+  const session = useSession();
+  const modal = useAuthModal();
 
   return (
     <RouterProvider
       router={router}
-      // context={{
-      //   user: session.user,
-      //   loading: session.loading,
-      //   open: modal.onOpen,
-      // }}
+      context={{
+        user: session.user,
+        loading: session.loading,
+        open: modal.onOpen,
+      }}
     />
   );
 }

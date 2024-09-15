@@ -1,3 +1,4 @@
+import Library from './Library';
 import NavItem from './NavItem';
 import {
   LikeIcon,
@@ -79,7 +80,9 @@ function SidebarHeader() {
         <span className="text-lg">My Library</span>
       </div>
 
-      <div className="flex flex-col gap-2.5 px-3.5 pt-5">
+      <div className="flex flex-col px-3.5 pt-5">
+        <Library />
+
         {session == null
           ? routes
               .filter((item) => !item.authentication)
