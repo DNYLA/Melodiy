@@ -3,6 +3,7 @@ import SidebarHeader from './SidebarHeader';
 import { useRef } from 'react';
 import { useScroll } from 'framer-motion';
 import { ScrollContext } from '../../../providers/ScrollProvider';
+import { Navbar } from '../Navbar/';
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -31,7 +32,7 @@ function Sidebar({ children }: SidebarProps) {
           className="flex-1 w-full h-full pb-2 overflow-y-auto"
           ref={pageRef}
         >
-          {/* <Navbar /> */}
+          <Navbar />
           <div className="w-full">{children}</div>
         </main>
       </ScrollContext.Provider>

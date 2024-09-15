@@ -14,13 +14,13 @@ function SidebarHeader() {
     {
       icon: LikeIcon,
       label: 'Liked songs',
-      href: '/',
+      href: '/liked',
       authentication: false,
     },
     {
       icon: SaveIcon,
       label: 'Saves',
-      href: '/',
+      href: '/saved',
       authentication: false,
     },
     {
