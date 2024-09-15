@@ -1,25 +1,24 @@
+import { IconProps } from '@melodiy/icons/types';
 import { Link } from '@tanstack/react-router';
-import { IconType } from 'react-icons';
-import { Icon, Icons } from '../../Utils';
+import { JSXElementConstructor } from 'react';
 
 interface NavItemProps {
-  icon: Icons;
+  icon: JSXElementConstructor<IconProps>; //What would the type be to achieve this
   label: string;
   href: string;
 }
 
-function NavItem({ icon, label, href }: NavItemProps) {
+function NavItem({ icon: Icon, label, href }: NavItemProps) {
   return (
     <Link
       draggable={false}
       to={href}
-      className="flex items-center self-stretch justify-between gap-2.5 text-sm text-base-accent group hover:text-content"
+      className="flex items-center self-stretch justify-between text-sm gap-x-2 text-base-accent group hover:text-content"
     >
       <Icon
-        icon={icon}
         width={55}
         height={55}
-        className="group-hover:fill-content fill-red-500 stroke-red-500"
+        className="group-hover:stroke-content h-[50%]"
       />
       <span className="w-full truncate">{label}</span>
     </Link>

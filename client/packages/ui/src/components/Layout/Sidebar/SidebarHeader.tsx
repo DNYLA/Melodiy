@@ -1,35 +1,41 @@
 import NavItem from './NavItem';
-import { Icons } from '../../Utils';
+import {
+  LikeIcon,
+  SaveIcon,
+  AlbumIcon,
+  FolderIcon,
+  ArtistIcon,
+} from '@melodiy/icons';
 
 function SidebarHeader() {
   const session = false;
   const routes = [
     {
-      icon: Icons.Like,
+      icon: LikeIcon,
       label: 'Liked songs',
       href: '/',
       authentication: false,
     },
     {
-      icon: Icons.Save,
+      icon: SaveIcon,
       label: 'Saves',
       href: '/',
       authentication: false,
     },
     {
-      icon: Icons.Album,
+      icon: AlbumIcon,
       label: 'Albums',
       href: '/liked',
       authentication: false,
     },
     {
-      icon: Icons.Folder,
+      icon: FolderIcon,
       label: 'Folders',
       href: '/files',
       authentication: true,
     },
     {
-      icon: Icons.Artist,
+      icon: ArtistIcon,
       label: 'My Content',
       href: '/files',
       authentication: true,
