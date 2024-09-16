@@ -23,8 +23,8 @@ function Navbar() {
 
   return (
     <div
-      style={{ width: `calc(100% - 270px )` }}
-      className="fixed top-0 z-[100] flex h-[70px] w-full flex-row justify-between px-2 py-3"
+      // style={{ width: `calc(100% - 20px )` }}
+      className="top-0 z-[100] flex h-[70px] w-full flex-row justify-between px-2 py-3 sticky bg-[#060606]"
     >
       <div className="flex flex-row items-center gap-x-3">
         {navItems.map((link) => (
@@ -36,7 +36,7 @@ function Navbar() {
             <link.icon
               width={45}
               height={45}
-              className="group-hover:stroke-content group-[&.active]:stroke-content"
+              className="group-hover:stroke-content group-[&.active]:stroke-content p-1"
             />
             <span className="">{link.label}</span>
           </Link>

@@ -19,7 +19,7 @@ function Sidebar({ children }: SidebarProps) {
   return (
     <div
       className={twMerge(
-        `flex h-full w-full`,
+        `flex h-screen w-full`,
         // player.active && 'h-[calc(100%-80px)]',
       )}
     >
@@ -33,7 +33,9 @@ function Sidebar({ children }: SidebarProps) {
           ref={pageRef}
         >
           <Navbar />
-          <div className="w-full">{children}</div>
+          <div className="w-full rounded-lg border-[#202020] border ml-2">
+            {children}
+          </div>
         </main>
       </ScrollContext.Provider>
     </div>

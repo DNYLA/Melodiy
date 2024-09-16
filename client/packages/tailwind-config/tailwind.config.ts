@@ -24,6 +24,16 @@ module.exports = {
         base: '#222222',
         'base-accent': '#898989',
         content: '#e0e0e0',
+        background: '#060606',
+      },
+      animation: {
+        fade: 'fadeIn .5s ease-in-out',
+      },
+      keyframes: {
+        fadeIn: {
+          from: { opacity: 0 },
+          to: { opacity: 1 },
+        },
       },
     },
   },

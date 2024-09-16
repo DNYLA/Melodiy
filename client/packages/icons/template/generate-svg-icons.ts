@@ -120,7 +120,6 @@ async function updateExports(settings: ExportSettings) {
     iconExports.push(exportLine);
   }
 
-  console.log(iconExports);
   await writeFile('src/index.ts', iconExports.join('\n'));
 }
 

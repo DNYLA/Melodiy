@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@melodiy/ui": "*",
+    "@melodiy/icons": "*",
     "@tanstack/react-query": "^5.56.2",
     "@tanstack/react-router": "^1.57.13",
     "@tanstack/router-vite-plugin": "^1.57.13",
