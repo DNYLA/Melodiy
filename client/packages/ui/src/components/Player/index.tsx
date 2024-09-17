@@ -33,7 +33,7 @@ function Player() {
     return null;
 
   return (
-    <div className="fixed bottom-0 h-[80px] w-full bg-[#1b1818] px-4 py-2">
+    <div className="p-5 h-[80px] w-full bg-[#1b1818] px-4 py-2">
       <PlayerContent
         key={player.active.id + downloadedTrackPath}
         track={player.active}

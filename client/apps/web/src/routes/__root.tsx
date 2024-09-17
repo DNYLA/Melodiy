@@ -7,6 +7,7 @@ import {
 } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import Providers from '../providers';
+import { Player } from '@melodiy/ui/player';
 
 type RouterContext = {
   user?: User;

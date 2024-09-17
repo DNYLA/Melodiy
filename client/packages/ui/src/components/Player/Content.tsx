@@ -158,7 +158,7 @@ function PlayerContent({ track, trackPath }: PlayerContentProps) {
             className={twMerge(
               'cursor-pointer text-neutral-400 transition hover:text-white hover:scale-110',
               player.type === PlayerType.Shuffle &&
-                'text-primary-light hover:text-primary-light'
+                'text-primary-light hover:text-primary-light',
             )}
             onClick={toggleShuffle}
           />
@@ -183,7 +183,7 @@ function PlayerContent({ track, trackPath }: PlayerContentProps) {
             className={twMerge(
               'cursor-pointer text-neutral-400 transition hover:text-white hover:scale-110',
               player.mode !== PlayerMode.NoRepeat &&
-                'text-primary-light hover:text-primary-light'
+                'text-primary-light hover:text-primary-light',
             )}
             onClick={toggleMode}
           />

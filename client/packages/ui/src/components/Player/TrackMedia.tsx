@@ -1,7 +1,7 @@
 import { Track } from '@melodiy/types';
 import { Link } from '@tanstack/react-router';
 import React from 'react';
-import { Image } from '../Data';
+import { Image } from '../Data/Image';
 
 interface TrackMediaProps {
   data: Track;

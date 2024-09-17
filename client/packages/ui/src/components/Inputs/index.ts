@@ -4,5 +4,5 @@ export { IconButton } from './Buttons/IconButton';
 export { Input, inputVariants } from './Input';
 // export { SearchComboBox } from './SearchComboBox';
 // export { Select } from './Select';
-// export { Slider } from './Slider';
+export { Slider } from './Slider';
 // export { Switch } from './Switch';

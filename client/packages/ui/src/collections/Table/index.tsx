@@ -94,8 +94,8 @@ const TrackTable: FC<TrackTableProps> = ({
             <tr
               key={row.id}
               className={twMerge(
-                'group hover:bg-[#1f1c1c]',
-                row.getIsSelected() && 'bg-[#1f1c1c]',
+                'group hover:bg-base-accent/10',
+                row.getIsSelected() && 'bg-base-accent/10',
               )}
               onClick={() => row.toggleSelected()}
               onDoubleClick={() => {

@@ -4,25 +4,22 @@ import { useRef } from 'react';
 import { useScroll } from 'framer-motion';
 import { ScrollContext } from '../../../providers/ScrollProvider';
 import { Navbar } from '../Navbar/';
+import { Player } from '../../Player';
+import { usePlayer } from '../../Player/hooks/usePlayer';
 
 interface SidebarProps {
   children: React.ReactNode;
 }
 
 function Sidebar({ children }: SidebarProps) {
-  // const player = usePlayer();
+  const player = usePlayer();
   const pageRef = useRef(null);
   const { scrollX, scrollY, scrollXProgress, scrollYProgress } = useScroll({
     container: pageRef,
   });
 
   return (
-    <div
-      className={twMerge(
-        `flex h-screen w-full`,
-        // player.active && 'h-[calc(100%-80px)]',
-      )}
-    >
+    <div className={twMerge(`flex h-screen w-full`)}>
       <SidebarHeader />
 
       <ScrollContext.Provider
@@ -33,8 +30,16 @@ function Sidebar({ children }: SidebarProps) {
           ref={pageRef}
         >
           <Navbar />
-          <div className="w-full rounded-lg border-[#202020] border ml-2">
+          <div
+            className={twMerge(
+              'w-full rounded-lg border-[#202020] border ml-2 gap-y-5',
+              player.active && 'mb-14',
+            )}
+          >
             {children}
+          </div>
+          <div className="p-2">
+            <Player />
           </div>
         </main>
       </ScrollContext.Provider>

@@ -1,6 +1,7 @@
 import { ArtistPreview } from '@melodiy/types';
 import { twMerge } from 'tailwind-merge';
 import { Image } from '../../../components/Data/Image';
+import { ArtistList } from '../../../components/Data/ArtistList';
 
 interface TitleCellProps {
   title: string;
@@ -11,10 +12,10 @@ interface TitleCellProps {
 
 function TitleCell({ title, artists, cover, isActive }: TitleCellProps) {
   return (
-    <div className="flex gap-x-2">
+    <div className="flex gap-x-2.5">
       <Image
         draggable={false}
-        className="h-[45px] w-[45px] rounded-md"
+        className="h-[45px] w-[45px] rounded-[3px]"
         src={cover}
         width={45}
         height={45}
@@ -29,7 +30,7 @@ function TitleCell({ title, artists, cover, isActive }: TitleCellProps) {
         >
           {title}
         </span>
-        {/* <ArtistList artists={artists} /> */}
+        <ArtistList artists={artists} />
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ export interface ArtistHeaderProps {
 function ArtistHeader({ id, name, imageSrc, listerners }: ArtistHeaderProps) {
   return (
     <div
-      className="relative w-full rounded-lg bg-accent h-96"
+      className="relative w-full rounded-lg border-base bg-accent h-96"
       style={
         {
           // backgroundColor: '#2b2525',
