@@ -15,7 +15,7 @@ function Artist() {
   const data = Route.useLoaderData();
 
   return (
-    <main className="flex flex-col w-full">
+    <div className="flex flex-col w-full">
       <Suspense
         fallback={
           <ArtistHeader
@@ -82,6 +82,10 @@ function Artist() {
                     <Tabs.Content className="w-full m-5" value="home">
                       <div className="flex flex-col px-5 gap-y-4">
                         <TopTracksTable tracks={artist.topTracks} />
+                        <TopTracksTable tracks={artist.topTracks} />
+                        <TopTracksTable tracks={artist.topTracks} />
+                        <TopTracksTable tracks={artist.topTracks} />
+                        <TopTracksTable tracks={artist.topTracks} />
                       </div>
                     </Tabs.Content>
                     <Tabs.Content className="w-full m-5" value="singles">
@@ -138,7 +142,7 @@ function Artist() {
           }}
         </Await>
       </Suspense>
-    </main>
+    </div>
   );
 }
 

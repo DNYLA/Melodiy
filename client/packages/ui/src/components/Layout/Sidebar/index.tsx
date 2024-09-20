@@ -19,30 +19,28 @@ function Sidebar({ children }: SidebarProps) {
   });
 
   return (
-    <div className={twMerge(`flex h-screen w-full`)}>
+    <div className={twMerge(`flex h-full w-full`)}>
       <SidebarHeader />
 
-      <ScrollContext.Provider
-        value={{ scrollX, scrollY, scrollXProgress, scrollYProgress }}
-      >
-        <main
-          className="flex-1 w-full h-full pb-2 overflow-y-auto"
-          ref={pageRef}
+      <div className="flex flex-col w-full h-[calc(100vh-16px)]">
+        <ScrollContext.Provider
+          value={{ scrollX, scrollY, scrollXProgress, scrollYProgress }}
         >
-          <Navbar />
-          <div
-            className={twMerge(
-              'w-full rounded-lg border-[#202020] border ml-2 gap-y-5',
-              player.active && 'mb-14',
-            )}
-          >
-            {children}
-          </div>
-          <div className="p-2">
-            <Player />
-          </div>
-        </main>
-      </ScrollContext.Provider>
+          <main className="flex-1 pb-2 overflow-y-auto" ref={pageRef}>
+            <Navbar />
+
+            <div
+              className={twMerge(
+                'rounded-lg border-[#202020] border h-[calc(100vh-85px)] ml-2 gap-y-5 overflow-auto',
+                player.active && 'h-[calc(100vh-175px)]',
+              )}
+            >
+              {children}
+            </div>
+          </main>
+        </ScrollContext.Provider>
+        <Player />
+      </div>
     </div>
   );
 }

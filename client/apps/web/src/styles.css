@@ -2,9 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body,
-:root {
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
   user-select: none;
   background-color: #060606;
   color: #e0e0e0;
@@ -12,5 +16,14 @@ body,
   height: 100%;
   font-family: 'Satoshi', sans-serif;
   font-style: normal;
-  padding: 4px;
+}
+
+#root {
+  display: flex;
+  padding: 8px;
+  height: calc(100% - 250px);
+}
+
+*::-webkit-scrollbar {
+  display: none;
 }

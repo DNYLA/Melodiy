@@ -44,7 +44,7 @@ function SidebarHeader() {
   ];
 
   return (
-    <div className="relative h-full w-[260px] select-none flex-col bg-accent rounded-[10px]">
+    <div className="flex h-full w-[260px] select-none flex-col bg-accent rounded-[10px]">
       <div className="flex gap-2.5 pl-4 items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
