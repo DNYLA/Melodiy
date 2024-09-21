@@ -26,20 +26,19 @@ const TrackMedia: React.FC<TrackMediaProps> = ({ data, onClick }) => {
     // >
     <div
       onClick={handleClick}
-      className="flex items-center w-full p-2 rounded-md cursor-pointer cursor-poiner gap-x-3 hover:bg-neutral-600/25"
+      className="flex items-center w-full p-2 cursor-pointer cursor-poiner gap-x-2 "
     >
-      <div className="relative h-[48px] w-[48px] overflow-hidden rounded-md">
-        <Image src={data.image} alt="Media Item" className="object-cover" />
+      <div className="relative overflow-hidden rounded-[3px] h-14 w-14">
+        <Image src={data.image} alt="Media Item" className="object-cover " />
       </div>
-      <div className="flex flex-col overflow-hidden gap-y-1">
-        <p className="flex text-white truncate hover:underline">{data.title}</p>
-        <Link to="/artist/$id" params={{ id: 15 }}></Link>
+      <div className="flex flex-col overflow-hidden ">
+        <p className="flex text-sm text-white truncate">{data.title}</p>
         <div className="flex gap-x-1">
           {data.artists.map(({ id, name }, i) => (
             <Link to={'/artist/$id'} params={{ id }}>
               <span
                 key={id}
-                className="text-sm cursor-pointer text-inactive hover:underline"
+                className="text-sm cursor-pointer text-base-accent hover:underline"
               >
                 {name}
                 {i !== data.artists.length - 1 ? ',' : ''}

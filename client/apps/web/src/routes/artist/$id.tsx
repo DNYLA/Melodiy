@@ -42,7 +42,7 @@ function Artist() {
                 />
                 <div className="">
                   <Tabs.Root className="flex flex-col" defaultValue="home">
-                    <Tabs.List className="flex p-5 gap-x-8 sticky top-[70px] w-full bg-background border-b border-base rounded-lg z-50">
+                    <Tabs.List className="sticky top-0 z-50 flex w-full p-5 border-b rounded-lg gap-x-8 bg-background border-base">
                       <Tabs.Trigger
                         className="data-[state=active]:border-b pb-2 border-primary hover:border-b"
                         value="home"

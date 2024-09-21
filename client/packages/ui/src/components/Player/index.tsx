@@ -1,7 +1,8 @@
 import { DownloadTrack } from '@melodiy/api';
 import { useEffect, useState } from 'react';
-import PlayerContent from './Content';
 import { usePlayer } from './hooks/usePlayer';
+import { twMerge } from 'tailwind-merge';
+import PlayerContent from './PlayerContent';
 
 function Player() {
   const [downloadedTrackPath, setTrackPath] = useState('');
@@ -33,7 +34,12 @@ function Player() {
     return null;
 
   return (
-    <div className="p-5 h-[80px] w-full bg-[#1b1818] px-4 py-2">
+    <div
+      className={twMerge(
+        'w-full p-5 h-[80px] bg-[#333842] px-4 py-2 rounded-xl mt-2 duration-500',
+        !player.isPlaying && 'bg-[#202020]',
+      )}
+    >
       <PlayerContent
         key={player.active.id + downloadedTrackPath}
         track={player.active}

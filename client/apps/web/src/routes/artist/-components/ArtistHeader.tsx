@@ -37,7 +37,7 @@ function ArtistHeader({ id, name, imageSrc, listerners }: ArtistHeaderProps) {
           alt={'Artist Cover'}
         />
       )}
-      <div className="absolute bottom-0 flex flex-col w-full px-24 my-20">
+      <div className="absolute bottom-0 flex flex-col w-full pr-24 my-6 pl-14">
         <h1 className="text-5xl font-bold">{name}</h1>
         <div className="flex flex-row justify-between w-full mt-8">
           {listerners != null && (

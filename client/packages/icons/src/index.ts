@@ -18,6 +18,7 @@ export { CheckedIcon } from './components/Checked';
 export { CloseIcon } from './components/Close';
 export { DeviceIcon } from './components/Device';
 export { DiscoverIcon } from './components/Discover';
+export { DjIcon } from './components/Dj';
 export { DownIcon } from './components/Down';
 export { DownloadIcon } from './components/Download';
 export { DownvoteIcon } from './components/Downvote';

@@ -1,15 +1,10 @@
-import { FullTrack, PlayerMode, PlayerType } from '@melodiy/types';
-import { Link } from '@tanstack/react-router';
+import { FullTrack, PlayerMode } from '@melodiy/types';
 import { useEffect, useState } from 'react';
-import { AiFillStepBackward, AiFillStepForward } from 'react-icons/ai';
-import { BsPauseFill, BsPlayFill, BsRepeat, BsRepeat1 } from 'react-icons/bs';
-import { FaShuffle } from 'react-icons/fa6';
+import { BsRepeat, BsRepeat1 } from 'react-icons/bs';
 import { HiSpeakerWave, HiSpeakerXMark } from 'react-icons/hi2';
-import { PiQueue } from 'react-icons/pi';
-import { twMerge } from 'tailwind-merge';
 import useSound from 'use-sound';
 import { msToMinuteSeconds } from '../../utils';
-import { Slider } from '../Inputs';
+import { IconButton, Slider } from '../Inputs';
 import TrackMedia from './TrackMedia';
 import { useMode } from './hooks/useMode';
 import { useOnNext } from './hooks/useOnNext';
@@ -17,6 +12,20 @@ import { useOnPrevious } from './hooks/useOnPrevious';
 import { usePlayer } from './hooks/usePlayer';
 import { useShuffle } from './hooks/useShuffle';
 import { useVolume } from './hooks/useVolume';
+import {
+  AddtoPlaylistIcon,
+  DeviceIcon,
+  LikeIcon,
+  LoopIcon,
+  LyricsIcon,
+  MoreIcon,
+  NextIcon,
+  PauseIcon,
+  PlayIcon,
+  PrevIcon,
+  QueueIcon,
+  ShuffleIcon,
+} from '@melodiy/icons';
 
 interface PlayerContentProps {
   track: FullTrack;
@@ -26,7 +35,7 @@ interface PlayerContentProps {
 function PlayerContent({ track, trackPath }: PlayerContentProps) {
   const player = usePlayer();
   const { onNext } = useOnNext();
-  const { onToggle: onModeToggle } = useMode();
+  const { onToggle: onRepeatToggle } = useMode();
   const { onToggle: onShuffleToggle } = useShuffle();
   const { onPrevious } = useOnPrevious();
   const { volume, update: updateVolume, toggleMute } = useVolume();
@@ -34,7 +43,7 @@ function PlayerContent({ track, trackPath }: PlayerContentProps) {
   // const [duration, setDuration] = useState(0);
   const { isPlaying, setIsPlaying } = player;
 
-  const PlayIcon = isPlaying ? BsPauseFill : BsPlayFill;
+  const PlayerActionIcon = isPlaying ? PauseIcon : PlayIcon;
   const getPlayerModeIcon = (mode: PlayerMode) => {
     switch (mode) {
       case PlayerMode.NoRepeat:
@@ -129,68 +138,42 @@ function PlayerContent({ track, trackPath }: PlayerContentProps) {
     onShuffleToggle();
   };
 
-  const toggleMode = () => {
-    onModeToggle();
+  const toggleRepeat = () => {
+    onRepeatToggle();
   };
 
   return (
-    <div className="grid h-full grid-cols-2 grid-rows-2 md:grid-cols-3">
-      <div className="flex justify-start w-full row-span-full">
-        <div className="flex items-center gap-x-4">
-          <TrackMedia data={track} />
-          {/* <LikeButton songId={song.id} /> */}
-        </div>
-      </div>
-
-      <div className="flex items-center justify-end w-full col-auto md:hidden">
-        <div
-          onClick={handlePlay}
-          className="flex items-center justify-center w-10 h-10 p-1 bg-white rounded-full cursor-pointer"
-        >
-          <PlayIcon size={30} className="text-black" />
-        </div>
-      </div>
-
-      <div className="h-full row-span-full">
-        <div className="items-center justify-center hidden w-full gap-x-6 md:flex">
-          <FaShuffle
-            size={23}
-            className={twMerge(
-              'cursor-pointer text-neutral-400 transition hover:text-white hover:scale-110',
-              player.type === PlayerType.Shuffle &&
-                'text-primary-light hover:text-primary-light',
-            )}
-            onClick={toggleShuffle}
+    <div className="flex justify-between w-full h-full">
+      <div className="flex w-full gap-x-5">
+        <div className="flex">
+          <IconButton
+            className="fill-primary stroke-none"
+            icon={PlayerActionIcon}
+            onClick={handlePlay}
           />
-          <AiFillStepBackward
-            size={25}
-            className="transition cursor-pointer text-neutral-400 hover:text-white"
+          <IconButton
+            className="stroke-base-accent fill-base-accent"
+            icon={PrevIcon}
             onClick={onPlayPrevious}
           />
-          <div
-            onClick={handlePlay}
-            className="flex items-center justify-center p-1 bg-white rounded-full cursor-pointer h-9 w-9"
-          >
-            <PlayIcon size={25} className="text-black" />
-          </div>
-          <AiFillStepForward
-            size={25}
-            className="transition cursor-pointer text-neutral-400 hover:text-white"
+          <IconButton
+            className="stroke-base-accent fill-base-accent"
+            icon={NextIcon}
             onClick={onPlayNext}
           />
-          <PlayerModeIcon
-            size={23}
-            className={twMerge(
-              'cursor-pointer text-neutral-400 transition hover:text-white hover:scale-110',
-              player.mode !== PlayerMode.NoRepeat &&
-                'text-primary-light hover:text-primary-light',
-            )}
-            onClick={toggleMode}
+          <IconButton
+            className="stroke-base-accent"
+            icon={ShuffleIcon}
+            onClick={toggleShuffle}
+          />
+          <IconButton
+            className="stroke-base-accent"
+            icon={LoopIcon}
+            onClick={toggleRepeat}
           />
         </div>
-        <div className="flex flex-row items-center text-sm font-light gap-x-2 text-neutral-200">
-          {/* <p>{sound?.seek()}</p> */}
-          {/* <span>{sound?.seek() ?? 0}</span> */}
+
+        <div className="flex flex-row items-center w-2/6 text-sm font-light gap-x-2 text-neutral-200">
           <span>{msToMinuteSeconds(curSecond * 1000)}</span>
           <Slider
             size={5}
@@ -201,27 +184,44 @@ function PlayerContent({ track, trackPath }: PlayerContentProps) {
           />
           <span>{msToMinuteSeconds(duration ?? 0)}</span>
         </div>
+
+        <div className="flex items-center gap-x-4">
+          <TrackMedia data={track} />
+          {/* <LikeButton songId={song.id} /> */}
+        </div>
       </div>
 
-      <div className="items-center justify-end hidden w-full pr-2 row-span-full md:flex gap-x-5">
-        <div className="duration-200 hover:text-inactive">
-          <Link to={'/queue'}>
-            <PiQueue className="cursor-pointer" size={24} />
-          </Link>
+      <div className="flex gap-x-5">
+        <div className="flex">
+          <IconButton className="stroke-base-accent" icon={LikeIcon} />
+          <IconButton className="stroke-base-accent" icon={AddtoPlaylistIcon} />
+          <IconButton className="stroke-base-accent" icon={LyricsIcon} />
+          <IconButton className="stroke-base-accent" icon={DeviceIcon} />
+          <IconButton
+            className="stroke-base-accent fill-base-accent"
+            icon={MoreIcon}
+          />
         </div>
 
-        <div className="flex w-[120px] items-center gap-x-2">
-          <VolumeIcon
-            onClick={toggleMute}
-            className="cursor-pointer"
-            size={34}
-          />
-          <Slider
-            value={volume}
-            onChange={(value) => updateVolume(value, false)}
-            onCommit={(value) => updateVolume(value, true)}
-            step={0.01}
-          />
+        <div className="flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="3"
+            height="39"
+            viewBox="0 0 3 39"
+            fill="none"
+          >
+            <path
+              d="M1.79004 1.5L1.79004 37.5"
+              stroke="#898989"
+              stroke-opacity="0.3"
+              stroke-width="4"
+              stroke-linecap="round"
+            />
+          </svg>
+        </div>
+        <div className="flex mr-2">
+          <IconButton className="stroke-base-accent" icon={QueueIcon} />
         </div>
       </div>
     </div>

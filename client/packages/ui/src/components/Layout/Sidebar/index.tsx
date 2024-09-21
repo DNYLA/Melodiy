@@ -37,9 +37,10 @@ function Sidebar({ children }: SidebarProps) {
             >
               {children}
             </div>
+
+            <Player />
           </main>
         </ScrollContext.Provider>
-        <Player />
       </div>
     </div>
   );
