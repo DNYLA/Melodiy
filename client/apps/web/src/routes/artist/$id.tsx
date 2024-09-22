@@ -79,7 +79,7 @@ function Artist() {
                       </Tabs.Trigger>
                     </Tabs.List>
 
-                    <Tabs.Content className="w-full m-5" value="home">
+                    <Tabs.Content className="w-full" value="home">
                       <div className="flex flex-col px-5 gap-y-4">
                         <TopTracksTable tracks={artist.topTracks} />
                         <TopTracksTable tracks={artist.topTracks} />

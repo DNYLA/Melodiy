@@ -12,10 +12,10 @@ import useFilePreview from '../../../hooks/useFilePreview';
 import { useSession } from '../../../hooks/useSession';
 import useTrackTags from '../../../hooks/useTrackTags';
 import { addFormFile } from '../../../utils';
-import { ImagePreview } from '../../Data';
+import { ImagePreview } from '../../Data/ImagePreview';
 import { ActionButton, Button, Input, Switch } from '../../Inputs';
 import { ComboBoxItem, SearchComboBox } from '../../Inputs/SearchComboBox';
-import useUploadModal from './useUploadModal';
+import { useUploadModal } from './useUploadModal';
 
 const schema = z.object({
   title: z
@@ -50,7 +50,7 @@ const schema = z.object({
               data.item(0) !== null &&
               (data.item(0)?.type === 'audio/mpeg' ||
                 data.item(0)?.type === 'audio/wav'),
-            'Only MP3 and Wav files are supported'
+            'Only MP3 and Wav files are supported',
           ),
   // .refine((data) => data.),
 });
@@ -99,7 +99,7 @@ function UploadTrackMenu() {
 
   const { query: albumQuery, loading: loadingAlbum } = useAlbumSearch(
     album?.name,
-    artist.id
+    artist.id,
   );
 
   const setTags = useCallback(() => {
@@ -174,13 +174,6 @@ function UploadTrackMenu() {
 
   return (
     <>
-      <Dialog.Title className="mb-4 text-xl font-bold text-center">
-        Upload Song
-      </Dialog.Title>
-      <Dialog.Description className="mb-5 text-sm leading-normal text-center">
-        Enter the details for the new song.
-      </Dialog.Description>
-
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-y-4"
@@ -289,13 +282,21 @@ function UploadTrackMenu() {
         <div className="flex mt-2 gap-x-4">
           {/* <Button onClick={() => readTags(trackFile)}>Read Tags</Button> */}
           <ActionButton
+            className="bg-content"
             disabled={!trackFile || trackFile.length == 0}
             isLoading={isReadingTags}
             onClick={() => setTags()}
           >
             Read Tags
           </ActionButton>
-          <Button onClick={resetForm}>Clear</Button>
+          <Button
+            variant={'alternative'}
+            rounded={'action'}
+            className="bg-content"
+            onClick={resetForm}
+          >
+            Clear
+          </Button>
         </div>
 
         <ActionButton type="submit" isLoading={isSubmitting}>

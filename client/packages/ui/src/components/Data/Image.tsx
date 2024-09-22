@@ -1,5 +1,6 @@
 import { ImgHTMLAttributes, SyntheticEvent, forwardRef } from 'react';
 import { getDefaultImage } from '../../utils';
+import { twMerge } from 'tailwind-merge';
 
 interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   fallback?: string;

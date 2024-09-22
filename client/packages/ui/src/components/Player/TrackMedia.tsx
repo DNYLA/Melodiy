@@ -29,7 +29,11 @@ const TrackMedia: React.FC<TrackMediaProps> = ({ data, onClick }) => {
       className="flex items-center w-full p-2 cursor-pointer cursor-poiner gap-x-2 "
     >
       <div className="relative overflow-hidden rounded-[3px] h-14 w-14">
-        <Image src={data.image} alt="Media Item" className="object-cover " />
+        <Image
+          src={data.image}
+          alt="Media Item"
+          className="object-cover h-14 w-14"
+        />
       </div>
       <div className="flex flex-col overflow-hidden ">
         <p className="flex text-sm text-white truncate">{data.title}</p>

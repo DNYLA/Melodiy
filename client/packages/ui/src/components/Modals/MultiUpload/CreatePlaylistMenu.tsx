@@ -10,9 +10,9 @@ import { usePlaylists } from '../../../hooks/query/usePlaylist';
 import useFilePreview from '../../../hooks/useFilePreview';
 import { useSession } from '../../../hooks/useSession';
 import { addFormFile } from '../../../utils';
-import { ImagePreview } from '../../Data';
 import { ActionButton, Input, Switch } from '../../Inputs';
-import useUploadModal from './useUploadModal';
+import { useUploadModal } from './useUploadModal';
+import { ImagePreview } from '../../Data/ImagePreview';
 
 const schema = z.object({
   title: z
@@ -87,12 +87,6 @@ function CreatePlaylistMenu() {
 
   return (
     <>
-      <Dialog.Title className="mb-4 text-xl font-bold text-center">
-        New Playlist
-      </Dialog.Title>
-      <Dialog.Description className="mb-5 text-sm leading-normal text-center">
-        Enter the details for the new playlist.
-      </Dialog.Description>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-y-4"

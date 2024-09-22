@@ -1,5 +1,5 @@
 import { CollectionType, Playlist } from '@melodiy/types';
-import CollectionHeader from '../Header/CollectionHeader';
+import CollectionContainer from '../Header/CollectionContainer';
 import TrackTable from './';
 import { ColumnBuilder } from './Helpers/ColumnBuilder';
 
@@ -18,7 +18,8 @@ export function PlaylistTable({ data }: PlaylistTableProps) {
 
   return (
     <div className="flex flex-col w-full gap-y-5">
-      <CollectionHeader
+      <CollectionContainer
+        id={data.id}
         title={data.title}
         cover={data.image}
         type={CollectionType.Playlist}
@@ -28,15 +29,14 @@ export function PlaylistTable({ data }: PlaylistTableProps) {
           name: data.user.username,
           redirect: `/user/${data.user.id}`,
         }}
-      />
-      <div className="px-6 py-3 pt-2 pr-5">
+      >
         <TrackTable
           data={data.tracks}
           columns={columns}
           collectionId={data.id}
           type={CollectionType.Playlist}
         />
-      </div>
+      </CollectionContainer>
     </div>
   );
 }

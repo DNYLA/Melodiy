@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { twMerge } from 'tailwind-merge';
 import { usePlaylists } from '../../../hooks/query/usePlaylist';
 import { AddtoPlaylistIcon, PlaylistIcon } from '@melodiy/icons';
-import useUploadModal from '../../Modals/MultiUpload/useUploadModal';
+import { useUploadModal } from '../../Modals/MultiUpload/useUploadModal';
 import { useAuthModal } from '../../Modals';
 import { useSession } from '../../../hooks';
 

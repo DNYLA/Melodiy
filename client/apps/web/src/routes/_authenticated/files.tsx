@@ -1,19 +1,14 @@
 import { fetchUserTracks } from '@melodiy/api';
-import { FilesTable } from '@melodiy/collections';
-import { useSession } from '@melodiy/ui';
-import { createFileRoute } from '@tanstack/react-router';
-import { useEffect } from 'react';
+import { FilesTable } from '@melodiy/ui/collections';
+import { useSession } from '@melodiy/ui/hooks';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 
 function Files() {
   const session = useSession();
   const tracks = Route.useLoaderData();
-
-  useEffect(() => {
-    console.log('re-rendering');
-  }, [session.user]);
-
+  const navigate = useNavigate();
   if (session.user == null) {
-    //TODO; redirect
+    navigate({ to: '/' });
     return <div></div>;
   }
 

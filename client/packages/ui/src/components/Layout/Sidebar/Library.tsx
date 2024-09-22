@@ -3,7 +3,7 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { FaSpinner } from 'react-icons/fa';
 import { useSession } from '../../../hooks/useSession';
 import { useAuthModal } from '../../Modals/Auth/useAuthModal';
-import useUploadModal from '../../Modals/MultiUpload/useUploadModal';
+import { useUploadModal } from '../../Modals/MultiUpload/useUploadModal';
 import {
   AddtoPlaylistIcon,
   ArrowRightIcon,

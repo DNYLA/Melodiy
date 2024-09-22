@@ -25,6 +25,7 @@ module.exports = {
         'base-accent': '#898989',
         content: '#e0e0e0',
         background: '#060606',
+        modal: '#202020',
       },
       animation: {
         fade: 'fadeIn .5s ease-in-out',

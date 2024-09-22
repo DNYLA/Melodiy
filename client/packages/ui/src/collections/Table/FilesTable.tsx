@@ -1,5 +1,5 @@
 import { CollectionType, Track } from '@melodiy/types';
-import CollectionHeader from '../Header/CollectionHeader';
+import CollectionContainer from '../Header/CollectionContainer';
 import TrackTable from './';
 import { ColumnBuilder } from './Helpers/ColumnBuilder';
 
@@ -21,7 +21,8 @@ export function FilesTable({ data, username }: FilesTableProps) {
 
   return (
     <div className="flex flex-col w-full gap-y-5">
-      <CollectionHeader
+      <CollectionContainer
+        id={'Your Files'}
         title={'Your Files'}
         type={CollectionType.Files}
         releaseDate={new Date()}
@@ -30,15 +31,16 @@ export function FilesTable({ data, username }: FilesTableProps) {
           name: username,
           redirect: `/user/${username}`,
         }}
-      />
-      <div className="px-6 py-3 pt-2 pr-5">
-        <TrackTable
-          data={data}
-          columns={columns}
-          collectionId={FILES_COLLECTION_ID}
-          type={CollectionType.Files}
-        />
-      </div>
+      >
+        <div className="px-6 py-3 pt-2 pr-5">
+          <TrackTable
+            data={data}
+            columns={columns}
+            collectionId={FILES_COLLECTION_ID}
+            type={CollectionType.Files}
+          />
+        </div>
+      </CollectionContainer>
     </div>
   );
 }

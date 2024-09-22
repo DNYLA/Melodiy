@@ -1,3 +1,4 @@
+import { useSession } from '../../../hooks';
 import Library from './Library';
 import NavItem from './NavItem';
 import {
@@ -9,7 +10,7 @@ import {
 } from '@melodiy/icons';
 
 function SidebarHeader() {
-  const session = false;
+  const session = useSession();
   const routes = [
     {
       icon: LikeIcon,
@@ -26,13 +27,13 @@ function SidebarHeader() {
     {
       icon: AlbumIcon,
       label: 'Albums',
-      href: '/liked',
+      href: '/albums',
       authentication: false,
     },
     {
       icon: FolderIcon,
       label: 'Folders',
-      href: '/files',
+      href: '/folders',
       authentication: true,
     },
     {
@@ -83,7 +84,7 @@ function SidebarHeader() {
       <div className="flex flex-col px-3.5 pt-5">
         <Library />
 
-        {session == null
+        {session.user == null
           ? routes
               .filter((item) => !item.authentication)
               .map((item) => <NavItem key={item.label} {...item} />)

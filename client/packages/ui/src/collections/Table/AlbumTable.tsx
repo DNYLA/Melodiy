@@ -1,7 +1,7 @@
 import { Album, CollectionType } from '@melodiy/types';
-import CollectionHeader from '../Header/CollectionHeader';
 import TrackTable from './';
 import { ColumnBuilder } from './Helpers/ColumnBuilder';
+import CollectionContainer from '../Header/CollectionContainer';
 
 interface AlbumTableProps {
   data: Album;
@@ -15,27 +15,34 @@ export function AlbumTable({ data }: AlbumTableProps) {
     .AddDuration()
     .Build();
 
+  const getOwners = () => {
+    return data.artists.map((artist) => {
+      return {
+        name: artist.name,
+        cover: artist.image,
+        redirect: `/artist/${artist.id}`,
+      };
+    });
+  };
+
   return (
     <div className="flex flex-col w-full gap-y-5">
-      <CollectionHeader
+      <CollectionContainer
+        id={data.id}
         title={data.title}
         cover={data.image}
         type={CollectionType.Album}
         releaseDate={new Date(data.createdAt)}
         tracks={data.tracks}
-        owner={{
-          name: data.artists[0]!.name,
-          redirect: `/artist/${data.artists[0]!.id}`,
-        }}
-      />
-      <div className="px-6 py-3 pt-2 pr-5">
+        owner={getOwners()}
+      >
         <TrackTable
           data={data.tracks}
           columns={columns}
           collectionId={data.id}
           type={CollectionType.Album}
         />
-      </div>
+      </CollectionContainer>
     </div>
   );
 }

@@ -15,4 +15,4 @@ const useUploadModal = create<UploadModalStore>((set) => ({
   onClose: () => set({ isOpen: false, isUploadTab: false }),
 }));
 
-export default useUploadModal;
+export { useUploadModal };

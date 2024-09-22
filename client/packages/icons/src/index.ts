@@ -12,6 +12,7 @@ export { ArrowRightIcon } from './components/ArrowRight';
 export { ArrowUpIcon } from './components/ArrowUp';
 export { ArtistIcon } from './components/Artist';
 export { AudiobookIcon } from './components/Audiobook';
+export { BulletPointIcon } from './components/BulletPoint';
 export { CameraIcon } from './components/Camera';
 export { CheckIcon } from './components/Check';
 export { CheckedIcon } from './components/Checked';

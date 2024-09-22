@@ -39,7 +39,7 @@ function ArtistHeader({ id, name, imageSrc, listerners }: ArtistHeaderProps) {
       )}
       <div className="absolute bottom-0 flex flex-col w-full pr-24 my-6 pl-14">
         <h1 className="text-5xl font-bold">{name}</h1>
-        <div className="flex flex-row justify-between w-full mt-8">
+        <div className="flex flex-row justify-between w-full mt-5">
           {listerners != null && (
             <span className="hidden text-base font-medium md:block text-content">
               {listerners.toLocaleString()} Monthly Listerners

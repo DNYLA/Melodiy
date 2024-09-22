@@ -173,7 +173,7 @@ function PlayerContent({ track, trackPath }: PlayerContentProps) {
           />
         </div>
 
-        <div className="flex flex-row items-center w-2/6 text-sm font-light gap-x-2 text-neutral-200">
+        <div className="flex flex-row items-center w-2/6 text-sm font-light gap-x-2 text-content">
           <span>{msToMinuteSeconds(curSecond * 1000)}</span>
           <Slider
             size={5}
@@ -183,11 +183,25 @@ function PlayerContent({ track, trackPath }: PlayerContentProps) {
             step={0.01}
           />
           <span>{msToMinuteSeconds(duration ?? 0)}</span>
+
+          <div className="flex items-center gap-x-2 group ">
+            <VolumeIcon
+              onClick={toggleMute}
+              className="cursor-pointer text-content"
+              size={34}
+            />
+            <Slider
+              className="hidden w-20 group-hover:flex"
+              value={volume}
+              onChange={(value) => updateVolume(value, false)}
+              onCommit={(value) => updateVolume(value, true)}
+              step={0.01}
+            />
+          </div>
         </div>
 
         <div className="flex items-center gap-x-4">
           <TrackMedia data={track} />
-          {/* <LikeButton songId={song.id} /> */}
         </div>
       </div>
 

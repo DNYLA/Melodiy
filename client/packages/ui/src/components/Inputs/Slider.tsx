@@ -50,10 +50,10 @@ export function Slider({
       aria-label="Volume"
     >
       <RadixSlider.Track
-        className="relative rounded-full grow bg-neutral-600"
+        className="relative rounded-full grow bg-base-accent"
         style={{ height: `${size}px` }}
       >
-        <RadixSlider.Range className="absolute h-full bg-white rounded-full" />
+        <RadixSlider.Range className="absolute h-full rounded-full bg-content" />
       </RadixSlider.Track>
     </RadixSlider.Root>
   );
