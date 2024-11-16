@@ -1,4 +1,6 @@
-import LinkContextItem from './LinkItem';
+import { Link } from '@tanstack/react-router';
+import ContextItemBase from '../Base/ContextItemBase';
+import { AlbumIcon, ArtistIcon } from '@melodiy/icons';
 
 interface TrackParentRedirectProps {
   artistId: string;
@@ -10,13 +12,17 @@ function TrackParentRedirectsContextItems({
 }: TrackParentRedirectProps) {
   return (
     <>
-      <LinkContextItem path={`artist`} slug={artistId}>
-        View Artist
-      </LinkContextItem>
+      <Link to={`/artist/$id`} params={{ id: artistId }} disabled={!artistId}>
+        <ContextItemBase icon={ArtistIcon} disabled={!artistId}>
+          View Artist
+        </ContextItemBase>
+      </Link>
 
-      <LinkContextItem path={`album`} slug={albumId} disabled={!albumId}>
-        View Album
-      </LinkContextItem>
+      {albumId && (
+        <Link to={`/album/$id`} params={{ id: albumId }}>
+          <ContextItemBase icon={AlbumIcon}>View Album</ContextItemBase>
+        </Link>
+      )}
     </>
   );
 }

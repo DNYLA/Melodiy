@@ -1,9 +1,9 @@
 import { CollectionType } from '@melodiy/types';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import React from 'react';
-import AlbumContextMenu from './Album';
-import FileContextMenu from './File';
-import PlaylistContextMenu from './Playlist';
+import AlbumContextMenu from './AlbumContextMenu';
+import FileContextMenu from './FileContextMenu';
+import PlaylistContextMenu from './PlaylistContextMenu';
 
 interface TableContextProps {
   trackId: string;
@@ -27,7 +27,7 @@ function TrackTableContextMenu({
     switch (type) {
       case CollectionType.Album:
         return <AlbumContextMenu trackId={trackId} artistId={artistId} />;
-      case CollectionType.Files:
+      case CollectionType.MyFiles:
         return (
           <FileContextMenu
             artistId={artistId}

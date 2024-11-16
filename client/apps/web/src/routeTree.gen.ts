@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as SetupImport } from './routes/setup'
+import { Route as SearchImport } from './routes/search'
 import { Route as AdminImport } from './routes/admin'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
@@ -24,6 +25,11 @@ import { Route as AuthenticatedFilesImport } from './routes/_authenticated/files
 
 const SetupRoute = SetupImport.update({
   path: '/setup',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SearchRoute = SearchImport.update({
+  path: '/search',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -87,6 +93,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminImport
       parentRoute: typeof rootRoute
     }
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchImport
+      parentRoute: typeof rootRoute
+    }
     '/setup': {
       id: '/setup'
       path: '/setup'
@@ -143,6 +156,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AuthenticatedRouteWithChildren
   '/admin': typeof AdminRoute
+  '/search': typeof SearchRoute
   '/setup': typeof SetupRoute
   '/files': typeof AuthenticatedFilesRoute
   '/album/$id': typeof AlbumIdRoute
@@ -154,6 +168,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AuthenticatedRouteWithChildren
   '/admin': typeof AdminRoute
+  '/search': typeof SearchRoute
   '/setup': typeof SetupRoute
   '/files': typeof AuthenticatedFilesRoute
   '/album/$id': typeof AlbumIdRoute
@@ -166,6 +181,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/admin': typeof AdminRoute
+  '/search': typeof SearchRoute
   '/setup': typeof SetupRoute
   '/_authenticated/files': typeof AuthenticatedFilesRoute
   '/album/$id': typeof AlbumIdRoute
@@ -179,6 +195,7 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/admin'
+    | '/search'
     | '/setup'
     | '/files'
     | '/album/$id'
@@ -189,6 +206,7 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/admin'
+    | '/search'
     | '/setup'
     | '/files'
     | '/album/$id'
@@ -199,6 +217,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/admin'
+    | '/search'
     | '/setup'
     | '/_authenticated/files'
     | '/album/$id'
@@ -211,6 +230,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AdminRoute: typeof AdminRoute
+  SearchRoute: typeof SearchRoute
   SetupRoute: typeof SetupRoute
   AlbumIdRoute: typeof AlbumIdRoute
   ArtistIdRoute: typeof ArtistIdRoute
@@ -221,6 +241,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AdminRoute: AdminRoute,
+  SearchRoute: SearchRoute,
   SetupRoute: SetupRoute,
   AlbumIdRoute: AlbumIdRoute,
   ArtistIdRoute: ArtistIdRoute,
@@ -242,6 +263,7 @@ export const routeTree = rootRoute
         "/",
         "/_authenticated",
         "/admin",
+        "/search",
         "/setup",
         "/album/$id",
         "/artist/$id",
@@ -259,6 +281,9 @@ export const routeTree = rootRoute
     },
     "/admin": {
       "filePath": "admin.tsx"
+    },
+    "/search": {
+      "filePath": "search.tsx"
     },
     "/setup": {
       "filePath": "setup.tsx"

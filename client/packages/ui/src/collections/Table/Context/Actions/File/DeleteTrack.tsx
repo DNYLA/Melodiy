@@ -1,7 +1,7 @@
-'use client';
 import { deleteTrack } from '@melodiy/api';
-import * as ContextMenu from '@radix-ui/react-context-menu';
 import toast from 'react-hot-toast';
+import ContextItemBase from '../../Base/ContextItemBase';
+import { RemovefromQueueIcon } from '@melodiy/icons';
 
 interface DeleteTrackContextItemProps {
   id: string;
@@ -21,12 +21,9 @@ function DeleteTrackContextItem({ id }: DeleteTrackContextItemProps) {
   };
 
   return (
-    <ContextMenu.Item
-      onClick={handleDelete}
-      className="group relative flex h-[25px] items-center rounded-[3px] px-2 py-4 text-sm leading-none text-red-500 outline-none  data-[highlighted]:bg-neutral-700/80"
-    >
+    <ContextItemBase onClick={handleDelete} icon={RemovefromQueueIcon}>
       Delete Song
-    </ContextMenu.Item>
+    </ContextItemBase>
   );
 }
 

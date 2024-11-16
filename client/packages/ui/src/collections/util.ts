@@ -4,7 +4,7 @@ export function getCollectionName(type: CollectionType) {
   switch (type) {
     case CollectionType.Album:
       return 'Album';
-    case CollectionType.Files:
+    case CollectionType.MyFiles:
       return 'Files';
     case CollectionType.Playlist:
       return 'Public Playlist';

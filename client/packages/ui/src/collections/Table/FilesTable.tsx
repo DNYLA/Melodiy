@@ -24,7 +24,7 @@ export function FilesTable({ data, username }: FilesTableProps) {
       <CollectionContainer
         id={'Your Files'}
         title={'Your Files'}
-        type={CollectionType.Files}
+        type={CollectionType.MyFiles}
         releaseDate={new Date()}
         tracks={data}
         owner={{
@@ -37,7 +37,7 @@ export function FilesTable({ data, username }: FilesTableProps) {
             data={data}
             columns={columns}
             collectionId={FILES_COLLECTION_ID}
-            type={CollectionType.Files}
+            type={CollectionType.MyFiles}
           />
         </div>
       </CollectionContainer>

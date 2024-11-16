@@ -1,6 +1,7 @@
 import { DiscoverIcon, HomeIcon, SearchIcon } from '@melodiy/icons';
 import { Link } from '@tanstack/react-router';
 import AuthSection from './AuthSection';
+import { SearchInput } from './SearchInput';
 
 function Navbar() {
   const navItems = [
@@ -13,11 +14,6 @@ function Navbar() {
       icon: DiscoverIcon,
       label: 'Discover',
       href: '/discover',
-    },
-    {
-      icon: SearchIcon,
-      label: 'Search',
-      href: '/search',
     },
   ];
 
@@ -41,6 +37,8 @@ function Navbar() {
             <span className="">{link.label}</span>
           </Link>
         ))}
+
+        <SearchInput />
       </div>
 
       <AuthSection />

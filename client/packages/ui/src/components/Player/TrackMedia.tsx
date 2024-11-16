@@ -2,6 +2,7 @@ import { Track } from '@melodiy/types';
 import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { Image } from '../Data/Image';
+import TrackContextMenu from '../../collections/Table/Context/TrackContextMenu';
 
 interface TrackMediaProps {
   data: Track;
@@ -17,12 +18,23 @@ const TrackMedia: React.FC<TrackMediaProps> = ({ data, onClick }) => {
     //TODO: Default turn on player
   };
 
+  const getTitleLink = () => {
+    if (data.album != null)
+      return (
+        <Link to={'/album/$id'} params={{ id: data.album.id }}>
+          <p className="flex text-sm text-white truncate">{data.title}</p>
+        </Link>
+      );
+
+    return <p className="flex text-sm text-white truncate">{data.title}</p>;
+  };
+
   return (
-    // <SongContextMenu
-    //   trackId={data.uid}
-    //   ownerId={data.user?.id}
-    //   key={data.uid}
-    //   type={PlaylistType.Playlist}
+    // <TrackContextMenu
+    //   trackId={data.id}
+    //   artistId={data.artists[0]?.id!}
+    //   albumId={data.album?.id}
+    //   key={data.id}
     // >
     <div
       onClick={handleClick}
@@ -36,7 +48,7 @@ const TrackMedia: React.FC<TrackMediaProps> = ({ data, onClick }) => {
         />
       </div>
       <div className="flex flex-col overflow-hidden ">
-        <p className="flex text-sm text-white truncate">{data.title}</p>
+        {getTitleLink()}
         <div className="flex gap-x-1">
           {data.artists.map(({ id, name }, i) => (
             <Link to={'/artist/$id'} params={{ id }}>
@@ -52,7 +64,7 @@ const TrackMedia: React.FC<TrackMediaProps> = ({ data, onClick }) => {
         </div>
       </div>
     </div>
-    // </SongContextMenu>
+    // </TrackContextMenu>
   );
 };
 

@@ -17,7 +17,7 @@ function MultiUploadModal() {
     <Dialog.Root open={isOpen} defaultOpen={isOpen} onOpenChange={onChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-neutral-900/80 backdrop-blur-sm z-[500]" />
-        <Dialog.Content className="fixed left-[50%] top-[50%] z-[1000] h-full max-h-full w-full translate-x-[-50%] translate-y-[-50%] rounded-md border-none bg-modal bg-opacity-80 focus:outline-none md:h-auto md:max-h-[85vh] md:w-[90vw] md:max-w-[450px]">
+        <Dialog.Content className="fixed left-[50%] top-[50%] z-[1000] h-full max-h-full w-full translate-x-[-50%] translate-y-[-50%] rounded-md border-none bg-modal bg-opacity-100 focus:outline-none md:h-auto md:max-h-[85vh] md:w-[90vw] md:max-w-[450px]">
           <Tabs.Root
             className="flex flex-col"
             defaultValue={isUploadTab === true ? 'tab2' : 'tab1'}

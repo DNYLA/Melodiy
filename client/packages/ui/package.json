@@ -42,6 +42,7 @@
     "@tanstack/react-table": "^8.20.5",
     "class-variance-authority": "^0.7.0",
     "dayjs": "^1.11.13",
+    "query-string": "^9.0.0",
     "react": "^18.2.0",
     "react-hook-form": "^7.53.0",
     "react-hot-toast": "^2.4.1",

@@ -1,5 +1,8 @@
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import toast from 'react-hot-toast';
+import ContextMenuBase from '../Base/ContextMenuBase';
+import ContextItemBase from '../Base/ContextItemBase';
+import { QueueIcon } from '@melodiy/icons';
 
 interface QueueContextItemProps {
   trackId: string;
@@ -13,14 +16,9 @@ function QueueContextItem({ trackId }: QueueContextItemProps) {
   };
 
   return (
-    <ContextMenu.Item
-      onClick={onQueue}
-      className={
-        'group relative flex h-[25px] items-center rounded-[3px] px-2 py-4 text-sm leading-none outline-none  data-[highlighted]:bg-neutral-700/80 data-[disabled]:text-inactive'
-      }
-    >
+    <ContextItemBase icon={QueueIcon} onClick={onQueue}>
       Add to queue
-    </ContextMenu.Item>
+    </ContextItemBase>
   );
 }
 
