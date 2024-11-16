@@ -2,7 +2,7 @@ import { fetchAlbum } from '@melodiy/api';
 import { AlbumTable } from '@melodiy/ui/collections';
 import { createFileRoute } from '@tanstack/react-router';
 
-function Artist({ params }: { params: { id: string } }) {
+function Artist() {
   const album = Route.useLoaderData();
   const navigate = Route.useNavigate();
 

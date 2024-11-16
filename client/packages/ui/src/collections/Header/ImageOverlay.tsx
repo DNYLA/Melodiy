@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { motion, useTransform } from 'framer-motion';
 import { FC, SyntheticEvent, useContext, useEffect, useState } from 'react';
 import { FiEdit2 } from 'react-icons/fi';

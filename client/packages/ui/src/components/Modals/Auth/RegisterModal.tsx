@@ -1,13 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useSession } from '../../../hooks/useSession';
 // import { ActionButton, Input } from '../../Inputs';
+import { ActionButton, Input } from '../../Inputs';
 import { Modal } from '../Modal';
 import { useAuthModal } from './useAuthModal';
-import { ActionButton, Input } from '../../Inputs';
 
 type FormValues = {
   username: string;
@@ -31,7 +30,6 @@ const schema = z
   });
 
 const RegisterModal = () => {
-  const navigate = useNavigate();
   const { onClose, isOpen, isLogin, onOpen } = useAuthModal();
   const { user, signUp } = useSession();
   const {

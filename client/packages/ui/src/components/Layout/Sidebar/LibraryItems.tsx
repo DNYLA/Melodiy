@@ -1,10 +1,10 @@
+import { AddtoPlaylistIcon, PlaylistIcon } from '@melodiy/icons';
 import { Link } from '@tanstack/react-router';
 import { twMerge } from 'tailwind-merge';
-import { usePlaylists } from '../../../hooks/query/usePlaylist';
-import { AddtoPlaylistIcon, PlaylistIcon } from '@melodiy/icons';
-import { useUploadModal } from '../../Modals/MultiUpload/useUploadModal';
-import { useAuthModal } from '../../Modals';
 import { useSession } from '../../../hooks';
+import { usePlaylists } from '../../../hooks/query/usePlaylist';
+import { useAuthModal } from '../../Modals';
+import { useUploadModal } from '../../Modals/MultiUpload/useUploadModal';
 
 export interface ILibraryItem {
   name: string;
@@ -14,7 +14,7 @@ export interface ILibraryItem {
 
 const LibraryItems = () => {
   const { data, isLoading, error } = usePlaylists();
-  const { user, loading: isUserLoading } = useSession();
+  const { user } = useSession();
   const { onOpen: onOpenUpload } = useUploadModal();
   const { onOpen: onOpenAuth } = useAuthModal();
 

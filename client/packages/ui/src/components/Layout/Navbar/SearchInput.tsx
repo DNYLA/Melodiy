@@ -1,12 +1,12 @@
 'use client';
 
-import { MatchRoute, useMatchRoute, useNavigate } from '@tanstack/react-router';
+import { SearchIcon } from '@melodiy/icons';
+import { useMatchRoute, useNavigate } from '@tanstack/react-router';
 import qs from 'query-string';
 import { useCallback, useEffect, useState } from 'react';
+import { twMerge } from 'tailwind-merge';
 import useDebounce from '../../../hooks/useDebounce';
 import { Input } from '../../Inputs';
-import { SearchIcon } from '@melodiy/icons';
-import { twMerge } from 'tailwind-merge';
 
 export function SearchInput() {
   const navigate = useNavigate();

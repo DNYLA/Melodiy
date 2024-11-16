@@ -1,5 +1,5 @@
-import { Sidebar } from '@melodiy/ui/components/Layout/';
 import { User } from '@melodiy/types';
+import { Sidebar } from '@melodiy/ui/components/Layout/';
 import {
   Outlet,
   createRootRouteWithContext,
@@ -7,7 +7,6 @@ import {
 } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import Providers from '../providers';
-import { Player } from '@melodiy/ui/player';
 
 type RouterContext = {
   user?: User;

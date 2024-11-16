@@ -8,7 +8,7 @@ COPY ./client/package*.json ./
 
 RUN npm install
 
-COPY ./client/ .
+COPY ./client/apps/web .
 RUN npx nx build web
 
 FROM nginx:alpine as production

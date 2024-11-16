@@ -10,7 +10,7 @@ interface TrackTags {
 }
 
 export default function useTrackTags(file: FileList) {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
   const [tags, setTags] = useState<TrackTags | null>(null);
 
   const readTags = useCallback((file: FileList) => {
@@ -21,7 +21,7 @@ export default function useTrackTags(file: FileList) {
     }
     // setIsLoading(true);
     toast.error(
-      'The auto-fill metadata feature is currently disabled due to an issue with the package. Please enter the track details manually'
+      'The auto-fill metadata feature is currently disabled due to an issue with the package. Please enter the track details manually',
     );
     // read(file[0], {
     //   onSuccess: (values) => {

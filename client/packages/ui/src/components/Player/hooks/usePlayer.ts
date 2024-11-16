@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {
   CollectionType,
   FullTrack,
@@ -19,7 +20,7 @@ interface PlayerStore {
   setActive: (
     track: FullTrack,
     collectionId: string,
-    type: CollectionType
+    type: CollectionType,
   ) => void;
   setQueue: (tracks: Track[]) => void;
 }

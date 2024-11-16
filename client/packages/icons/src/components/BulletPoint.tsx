@@ -1,11 +1,4 @@
-import { IconProps } from '../types';
-import { twMerge } from 'tailwind-merge';
-
-function BulletPointIcon({
-  width = 3,
-  height = 4,
-  className,
-}: Partial<IconProps>) {
+function BulletPointIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

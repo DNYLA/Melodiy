@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import * as RadixSlider from '@radix-ui/react-slider';
 import { twMerge } from 'tailwind-merge';
 

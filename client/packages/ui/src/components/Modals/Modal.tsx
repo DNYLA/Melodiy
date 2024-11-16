@@ -1,24 +1,18 @@
+import { CloseIcon } from '@melodiy/icons';
 import * as Dialog from '@radix-ui/react-dialog';
 import React from 'react';
-import { IoMdClose } from 'react-icons/io';
 import { IconButton } from '../Inputs';
-import { CloseIcon } from '@melodiy/icons';
 
 interface ModalProps {
   isOpen: boolean;
+  // eslint-disable-next-line no-unused-vars
   onChange: (open: boolean) => void;
   title: string;
   description: string;
   children: React.ReactNode;
 }
 
-export function Modal({
-  isOpen,
-  onChange,
-  title,
-  description,
-  children,
-}: ModalProps) {
+export function Modal({ isOpen, onChange, title, children }: ModalProps) {
   return (
     <Dialog.Root open={isOpen} defaultOpen={isOpen} onOpenChange={onChange}>
       <Dialog.Portal>

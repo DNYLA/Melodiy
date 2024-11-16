@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { initialiseAxios } from '@melodiy/api';
 import { useAuthModal, useSession } from '@melodiy/ui/hooks';
 import { RouterProvider, createRouter } from '@tanstack/react-router';

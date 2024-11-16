@@ -1,10 +1,10 @@
 import { SettingsIcon } from '@melodiy/icons';
+import { Link } from '@tanstack/react-router';
 import { useSession } from '../../../hooks/useSession';
 import { Image } from '../../Data/Image';
-import { Link } from '@tanstack/react-router';
 
 export function UserMenu() {
-  const { user, signOut } = useSession();
+  const { user } = useSession();
   const defaultAvatar = '/images/default_avatar.jpg';
 
   return (

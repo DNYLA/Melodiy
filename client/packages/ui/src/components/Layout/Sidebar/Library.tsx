@@ -1,24 +1,11 @@
+import { DownIcon, PlaylistIcon, RightIcon } from '@melodiy/icons';
 import { Suspense, useState } from 'react';
-import { AiOutlinePlus } from 'react-icons/ai';
 import { FaSpinner } from 'react-icons/fa';
-import { useSession } from '../../../hooks/useSession';
-import { useAuthModal } from '../../Modals/Auth/useAuthModal';
-import { useUploadModal } from '../../Modals/MultiUpload/useUploadModal';
-import {
-  AddtoPlaylistIcon,
-  ArrowRightIcon,
-  DownIcon,
-  PlaylistIcon,
-  RightIcon,
-} from '@melodiy/icons';
-import { usePlaylists } from '../../../hooks/query/usePlaylist';
 import { twMerge } from 'tailwind-merge';
-import { Link } from '@tanstack/react-router';
 import LibraryItems from './LibraryItems';
 // import LibraryItems from './LibraryItems';
 
 function Library() {
-  const { user, loading: isUserLoading } = useSession();
   const [expanded, setExpanded] = useState(false);
 
   const ToggleIcon = expanded ? DownIcon : RightIcon;

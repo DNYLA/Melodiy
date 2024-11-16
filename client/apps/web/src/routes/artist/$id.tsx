@@ -1,14 +1,14 @@
 import { fetchArtist } from '@melodiy/api';
+import { TopTracksTable } from '@melodiy/ui/collections';
 import {
   CollectionCard,
   CollectionCardSize,
 } from '@melodiy/ui/components/Cards';
-import { TopTracksTable, CollectionList } from '@melodiy/ui/collections';
+import * as Tabs from '@radix-ui/react-tabs';
 import { Await, createFileRoute, defer } from '@tanstack/react-router';
 import { Suspense } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import { ArtistHeader } from './-components/ArtistHeader';
-import * as Tabs from '@radix-ui/react-tabs';
 
 function Artist() {
   const navigate = Route.useNavigate();

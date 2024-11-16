@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CreatePlaylist } from '@melodiy/api';
-import * as Dialog from '@radix-ui/react-dialog';
 import { useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -10,9 +9,9 @@ import { usePlaylists } from '../../../hooks/query/usePlaylist';
 import useFilePreview from '../../../hooks/useFilePreview';
 import { useSession } from '../../../hooks/useSession';
 import { addFormFile } from '../../../utils';
+import { ImagePreview } from '../../Data/ImagePreview';
 import { ActionButton, Input, Switch } from '../../Inputs';
 import { useUploadModal } from './useUploadModal';
-import { ImagePreview } from '../../Data/ImagePreview';
 
 const schema = z.object({
   title: z
@@ -28,7 +27,6 @@ interface CreatePlaylistForm {
   public: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface CreatePlaylistMenuProps {}
 
 function CreatePlaylistMenu() {

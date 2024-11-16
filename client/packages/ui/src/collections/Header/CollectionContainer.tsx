@@ -1,39 +1,22 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import {
+  AddtoQueueIcon,
+  ArtistIcon,
+  BulletPointIcon,
+  DownloadIcon,
+  MoreIcon,
+  PauseIcon,
+  PlayIcon,
+  ShareIcon,
+  ShuffleIcon,
+} from '@melodiy/icons';
 import { CollectionType, Track } from '@melodiy/types';
 import { useNavigate } from '@tanstack/react-router';
 import dayjs from 'dayjs';
-import {
-  AnimatePresence,
-  motion,
-  useMotionValueEvent,
-  useTransform,
-} from 'framer-motion';
-import { FC, useContext, useEffect, useRef, useState } from 'react';
-import { BiShuffle } from 'react-icons/bi';
-import { BsFillPlayFill } from 'react-icons/bs';
-import { getCollectionName } from '../util';
-import ImageOverlay from './ImageOverlay';
-import { ScrollContext } from '../../providers/ScrollProvider';
-import {
-  ArtistIcon,
-  BulletPointIcon,
-  LoopIcon,
-  NextIcon,
-  PlayIcon,
-  PauseIcon,
-  PrevIcon,
-  ShuffleIcon,
-  AddtoPlaylistIcon,
-  DownloadIcon,
-  AddtoQueueIcon,
-  ShareIcon,
-  MoreIcon,
-} from '@melodiy/icons';
+import { FC, useRef } from 'react';
+import { twMerge } from 'tailwind-merge';
+import { Image } from '../../components/Data/Image';
 import { IconButton } from '../../components/Inputs';
 import { usePlayerIcon } from '../../components/Player/hooks/usePlayerIcon';
-import { twMerge } from 'tailwind-merge';
-import { getDefaultImage } from '../../utils';
-import { Image } from '../../components/Data/Image';
 
 type CollectionOwner = {
   name: string;
@@ -124,7 +107,7 @@ const CollectionContainer: FC<CollectionContainerProps> = ({
 
           {getCollectionDetails().map((stat) => (
             <>
-              <BulletPointIcon className="" />
+              <BulletPointIcon />
               <p className="text-base-accent">{stat}</p>
             </>
           ))}

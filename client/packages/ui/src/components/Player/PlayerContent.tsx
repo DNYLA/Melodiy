@@ -1,17 +1,4 @@
-import { FullTrack, PlayerMode } from '@melodiy/types';
-import { useEffect, useState } from 'react';
-import { BsRepeat, BsRepeat1 } from 'react-icons/bs';
-import { HiSpeakerWave, HiSpeakerXMark } from 'react-icons/hi2';
-import useSound from 'use-sound';
-import { msToMinuteSeconds } from '../../utils';
-import { IconButton, Slider } from '../Inputs';
-import TrackMedia from './TrackMedia';
-import { useMode } from './hooks/useMode';
-import { useOnNext } from './hooks/useOnNext';
-import { useOnPrevious } from './hooks/useOnPrevious';
-import { usePlayer } from './hooks/usePlayer';
-import { useShuffle } from './hooks/useShuffle';
-import { useVolume } from './hooks/useVolume';
+/* eslint-disable no-unused-vars */
 import {
   AddtoPlaylistIcon,
   DeviceIcon,
@@ -26,6 +13,20 @@ import {
   QueueIcon,
   ShuffleIcon,
 } from '@melodiy/icons';
+import { FullTrack, PlayerMode } from '@melodiy/types';
+import { useEffect, useState } from 'react';
+import { BsRepeat, BsRepeat1 } from 'react-icons/bs';
+import { HiSpeakerWave, HiSpeakerXMark } from 'react-icons/hi2';
+import useSound from 'use-sound';
+import { msToMinuteSeconds } from '../../utils';
+import { IconButton, Slider } from '../Inputs';
+import TrackMedia from './TrackMedia';
+import { useMode } from './hooks/useMode';
+import { useOnNext } from './hooks/useOnNext';
+import { useOnPrevious } from './hooks/useOnPrevious';
+import { usePlayer } from './hooks/usePlayer';
+import { useShuffle } from './hooks/useShuffle';
+import { useVolume } from './hooks/useVolume';
 
 interface PlayerContentProps {
   track: FullTrack;
@@ -63,7 +64,7 @@ function PlayerContent({ track, trackPath }: PlayerContentProps) {
 
   const VolumeIcon = getVolumeIcon();
 
-  const [play, { pause, stop, sound, duration }] = useSound(trackPath, {
+  const [play, { pause, sound, duration }] = useSound(trackPath, {
     volume,
     onplay: () => setIsPlaying(true),
     onend: () => {
