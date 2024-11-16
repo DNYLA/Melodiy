@@ -12,11 +12,12 @@ public class FirstTimeSetupMiddleware(RequestDelegate next)
     {
         var alreadySetup = AlreadyInitialised(httpContext);
 
-        if (!alreadySetup && !(httpContext.Request.Path.HasValue && httpContext.Request.Path.StartsWithSegments("/setup") ))
-        {
-            httpContext.Response.Redirect("/setup", false);
+       if (!alreadySetup && !(httpContext.Request.Path.HasValue && httpContext.Request.Path.StartsWithSegments("/api/setup"))) 
+       {
+                httpContext.Response.Redirect("/api/setup", false);
             await httpContext.Response.CompleteAsync();
-        }
+            return;
+       }
 
         await next(httpContext);
     }

@@ -15,10 +15,6 @@ using Microsoft.Extensions.Caching.Memory;
 public sealed class SetupController(IMemoryCache memoryCache, IAuthenticationService authenticationService)
     : ControllerBase
 {
-    private readonly IMemoryCache _memoryCache = memoryCache;
-
-    private readonly IAuthenticationService _authenticationService = authenticationService;
-
     [HttpGet]
     public IActionResult Setup()
     {
@@ -26,12 +22,12 @@ public sealed class SetupController(IMemoryCache memoryCache, IAuthenticationSer
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<AuthenticationResultViewModel>> Regoster(RegisterRequestModel registerRequestModel)
+    public async Task<ActionResult<AuthenticationResultViewModel>> Register(RegisterRequestModel registerRequestModel)
     {
-        var response = await _authenticationService.Register(registerRequestModel, Role.Owner);
+        var response = await authenticationService.Register(registerRequestModel, Role.Owner);
         SetRefreshToken(response.RefreshToken);
 
-        _memoryCache.Remove(CacheKeyConst.SetupAlreadyInitialisedKey);
+        memoryCache.Remove(CacheKeyConst.SetupAlreadyInitialisedKey);
 
         return new AuthenticationResultViewModel
         {

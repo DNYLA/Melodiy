@@ -46,7 +46,6 @@ function SessionProvider({ children }: IContainer) {
 
       if ('setup' in data) {
         navigate({ to: '/setup' });
-        //TODO: Redirect
       } else {
         setUser(data.user);
       }

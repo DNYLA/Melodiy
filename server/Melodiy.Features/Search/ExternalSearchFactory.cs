@@ -1,5 +1,8 @@
 ﻿namespace Melodiy.Features.Search;
 
+using System.Linq.Expressions;
+using System.Net;
+
 using Melodiy.Features.Album;
 using Melodiy.Features.Album.Entities;
 using Melodiy.Features.Artist;
@@ -17,9 +20,7 @@ using Melodiy.Integrations.Common.Search;
 using Melodiy.Integrations.Common.Search.Models;
 
 using Microsoft.EntityFrameworkCore;
-
-using System.Linq.Expressions;
-using System.Net;
+using Microsoft.IdentityModel.Tokens;
 
 public class ExternalSearchFactory(
     ISearchProvider searchProvider,
@@ -28,50 +29,39 @@ public class ExternalSearchFactory(
     ITrackRepository trackRepository,
     IImageRepository imageRepository) : IExternalSearchFactory
 {
-    private readonly ISearchProvider _searchProvider = searchProvider;
-
-    private readonly IAlbumRepository _albumRepository = albumRepository;
-
-    private readonly IArtistRepository _artistRepository = artistRepository;
-
-    private readonly ITrackRepository _trackRepository = trackRepository;
-
-    private readonly IImageRepository _imageRepository = imageRepository;
-
     public async Task<SearchResult> Search(string term, ExternalSearchType? type, int limit = 10)
     {
-        var result = await _searchProvider.Search(term, limit, type);
+        var result = await searchProvider.Search(term, limit, type);
         var model = new SearchResult
         {
             Source = result.Source
         };
 
-        if (result.Albums.Any())
+        if (!result.Albums.IsNullOrEmpty())
         {
             var createdAlbums = await BulkCreateAlbums(result.Albums, result.Source);
             model.Albums = createdAlbums.Select(album => album.ToResponse()).ToList();
         }
 
-        if (result.Artists.Any())
+        if (!result.Artists.IsNullOrEmpty())
         {
             var createdArtists = await BulkCreateArtists(result.Artists, result.Source);
             model.Artists = createdArtists.Select(artist => artist.ToResponse()).ToList();
         }
 
-        if (result.Tracks.Any())
+        if (!result.Tracks.IsNullOrEmpty())
         {
             var createdTracks = await BulkCreateTracks(result.Tracks, result.Source);
             model.Tracks = createdTracks.Select(track => track.ToResponse()).ToList();
         }
 
-        Console.WriteLine(model.Artists.Count);
         return model;
     }
 
     public async Task<List<TrackResponse>> GetAlbumTracks(string id)
     {
-        var source = _searchProvider.GetSourceType();
-        var album = await _searchProvider.GetAlbum(id);
+        var source = searchProvider.GetSourceType();
+        var album = await searchProvider.GetAlbum(id);
         var tracks = await BulkCreateTracks(album.Tracks, source);
 
         //Ordering newly inserted tracks requires us to match data between external and new (internally created) tracks.
@@ -79,9 +69,9 @@ public class ExternalSearchFactory(
         return source switch
         {
             SourceType.Spotify => tracks
-                                  .OrderBy(track => album.Tracks.Find(
-                                               externalTrack => track.SpotifyId == externalTrack.Id)!.Position)
-                                  .Select(track => track.ToResponse()).ToList(),
+                                 .OrderBy(track => album.Tracks.Find(
+                                      externalTrack => track.SpotifyId == externalTrack.Id)!.Position)
+                                 .Select(track => track.ToResponse()).ToList(),
             _ => new List<TrackResponse>()
         };
     }
@@ -94,7 +84,7 @@ public class ExternalSearchFactory(
         }
 
         //Get External Data
-        var externalArtist = await _searchProvider.GetArtist(externalId);
+        var externalArtist = await searchProvider.GetArtist(externalId);
         if (externalArtist == null)
         {
             return artist;
@@ -103,18 +93,18 @@ public class ExternalSearchFactory(
         //Update Image if one doesn't already exist.
         if (artist.Image == null && externalArtist.ImageUrl != null)
         {
-            var existingImage = await _imageRepository.AsQueryable()
-                                                      .FirstOrDefaultAsync(i => i.Url == externalArtist.ImageUrl);
+            var existingImage = await imageRepository.AsQueryable()
+                                                     .FirstOrDefaultAsync(i => i.Url == externalArtist.ImageUrl);
             artist.Image = existingImage ?? new Image
             {
                 Url = externalArtist.ImageUrl,
             };
 
-            await _artistRepository
-                .SaveAsync(artist); //Save changes here as we don't want tracked changes to affect album inserting.
+            await artistRepository
+               .SaveAsync(artist); //Save changes here as we don't want tracked changes to affect album inserting.
         }
 
-        var albums = await BulkCreateAlbums(externalArtist.Albums, _searchProvider.GetSourceType());
+        var albums = await BulkCreateAlbums(externalArtist.Albums, searchProvider.GetSourceType());
         artist.Albums = artist.Albums.Concat(albums).DistinctBy(album => album.Id).ToList();
 
         return artist;
@@ -122,7 +112,7 @@ public class ExternalSearchFactory(
 
     public SourceType GetSourceType()
     {
-        return _searchProvider.GetSourceType();
+        return searchProvider.GetSourceType();
     }
 
     private List<Album> GetAlbumsBySourceType(IEnumerable<string> ids, SourceType source)
@@ -167,12 +157,12 @@ public class ExternalSearchFactory(
         {
             Title = album.Title,
             Image = album.ImageUrl != null
-                        ? new Image
-                        {
-                            Url = album.ImageUrl,
-                            Source = SourceType.Spotify
-                        }
-                        : null,
+                ? new Image
+                {
+                    Url = album.ImageUrl,
+                    Source = SourceType.Spotify
+                }
+                : null,
             Artists = album.Artists
                            .Select(externalArtist => albumArtists.Find(a => a.SpotifyId == externalArtist.Id)!)
                            .ToList(), //Will Automatically relate but won't return related data
@@ -186,9 +176,9 @@ public class ExternalSearchFactory(
         var urls = newAlbumsWithImages.Where(a => a.Image != null)
                                       .Select(a => a.Image!.Url)
                                       .ToList();
-        var existingImages = _imageRepository
-                             .AsQueryable().Where(i => i.Source == SourceType.Spotify && urls.Contains(i.Url))
-                             .ToList();
+        var existingImages = imageRepository
+                            .AsQueryable().Where(i => i.Source == SourceType.Spotify && urls.Contains(i.Url))
+                            .ToList();
 
         //Relate the existing images with the new artist.
         foreach (var album in newAlbumsWithImages)
@@ -201,7 +191,7 @@ public class ExternalSearchFactory(
             }
         }
 
-        await _albumRepository.SaveAsync(newAlbumsWithImages);
+        await albumRepository.SaveAsync(newAlbumsWithImages);
 
         return existingAlbums.Concat(newAlbumsWithImages).ToList();
     }
@@ -214,10 +204,10 @@ public class ExternalSearchFactory(
         //Fetch Already Existing Artists (Need this as we still want to return them)
         var ids = filtered.Select(artist => artist.Id)
                           .ToList(); //Needed for query below (Any isn't translatable to SQL but contains is)
-        var existingArtists = _artistRepository.AsQueryable()
-                                               .Where(a => a.SpotifyId != null && ids.Contains(a.SpotifyId))
-                                               .Include(a => a.Image)
-                                               .ToList();
+        var existingArtists = artistRepository.AsQueryable()
+                                              .Where(a => a.SpotifyId != null && ids.Contains(a.SpotifyId))
+                                              .Include(a => a.Image)
+                                              .ToList();
 
         var existingIds = existingArtists.Select(a => a.SpotifyId!).ToList(); //SpotifyId can't be null in this case.
 
@@ -227,22 +217,22 @@ public class ExternalSearchFactory(
         {
             Name = artist.Name,
             Image = artist.ImageUrl != null
-                        ? new Image
-                        {
-                            Url = artist.ImageUrl,
-                            Source = SourceType.Spotify
-                        }
-                        : null,
+                ? new Image
+                {
+                    Url = artist.ImageUrl,
+                    Source = SourceType.Spotify
+                }
+                : null,
             Verified = true,
             SpotifyId = artist.Id,
         }).ToList();
 
         //Check if any of these images already exist.
         var urls = newArtistsWithImages.Where(a => a.Image != null).Select(a => a.Image!.Url).ToList();
-        var existingImages = _imageRepository
-                             .AsQueryable()
-                             .Where(i => i.Source == SourceType.Spotify && urls.Contains(i.Url))
-                             .ToList();
+        var existingImages = imageRepository
+                            .AsQueryable()
+                            .Where(i => i.Source == SourceType.Spotify && urls.Contains(i.Url))
+                            .ToList();
 
         //Relate the existing images with the new artist.
         foreach (var artist in newArtistsWithImages)
@@ -255,7 +245,7 @@ public class ExternalSearchFactory(
             }
         }
 
-        await _artistRepository.SaveAsync(newArtistsWithImages);
+        await artistRepository.SaveAsync(newArtistsWithImages);
 
         return existingArtists.Concat(newArtistsWithImages).ToList();
     }
@@ -267,11 +257,11 @@ public class ExternalSearchFactory(
 
         //Fetch already existing albums
         var ids = filtered.Select(a => a.Id).ToList();
-        var existingTracks = _trackRepository.AsQueryable().Include(t => t.Image)
-                                             .Include(t => t.TrackArtists)
-                                             .Include(t => t.AlbumTrack)
-                                             .Where(t => t.SpotifyId != null && ids.Contains(t.SpotifyId))
-                                             .ToList();
+        var existingTracks = trackRepository.AsQueryable().Include(t => t.Image)
+                                            .Include(t => t.TrackArtists)
+                                            .Include(t => t.AlbumTrack)
+                                            .Where(t => t.SpotifyId != null && ids.Contains(t.SpotifyId))
+                                            .ToList();
 
         var existingIds = existingTracks.Select(a => a.SpotifyId!).ToList();
         var trackArtists = await BulkCreateArtists(filtered.SelectMany(track => track.Artists).ToList(), source);
@@ -288,12 +278,12 @@ public class ExternalSearchFactory(
             Source = SourceType.Spotify,
             Public = true,
             Image = track.Album.ImageUrl != null
-                        ? new Image
-                        {
-                            Url = track.Album.ImageUrl,
-                            Source = SourceType.Spotify
-                        }
-                        : null,
+                ? new Image
+                {
+                    Url = track.Album.ImageUrl,
+                    Source = SourceType.Spotify
+                }
+                : null,
             TrackArtists = track.Artists.Select(externalArtist =>
             {
                 var artist = trackArtists.Find(a => a.SpotifyId == externalArtist.Id)!;
@@ -312,7 +302,7 @@ public class ExternalSearchFactory(
 
         //Check if any of these images already exist.
         var urls = newTracksWithImages.Where(t => t.Image != null).Select(t => t.Image!.Url).ToList();
-        var existingImages = _imageRepository.AsQueryable().Where(i => urls.Contains(i.Url)).ToList();
+        var existingImages = imageRepository.AsQueryable().Where(i => urls.Contains(i.Url)).ToList();
 
         //Relate the existing images with the new artist.
         foreach (var track in newTracksWithImages)
@@ -325,7 +315,7 @@ public class ExternalSearchFactory(
             }
         }
 
-        await _trackRepository.SaveAsync(newTracksWithImages);
+        await trackRepository.SaveAsync(newTracksWithImages);
 
         return existingTracks.Concat(newTracksWithImages).ToList();
     }
@@ -334,10 +324,10 @@ public class ExternalSearchFactory(
     {
         return externalType switch
         {
-            ExternalAlbumType.Album => AlbumType.Album,
-            ExternalAlbumType.Ep => AlbumType.Ep,
+            ExternalAlbumType.Album  => AlbumType.Album,
+            ExternalAlbumType.Ep     => AlbumType.Ep,
             ExternalAlbumType.Single => AlbumType.Single,
-            _ => AlbumType.Album
+            _                        => AlbumType.Album
         };
     }
 }

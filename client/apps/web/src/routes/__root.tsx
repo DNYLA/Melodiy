@@ -17,15 +17,15 @@ type RouterContext = {
 
 function RooutLayout() {
   const matchRoute = useMatchRoute();
-  // const isValid = matchRoute({ to: '/setup' }) || matchRoute({ to: '/admin' });
+  const isValid = matchRoute({ to: '/setup' }) || matchRoute({ to: '/admin' });
 
-  // if (isValid !== false) {
-  //   return (
-  //     <Providers>
-  //       <Outlet />
-  //     </Providers>
-  //   );
-  // }
+  if (isValid !== false) {
+    return (
+      <Providers>
+        <Outlet />
+      </Providers>
+    );
+  }
 
   return (
     <>

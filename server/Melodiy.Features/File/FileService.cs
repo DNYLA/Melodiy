@@ -17,22 +17,29 @@ public sealed class FileService(
     IImageRepository imageRepository,
     IUserService userService) : IFileService
 {
-    private readonly IFileRepository _fileRepository = fileRepository;
-
-    private readonly IImageRepository _imageRepository = imageRepository;
-
-    private readonly IUserService _userService = userService;
-
     public async Task<ImageResponse> UploadImage(IFormFile file)
     {
-        var user = await _userService.GetUserDetails();
+        var user = await userService.GetUserDetails();
 
         if (user == null || file.Length == 0 || !file.IsImage())
         {
             throw new ApiException(HttpStatusCode.BadRequest, "Invalid Image file");
         }
+        
+        var response = await fileRepository.UploadFile(file, user.Username, StorageBucket.Images);
+        var imageExists = await imageRepository.GetByPath(response.Path, response.Source);
 
-        var response = await _fileRepository.UploadFile(file, user.Username, StorageBucket.Images);
+        if (imageExists != null)
+        {
+            return new ImageResponse
+            {
+                Id = imageExists.Id,
+                Url = imageExists.Url,
+                Path = imageExists.Path,
+                Source = imageExists.Source,
+                UserId = imageExists.UserId
+            };
+        }
 
         var image = new Image
         {
@@ -41,8 +48,8 @@ public sealed class FileService(
             Source = response.Source,
             UserId = user.Id
         };
-
-        await _imageRepository.AddAsync(image);
+         
+        await imageRepository.AddAsync(image);
 
         return new ImageResponse
         {
@@ -56,7 +63,7 @@ public sealed class FileService(
 
     public async Task<FileResponse> UploadAudio(IFormFile file, bool isPublic)
     {
-        var user = await _userService.GetUserDetails();
+        var user = await userService.GetUserDetails();
 
         if (user == null || file.Length == 0 || !file.IsAudio())
         {
@@ -64,7 +71,7 @@ public sealed class FileService(
         }
 
         var bucketType = isPublic ? StorageBucket.TrackPublic : StorageBucket.TracksPrivate;
-        var response = await _fileRepository.UploadFile(file, user.Username, bucketType);
+        var response = await fileRepository.UploadFile(file, user.Username, bucketType);
 
         return response;
     }
@@ -93,6 +100,6 @@ public sealed class FileService(
     public async Task<string> GetTrackUrl(string path, bool isPublic)
     {
         var bucket = isPublic ? StorageBucket.TrackPublic : StorageBucket.TracksPrivate;
-        return await _fileRepository.GetUrl(path, bucket);
+        return await fileRepository.GetUrl(path, bucket);
     }
 }

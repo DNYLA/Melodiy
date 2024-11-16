@@ -11,6 +11,8 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as SetupImport } from './routes/setup'
+import { Route as AdminImport } from './routes/admin'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
 import { Route as PlaylistIdImport } from './routes/playlist/$id'
@@ -19,6 +21,16 @@ import { Route as AlbumIdImport } from './routes/album/$id'
 import { Route as AuthenticatedFilesImport } from './routes/_authenticated/files'
 
 // Create/Update Routes
+
+const SetupRoute = SetupImport.update({
+  path: '/setup',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminRoute = AdminImport.update({
+  path: '/admin',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AuthenticatedRoute = AuthenticatedImport.update({
   id: '/_authenticated',
@@ -66,6 +78,20 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AuthenticatedImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminImport
+      parentRoute: typeof rootRoute
+    }
+    '/setup': {
+      id: '/setup'
+      path: '/setup'
+      fullPath: '/setup'
+      preLoaderRoute: typeof SetupImport
       parentRoute: typeof rootRoute
     }
     '/_authenticated/files': {
@@ -116,6 +142,8 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AuthenticatedRouteWithChildren
+  '/admin': typeof AdminRoute
+  '/setup': typeof SetupRoute
   '/files': typeof AuthenticatedFilesRoute
   '/album/$id': typeof AlbumIdRoute
   '/artist/$id': typeof ArtistIdRoute
@@ -125,6 +153,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AuthenticatedRouteWithChildren
+  '/admin': typeof AdminRoute
+  '/setup': typeof SetupRoute
   '/files': typeof AuthenticatedFilesRoute
   '/album/$id': typeof AlbumIdRoute
   '/artist/$id': typeof ArtistIdRoute
@@ -135,6 +165,8 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/admin': typeof AdminRoute
+  '/setup': typeof SetupRoute
   '/_authenticated/files': typeof AuthenticatedFilesRoute
   '/album/$id': typeof AlbumIdRoute
   '/artist/$id': typeof ArtistIdRoute
@@ -146,16 +178,28 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | ''
+    | '/admin'
+    | '/setup'
     | '/files'
     | '/album/$id'
     | '/artist/$id'
     | '/playlist/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/files' | '/album/$id' | '/artist/$id' | '/playlist/$id'
+  to:
+    | '/'
+    | ''
+    | '/admin'
+    | '/setup'
+    | '/files'
+    | '/album/$id'
+    | '/artist/$id'
+    | '/playlist/$id'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/admin'
+    | '/setup'
     | '/_authenticated/files'
     | '/album/$id'
     | '/artist/$id'
@@ -166,6 +210,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  AdminRoute: typeof AdminRoute
+  SetupRoute: typeof SetupRoute
   AlbumIdRoute: typeof AlbumIdRoute
   ArtistIdRoute: typeof ArtistIdRoute
   PlaylistIdRoute: typeof PlaylistIdRoute
@@ -174,6 +220,8 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  AdminRoute: AdminRoute,
+  SetupRoute: SetupRoute,
   AlbumIdRoute: AlbumIdRoute,
   ArtistIdRoute: ArtistIdRoute,
   PlaylistIdRoute: PlaylistIdRoute,
@@ -193,6 +241,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/_authenticated",
+        "/admin",
+        "/setup",
         "/album/$id",
         "/artist/$id",
         "/playlist/$id"
@@ -206,6 +256,12 @@ export const routeTree = rootRoute
       "children": [
         "/_authenticated/files"
       ]
+    },
+    "/admin": {
+      "filePath": "admin.tsx"
+    },
+    "/setup": {
+      "filePath": "setup.tsx"
     },
     "/_authenticated/files": {
       "filePath": "_authenticated/files.tsx",

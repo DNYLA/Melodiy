@@ -1,30 +1,25 @@
 ﻿namespace Melodiy.Features.Authentication;
 
-using Melodiy.Features.Authentication.Models;
-using Melodiy.Features.Common.Exceptions;
-
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-
 using System.Net;
 
+using Melodiy.Features.Authentication.Models;
+using Melodiy.Features.Common.Exceptions;
 using Melodiy.Features.User;
 using Melodiy.Features.User.Entities;
 
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/auth")]
-public sealed class AuthenticationController(IAuthenticationService authenticationService, IUserService userService) : ControllerBase
+public sealed class AuthenticationController(IAuthenticationService authenticationService, IUserService userService)
+    : ControllerBase
 {
-    private readonly IAuthenticationService _authenticationService = authenticationService;
-
-    private readonly IUserService _userService = userService;
-
     [HttpPost("login")]
     public async Task<ActionResult<AuthenticationResultViewModel>> Login(LoginRequestModel loginRequestModel)
     {
-        var response = await _authenticationService.ValidateLogin(loginRequestModel);
+        var response = await authenticationService.ValidateLogin(loginRequestModel);
         SetRefreshToken(response.RefreshToken);
 
         return new AuthenticationResultViewModel
@@ -37,21 +32,21 @@ public sealed class AuthenticationController(IAuthenticationService authenticati
     [HttpPost("register")]
     public async Task<ActionResult<AuthenticationResultViewModel>> Register(RegisterRequestModel registerRequestModel)
     {
-        var response = await _authenticationService.Register(registerRequestModel, Role.User);
+        var response = await authenticationService.Register(registerRequestModel, Role.User);
         SetRefreshToken(response.RefreshToken);
 
-        return new AuthenticationResultViewModel
+        return Ok(new AuthenticationResultViewModel
         {
             User = response.User,
             AccessToken = response.AccessToken
-        };
+        });
     }
 
     [Authorize]
     [HttpPost("logout")]
     public async Task Logout()
     {
-        var user = await _userService.GetUserDetails();
+        var user = await userService.GetUserDetails();
         var refreshToken = Request.Cookies["refreshToken"];
 
         if (user == null)
@@ -65,7 +60,7 @@ public sealed class AuthenticationController(IAuthenticationService authenticati
         }
         else
         {
-            await _authenticationService.RemoveRefreshToken(refreshToken, user.Id);
+            await authenticationService.RemoveRefreshToken(refreshToken, user.Id);
         }
     }
 
@@ -81,7 +76,7 @@ public sealed class AuthenticationController(IAuthenticationService authenticati
 
         try
         {
-            var response = await _authenticationService.RefreshToken(refreshToken);
+            var response = await authenticationService.RefreshToken(refreshToken);
             SetRefreshToken(response.RefreshToken);
 
             return new AuthenticationResultViewModel
