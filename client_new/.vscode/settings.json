@@ -8,11 +8,5 @@
   "[csharp]": {
     "editor.defaultFormatter": "ms-dotnettools.csharp"
   },
-  "eslint.workingDirectories": [
-    "./client_new",
-    "./client_new/apps/web",
-    "./part_c_patientor/frontend",
-    "./part_c_patientor/backend",
-    "./part_d"
-  ]
+  "eslint.workingDirectories": ["./client_new", "./apps/web_next"]
 }
