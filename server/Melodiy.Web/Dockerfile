@@ -4,7 +4,9 @@ RUN addgroup --system web && \
           adduser --system -G web web
 WORKDIR /app
 
+#root package.json + package-lock.json
 COPY ./client/package*.json ./
+COPY ./client/apps/web/package.json ./apps/web/package.json
 
 RUN npm install
 
