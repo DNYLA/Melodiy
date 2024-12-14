@@ -1,9 +1,9 @@
+// tailwind config is required for editor support
 import sharedConfig from '@melodiy/tailwind-config';
 import type { Config } from 'tailwindcss';
 
-const config: Pick<Config, 'prefix' | 'presets' | 'content'> = {
-  content: ['./src/**/*.tsx'],
-  prefix: 'ui-',
+const config: Pick<Config, 'content' | 'presets'> = {
+  content: ['./src/app/**/*.tsx'],
   presets: [sharedConfig],
 };
 

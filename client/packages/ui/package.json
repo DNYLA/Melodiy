@@ -46,6 +46,7 @@
     "react": "^18.2.0",
     "react-hook-form": "^7.53.0",
     "react-hot-toast": "^2.4.1",
+    "tailwindcss": "^4.0.0-beta.6",
     "use-sound": "^4.0.3",
     "zustand": "^4.5.5"
   }

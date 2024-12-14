@@ -1,5 +1,11 @@
 {
   "extends": "@melodiy/typescript-config/react-library.json",
-  "include": ["."],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx", "tailwind.config.ts"],
   "exclude": ["dist", "build", "node_modules"]
 }
