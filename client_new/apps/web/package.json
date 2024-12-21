@@ -12,6 +12,7 @@
   "dependencies": {
     "@melodiy/router": "workspace:*",
     "@melodiy/ui": "workspace:*",
+    "@melodiy/types": "workspace:*",
     "@tailwindcss/vite": "4.0.0-beta.8",
     "@tanstack/react-query": "^5.62.8",
     "react": "^18.3.1",
