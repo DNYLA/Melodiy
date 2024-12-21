@@ -1,29 +1,31 @@
 {
-  "name": "@melodiy/ui",
+  "name": "@melodiy/icons",
   "private": true,
   "version": "0.0.0",
-  "main": "dist/melodiy-ui.cjs.js",
-  "module": "dist/melodiy-ui.esm.js",
+  "main": "dist/melodiy-icons.cjs.js",
+  "module": "dist/melodiy-icons.esm.js",
   "types": "dist/index.d.ts",
   "type": "module",
-  "exports": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./types": "./src/types.ts"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate-icons": "tsx template/generate-svg-icons.ts"
   },
   "dependencies": {
-    "@melodiy/api": "workspace:*",
-    "@melodiy/icons": "workspace:*",
-    "@types/node": "^22.10.2",
+    "fast-xml-parser": "^4.5.1",
+    "handlebars": "^4.7.8",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "tailwind-merge": "^2.5.5",
-    "vite-plugin-dts": "^4.4.0"
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@types/node": "^22.10.2",
     "@types/react": "^18.3.17",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
@@ -31,8 +33,11 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.13.0",
+    "tailwind-merge": "^2.5.5",
+    "tsx": "^4.19.2",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.1",
-    "vite": "^6.0.3"
+    "vite": "^6.0.3",
+    "vite-plugin-dts": "^4.4.0"
   }
 }
