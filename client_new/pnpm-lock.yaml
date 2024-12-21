@@ -151,6 +151,9 @@ importers:
 
   packages/router:
     dependencies:
+      '@melodiy/types':
+        specifier: workspace:*
+        version: link:../types
       '@tanstack/react-query':
         specifier: ^5.62.8
         version: 5.62.8(react@18.3.1)
@@ -218,6 +221,13 @@ importers:
       typescript:
         specifier: ~5.6.2
         version: 5.6.3
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.10.2
+      '@types/react':
+        specifier: ^18.3.17
+        version: 18.3.18
 
   packages/ui:
     dependencies:

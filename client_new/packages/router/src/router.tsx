@@ -12,6 +12,9 @@ export const router = createRouter({
   routeTree,
   context: {
     queryClient,
+    user: undefined,
+    loading: undefined!,
+    open: undefined!,
   },
   defaultPendingComponent: () => (
     <div>Loading form global pending component...</div>
