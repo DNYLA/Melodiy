@@ -1,0 +1,12 @@
+{
+  "name": "melodiy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm --filter web run dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
