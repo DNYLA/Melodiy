@@ -72,6 +72,22 @@ importers:
         specifier: ^6.0.3
         version: 6.0.5(@types/node@22.10.2)(jiti@2.4.2)(lightningcss@1.28.2)(tsx@4.19.2)
 
+  packages/api:
+    dependencies:
+      '@melodiy/types':
+        specifier: workspace:*
+        version: link:../types
+      axios:
+        specifier: ^1.7.9
+        version: 1.7.9
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.10.2
+      typescript:
+        specifier: ~5.6.2
+        version: 5.6.3
+
   packages/router:
     dependencies:
       '@tanstack/react-query':
@@ -144,6 +160,9 @@ importers:
 
   packages/ui:
     dependencies:
+      '@melodiy/api':
+        specifier: workspace:*
+        version: link:../api
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.2
