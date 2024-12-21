@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "pnpm --filter web run dev"
+    "web": "pnpm --filter web",
+    "router": "pnpm --filter @melodiy/router",
+    "dev": "pnpm router build && pnpm web dev"
   },
   "keywords": [],
   "author": "",

@@ -1,8 +1,12 @@
 {
-  "name": "web",
+  "name": "@melodiy/router",
   "private": true,
   "version": "0.0.0",
+  "main": "dist/melodiy-ui.cjs.js",
+  "module": "dist/melodiy-ui.esm.js",
+  "types": "dist/index.d.ts",
   "type": "module",
+  "exports": "./src/index.ts",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -10,17 +14,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@melodiy/router": "workspace:*",
-    "@melodiy/ui": "workspace:*",
-    "@tailwindcss/vite": "4.0.0-beta.8",
     "@tanstack/react-query": "^5.62.8",
+    "@tanstack/react-router": "^1.91.3",
+    "@tanstack/router-plugin": "^1.91.1",
+    "axios": "^1.7.9",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "tailwind-merge": "^2.5.5",
-    "tailwindcss": "4.0.0-beta.8"
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@tanstack/router-devtools": "^1.91.3",
+    "@types/node": "^22.10.2",
     "@types/react": "^18.3.17",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
@@ -30,6 +34,7 @@
     "globals": "^15.13.0",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.1",
-    "vite": "^6.0.3"
+    "vite": "^6.0.3",
+    "vite-plugin-dts": "^4.4.0"
   }
 }
