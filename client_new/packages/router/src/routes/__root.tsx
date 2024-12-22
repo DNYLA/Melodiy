@@ -1,25 +1,6 @@
 import { QueryClient } from '@tanstack/react-query';
 import { createRootRouteWithContext, Link } from '@tanstack/react-router';
-// import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { User } from '@melodiy/types';
-
-// export const Route = createRootRoute({
-//   component: () => (
-//     <>
-//       <div className="p-2 flex gap-2">
-//         <Link to="/" className="[&.active]:font-bold">
-//           Home
-//         </Link>{' '}
-//         <Link to="/" className="[&.active]:font-bold">
-//           About
-//         </Link>
-//       </div>
-//       <hr />
-//       <Outlet />
-//       <TanStackRouterDevtools />
-//     </>
-//   ),
-// });
 
 type RouterContext = {
   queryClient: QueryClient;

@@ -14,6 +14,7 @@ export { router, queryClient };
 // By re exporting the api from TanStack router, we can enforce that other packages
 // rely on this one instead, making the type register being applied
 export {
+  Await,
   Outlet,
   Link,
   useRouteContext,
@@ -24,5 +25,7 @@ export {
   useMatchRoute,
   useNavigate,
   useParams,
+  useLoaderData,
+  useSearch,
 } from '@tanstack/react-router';
 export type { ErrorComponentProps } from '@tanstack/react-router';
