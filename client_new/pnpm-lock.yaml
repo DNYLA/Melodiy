@@ -157,6 +157,9 @@ importers:
 
   packages/router:
     dependencies:
+      '@melodiy/api':
+        specifier: workspace:*
+        version: link:../api
       '@melodiy/types':
         specifier: workspace:*
         version: link:../types
@@ -178,6 +181,9 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+      zod:
+        specifier: ^3.24.1
+        version: 3.24.1
     devDependencies:
       '@eslint/js':
         specifier: ^9.17.0
