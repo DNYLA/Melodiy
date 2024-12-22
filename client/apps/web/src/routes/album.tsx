@@ -7,7 +7,7 @@ export default function Album() {
 
   if (!album) {
     navigate({ to: '/' });
-    return;
+    return <div></div>;
   }
 
   return (

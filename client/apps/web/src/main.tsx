@@ -11,9 +11,9 @@ import {
 import { RootComponent } from './rootComponent';
 import Artist from './routes/artist';
 import Admin from './routes/admin';
-// import Album from './routes/album';
+import Album from './routes/album';
 import Files from './routes/files';
-// import Playlist from './routes/playlist';
+import Playlist from './routes/playlist';
 import Search from './routes/search';
 import Setup from './routes/setup';
 import { initialiseAxios } from '@melodiy/api';
@@ -21,11 +21,11 @@ import { initialiseAxios } from '@melodiy/api';
 //Override root component or other custom routes that require ui lib data
 const routerMap = {
   __root__: RootComponent,
-  '/artist/$id': Artist,
   '/admin': Admin,
-  // '/album/$id': Album,
+  '/album/$id': Album,
+  '/artist/$id': Artist,
   '/_authenticated/files': Files,
-  // '/playlist/$id': Playlist,
+  '/playlist/$id': Playlist,
   '/search': Search,
   '/setup': Setup,
 } as const satisfies Partial<Record<RouterIds, () => React.ReactElement>>;

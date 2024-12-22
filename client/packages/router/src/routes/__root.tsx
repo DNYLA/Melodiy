@@ -1,5 +1,5 @@
 import { QueryClient } from '@tanstack/react-query';
-import { createRootRouteWithContext, Link } from '@tanstack/react-router';
+import { createRootRouteWithContext } from '@tanstack/react-router';
 import { User } from '@melodiy/types';
 
 type RouterContext = {
@@ -13,9 +13,9 @@ type RouterContext = {
 export const Route = createRootRouteWithContext<RouterContext>()({
   notFoundComponent: () => {
     return (
-      <div>
-        <p>This is the notFoundComponent configured on root route</p>
-        <Link to="/">Start Over</Link>
+      <div className="content-center w-full h-full text-center ">
+        <h1 className="text-xl">404 Not Found</h1>
+        <p>The page you are looking for could not be found.</p>
       </div>
     );
   },

@@ -16,9 +16,9 @@ export const router = createRouter({
     loading: undefined!,
     open: undefined!,
   },
-  defaultPendingComponent: () => (
-    <div>Loading form global pending component...</div>
-  ),
+  // defaultPendingComponent: () => (
+  //   <div>Loading form global pending component...</div>
+  // ),
   // This make the loader only wait 200ms before showing the pending component, instead of the default 1000ms
   defaultPendingMs: 200,
   defaultPreload: 'intent',

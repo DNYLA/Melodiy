@@ -6,6 +6,7 @@ export default function Files() {
   const session = useSession();
   const tracks = useLoaderData({ from: '/_authenticated/files' });
   const navigate = useNavigate();
+  // console.log(session.user);
 
   if (session.user == null) {
     navigate({ to: '/' });

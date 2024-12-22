@@ -31,8 +31,8 @@ function Sidebar({ children }: SidebarProps) {
 
             <div
               className={twMerge(
-                'rounded-lg border-[#202020] border h-[calc(100vh-85px)] ml-2 gap-y-5 overflow-auto',
-                player.active && 'h-[calc(100vh-175px)]',
+                'rounded-lg border-[#202020] border h-[calc(100vh-100px)] ml-2 gap-y-5 overflow-auto',
+                player.active && 'h-[calc(100vh-175px)]'
               )}
             >
               {children}

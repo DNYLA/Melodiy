@@ -7,7 +7,7 @@ export default function Playlist() {
 
   if (!playlist) {
     navigate({ to: '/' });
-    return;
+    return <div></div>;
   }
 
   return (
