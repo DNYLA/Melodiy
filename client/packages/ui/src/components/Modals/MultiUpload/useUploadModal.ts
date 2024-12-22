@@ -3,7 +3,6 @@ import { create } from 'zustand';
 interface UploadModalStore {
   isOpen: boolean;
   isUploadTab: boolean;
-  // eslint-disable-next-line no-unused-vars
   onOpen: (uploadTab?: boolean) => void;
   onClose: () => void;
 }

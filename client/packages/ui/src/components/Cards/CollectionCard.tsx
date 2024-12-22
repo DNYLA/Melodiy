@@ -1,5 +1,5 @@
 import { ArtistPreview } from '@melodiy/types';
-import { Link } from '@tanstack/react-router';
+import { Link } from '@melodiy/router';
 import { ArtistList } from '../Data/ArtistList';
 import { Image } from '../Data/Image';
 

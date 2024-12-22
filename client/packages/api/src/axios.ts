@@ -78,5 +78,5 @@ AXIOS.interceptors.response.use(
     }
 
     return Promise.reject(err);
-  },
+  }
 );

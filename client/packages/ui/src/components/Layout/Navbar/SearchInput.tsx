@@ -1,7 +1,7 @@
 'use client';
 
 import { SearchIcon } from '@melodiy/icons';
-import { useMatchRoute, useNavigate } from '@tanstack/react-router';
+import { useMatchRoute, useNavigate } from '@melodiy/router';
 import qs from 'query-string';
 import { useCallback, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -39,14 +39,14 @@ export function SearchInput() {
     <div
       className={twMerge(
         'flex items-center justify-center cursor-pointer group text-base-accent',
-        isActive && 'rounded-[10px] bg-accent text-white',
+        isActive && 'rounded-[10px] bg-accent text-white'
       )}
     >
       <SearchIcon
         width={50}
         height={50}
         className={twMerge(
-          'group-hover:stroke-content group-[&.active]:stroke-content p-1',
+          'group-hover:stroke-content group-[&.active]:stroke-content p-1'
         )}
       />
       <Input
@@ -56,7 +56,7 @@ export function SearchInput() {
         placeholder="Search..."
         className={twMerge(
           'text-base-accent bg-transparent group-hover:text-white group-hover:placeholder:text-white',
-          isActive && 'text-white',
+          isActive && 'text-white'
         )}
         onKeyDown={handleKeyDown}
       />

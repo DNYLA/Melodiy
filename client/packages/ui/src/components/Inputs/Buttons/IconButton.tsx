@@ -20,12 +20,12 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
       icon: Icon,
       ...props
     },
-    ref,
+    ref
   ) => {
     return (
       <button
         className={twMerge(
-          'p-0 transition-all ease-in delay-75 border-none rounded-full hover:opacity-85',
+          'p-0 transition-all ease-in delay-75 border-none rounded-full hover:opacity-85'
         )}
         type={type}
         data-type="button"
@@ -40,7 +40,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         />
       </button>
     );
-  },
+  }
 );
 
 IconButton.displayName = 'Button';

@@ -8,7 +8,7 @@ import {
   register,
 } from '@melodiy/api';
 import { IContainer, User } from '@melodiy/types';
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@melodiy/router';
 import { createContext, useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -19,7 +19,7 @@ type SessionContextType = {
   register: (
     username: string,
     password: string,
-    setup: boolean,
+    setup: boolean
   ) => Promise<boolean>;
   logout: () => void;
   // update: () => void;
@@ -76,7 +76,7 @@ function SessionProvider({ children }: IContainer) {
         setLoading(false);
       }
     },
-    [],
+    []
   );
 
   const handleSignUp = useCallback(
@@ -102,7 +102,7 @@ function SessionProvider({ children }: IContainer) {
         setLoading(false);
       }
     },
-    [],
+    []
   );
 
   const handleLogout = useCallback(async () => {

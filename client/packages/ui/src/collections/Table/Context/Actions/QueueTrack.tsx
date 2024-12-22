@@ -1,6 +1,4 @@
-import * as ContextMenu from '@radix-ui/react-context-menu';
 import toast from 'react-hot-toast';
-import ContextMenuBase from '../Base/ContextMenuBase';
 import ContextItemBase from '../Base/ContextItemBase';
 import { QueueIcon } from '@melodiy/icons';
 
@@ -8,6 +6,7 @@ interface QueueContextItemProps {
   trackId: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function QueueContextItem({ trackId }: QueueContextItemProps) {
   const onQueue = () => {
     // const curIds = player.active?.id;

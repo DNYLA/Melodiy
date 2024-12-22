@@ -67,7 +67,7 @@ const TrackTable: FC<TrackTableProps> = ({
                     ? null
                     : flexRender(
                         header.column.columnDef.header,
-                        header.getContext(),
+                        header.getContext()
                       )}
                 </th>
               ))
@@ -95,7 +95,7 @@ const TrackTable: FC<TrackTableProps> = ({
               key={row.id}
               className={twMerge(
                 'group hover:bg-base-accent/10',
-                row.getIsSelected() && 'bg-base-accent/10',
+                row.getIsSelected() && 'bg-base-accent/10'
               )}
               onClick={() => row.toggleSelected()}
               onDoubleClick={() => {

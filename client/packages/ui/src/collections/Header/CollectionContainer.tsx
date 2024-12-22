@@ -10,7 +10,7 @@ import {
   ShuffleIcon,
 } from '@melodiy/icons';
 import { CollectionType, Track } from '@melodiy/types';
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@melodiy/router';
 import dayjs from 'dayjs';
 import { FC, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -38,7 +38,6 @@ export interface CollectionContainerProps {
 const CollectionContainer: FC<CollectionContainerProps> = ({
   id,
   title,
-  type,
   cover,
   releaseDate,
   tracks,
@@ -54,7 +53,7 @@ const CollectionContainer: FC<CollectionContainerProps> = ({
     if (!tracks || tracks.length === 0) return '0 Minutes';
     const totalDuration = tracks.reduce(
       (total, { duration }) => total + duration,
-      0,
+      0
     );
     const totalMins = totalDuration / 60000;
 

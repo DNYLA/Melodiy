@@ -18,6 +18,7 @@ const TrackContextMenu: React.FC<TrackContextMenuProps> = ({
   artistId,
   albumId,
 }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { user } = useSession();
 
   return (

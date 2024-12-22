@@ -1,7 +1,6 @@
 import { AdminPanel } from '@melodiy/ui/components/Admin';
-import { createFileRoute } from '@tanstack/react-router';
 
-function Admin() {
+export default function Admin() {
   return (
     <main className="flex flex-col items-center justify-center w-full h-screen gap-y-4">
       <div className="flex flex-col items-center gap-y-2">
@@ -13,7 +12,3 @@ function Admin() {
     </main>
   );
 }
-
-export const Route = createFileRoute('/admin')({
-  component: Admin,
-});

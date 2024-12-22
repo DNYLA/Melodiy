@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@melodiy/router';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { ActionButton, Input, Select } from '../Inputs';
@@ -22,7 +22,7 @@ function AdminPanel() {
   const {
     register,
     handleSubmit,
-    reset,
+    // reset,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -34,6 +34,7 @@ function AdminPanel() {
   //   }
   // }, [user, signOut]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onSubmit = async (data: FormValues) => {
     // const success = await updateSettings(data.username, data.password, true);
     // if (success) {

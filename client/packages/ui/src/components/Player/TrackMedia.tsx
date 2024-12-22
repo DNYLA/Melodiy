@@ -1,5 +1,5 @@
 import { Track } from '@melodiy/types';
-import { Link } from '@tanstack/react-router';
+import { Link } from '@melodiy/router';
 import { Image } from '../Data/Image';
 // import TrackContextMenu from '../../collections/Table/Context/TrackContextMenu';
 

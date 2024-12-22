@@ -20,8 +20,8 @@ function Select({ placeholder, items }: SelectProps) {
   return (
     <RadixSelect.Root>
       <RadixSelect.Trigger
-        // className="inline-flex items-center justify-center rounded px-[15px] text-[13px] leading-none h-[35px] gap-[5px] bg-white text-violet11 shadow-[0_2px_10px] shadow-black/10 hover:bg-mauve3 focus:shadow-[0_0_0_2px] focus:shadow-black data-[placeholder]:text-violet9 outline-none"
-        className="inline-flex items-center justify-center shadow-blackA9 h-[35px] appearance-none rounded px-2.5 py-2 bg-neutral-700 text-sm"
+        // className="inline-flex items-center justify-center rounded-sm px-[15px] text-[13px] leading-none h-[35px] gap-[5px] bg-white text-violet11 shadow-[0_2px_10px] shadow-black/10 hover:bg-mauve3 focus:shadow-[0_0_0_2px] focus:shadow-black data-[placeholder]:text-violet9 outline-none"
+        className="inline-flex items-center justify-center shadow-blackA9 h-[35px] appearance-none rounded-sm px-2.5 py-2 bg-neutral-700 text-sm"
       >
         <RadixSelect.Value placeholder={placeholder} />
         <RadixSelect.Icon className="">
@@ -39,7 +39,7 @@ function Select({ placeholder, items }: SelectProps) {
                 <RadixSelect.Item
                   value={item.value}
                   className={twMerge(
-                    'text-[13px] leading-none text-white rounded-[3px] flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-neutral-500 data-[highlighted]:text-violet1',
+                    'text-[13px] leading-none text-white rounded-[3px] flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-neutral-500 data-[highlighted]:text-violet1'
                   )}
                 >
                   <RadixSelect.ItemText>{item.text}</RadixSelect.ItemText>

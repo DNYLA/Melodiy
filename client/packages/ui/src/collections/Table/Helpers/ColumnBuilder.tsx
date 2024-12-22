@@ -1,6 +1,6 @@
 /* eslint react-hooks/rules-of-hooks: 0 */
 import { Track } from '@melodiy/types';
-import { Link } from '@tanstack/react-router';
+import { Link } from '@melodiy/router';
 import { ColumnHelper, createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -67,7 +67,7 @@ export class ColumnBuilder {
             isActive={isActiveTrack(row.original.id)}
           />
         ),
-      },
+      }
     );
 
     this.columns.push(col);
@@ -78,7 +78,7 @@ export class ColumnBuilder {
     const col = this.columnHelper.accessor('album', {
       header: 'Album',
       cell: ({ getValue }) => (
-        <Link to={'/album/$id'} params={{ id: getValue()?.id }}>
+        <Link to={'/album/$id'} params={{ id: getValue()?.id ?? '/' }}>
           <span className="cursor-pointer text-[15px] hover:underline">
             {getValue()?.title}
           </span>

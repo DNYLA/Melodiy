@@ -1,5 +1,5 @@
-import { SettingsIcon } from '@melodiy/icons';
-import { Link } from '@tanstack/react-router';
+// import { SettingsIcon } from '@melodiy/icons';
+// import { Link } from '@melodiy/router';
 import { useSession } from '../../../hooks/useSession';
 import { Image } from '../../Data/Image';
 
@@ -9,13 +9,13 @@ export function UserMenu() {
 
   return (
     <div className="flex flex-row items-center gap-x-3">
-      <Link to="/settings" className="group">
+      {/* <Link to="/settings" className="group">
         <SettingsIcon
           width={40}
           height={40}
           className="group-hover:stroke-content group-[&.active]:stroke-content hover:"
         />
-      </Link>
+      </Link> */}
 
       <Image
         className="block h-[45px] w-[45px] rounded-full hover:border border-base"

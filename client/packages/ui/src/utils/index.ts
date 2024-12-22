@@ -23,6 +23,7 @@ export const getDefaultImage = () => '/images/default_playlist.png';
 
 export function addFormFile(form: FormData, key: string, file?: FileList) {
   if (file && file.length > 0) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     form.append(key, file[0] as any); //TODO: Fix any
   }
 }

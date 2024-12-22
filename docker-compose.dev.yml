@@ -7,5 +7,5 @@ services:
     ports:
       - 5129:5129
     volumes:
-      - ./server/Melodiy.Web/appsettings.production.json:/app/appsettings.json
+      - ./server/Melodiy.Web/appsettings.development.json:/app/appsettings.json
       - ./files:/usr/share/Melodiy

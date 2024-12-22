@@ -1,19 +1,13 @@
-import { SearchQuery } from '@melodiy/api';
-import { SearchType } from '@melodiy/types';
+import { useLoaderData, useSearch } from '@melodiy/router';
 import { SearchTable } from '@melodiy/ui/collections';
 import { AlbumCard, ArtistCard } from '@melodiy/ui/components/Cards';
-import { Await, createFileRoute, defer } from '@tanstack/react-router';
+import { Await } from '@melodiy/router';
 import { Suspense } from 'react';
 import { FaSpinner } from 'react-icons/fa';
-import { z } from 'zod';
 
-const searchSchema = z.object({
-  title: z.string().catch(''),
-});
-
-function Search() {
-  const { title } = Route.useSearch();
-  const results = Route.useLoaderData();
+export default function Search() {
+  const { title } = useSearch({ from: '/search' });
+  const results = useLoaderData({ from: '/search' });
 
   //TODO: Move Loading & NoResults to seperate file
   return (
@@ -28,9 +22,10 @@ function Search() {
         {(result) => {
           if (
             !result ||
-            (result.tracks.length === 0 &&
-              result.artists.length === 0 &&
-              result.albums.length === 0)
+            !result.tracks ||
+            (result.tracks?.length === 0 &&
+              result.artists?.length === 0 &&
+              result.albums?.length === 0)
           )
             return (
               <div className="absolute translate-y-1/2 top-50 left-0.5 right-0 w-full items-center gap-y-2 self-center px-6 pr-5 pt-2 text-center align-middle font-bold h-full">
@@ -85,13 +80,3 @@ function Search() {
     </Suspense>
   );
 }
-
-export const Route = createFileRoute('/search')({
-  validateSearch: (search) => searchSchema.parse(search),
-  loaderDeps: ({ search: { title } }) => ({ title }),
-  loader: async ({ deps: { title } }) => {
-    const tracks = SearchQuery(title, SearchType.All);
-    return { results: defer(tracks) };
-  },
-  component: Search,
-});

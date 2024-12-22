@@ -22,7 +22,7 @@ function ImagePreview({ className, src, alt, onReset }: ImagePreviewProps) {
     <div
       className={twMerge(
         'group relative flex w-[150px]',
-        src && 'cursor-pointer',
+        src && 'cursor-pointer'
       )}
       onClick={onReset}
     >
@@ -30,7 +30,7 @@ function ImagePreview({ className, src, alt, onReset }: ImagePreviewProps) {
         size={35}
         className={twMerge(
           'absolute right-0 hidden px-2 py-2 group-hover:text-red-400',
-          src && 'group-hover:block',
+          src && 'group-hover:block'
         )}
       />
       <Image

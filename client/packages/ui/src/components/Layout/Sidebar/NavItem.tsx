@@ -1,5 +1,5 @@
 import { IconProps } from '@melodiy/icons/types';
-import { Link } from '@tanstack/react-router';
+import { Link } from '@melodiy/router';
 import { JSXElementConstructor } from 'react';
 
 interface NavItemProps {

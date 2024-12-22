@@ -1,5 +1,4 @@
 import { addTrackToPlaylist } from '@melodiy/api';
-import { Playlist } from '@melodiy/types';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import { ChevronRightIcon } from '@radix-ui/react-icons';
 import { useEffect, useRef, useState } from 'react';
@@ -28,7 +27,7 @@ function AddToPlaylistContextItem({ trackId }: AddToPlaylistContextItemProps) {
     if (!data || isLoading) return [];
 
     return data.filter((p) =>
-      p.title.toLowerCase().includes(filter.toLowerCase()),
+      p.title.toLowerCase().includes(filter.toLowerCase())
     );
   };
 

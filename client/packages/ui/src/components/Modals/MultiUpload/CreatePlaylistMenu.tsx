@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CreatePlaylist } from '@melodiy/api';
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@melodiy/router';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
@@ -26,8 +26,6 @@ interface CreatePlaylistForm {
   cover?: FileList;
   public: boolean;
 }
-
-export interface CreatePlaylistMenuProps {}
 
 function CreatePlaylistMenu() {
   const navigate = useNavigate();
@@ -69,7 +67,7 @@ function CreatePlaylistMenu() {
       //TODO: Refresh Playlist Mutation with useQuery
       toast.success('Created new playlist');
       refetchPlaylists();
-      navigate({ to: '/playlist/', params: { id: playlist.id } });
+      navigate({ to: '/playlist/$id', params: { id: playlist.id } });
       reset();
       resetCover();
       onClose();

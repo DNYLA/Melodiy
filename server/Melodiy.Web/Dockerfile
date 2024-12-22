@@ -1,17 +1,24 @@
 # Use the official .NET Core SDK as a parent image
-FROM node:20-alpine as development
+FROM node:22-alpine as development
 RUN addgroup --system web && \
           adduser --system -G web web
+RUN apk add --no-cache bash && npm install -g pnpm
+
 WORKDIR /app
 
-#root package.json + package-lock.json
-COPY ./client/package*.json ./
-COPY ./client/apps/web/package.json ./apps/web/package.json
+# Copy the root workspace files for dependency installation
+COPY ./client/pnpm-workspace.yaml ./
+COPY ./client/package.json ./package.json
+COPY ./client/pnpm-lock.yaml ./pnpm-lock.yaml
 
-RUN npm install
+# Install all dependencies
+RUN pnpm install
 
-COPY ./client/apps/web .
-RUN npx nx build web
+# Copy the entire monorepo for the build
+COPY ./client ./
+
+# Build the frontend app
+RUN pnpm --filter apps/web build
 
 FROM nginx:alpine as production
 WORKDIR /app
@@ -36,7 +43,7 @@ COPY ./server/Melodiy.Features/*.csproj ./Melodiy.Features/
 COPY ./server/Melodiy.Infrastructure/*.csproj ./Melodiy.Infrastructure/
 COPY ./server/Melodiy.Integrations/*.csproj ./Melodiy.Integrations/
 COPY ./server/Melodiy.Web/*.csproj ./Melodiy.Web/
-COPY --from=development /app/dist/apps/web ./Melodiy.Web/wwwroot/
+COPY --from=development /app/apps/web/dist/ ./Melodiy.Web/wwwroot/
 
 
 WORKDIR /src/Melodiy.Web/

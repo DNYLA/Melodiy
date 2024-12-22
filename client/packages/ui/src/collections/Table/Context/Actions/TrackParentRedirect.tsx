@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router';
+import { Link } from '@melodiy/router';
 import ContextItemBase from '../Base/ContextItemBase';
 import { AlbumIcon, ArtistIcon } from '@melodiy/icons';
 

@@ -1,5 +1,5 @@
 import { AddtoPlaylistIcon, PlaylistIcon } from '@melodiy/icons';
-import { Link } from '@tanstack/react-router';
+import { Link } from '@melodiy/router';
 import { twMerge } from 'tailwind-merge';
 import { useSession } from '../../../hooks';
 import { usePlaylists } from '../../../hooks/query/usePlaylist';
@@ -32,10 +32,10 @@ const LibraryItems = () => {
         data.map((playlist) => (
           <Link
             key={playlist.id}
-            to={'/playlist/$playlistId'}
-            params={{ playlistId: playlist.id }}
+            to={'/playlist/$id'}
+            params={{ id: playlist.id }}
             className={twMerge(
-              `... cursor-pointer truncate hover:text-white flex flex-row items-center self-stretch`,
+              `... cursor-pointer truncate hover:text-white flex flex-row items-center self-stretch`
             )}
             activeProps={{
               style: {
@@ -54,7 +54,7 @@ const LibraryItems = () => {
 
       <div
         className={twMerge(
-          `... cursor-pointer truncate hover:text-white flex flex-row items-center self-stretch font-medium`,
+          `... cursor-pointer truncate hover:text-white flex flex-row items-center self-stretch font-medium`
         )}
         onClick={handleOpen}
       >

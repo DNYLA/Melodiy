@@ -8,6 +8,7 @@ interface AuthModalStore {
   onClose: () => void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const useAuthModal = create<AuthModalStore>((set: any) => ({
   isOpen: false,
   isLogin: true,

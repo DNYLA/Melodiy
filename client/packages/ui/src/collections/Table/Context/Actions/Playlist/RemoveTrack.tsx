@@ -1,5 +1,5 @@
 import { removeTrackFromPlaylist } from '@melodiy/api';
-import { useParams } from '@tanstack/react-router';
+import { useParams } from '@melodiy/router';
 import toast from 'react-hot-toast';
 import ContextItemBase from '../../Base/ContextItemBase';
 

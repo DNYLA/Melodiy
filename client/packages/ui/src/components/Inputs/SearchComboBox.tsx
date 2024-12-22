@@ -90,7 +90,7 @@ function SearchComboBox({
   }, [term]);
 
   return (
-    <div className="relative w-full overflow-hidden text-left rounded cursor-default bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+    <div className="relative w-full overflow-hidden text-left rounded-sm cursor-default bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
       <Combobox
         disabled={disabled}
         value={selectedValue}
@@ -111,7 +111,7 @@ function SearchComboBox({
             onAbortCapture={() => console.log('here')}
             value={inputValue}
             placeholder={placeholder}
-            className="w-full items-center justify-center rounded bg-neutral-800 px-2.5 py-2 text-sm leading-none text-white outline-none placeholder:text-sm placeholder:font-extralight placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:bg-[#373737] disabled:bg-opacity-100"
+            className="w-full items-center justify-center rounded-sm bg-neutral-800 px-2.5 py-2 text-sm leading-none text-white outline-none placeholder:text-sm placeholder:font-extralight placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:bg-[#373737] disabled:bg-opacity/100"
             onChange={(event) => onInputChange(event.target.value)}
           />
           {/* <Input
@@ -122,7 +122,7 @@ function SearchComboBox({
             onAbortCapture={() => console.log('here')}
             value={inputValue}
             placeholder={placeholder}
-            className="w-full items-center justify-center rounded bg-neutral-700 px-2.5 py-2 text-sm leading-none text-white outline-none placeholder:text-sm placeholder:font-extralight placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:bg-neutral-400"
+            className="w-full items-center justify-center rounded-sm bg-neutral-700 px-2.5 py-2 text-sm leading-none text-white outline-none placeholder:text-sm placeholder:font-extralight placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:bg-neutral-400"
             onChange={(event) => onInputChange(event.target.value)}
           /> */}
         </ComboboxButton>
@@ -173,7 +173,7 @@ function SearchComboBox({
                           <IoIosCheckmarkCircle
                             className={twMerge(
                               'text-primary',
-                              active && 'text-primary-light',
+                              active && 'text-primary-light'
                             )}
                             size={18}
                           />

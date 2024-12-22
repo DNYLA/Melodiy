@@ -1,6 +1,5 @@
 import { ImgHTMLAttributes, SyntheticEvent, forwardRef } from 'react';
 import { getDefaultImage } from '../../utils';
-import { twMerge } from 'tailwind-merge';
 
 interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   fallback?: string;
@@ -8,6 +7,7 @@ interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
 
 //Wrapper around image to handle fallbacks by default
 const Image = forwardRef<HTMLImageElement, ImageProps>(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ({ src, fallback, alt, style, ...props }, ref) => {
     const handleError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
       const fallbackSrc = fallback ?? getDefaultImage();
@@ -25,7 +25,7 @@ const Image = forwardRef<HTMLImageElement, ImageProps>(
         />
       </div>
     );
-  },
+  }
 );
 
 Image.displayName = 'MelodiyImage';

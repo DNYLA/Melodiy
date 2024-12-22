@@ -19,7 +19,7 @@ const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
       children,
       ...props
     },
-    ref,
+    ref
   ) => {
     return (
       <Button
@@ -34,7 +34,7 @@ const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
         {children}
       </Button>
     );
-  },
+  }
 );
 
 ActionButton.displayName = 'ActionButton';

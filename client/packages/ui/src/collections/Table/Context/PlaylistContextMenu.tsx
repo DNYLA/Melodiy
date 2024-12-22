@@ -1,4 +1,3 @@
-import * as ContextMenu from '@radix-ui/react-context-menu';
 import AddToFavouritesContextItem from './Actions/AddToLikes';
 import AddToPlaylistContextItem from './Actions/AddToPlaylist';
 import QueueContextItem from './Actions/QueueTrack';
@@ -20,6 +19,7 @@ const PlaylistContextMenu: React.FC<PlaylistContextMenuProps> = ({
   albumId,
 }) => {
   const { user } = useSession();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const isOwner = ownerId === user?.id;
 
   return (

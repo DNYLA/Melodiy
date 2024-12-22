@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router';
+import { Link } from '@melodiy/router';
 import { Image } from '../Data/Image';
 
 export interface ArtistCardProps {

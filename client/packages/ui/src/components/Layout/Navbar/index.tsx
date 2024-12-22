@@ -1,5 +1,5 @@
 import { DiscoverIcon, HomeIcon } from '@melodiy/icons';
-import { Link } from '@tanstack/react-router';
+import { Link } from '@melodiy/router';
 import AuthSection from './AuthSection';
 import { SearchInput } from './SearchInput';
 
