@@ -12,7 +12,6 @@ _node_modules
 _docpress
 .DS_Store
 
-lib
 dist
 tsconfig.tsbuildinfo
 
