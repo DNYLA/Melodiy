@@ -1,0 +1,17 @@
+import { IconProps } from '../types';
+import { twMerge } from 'tailwind-merge';
+
+function ArtistIcon({ width = 50, height = 50, className }: Partial<IconProps>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg"
+    width={width}
+    height={height}
+    className={twMerge('text-base-accent stroke-current', className)}
+    fill="none"
+    viewBox="0 0 41 42" >
+      <path stroke="stroke-current" stroke-width="2.021" d="M24.497 14.14a3.368 3.368 0 1 1-6.735 0 3.368 3.368 0 0 1 6.735 0Z"></path><path stroke="stroke-current" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.021" d="m17.762 20.875-3.552 2.368a3.368 3.368 0 0 0-1.5 2.802v1.677c0 .868.704 1.572 1.572 1.572h6.848"></path><path stroke="stroke-current" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.684" d="M28.707 14.139v7.577m0 0v3.763c0 .749-.534 1.402-1.282 1.379-1.239-.04-2.928-.483-2.928-2.617 0-3.367 4.21-2.525 4.21-2.525Z"></path>
+    </svg>
+  );
+}
+
+export { ArtistIcon };

@@ -1,4 +1,7 @@
-﻿namespace Melodiy.Integrations.Youtube;
+﻿using System.Net;
+using Microsoft.Extensions.Caching.Memory;
+
+namespace Melodiy.Integrations.Youtube;
 
 using Melodiy.Integrations.Common;
 using Melodiy.Integrations.Common.Stream;
@@ -11,7 +14,7 @@ using YoutubeExplode.Videos.Streams;
 using YoutubeSearchApi.Net.Models.Youtube;
 using YoutubeSearchApi.Net.Services;
 
-public partial class YoutubeStreamProvider : IStreamProvider
+public partial class YoutubeStreamProvider(IMemoryCache memoryCache) : IStreamProvider
 {
     private readonly Regex _officialFlag = VideoTitleRegex();
 
@@ -26,7 +29,7 @@ public partial class YoutubeStreamProvider : IStreamProvider
             throw new Exception("Track not found");
         }
 
-        var successfullyConvertedDuration = int.TryParse(bestResult.Duration, out int duration);
+        var successfullyConvertedDuration = int.TryParse(bestResult.Duration, out var duration);
 
         return new ExternalStreamResponse
         {
@@ -38,13 +41,24 @@ public partial class YoutubeStreamProvider : IStreamProvider
 
     public async Task<string> GetStream(string id)
     {
+        var key = $"youtube-stream-{id}";
+        if (memoryCache.TryGetValue(key, out string? value) && !string.IsNullOrWhiteSpace(value))
+        {
+            return value;
+        }
+
         var youtube = new YoutubeClient();
         var streamManifest = await youtube.Videos.Streams.GetManifestAsync(id);
 
-        return streamManifest
+        var url = streamManifest
                .GetAudioStreams()
                .Where(s => s.Container == Container.Mp3 || s.Container == Container.Mp4)
                .GetWithHighestBitrate().Url;
+
+        if (string.IsNullOrWhiteSpace(url)) throw new Exception("Unable to find stream id");
+        memoryCache.Set(key, url, TimeSpan.FromHours(5.5)); //Each link generated lasts for 6 hours
+
+        return url;
     }
 
     private static async Task<List<YoutubeVideo>> Search(string term)
@@ -80,7 +94,7 @@ public partial class YoutubeStreamProvider : IStreamProvider
 
                 score += isSameChannel
                              ? 2
-                             : 0; //Correct channel shhould take priority over correct title as search results will already contain a similar result to search term/trackname.
+                             : 0; //Correct channel should take priority over correct title as search results will already contain a similar result to search term/trackname.
                 score += titleContainsArtist ? 1 : 0;
             }
 

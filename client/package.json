@@ -1,0 +1,15 @@
+{
+  "name": "melodiy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "router": "pnpm --filter @melodiy/router",
+    "ui": "pnpm --filter @melodiy/ui",
+    "web": "pnpm --filter web",
+    "dev": "pnpm router build && pnpm web dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

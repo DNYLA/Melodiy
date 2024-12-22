@@ -7,7 +7,9 @@ using Melodiy.Features.Playlist.Entities;
 using Melodiy.Features.Track.Entities;
 using Melodiy.Features.User.Entities;
 using Melodiy.Integrations.Common;
+using Microsoft.EntityFrameworkCore;
 
+[Index(nameof(Path), IsUnique = true)]
 public sealed class Image : BaseEntity
 {
     public int Id { get; set; }

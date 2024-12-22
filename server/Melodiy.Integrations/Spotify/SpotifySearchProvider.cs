@@ -75,19 +75,16 @@ internal class SpotifySearchProvider(IOptions<SpotifySettings> spotifySettings) 
 
         if (results.Tracks?.Items != null && results.Tracks.Items.Any())
         {
-            Console.WriteLine("Tracks");
             pipedResults.Tracks = results.Tracks.Items.Select(SpotifyTrackToExternalTrack).ToList();
         }
 
         if (results.Artists?.Items != null && results.Artists.Items.Any())
         {
-            Console.WriteLine("Artists");
             pipedResults.Artists = results.Artists.Items.Select(SpotifyArtistToExternalArtist).ToList();
         }
 
         if (results.Albums?.Items != null && results.Albums.Items.Any())
         {
-            Console.WriteLine("Albums");
             pipedResults.Albums = results.Albums.Items.Select(SpotifyAlbumToExternalAlbum).ToList();
         }
 

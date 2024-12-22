@@ -1,0 +1,52 @@
+@import 'tailwindcss';
+/* @config "../tailwind.config.js"; */
+
+@tailwind utilities;
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
+}
+
+@layer base {
+  input::placeholder,
+  textarea::placeholder {
+    color: theme(--color-gray-400);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  user-select: none;
+  background-color: #060606;
+  color: #e0e0e0;
+  color-scheme: dark;
+  height: 100%;
+  font-family: 'Satoshi', sans-serif;
+  font-style: normal;
+}
+
+#root {
+  display: flex;
+  padding: 8px;
+  height: calc(100% - 250px);
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+@theme {
+  --color-primary: #319795;
+  --color-secondary: #4adad7;
+  --color-accent: #111111;
+  --color-inactive: #a3a3a3;
+  --color-base: #222222;
+  --color-base-accent: #898989;
+  --color-content: #e0e0e0;
+  --color-background: #060606;
+  --color-modal: #202020;
+}

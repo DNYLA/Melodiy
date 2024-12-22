@@ -1,5 +1,7 @@
 ﻿namespace Melodiy.Features.Authentication;
 
+using System.Net;
+
 using Melodiy.Features.Authentication.Entities;
 using Melodiy.Features.Authentication.Jwt;
 using Melodiy.Features.Authentication.Models;
@@ -10,32 +12,22 @@ using Melodiy.Features.User.Entities;
 using Melodiy.Features.User.Models;
 using Melodiy.Integrations.Common;
 
-using System.Net;
-
 public sealed class AuthenticationService(
     IJwtTokenGenerator jwtTokenGenerator,
     IHashService hashService,
     IUserRepository userRepository,
     IRefreshTokenRepository refreshTokenRepository) : IAuthenticationService
 {
-    private readonly IJwtTokenGenerator _jwtTokenGenerator = jwtTokenGenerator;
-
-    private readonly IHashService _hashService = hashService;
-
-    private readonly IUserRepository _userRepository = userRepository;
-
-    private readonly IRefreshTokenRepository _refreshTokenRepository = refreshTokenRepository;
-
     public async Task<AuthenticationResult> ValidateLogin(LoginRequestModel request)
     {
-        var user = await _userRepository.GetByUsername(request.Username);
+        var user = await userRepository.GetByUsername(request.Username);
 
-        if (user == null || !_hashService.ValidateSecure(request.Password, user.Password))
+        if (user == null || !hashService.ValidateSecure(request.Password, user.Password))
         {
             throw new ApiException(HttpStatusCode.Unauthorized, "Invalid Credentials");
         }
 
-        var token = _jwtTokenGenerator.GenerateAccessToken(user.Id, user.Username);
+        var token = jwtTokenGenerator.GenerateAccessToken(user.Id, user.Username);
         var refreshToken = await CreateRefreshToken(user.Id, request.UserAgent);
 
         return new AuthenticationResult
@@ -52,14 +44,14 @@ public sealed class AuthenticationService(
 
     public async Task<AuthenticationResult> Register(RegisterRequestModel request, Role role)
     {
-        if (await _userRepository.ExistsAsync(request.Username))
+        if (await userRepository.ExistsAsync(request.Username))
         {
             throw new ApiException(HttpStatusCode.Conflict, "Username already exists");
         }
 
-        var hashedPassword = _hashService.Secure(request.Password);
-        var user = await _userRepository.AddAsync(request.Username, hashedPassword, role);
-        var token = _jwtTokenGenerator.GenerateAccessToken(user.Id, user.Username);
+        var hashedPassword = hashService.Secure(request.Password);
+        var user = await userRepository.AddAsync(request.Username, hashedPassword, role);
+        var token = jwtTokenGenerator.GenerateAccessToken(user.Id, user.Username);
         var refreshToken = await CreateRefreshToken(user.Id, request.UserAgent);
 
         return new AuthenticationResult
@@ -76,26 +68,26 @@ public sealed class AuthenticationService(
 
     public async Task<AuthenticationResult> RefreshToken(string refreshToken)
     {
-        var tokenDetails = await _refreshTokenRepository.WithUser().GetAsync(refreshToken);
+        var tokenDetails = await refreshTokenRepository.WithUser().GetAsync(refreshToken);
 
         if (tokenDetails == null)
         {
             throw new ApiException(HttpStatusCode.Unauthorized);
         }
-        
+
         if (tokenDetails.Expires < DateTime.UtcNow)
         {
-            await _refreshTokenRepository.DeleteExpiredAsync(tokenDetails.UserId, DateTime.UtcNow);
+            await refreshTokenRepository.DeleteExpiredAsync(tokenDetails.UserId, DateTime.UtcNow);
 
             throw new ApiException(HttpStatusCode.Unauthorized);
         }
 
-        var accessToken = _jwtTokenGenerator.GenerateAccessToken(tokenDetails.User.Id, tokenDetails.User.Username);
-        var newRefreshToken = _jwtTokenGenerator.GenerateRefreshToken();
+        var accessToken = jwtTokenGenerator.GenerateAccessToken(tokenDetails.User.Id, tokenDetails.User.Username);
+        var newRefreshToken = jwtTokenGenerator.GenerateRefreshToken();
 
         tokenDetails.Token = newRefreshToken.Token;
         tokenDetails.Expires = newRefreshToken.Expires;
-        await _refreshTokenRepository.SaveAsync(tokenDetails);
+        await refreshTokenRepository.SaveAsync(tokenDetails);
 
         return new AuthenticationResult()
         {
@@ -111,7 +103,7 @@ public sealed class AuthenticationService(
 
     public async Task RemoveRefreshToken(string refreshToken, int userId)
     {
-        var tokenDetails = await _refreshTokenRepository.WithUser().GetAsync(refreshToken);
+        var tokenDetails = await refreshTokenRepository.WithUser().GetAsync(refreshToken);
 
         if (tokenDetails == null)
         {
@@ -122,15 +114,15 @@ public sealed class AuthenticationService(
             throw new ApiException(HttpStatusCode.Unauthorized);
         }
 
-        await _refreshTokenRepository.DeleteAsync(tokenDetails);
+        await refreshTokenRepository.DeleteAsync(tokenDetails);
     }
 
     private async Task<RefreshTokenModel> CreateRefreshToken(int userId, string? userAgent)
     {
         //TODO: Should we verify previously created refresh tokens and prune any old ones?
-        var tokenDetails = _jwtTokenGenerator.GenerateRefreshToken();
+        var tokenDetails = jwtTokenGenerator.GenerateRefreshToken();
 
-        await _refreshTokenRepository.AddAsync(new RefreshToken
+        await refreshTokenRepository.AddAsync(new RefreshToken
         {
             Token = tokenDetails.Token,
             Expires = tokenDetails.Expires,

@@ -1,5 +1,7 @@
 ﻿namespace Melodiy.Features.Search;
 
+using System.Net;
+
 using MediatR;
 
 using Melodiy.Features.Album.Query;
@@ -12,25 +14,17 @@ using Melodiy.Features.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using System.Net;
-
 [ApiController]
 [Route("api/[controller]")]
 public class SearchController(ISearchService searchService, IUserService userService, IMediator mediator)
     : ControllerBase
 {
-    private readonly ISearchService _searchService = searchService;
-
-    private readonly IUserService _userService = userService;
-
-    private readonly IMediator _mediator = mediator;
-
     [Authorize]
     [HttpGet("me")]
     public async Task<ActionResult<SearchResultViewModel>> Search([FromQuery] string term, [FromQuery] string? artistId,
-                                                                  [FromQuery] SearchType? type)
+        [FromQuery] SearchType? type)
     {
-        var user = await _userService.GetUserDetails();
+        var user = await userService.GetUserDetails();
 
         if (user == null)
         {
@@ -44,13 +38,13 @@ public class SearchController(ISearchService searchService, IUserService userSer
         {
             case SearchType.Album when string.IsNullOrWhiteSpace(artistId):
                 throw new ApiException(HttpStatusCode.BadRequest,
-                                       "ArtistId is required when searching for your albums created by an artist");
+                    "ArtistId is required when searching for your albums created by an artist");
             case SearchType.Album:
-                {
-                    var response = await _mediator.Send(new SearchAlbumsQuery(term, 5, artistId, user.Id));
-                    result.Albums = response.Select(album => album.ToViewModel()).ToList();
-                    break;
-                }
+            {
+                var response = await mediator.Send(new SearchAlbumsQuery(term, 5, artistId, user.Id));
+                result.Albums = response.Select(album => album.ToViewModel()).ToList();
+                break;
+            }
             default:
                 throw new ApiException(HttpStatusCode.NotImplemented, $"SearchType: {type} currently not accepted.");
         }
@@ -67,22 +61,22 @@ public class SearchController(ISearchService searchService, IUserService userSer
         switch (type)
         {
             case SearchType.All:
-                {
-                    var response = await _searchService.Search(term);
+            {
+                var response = await searchService.Search(term);
 
-                    return new SearchResultViewModel
-                    {
-                        Albums = response.Albums.Select(album => album.ToViewModel()).ToList(),
-                        Artists = response.Artists.Select(artist => artist.ToViewModel()).ToList(),
-                        Tracks = response.Tracks.Select(track => track.ToViewModel()).ToList()
-                    };
-                }
-            case SearchType.Artist:
+                return new SearchResultViewModel
                 {
-                    var response = await _mediator.Send(new SearchArtistsQuery(term, 5, true));
-                    results.Artists = response.Select(artist => artist.ToViewModel()).ToList();
-                    break;
-                }
+                    Albums = response.Albums.Select(album => album.ToViewModel()).ToList(),
+                    Artists = response.Artists.Select(artist => artist.ToViewModel()).ToList(),
+                    Tracks = response.Tracks.Select(track => track.ToViewModel()).ToList()
+                };
+            }
+            case SearchType.Artist:
+            {
+                var response = await mediator.Send(new SearchArtistsQuery(term, 5, true));
+                results.Artists = response.Select(artist => artist.ToViewModel()).ToList();
+                break;
+            }
             default:
                 throw new ApiException(HttpStatusCode.NotImplemented, $"SearchType: {type} currently not accepted.");
         }

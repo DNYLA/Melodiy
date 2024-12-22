@@ -230,6 +230,9 @@ namespace Melodiy.Features.Common.Context.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Path")
+                        .IsUnique();
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Images");

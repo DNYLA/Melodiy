@@ -43,7 +43,7 @@ public sealed class AlbumRepository(MelodiyDbContext context) : IAlbumRepository
 
     public IAlbumRepository WithArtist()
     {
-        _albums.Include(artist => artist.Artists).Load();
+        _albums.Include(artist => artist.Artists).ThenInclude(artist => artist.Image).Load();
 
         return this;
     }

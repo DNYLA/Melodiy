@@ -1,0 +1,22 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependency directory
+**/node_modules/**
+_node_modules
+.pnp.cjs
+
+.tmp
+_docpress
+.DS_Store
+
+dist
+tsconfig.tsbuildinfo
+
+# Visual Studio Code configs
+.vscode/
+
+# JetBrains IDEs
+.idea/
