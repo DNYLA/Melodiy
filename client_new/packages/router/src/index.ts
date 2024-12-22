@@ -21,5 +21,6 @@ export {
   RouterProvider,
   getRouteApi,
   ErrorComponent,
+  useMatchRoute,
 } from '@tanstack/react-router';
 export type { ErrorComponentProps } from '@tanstack/react-router';
