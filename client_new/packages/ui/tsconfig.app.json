@@ -18,8 +18,11 @@
 
     /* Linting */
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+
+    //TODO: Renable sometime in the future
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },

@@ -8,7 +8,6 @@ import {
   RouterIds,
   RouterProvider,
 } from '@melodiy/router';
-import { Button } from '@melodiy/ui';
 import { RootComponent } from './rootComponent';
 
 //Override root component or other custom routes that require ui lib data
@@ -29,7 +28,6 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-      <Button />
     </QueryClientProvider>
   </StrictMode>
 );
