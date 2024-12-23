@@ -8,12 +8,12 @@
   padding-inline: 2rem;
 }
 
-@layer base {
+/* @layer base {
   input::placeholder,
   textarea::placeholder {
     color: theme(--color-gray-400);
   }
-}
+} */
 
 * {
   box-sizing: border-box;

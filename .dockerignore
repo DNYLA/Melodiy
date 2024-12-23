@@ -1,0 +1,3 @@
+# Ignore all node_modules and dist directories, regardless of location
+**/node_modules/
+**/dist/

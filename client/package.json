@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "pnpm router build && pnpm web build",
     "router": "pnpm --filter @melodiy/router",
     "ui": "pnpm --filter @melodiy/ui",
     "web": "pnpm --filter web",
@@ -11,5 +12,8 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "~5.6.2"
+  }
 }

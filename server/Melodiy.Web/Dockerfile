@@ -6,19 +6,22 @@ RUN apk add --no-cache bash && npm install -g pnpm
 
 WORKDIR /app
 
-# Copy the root workspace files for dependency installation
-COPY ./client/pnpm-workspace.yaml ./
-COPY ./client/package.json ./package.json
-COPY ./client/pnpm-lock.yaml ./pnpm-lock.yaml
-
-# Install all dependencies
-RUN pnpm install
+# # Copy the root workspace files for dependency installation
+# COPY ./client/pnpm-workspace.yaml ./pnpm-workspace.yaml
+# COPY ./client/package.json ./package.json
+# COPY ./client/pnpm-lock.yaml ./pnpm-lock.yaml
 
 # Copy the entire monorepo for the build
 COPY ./client ./
 
+# debugging
+# RUN ls -al /app
+
+# Install all dependencies
+RUN pnpm install
+
 # Build the frontend app
-RUN pnpm --filter apps/web build
+RUN pnpm --filter router build && pnpm --filter web build
 
 FROM nginx:alpine as production
 WORKDIR /app
