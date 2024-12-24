@@ -21,7 +21,6 @@ export function RootComponent() {
         <Sidebar>
           <Outlet />
         </Sidebar>
-        {/* <Player /> */}
         {process.env.NODE_ENV === 'development' && <TanStackRouterDevtools />}
       </Providers>
     </>

@@ -122,6 +122,8 @@ public static class ViewModelConverterExtensions
 
     public static FullTrackViewModel ToFullViewModel(this TrackResponse track)
     {
+        var requiresClientYoutubeStream = string.IsNullOrWhiteSpace(track.ExternalDetails.Path) && !string.IsNullOrWhiteSpace(track.ExternalDetails.YoutubeId);
+
         return new FullTrackViewModel
         {
             Id = track.Slug,
@@ -136,7 +138,9 @@ public static class ViewModelConverterExtensions
             User = track.User?.ToViewModel(),
             Image = track.Image.GetUrl(),
             Path = track.ExternalDetails.Path,
-            LocalCdnRequestRequired = track is { Public: false, Source: SourceType.Local }
+            LocalCdnRequestRequired = track is { Public: false, Source: SourceType.Local },
+            //TODO: surely a better way to handle this
+            YoutubeStreamId = requiresClientYoutubeStream ? track.ExternalDetails.YoutubeId : null,
         };
     }
 

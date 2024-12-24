@@ -1,5 +1,7 @@
 ﻿namespace Melodiy.Features.Player;
 
+using System.Net;
+
 using MediatR;
 
 using Melodiy.Features.Album.Query;
@@ -13,8 +15,6 @@ using Melodiy.Features.Playlist;
 using Melodiy.Features.Track.Models;
 using Melodiy.Features.Track.Query;
 using Melodiy.Features.User.Models;
-
-using System.Net;
 
 public sealed class PlayerService(IDateTimeProvider dateProvider, IPlaylistService playlistService, IMediator mediator)
     : IPlayerService
@@ -88,11 +88,13 @@ public sealed class PlayerService(IDateTimeProvider dateProvider, IPlaylistServi
         //Client Queue = List of Next Tracks that will play
         var clientQueue = queue.Skip(position + 1).Select(x => x.ToViewModel()).ToList();
 
-        return new PlayerViewModel
+        var model = new PlayerViewModel
         {
             CurrentTrack = track.ToFullViewModel(),
             Queue = clientQueue,
         };
+
+        return model;
     }
 
     public async Task<PlayerViewModel> Previous(string trackId, string collectionId, CollectionType collection,
