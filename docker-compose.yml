@@ -2,7 +2,7 @@ services:
   melodiy:
     image: ghcr.io/dnyla/melodiy:latest
     ports:
-      - 5129:5129
+      - 7175:7175
     volumes:
       - ./server/Melodiy.Web/appsettings.production.json:/app/appsettings.json
       - ./files:/usr/share/Melodiy
