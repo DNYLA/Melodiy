@@ -41,7 +41,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG configuration=Release
 WORKDIR /src
 
-COPY ./aspnetapp.pfx ./server/https/aspnetapp.pfx
+# COPY ./aspnetapp.pfx ./server/https/aspnetapp.pfx
 COPY ./server/*.sln .
 COPY ./server/Melodiy.Features/*.csproj ./Melodiy.Features/
 COPY ./server/Melodiy.Infrastructure/*.csproj ./Melodiy.Infrastructure/
