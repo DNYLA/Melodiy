@@ -49,7 +49,7 @@ const schema = z.object({
               data.item(0) !== null &&
               (data.item(0)?.type === 'audio/mpeg' ||
                 data.item(0)?.type === 'audio/wav'),
-            'Only MP3 and Wav files are supported',
+            'Only MP3 and Wav files are supported'
           ),
   // .refine((data) => data.),
 });
@@ -98,7 +98,7 @@ function UploadTrackMenu() {
 
   const { query: albumQuery, loading: loadingAlbum } = useAlbumSearch(
     album?.name,
-    artist.id,
+    artist.id
   );
 
   const setTags = useCallback(() => {
@@ -152,7 +152,17 @@ function UploadTrackMenu() {
     }
 
     try {
-      await UpoloadTrack(formData, data.public);
+      const createdTrack = await UpoloadTrack(formData, data.public);
+      if (createdTrack.album != null) {
+        const updatedComboItem: ComboBoxItem = {
+          id: createdTrack.album.id,
+          name: createdTrack.album.title,
+          verified: false,
+        };
+
+        setValue('album', updatedComboItem);
+      }
+
       toast.success('Successfully Created Track');
     } catch (err) {
       toast.error(getApiError(err).message);
