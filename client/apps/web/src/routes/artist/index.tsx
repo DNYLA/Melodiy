@@ -1,14 +1,13 @@
+import { Await, useLoaderData, useNavigate } from '@melodiy/router';
 import { TopTracksTable } from '@melodiy/ui/collections';
 import {
   CollectionCard,
   CollectionCardSize,
 } from '@melodiy/ui/components/Cards';
 import * as Tabs from '@radix-ui/react-tabs';
-import { Await } from '@melodiy/router';
 import { Suspense } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import { ArtistHeader } from './ArtistHeader';
-import { useLoaderData, useNavigate } from '@melodiy/router';
 
 export default function Artist() {
   const navigate = useNavigate();
@@ -81,10 +80,6 @@ export default function Artist() {
 
                     <Tabs.Content className="w-full" value="home">
                       <div className="flex flex-col px-5 gap-y-4">
-                        <TopTracksTable tracks={artist.topTracks} />
-                        <TopTracksTable tracks={artist.topTracks} />
-                        <TopTracksTable tracks={artist.topTracks} />
-                        <TopTracksTable tracks={artist.topTracks} />
                         <TopTracksTable tracks={artist.topTracks} />
                       </div>
                     </Tabs.Content>

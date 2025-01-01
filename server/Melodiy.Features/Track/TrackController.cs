@@ -65,7 +65,7 @@ public class TrackController(IUserService userService, IMediator mediator) : Con
                 Title = request.AlbumTitle,
                 ArtistSlug = request.ArtistId!,
                 Timestamp = 0,
-                Image = null,
+                Image = request.Image,
                 UserId = user.Id
             });
 

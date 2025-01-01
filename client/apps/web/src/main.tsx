@@ -40,9 +40,7 @@ Object.entries(routerMap).forEach(([path, component]) => {
 });
 
 const apiUrl =
-  import.meta.env.MODE === 'development'
-    ? 'https://127.0.0.1:5129/api'
-    : '/api';
+  import.meta.env.MODE === 'development' ? 'http://localhost:5129/api' : '/api';
 initialiseAxios(apiUrl);
 
 createRoot(document.getElementById('root')!).render(
