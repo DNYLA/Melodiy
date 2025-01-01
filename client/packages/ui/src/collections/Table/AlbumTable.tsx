@@ -1,7 +1,8 @@
 import { Album, CollectionType } from '@melodiy/types';
+import { getDefaultPlaylistImage } from '../../utils';
+import CollectionContainer from '../Header/CollectionContainer';
 import TrackTable from './';
 import { ColumnBuilder } from './Helpers/ColumnBuilder';
-import CollectionContainer from '../Header/CollectionContainer';
 
 interface AlbumTableProps {
   data: Album;
@@ -31,6 +32,7 @@ export function AlbumTable({ data }: AlbumTableProps) {
         id={data.id}
         title={data.title}
         cover={data.image}
+        coverFallback={getDefaultPlaylistImage()}
         type={CollectionType.Album}
         releaseDate={new Date(data.createdAt)}
         tracks={data.tracks}

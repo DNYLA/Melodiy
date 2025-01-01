@@ -1,13 +1,13 @@
 /* eslint react-hooks/rules-of-hooks: 0 */
-import { Track } from '@melodiy/types';
 import { Link } from '@melodiy/router';
+import { Track } from '@melodiy/types';
 import { ColumnHelper, createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { usePlayer } from '../../../components/Player/hooks/usePlayer';
+import { msToMinuteSeconds } from '../../../utils';
 import CounterCell from '../Cells/Counter';
 import TitleCell from '../Cells/Title';
-import { getDefaultImage, msToMinuteSeconds } from '../../../utils';
-import { usePlayer } from '../../../components/Player/hooks/usePlayer';
 dayjs.extend(relativeTime);
 
 //TODO: Convert to Hook?
@@ -53,7 +53,7 @@ export class ColumnBuilder {
         return {
           title: row.title,
           artists: row.artists,
-          cover: row.image ?? getDefaultImage(),
+          cover: row.image,
           id: row.id, //We could pass isActive however we will need the id in future updates
         };
       },

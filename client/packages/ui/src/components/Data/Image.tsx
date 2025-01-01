@@ -18,7 +18,7 @@ const Image = forwardRef<HTMLImageElement, ImageProps>(
       <div ref={ref}>
         <img
           // style={{ objectFit: 'cover' }}
-          src={src ?? getDefaultImage()}
+          src={src ?? fallback ?? getDefaultImage()}
           alt={alt}
           onError={handleError}
           {...props}

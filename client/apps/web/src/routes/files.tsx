@@ -1,6 +1,6 @@
+import { useLoaderData, useNavigate } from '@melodiy/router';
 import { FilesTable } from '@melodiy/ui/collections';
 import { useSession } from '@melodiy/ui/hooks';
-import { useLoaderData, useNavigate } from '@melodiy/router';
 
 export default function Files() {
   const session = useSession();
@@ -15,7 +15,7 @@ export default function Files() {
 
   return (
     <main className="flex flex-col w-full gap-y-5">
-      <FilesTable data={tracks} username={session.user?.username} />
+      <FilesTable data={tracks} user={session.user} />
     </main>
   );
 }

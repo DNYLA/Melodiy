@@ -1,12 +1,13 @@
 import { ArtistPreview } from '@melodiy/types';
 import { twMerge } from 'tailwind-merge';
-import { Image } from '../../../components/Data/Image';
 import { ArtistList } from '../../../components/Data/ArtistList';
+import { Image } from '../../../components/Data/Image';
+import { getDefaultTrackImage } from '../../../utils';
 
 interface TitleCellProps {
   title: string;
   artists: ArtistPreview[];
-  cover: string;
+  cover?: string;
   isActive: boolean;
 }
 
@@ -17,6 +18,7 @@ function TitleCell({ title, artists, cover, isActive }: TitleCellProps) {
         draggable={false}
         className="h-[45px] w-[45px] rounded-[3px]"
         src={cover}
+        fallback={getDefaultTrackImage()}
         width={45}
         height={45}
         alt="Song Cover"
@@ -25,7 +27,7 @@ function TitleCell({ title, artists, cover, isActive }: TitleCellProps) {
         <span
           className={twMerge(
             'text-[15px]',
-            isActive && 'font-medium text-primary-light',
+            isActive && 'font-medium text-primary-light'
           )}
         >
           {title}

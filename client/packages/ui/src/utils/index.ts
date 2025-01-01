@@ -19,7 +19,11 @@ export function msToMinuteSeconds(duration: number) {
   return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
 }
 
-export const getDefaultImage = () => '/images/default_playlist.png';
+export const getDefaultImage = () => '/images/default_playlist.jpg';
+export const getDefaultArtistImage = () => '/images/default_artist.jpg';
+export const getDefaultPlaylistImage = () => '/images/default_playlist.jpg';
+export const getDefaultTrackImage = () => '/images/default_track.jpg';
+export const getDefaultUserImage = () => '/images/default_avatar.jpg';
 
 export function addFormFile(form: FormData, key: string, file?: FileList) {
   if (file && file.length > 0) {

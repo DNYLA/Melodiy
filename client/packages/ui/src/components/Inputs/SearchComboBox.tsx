@@ -9,6 +9,7 @@ import {
 import { Fragment, useEffect, useState } from 'react';
 import { IoIosCheckmarkCircle, IoMdCheckmark } from 'react-icons/io';
 import { twMerge } from 'tailwind-merge';
+import { getDefaultArtistImage } from '../../utils';
 import { Image } from '../Data/Image';
 
 export type ComboBoxItem = {
@@ -158,6 +159,7 @@ function SearchComboBox({
                     <div className="flex gap-x-2">
                       <Image
                         src={item.image}
+                        fallback={getDefaultArtistImage()}
                         alt={`item cover`}
                         width={40}
                         height={40}

@@ -7,10 +7,17 @@ export interface ImagePreviewProps {
   className?: string;
   src?: string;
   alt: string;
+  fallback?: string;
   onReset?: () => void;
 }
 
-function ImagePreview({ className, src, alt, onReset }: ImagePreviewProps) {
+function ImagePreview({
+  className,
+  src,
+  fallback,
+  alt,
+  onReset,
+}: ImagePreviewProps) {
   useEffect(() => {
     if (!src) return;
 
@@ -37,6 +44,7 @@ function ImagePreview({ className, src, alt, onReset }: ImagePreviewProps) {
         className={twMerge('h-[150px] w-[150px] rounded', className)}
         // placeholder="blur" //TODO: Fix
         src={src}
+        fallback={fallback}
         alt={alt}
         width={150}
         height={150}
