@@ -41,7 +41,7 @@ Object.entries(routerMap).forEach(([path, component]) => {
 
 const apiUrl =
   import.meta.env.MODE === 'development'
-    ? 'https://127.0.0.1:7175/api'
+    ? 'https://127.0.0.1:5129/api'
     : '/api';
 initialiseAxios(apiUrl);
 
