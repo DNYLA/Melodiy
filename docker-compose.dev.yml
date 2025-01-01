@@ -6,11 +6,6 @@ services:
       dockerfile: ./server/Melodiy.Web/Dockerfile
     ports:
       - 5129:5129
-      - 7175:7175
-    environment:
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=thepassword
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     volumes:
       - ./server/Melodiy.Web/appsettings.development.json:/app/appsettings.json
       - ./files:/usr/share/Melodiy
-      - ${USERPROFILE}\.aspnet\https:/https/

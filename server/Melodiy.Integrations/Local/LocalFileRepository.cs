@@ -1,4 +1,7 @@
-﻿namespace Melodiy.Integrations.Local;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+
+namespace Melodiy.Integrations.Local;
 
 using Melodiy.Integrations.Common;
 using Melodiy.Integrations.Common.File;
@@ -6,12 +9,8 @@ using Melodiy.Integrations.Common.File;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 
-public class LocalFileRepository(IHashService hashService, IHttpContextAccessor httpContextAccessor) : IFileRepository
+public class LocalFileRepository(IHashService hashService, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment webHostingEnvironment) : IFileRepository
 {
-    private readonly IHashService _hashService = hashService;
-
-    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
-
     public const string BaseFolderName = "Melodiy";
 
     public async Task<FileResponse> UploadFile(IFormFile file, string subPath, StorageBucket bucket)
@@ -21,7 +20,7 @@ public class LocalFileRepository(IHashService hashService, IHttpContextAccessor 
         using MemoryStream memoryStream = new();
         await file.CopyToAsync(memoryStream);
 
-        var fileHash = _hashService.File(memoryStream);
+        var fileHash = hashService.File(memoryStream);
         var fileName = fileHash + Path.GetExtension(file.FileName);
         var scopedPath = Path.Join(subPath, fileName);
         var fullPath = Path.Join(bucketPath, scopedPath);
@@ -61,7 +60,8 @@ public class LocalFileRepository(IHashService hashService, IHttpContextAccessor 
             throw new Exception("No valid host found");
         }
 
-        var location = new Uri($"{request.Scheme}://{request.Host}/api/cdn");
+        var scheme = webHostingEnvironment.IsProduction() ? "https" : request.Scheme; //Force HTTPS on prod regardless of scheme all hosted applications should support https via hosting/proxy.
+        var location = new Uri($"{scheme}://{request.Host}/api/cdn");
         var url = location.AbsoluteUri;
         var path = Path.Join(url, BucketName(bucket), subPath);
 

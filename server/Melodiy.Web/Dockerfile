@@ -33,10 +33,9 @@ RUN addgroup --system web && \
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS base
 WORKDIR /app
-EXPOSE 5129 7175
+EXPOSE 5129
 
-ENV ASPNETCORE_URLS="https://+:7175;http://+:5129"
-ENV ASPNETCORE_HTTPS_PORTS=7175
+ENV ASPNETCORE_URLS="http://+:5129"
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG configuration=Release
