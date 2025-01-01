@@ -1,5 +1,6 @@
-import { Track } from '@melodiy/types';
 import { Link } from '@melodiy/router';
+import { Track } from '@melodiy/types';
+import { getDefaultTrackImage } from '../../utils';
 import { Image } from '../Data/Image';
 // import TrackContextMenu from '../../collections/Table/Context/TrackContextMenu';
 
@@ -42,6 +43,7 @@ const TrackMedia: React.FC<TrackMediaProps> = ({ data, onClick }) => {
       <div className="relative overflow-hidden rounded-[3px] h-14 w-14">
         <Image
           src={data.image}
+          fallback={getDefaultTrackImage()}
           alt="Media Item"
           className="object-cover h-14 w-14"
         />

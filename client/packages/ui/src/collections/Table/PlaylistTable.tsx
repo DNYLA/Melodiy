@@ -1,4 +1,5 @@
 import { CollectionType, Playlist } from '@melodiy/types';
+import { getDefaultPlaylistImage } from '../../utils';
 import CollectionContainer from '../Header/CollectionContainer';
 import TrackTable from './';
 import { ColumnBuilder } from './Helpers/ColumnBuilder';
@@ -22,6 +23,7 @@ export function PlaylistTable({ data }: PlaylistTableProps) {
         id={data.id}
         title={data.title}
         cover={data.image}
+        coverFallback={getDefaultPlaylistImage()}
         type={CollectionType.Playlist}
         releaseDate={new Date(data.createdAt)}
         tracks={data.tracks}

@@ -1,16 +1,17 @@
-import { CollectionType, Track } from '@melodiy/types';
+import { CollectionType, Track, User } from '@melodiy/types';
+import { getDefaultUserImage } from '../../utils';
 import CollectionContainer from '../Header/CollectionContainer';
 import TrackTable from './';
 import { ColumnBuilder } from './Helpers/ColumnBuilder';
 
 interface FilesTableProps {
-  username: string; //Pass it trough as the server already got the user for us
+  user: User;
   data: Track[];
 }
 
 const FILES_COLLECTION_ID = 'files';
 
-export function FilesTable({ data, username }: FilesTableProps) {
+export function FilesTable({ data, user }: FilesTableProps) {
   const columns = new ColumnBuilder()
     .AddPosition(FILES_COLLECTION_ID)
     .AddTitle(FILES_COLLECTION_ID)
@@ -24,12 +25,14 @@ export function FilesTable({ data, username }: FilesTableProps) {
       <CollectionContainer
         id={'Your Files'}
         title={'Your Files'}
+        cover={user.avatar}
+        coverFallback={getDefaultUserImage()}
         type={CollectionType.MyFiles}
         releaseDate={new Date()}
         tracks={data}
         owner={{
-          name: username,
-          redirect: `/user/${username}`,
+          name: user.username,
+          redirect: `/user/${user.username}`,
         }}
       >
         <div className="px-6 py-3 pt-2 pr-5">

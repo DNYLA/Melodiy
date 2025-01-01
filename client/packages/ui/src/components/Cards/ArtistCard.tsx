@@ -1,4 +1,5 @@
 import { Link } from '@melodiy/router';
+import { getDefaultArtistImage } from '../../utils';
 import { Image } from '../Data/Image';
 
 export interface ArtistCardProps {
@@ -15,6 +16,7 @@ function ArtistCard({ id, name, imageSrc }: ArtistCardProps) {
           draggable={false}
           className={'max-h-[160px] max-w-[160px] rounded-full'}
           src={imageSrc}
+          fallback={getDefaultArtistImage()}
           width={160}
           height={160}
           alt="Artist Avatar"

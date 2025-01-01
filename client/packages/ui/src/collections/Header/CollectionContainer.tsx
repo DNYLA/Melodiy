@@ -9,14 +9,15 @@ import {
   ShareIcon,
   ShuffleIcon,
 } from '@melodiy/icons';
-import { CollectionType, Track } from '@melodiy/types';
 import { useNavigate } from '@melodiy/router';
+import { CollectionType, Track } from '@melodiy/types';
 import dayjs from 'dayjs';
 import { FC, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { Image } from '../../components/Data/Image';
 import { IconButton } from '../../components/Inputs';
 import { usePlayerIcon } from '../../components/Player/hooks/usePlayerIcon';
+import { getDefaultUserImage } from '../../utils';
 
 type CollectionOwner = {
   name: string;
@@ -29,6 +30,7 @@ export interface CollectionContainerProps {
   title: string;
   type: CollectionType;
   cover?: string;
+  coverFallback?: string;
   releaseDate: Date;
   tracks: Track[];
   owner: CollectionOwner | CollectionOwner[]; //A Collection can be a playlist which is owned by a user or an album, ep, single owned by artists(s)
@@ -39,6 +41,7 @@ const CollectionContainer: FC<CollectionContainerProps> = ({
   id,
   title,
   cover,
+  coverFallback,
   releaseDate,
   tracks,
   owner,
@@ -164,6 +167,7 @@ const CollectionContainer: FC<CollectionContainerProps> = ({
       <div className="flex flex-col w-1/4 mx-5 my-10 gap-y-3">
         <Image
           src={cover}
+          fallback={coverFallback}
           draggable={false}
           className={twMerge('z-5 rounded-xl w-full object-cover')}
           alt={'Collection cover'}
@@ -178,6 +182,7 @@ const CollectionContainer: FC<CollectionContainerProps> = ({
             >
               <Image
                 src={owner.cover}
+                fallback={getDefaultUserImage()}
                 draggable={false}
                 className={twMerge('rounded-full w-20 h-20 object-cover')}
                 alt={'Collection cover'}
