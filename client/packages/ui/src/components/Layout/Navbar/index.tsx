@@ -1,4 +1,4 @@
-import { DiscoverIcon, HomeIcon } from '@melodiy/icons';
+import { HomeIcon } from '@melodiy/icons';
 import { Link } from '@melodiy/router';
 import AuthSection from './AuthSection';
 import { SearchInput } from './SearchInput';
@@ -10,11 +10,11 @@ function Navbar() {
       label: 'Home',
       href: '/',
     },
-    {
-      icon: DiscoverIcon,
-      label: 'Discover',
-      href: '/discover',
-    },
+    // {
+    //   icon: DiscoverIcon,
+    //   label: 'Discover',
+    //   href: '/discover',
+    // },
   ];
 
   return (
