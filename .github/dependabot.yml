@@ -1,0 +1,70 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+      
+version: 2
+updates:
+  # Web Application
+  - package-ecosystem: "npm"  # Use "npm" since PNPM uses the same package format
+    directory: "/client/apps/web"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ui-web"
+
+  # Api Package
+  - package-ecosystem: "npm"  # Use "npm" since PNPM uses the same package format
+    directory: "/client/packages/api"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ui-package"
+
+  # Icons Package
+  - package-ecosystem: "npm"  # Use "npm" since PNPM uses the same package format
+    directory: "/client/packages/icons"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ui-package"
+
+  # Router Package
+  - package-ecosystem: "npm"  # Use "npm" since PNPM uses the same package format
+    directory: "/client/packages/router"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ui-package"
+
+  # Types Package
+  - package-ecosystem: "npm"  # Use "npm" since PNPM uses the same package format
+    directory: "/client/packages/types"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ui-package"
+
+  # UI Package
+  - package-ecosystem: "npm"  # Use "npm" since PNPM uses the same package format
+    directory: "/client/packages/ui"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ui-package"
+
+  # Server
+  - package-ecosystem: "nuget"
+    directory: "/server"  # Root of the ASP.NET Core solution (Melodiy.sln)
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "server"
+
+  # Workflows
+  - package-ecosystem: "github-actions"
+    directory: "/" # / will look in /.github/workflows directory by default
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "workflow"
