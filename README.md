@@ -54,9 +54,18 @@ Pre-requisites
 * Spotify Api Key (Optional Remove the "Spotify" section in app settings if you don't want to include Spotify searches).
 * Supabase Application (Optional remove the "Supabase" section in app settings if you don't want to use Supabase as the CDN).
 
-1. pull the latest image using **docker pull ghcr.io/dnyla/melodiy:latest**
-2. Copy docker-compose.yml and appsetting.json and edit appsetting.json to include your Supabase (optional), Spotify (optional) and Database settings.
-3. docker compose up to run the server.
+1. Pull the latest image using ```docker pull ghcr.io/dnyla/melodiy:latest```
+2. Copy **docker-compose.yml** and **appsetting.json** and edit appsetting.json to include your Supabase (optional), Spotify (optional) and Database settings.
+3. ```docker compose up``` to run the server.
+
+### Caddy
+In my production environments i use Caddy to host the web app to the public via a reverse proxy this way HTTPS certificates are generated and handled by caddy automatically. Below is my Caddyfile which reverse proxies the docker container, from memeory you will need to set up a docker network to achieve this however i forgot how to set this up and it was a litle complex my first time from what i remember. I will be migrated my app to another VPS before v2.0 is officially launched and will note down the steps and commands i used to create the network in the upcoming future.
+
+```
+melodiy.net {
+  reverse_proxy 172.17.0.1:5129
+}
+```
 
 ### Supabase
 If you want to use supabase as the CDN you need to set up the following function within supabase. This will become obsolete in future versions as i plan on making changes to not write the full URL for each file into the database and instead use identifiers and generate the URL whenever requested.
@@ -89,19 +98,7 @@ END;
 
 ## Local Development
 
-To setup local development you need to create an appsettings.development.json inside of the Melodiy.Web.
-
-You will also need to setup a https development certificate so you can run the application using HTTPS. You can use this guide to generate a dotnet development certificate https://learn.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-8.0.
-
-For windows i will write down the steps i used to produce a certificate that can be used within the docker container. If your using visual studio you can choose the startup type to be HTTPS and when its your first time starting the server you will be asked to trust and sign the certificate. However this won't work with docker any edits you make should be tested within the docker container however if you have problems with setting up and hosting the local development container i am more than happy to test it out for you as i wwill be verifying everything is still working within the container.
-
-These steps are taken from the guide however i edited the command by adding a -t otherwise it woul the password is a placeholder if you change it don't forget to update docker-compose.dev.yml.
-
-1. run dotnet dev-certs https -ep %USERPROFILE%\.aspnet\https\aspnetapp.pfx -p thepassword -v 
-2. dotnet dev-certs https --trust
-3. I use docker-compose -f docker-compose.dev.yml up --build --force-recreate to start the development container you might get away without having to use --build or --force-recreate everytime. I'm unfortunetely not a docker expert and had problems towards the start of development and using --build with --force-recreate seemed to fix all of my issues.
-
-If you are using the local CDN you will notice files created locally don't work correctly when running the docker container. This is because the local files are stored in C:\ProgramData\Melodiy but the docker compose file mounts a new volume from the root folder inside the repo called files. For now i have been copying over C:\ProgramData\Melodiy into the files folder but will be looking at automatically mounting this in the future i just need to double check for linux development as the folder won't be C:\ProgramData\Melodiy on linux machines.
+To setup local development you need to create an appsettings.development.json inside of the Melodiy.Web project. Https is optional for local development however you can enable it via Visual Studio by selecting https or alternatively you can run ```dotnet dev-certs https --trust``` followed by ```dotnet dev-certs https --trust``` if your on windows. Previous versions required https for local development however for now it is not needed and will work without. If you do chose to use https you will need to update the port used in the frontend.
 
 # Getting Help
 
