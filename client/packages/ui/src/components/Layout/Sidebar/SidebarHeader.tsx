@@ -41,7 +41,7 @@ function SidebarHeader() {
   return (
     <div className="flex h-full w-[260px] select-none flex-col bg-accent rounded-[10px]">
       <div className="flex gap-2.5 pl-4 items-center pt-2">
-        <img src="./logo.png" className="items-center w-10 h-10 text-center" />
+        <img src="/logo.png" className="items-center w-10 h-10 text-center" />
 
         <span className="text-lg">My Library</span>
       </div>
