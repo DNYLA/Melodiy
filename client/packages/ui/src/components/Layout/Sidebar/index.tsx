@@ -1,11 +1,11 @@
-import { twMerge } from 'tailwind-merge';
-import SidebarHeader from './SidebarHeader';
-import { useRef } from 'react';
 import { useScroll } from 'framer-motion';
+import { useRef } from 'react';
+import { twMerge } from 'tailwind-merge';
 import { ScrollContext } from '../../../providers/ScrollProvider';
-import { Navbar } from '../Navbar/';
 import { Player } from '../../Player';
 import { usePlayer } from '../../Player/hooks/usePlayer';
+import { Navbar } from '../Navbar/';
+import SidebarHeader from './SidebarHeader';
 
 interface SidebarProps {
   children: React.ReactNode;
