@@ -11,7 +11,7 @@ function Library() {
   const ToggleIcon = expanded ? DownIcon : RightIcon;
 
   return (
-    <div>
+    <div className="px-1 py-2">
       <div
         draggable={false}
         className="flex items-center self-stretch justify-between text-sm font-medium cursor-pointer gap-x-2 text-base-accent group hover:text-content"
@@ -34,7 +34,7 @@ function Library() {
         <div
           className={twMerge(
             'flex-col pl-5 opacity-0 transition-opacity ease-in duration-200 delay-100 absolute invisible pt-1',
-            expanded && 'flex opacity-100 visible relative',
+            expanded && 'flex opacity-100 visible relative'
           )}
         >
           <LibraryItems />
