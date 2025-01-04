@@ -22,6 +22,7 @@ type SessionContextType = {
     setup: boolean
   ) => Promise<boolean>;
   logout: () => void;
+  updateAvatar: (avatar?: string) => void;
   // update: () => void;
 };
 
@@ -31,6 +32,7 @@ const SessionContext = createContext<SessionContextType>({
   login: async () => false,
   register: async () => false,
   logout: async () => Promise<void>,
+  updateAvatar: async () => Promise<void>,
 });
 
 function SessionProvider({ children }: IContainer) {
@@ -116,6 +118,15 @@ function SessionProvider({ children }: IContainer) {
     }
   }, [navigate]);
 
+  const updateAvatar = useCallback(
+    async (avatar?: string) => {
+      if (user) {
+        setUser({ ...user, avatar: avatar });
+      }
+    },
+    [user]
+  );
+
   return (
     <SessionContext.Provider
       value={{
@@ -123,6 +134,7 @@ function SessionProvider({ children }: IContainer) {
         login: handleLogin,
         register: handleSignUp,
         logout: handleLogout,
+        updateAvatar: updateAvatar,
         isLoading: loading,
       }}
     >

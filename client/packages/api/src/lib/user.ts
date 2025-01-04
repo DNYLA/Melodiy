@@ -1,5 +1,6 @@
 import { AuthResult, User } from '@melodiy/types';
 import { AXIOS, resetAccessToken, setAccessToken } from '../axios';
+import { getApiError } from '../utils';
 
 export async function fetchUser(): Promise<User> {
   const { data } = await AXIOS.get<AuthResult>(`/api/me`);
@@ -13,6 +14,17 @@ export async function fetchUser(): Promise<User> {
 //   const { data } = await AXIOS.get<User>(`/user/${username}`);
 //   return data;
 // }
+
+export async function updateUser(formData: FormData): Promise<User> {
+  try {
+    const response = await AXIOS.patch<User>(`user`, formData);
+    if (response.data == null) throw new Error('Unable to update user');
+
+    return response.data;
+  } catch (err) {
+    throw getApiError(err).message;
+  }
+}
 
 export async function login(username: string, password: string): Promise<User> {
   const { data } = await AXIOS.post<AuthResult>('/auth/login', {

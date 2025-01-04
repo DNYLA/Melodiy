@@ -1,13 +1,13 @@
 ﻿namespace Melodiy.Features.User;
 
+using System.Net;
+
 using Melodiy.Features.Common.Exceptions;
 using Melodiy.Features.Common.Extensions;
 using Melodiy.Features.User.Models;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-using System.Net;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -20,6 +20,15 @@ public class UserController(IUserService userService) : ControllerBase
     public async Task<UserViewModel> GetUser()
     {
         var user = await _userService.GetUserDetails();
+
+        return user != null ? user.ToViewModel() : throw new ApiException(HttpStatusCode.Unauthorized, string.Empty);
+    }
+
+    [HttpPatch]
+    [Authorize]
+    public async Task<UserViewModel> UpdateUser([FromForm] UpdateUserRequest request)
+    {
+        var user = await _userService.UpdateUser(request);
 
         return user != null ? user.ToViewModel() : throw new ApiException(HttpStatusCode.Unauthorized, string.Empty);
     }

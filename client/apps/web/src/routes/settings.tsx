@@ -6,13 +6,13 @@ import { ProfileSettings } from '@melodiy/ui/settings';
 export default function Settings() {
   const session = useSession();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const tracks = useLoaderData({ from: '/_authenticated/settings' });
+  // const tracks = useLoaderData({ from: '/_authenticated/settings' });
   const navigate = useNavigate();
 
-  // if (session.user == null) {
-  //   navigate({ to: '/' });
-  //   return <div></div>;
-  // }
+  if (session.user == null) {
+    navigate({ to: '/' });
+    return <div></div>;
+  }
 
   return (
     <main className="flex flex-col w-full p-8 gap-y-5">

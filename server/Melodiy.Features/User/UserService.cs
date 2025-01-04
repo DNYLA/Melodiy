@@ -1,4 +1,6 @@
-﻿namespace Melodiy.Features.User;
+﻿using Melodiy.Features.File;
+
+namespace Melodiy.Features.User;
 
 using Melodiy.Features.User.Models;
 
@@ -7,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-public sealed class UserService(IHttpContextAccessor httpContextAccessor, IUserRepository userRepository) : IUserService
+public sealed class UserService(IHttpContextAccessor httpContextAccessor, IUserRepository userRepository, IFileService fileService) : IUserService
 {
     public async Task<UserResponse?> GetUserDetails()
     {
@@ -39,6 +41,34 @@ public sealed class UserService(IHttpContextAccessor httpContextAccessor, IUserR
         var user = await userRepository.GetByUsername(username);
 
         if (user == null) return null;
+
+        return new UserResponse
+        {
+            Id = user.Id,
+            Username = user.Username,
+            Avatar = user.Avatar
+        };
+    }
+
+    public async Task<UserResponse?> UpdateUser(UpdateUserRequest request)
+    {
+        var userFromSession = await GetUserDetails();
+        if (userFromSession == null) return null;
+
+        var user = await userRepository.GetByIdAsync(userFromSession.Id);
+        if (user == null) return null;
+
+        if (request is { UpdateImage: true, Image: null })
+        {
+            user.Avatar = null;
+        } else if (request is { UpdateImage: true, Image: not null })
+        {
+            //TODO: Call Image service
+            var image = await fileService.UploadImage(request.Image);
+            user.Avatar = image.Url;
+        }
+
+        await userRepository.SaveAsync(user);
 
         return new UserResponse
         {

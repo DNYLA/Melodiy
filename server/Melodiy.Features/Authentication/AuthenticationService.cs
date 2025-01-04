@@ -36,6 +36,7 @@ public sealed class AuthenticationService(
             {
                 Id = user.Id,
                 Username = user.Username,
+                Avatar = user.Avatar
             },
             AccessToken = token,
             RefreshToken = refreshToken
@@ -60,6 +61,7 @@ public sealed class AuthenticationService(
             {
                 Id = user.Id,
                 Username = user.Username,
+                Avatar = user.Avatar
             },
             AccessToken = token,
             RefreshToken = refreshToken
@@ -95,6 +97,7 @@ public sealed class AuthenticationService(
             {
                 Id = tokenDetails.User.Id,
                 Username = tokenDetails.User.Username,
+                Avatar = tokenDetails.User.Avatar
             },
             AccessToken = accessToken,
             RefreshToken = newRefreshToken

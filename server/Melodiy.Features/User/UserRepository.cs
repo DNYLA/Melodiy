@@ -44,8 +44,9 @@ public sealed class UserRepository(MelodiyDbContext context) : IUserRepository
         return await _users.FirstOrDefaultAsync(user => user.Username.ToLower().Equals(username.ToLower()));
     }
 
-    public async Task UpdateAsync(User user)
+    public async Task SaveAsync(User user)
     {
-        throw new NotImplementedException();
+        _users.Update(user);
+        await context.SaveChangesAsync();
     }
 }

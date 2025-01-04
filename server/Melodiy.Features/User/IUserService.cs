@@ -10,5 +10,7 @@ public interface IUserService
 
     Task<UserResponse?> GetByName(string username);
 
+    Task<UserResponse?> UpdateUser(UpdateUserRequest request);
+
     //Task<UserResponseModel> Update(User user);
 }

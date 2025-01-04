@@ -14,5 +14,5 @@ public interface IUserRepository
 
     Task<User?> GetByUsername(string username);
 
-    Task UpdateAsync(User user);
+    Task SaveAsync(User user);
 }
