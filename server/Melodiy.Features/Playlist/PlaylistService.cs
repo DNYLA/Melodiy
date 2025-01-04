@@ -84,11 +84,11 @@ public sealed class PlaylistService(
         return response;
     }
 
-    public async Task<List<PlaylistResponse>> GetAll(int userId)
+    public async Task<List<PlaylistResponse>> GetAll(int userId, bool includePrivate)
     {
         var playlists = await _playlistRepository.WithUser()
                                                  .WithImage()
-                                                 .GetByUser(userId);
+                                                 .GetByUser(userId, includePrivate);
 
         return playlists.Select(playlist => playlist.ToResponse()).ToList();
     }

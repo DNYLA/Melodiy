@@ -9,6 +9,11 @@ export async function fetchUser(): Promise<User> {
   return data.user;
 }
 
+// export async function fetchUserByUsername(username: string): Promise<User> {
+//   const { data } = await AXIOS.get<User>(`/user/${username}`);
+//   return data;
+// }
+
 export async function login(username: string, password: string): Promise<User> {
   const { data } = await AXIOS.post<AuthResult>('/auth/login', {
     username,

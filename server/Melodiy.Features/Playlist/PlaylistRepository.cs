@@ -29,9 +29,14 @@ public sealed class PlaylistRepository(MelodiyDbContext context) : IPlaylistRepo
         return playlist;
     }
 
-    public async Task<List<Playlist>> GetByUser(int userId)
+    public async Task<List<Playlist>> GetByUser(int userId, bool includePrivate)
     {
-        return await _playlists.Where(playlist => playlist.UserId == userId).ToListAsync();
+        if (includePrivate)
+        {
+            return await _playlists.Where(playlist => playlist.UserId == userId).ToListAsync();
+        }
+
+        return await _playlists.Where(playlist => playlist.UserId == userId && playlist.Public == true).ToListAsync();
     }
 
     public async Task RemoveTrack(PlaylistTrack track)

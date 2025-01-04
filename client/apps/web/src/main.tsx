@@ -17,6 +17,8 @@ import Playlist from './routes/playlist';
 import Search from './routes/search';
 import Setup from './routes/setup';
 import './styles.css';
+import Settings from './routes/settings';
+import UserProfile from './routes/profile';
 
 //Override root component or other custom routes that require ui lib data
 const routerMap = {
@@ -25,9 +27,11 @@ const routerMap = {
   '/album/$id': Album,
   '/artist/$id': Artist,
   '/_authenticated/files': Files,
+  '/_authenticated/settings': Settings,
   '/playlist/$id': Playlist,
   '/search': Search,
   '/setup': Setup,
+  '/profile/$id': UserProfile,
 } as const satisfies Partial<Record<RouterIds, () => React.ReactElement>>;
 
 Object.entries(routerMap).forEach(([path, component]) => {

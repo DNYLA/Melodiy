@@ -16,9 +16,11 @@ import { Route as SearchImport } from './routes/search'
 import { Route as AdminImport } from './routes/admin'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
+import { Route as ProfileIdImport } from './routes/profile/$id'
 import { Route as PlaylistIdImport } from './routes/playlist/$id'
 import { Route as ArtistIdImport } from './routes/artist/$id'
 import { Route as AlbumIdImport } from './routes/album/$id'
+import { Route as AuthenticatedSettingsImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedFilesImport } from './routes/_authenticated/files'
 
 // Create/Update Routes
@@ -52,6 +54,12 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ProfileIdRoute = ProfileIdImport.update({
+  id: '/profile/$id',
+  path: '/profile/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const PlaylistIdRoute = PlaylistIdImport.update({
   id: '/playlist/$id',
   path: '/playlist/$id',
@@ -68,6 +76,12 @@ const AlbumIdRoute = AlbumIdImport.update({
   id: '/album/$id',
   path: '/album/$id',
   getParentRoute: () => rootRoute,
+} as any)
+
+const AuthenticatedSettingsRoute = AuthenticatedSettingsImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 
 const AuthenticatedFilesRoute = AuthenticatedFilesImport.update({
@@ -122,6 +136,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedFilesImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/album/$id': {
       id: '/album/$id'
       path: '/album/$id'
@@ -143,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlaylistIdImport
       parentRoute: typeof rootRoute
     }
+    '/profile/$id': {
+      id: '/profile/$id'
+      path: '/profile/$id'
+      fullPath: '/profile/$id'
+      preLoaderRoute: typeof ProfileIdImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -150,10 +178,12 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedFilesRoute: typeof AuthenticatedFilesRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedFilesRoute: AuthenticatedFilesRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -167,9 +197,11 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/setup': typeof SetupRoute
   '/files': typeof AuthenticatedFilesRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/album/$id': typeof AlbumIdRoute
   '/artist/$id': typeof ArtistIdRoute
   '/playlist/$id': typeof PlaylistIdRoute
+  '/profile/$id': typeof ProfileIdRoute
 }
 
 export interface FileRoutesByTo {
@@ -179,9 +211,11 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/setup': typeof SetupRoute
   '/files': typeof AuthenticatedFilesRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/album/$id': typeof AlbumIdRoute
   '/artist/$id': typeof ArtistIdRoute
   '/playlist/$id': typeof PlaylistIdRoute
+  '/profile/$id': typeof ProfileIdRoute
 }
 
 export interface FileRoutesById {
@@ -192,9 +226,11 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/setup': typeof SetupRoute
   '/_authenticated/files': typeof AuthenticatedFilesRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/album/$id': typeof AlbumIdRoute
   '/artist/$id': typeof ArtistIdRoute
   '/playlist/$id': typeof PlaylistIdRoute
+  '/profile/$id': typeof ProfileIdRoute
 }
 
 export interface FileRouteTypes {
@@ -206,9 +242,11 @@ export interface FileRouteTypes {
     | '/search'
     | '/setup'
     | '/files'
+    | '/settings'
     | '/album/$id'
     | '/artist/$id'
     | '/playlist/$id'
+    | '/profile/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -217,9 +255,11 @@ export interface FileRouteTypes {
     | '/search'
     | '/setup'
     | '/files'
+    | '/settings'
     | '/album/$id'
     | '/artist/$id'
     | '/playlist/$id'
+    | '/profile/$id'
   id:
     | '__root__'
     | '/'
@@ -228,9 +268,11 @@ export interface FileRouteTypes {
     | '/search'
     | '/setup'
     | '/_authenticated/files'
+    | '/_authenticated/settings'
     | '/album/$id'
     | '/artist/$id'
     | '/playlist/$id'
+    | '/profile/$id'
   fileRoutesById: FileRoutesById
 }
 
@@ -243,6 +285,7 @@ export interface RootRouteChildren {
   AlbumIdRoute: typeof AlbumIdRoute
   ArtistIdRoute: typeof ArtistIdRoute
   PlaylistIdRoute: typeof PlaylistIdRoute
+  ProfileIdRoute: typeof ProfileIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -254,6 +297,7 @@ const rootRouteChildren: RootRouteChildren = {
   AlbumIdRoute: AlbumIdRoute,
   ArtistIdRoute: ArtistIdRoute,
   PlaylistIdRoute: PlaylistIdRoute,
+  ProfileIdRoute: ProfileIdRoute,
 }
 
 export const routeTree = rootRoute
@@ -273,7 +317,8 @@ export const routeTree = rootRoute
         "/setup",
         "/album/$id",
         "/artist/$id",
-        "/playlist/$id"
+        "/playlist/$id",
+        "/profile/$id"
       ]
     },
     "/": {
@@ -282,7 +327,8 @@ export const routeTree = rootRoute
     "/_authenticated": {
       "filePath": "_authenticated.tsx",
       "children": [
-        "/_authenticated/files"
+        "/_authenticated/files",
+        "/_authenticated/settings"
       ]
     },
     "/admin": {
@@ -298,6 +344,10 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/files.tsx",
       "parent": "/_authenticated"
     },
+    "/_authenticated/settings": {
+      "filePath": "_authenticated/settings.tsx",
+      "parent": "/_authenticated"
+    },
     "/album/$id": {
       "filePath": "album/$id.tsx"
     },
@@ -306,6 +356,9 @@ export const routeTree = rootRoute
     },
     "/playlist/$id": {
       "filePath": "playlist/$id.tsx"
+    },
+    "/profile/$id": {
+      "filePath": "profile/$id.tsx"
     }
   }
 }

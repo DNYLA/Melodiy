@@ -12,7 +12,9 @@
     "./providers": "./src/providers/index.ts",
     "./collections": "./src/collections/index.ts",
     "./player": "./src/components/Player/index.tsx",
-    "./admin": "./src/components/Admin/index.tsx"
+    "./profile": "./src/components/Profile/index.tsx",
+    "./admin": "./src/components/Admin/index.tsx",
+    "./settings": "./src/components/Settings/index.ts"
   },
   "scripts": {
     "dev": "vite",
@@ -30,6 +32,7 @@
     "@radix-ui/react-context-menu": "^2.2.4",
     "@radix-ui/react-dialog": "^1.1.4",
     "@radix-ui/react-icons": "^1.3.2",
+    "@radix-ui/react-popover": "^1.1.4",
     "@radix-ui/react-select": "^2.1.4",
     "@radix-ui/react-slider": "^1.2.2",
     "@radix-ui/react-switch": "^1.1.2",

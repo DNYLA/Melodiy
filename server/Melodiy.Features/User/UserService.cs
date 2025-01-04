@@ -7,16 +7,14 @@ using Microsoft.AspNetCore.Http;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-public sealed class UserService(IHttpContextAccessor httpContextAccessor) : IUserService
+public sealed class UserService(IHttpContextAccessor httpContextAccessor, IUserRepository userRepository) : IUserService
 {
-    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
-
     public async Task<UserResponse?> GetUserDetails()
     {
-        var user = _httpContextAccessor.HttpContext?.User;
+        var user = httpContextAccessor.HttpContext?.User;
         var model = new UserResponse();
 
-        if (user == null || user?.Identity?.IsAuthenticated == false)
+        if (user == null || user.Identity?.IsAuthenticated == false)
         {
             return null;
         }
@@ -38,6 +36,15 @@ public sealed class UserService(IHttpContextAccessor httpContextAccessor) : IUse
 
     public async Task<UserResponse?> GetByName(string username)
     {
-        throw new NotImplementedException();
+        var user = await userRepository.GetByUsername(username);
+
+        if (user == null) return null;
+
+        return new UserResponse
+        {
+            Id = user.Id,
+            Username = user.Username,
+            Avatar = user.Avatar
+        };
     }
 }

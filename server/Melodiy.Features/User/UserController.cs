@@ -23,4 +23,13 @@ public class UserController(IUserService userService) : ControllerBase
 
         return user != null ? user.ToViewModel() : throw new ApiException(HttpStatusCode.Unauthorized, string.Empty);
     }
+
+    //Might be used in the future possibly going to leave it commented as its likely we might need to fetch basic user data without returning the whole profile.
+    //[HttpGet("{username}")]
+    //public async Task<UserViewModel> GetUserById(string username)
+    //{
+    //    var user = await _userService.GetByName(username);
+
+    //    return user != null ? user.ToViewModel() : throw new ApiException(HttpStatusCode.NotFound, $"Could not find a username {username}");
+    //}
 }

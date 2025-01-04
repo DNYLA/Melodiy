@@ -66,7 +66,7 @@ public sealed class PlaylistController(IPlaylistService playlistService, IUserSe
             throw new ApiException(HttpStatusCode.Unauthorized);
         }
 
-        var response = await _playlistService.GetAll(user.Id);
+        var response = await _playlistService.GetAll(user.Id, includePrivate: true);
 
         return response.Select(playlist => playlist.ToViewModel()).ToList();
     }
