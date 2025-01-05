@@ -8,7 +8,9 @@ public interface IPlaylistRepository
 
     Task<Playlist?> GetBySlugAsync(string slug);
 
-    Task<List<Playlist>> GetByUser(int userId, bool includePrivate);
+    Task<List<Playlist>> GetByUser(int userId, bool includePrivate, int limit);
+
+    Task<List<Playlist>> GetLatest(int limit);
 
     Task RemoveTrack(PlaylistTrack track);
 

@@ -19,10 +19,12 @@ import Setup from './routes/setup';
 import './styles.css';
 import Settings from './routes/settings';
 import UserProfile from './routes/profile';
+import Homepage from './routes/home';
 
 //Override root component or other custom routes that require ui lib data
 const routerMap = {
   __root__: RootComponent,
+  '/': Homepage,
   '/admin': Admin,
   '/album/$id': Album,
   '/artist/$id': Artist,

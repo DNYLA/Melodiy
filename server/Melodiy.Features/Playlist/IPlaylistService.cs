@@ -9,7 +9,9 @@ public interface IPlaylistService
 
     Task<PlaylistResponse> Get(string slug, int? userId);
 
-    Task<List<PlaylistResponse>> GetAll(int userId, bool includePrivate);
+    Task<List<PlaylistResponse>> GetAll(int userId, bool includePrivate, int limit = 0);
+
+    Task<List<PlaylistResponse>> GetLatest(int limit = 0);
 
     Task<TrackResponse> AddTrack(string id, string trackId, int userId);
 

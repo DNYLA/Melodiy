@@ -29,14 +29,37 @@ public sealed class PlaylistRepository(MelodiyDbContext context) : IPlaylistRepo
         return playlist;
     }
 
-    public async Task<List<Playlist>> GetByUser(int userId, bool includePrivate)
+    public async Task<List<Playlist>> GetByUser(int userId, bool includePrivate, int limit)
     {
+        IQueryable<Playlist> query;
+
         if (includePrivate)
         {
-            return await _playlists.Where(playlist => playlist.UserId == userId).ToListAsync();
+            query = _playlists.Where(playlist => playlist.UserId == userId);
+        }
+        else
+        {
+            query = _playlists.Where(playlist => playlist.UserId == userId && playlist.Public == true);
         }
 
-        return await _playlists.Where(playlist => playlist.UserId == userId && playlist.Public == true).ToListAsync();
+        if (limit > 0)
+        {
+            query = query.Take(limit);
+        }
+
+        return await query.ToListAsync();
+    }
+
+    public async Task<List<Playlist>> GetLatest(int limit)
+    {
+        IQueryable<Playlist> query = _playlists.Where(playlist => playlist.Public == true).OrderByDescending(playlist => playlist.CreatedAt);
+
+        if (limit > 0)
+        {
+            query = query.Take(limit);
+        }
+
+        return await query.ToListAsync();
     }
 
     public async Task RemoveTrack(PlaylistTrack track)

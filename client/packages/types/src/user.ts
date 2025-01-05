@@ -13,6 +13,10 @@ export type UserProfile = {
   playlists: Playlist[];
 };
 
+export type UserFeed = {
+  playlists: Playlist[];
+};
+
 export type AuthResult = {
   user: User;
   accessToken: string;

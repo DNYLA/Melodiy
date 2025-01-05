@@ -1,4 +1,6 @@
-﻿namespace Melodiy.Features.Profile;
+﻿using Melodiy.Features.User.Models;
+
+namespace Melodiy.Features.Profile;
 
 using Melodiy.Features.Common.Extensions;
 using Melodiy.Features.Playlist;
@@ -22,5 +24,23 @@ public sealed class ProfileService(IUserRepository userRepository, IPlaylistServ
             Avatar = user.Avatar,
             Playlists = playlists.Select(playlist => playlist.ToViewModel()).ToList()
         };
+    }
+
+    public async Task<ProfileHomeFeedViewModel> GetHomeFeed(UserResponse? user)
+    {
+        var model = new ProfileHomeFeedViewModel();
+
+        if (user == null)
+        {
+            var playlists = await playlistService.GetLatest(8);
+            model.Playlists = playlists.Select(x => x.ToViewModel()).ToList();
+        }
+        else
+        {
+            var playlists = await playlistService.GetAll(user.Id, true, 8);
+            model.Playlists = playlists.Select(x => x.ToViewModel()).ToList();
+        }
+
+        return model;
     }
 }

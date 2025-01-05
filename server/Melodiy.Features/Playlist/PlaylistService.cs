@@ -84,11 +84,20 @@ public sealed class PlaylistService(
         return response;
     }
 
-    public async Task<List<PlaylistResponse>> GetAll(int userId, bool includePrivate)
+    public async Task<List<PlaylistResponse>> GetAll(int userId, bool includePrivate, int limit = 0)
     {
         var playlists = await _playlistRepository.WithUser()
                                                  .WithImage()
-                                                 .GetByUser(userId, includePrivate);
+                                                 .GetByUser(userId, includePrivate, limit);
+
+        return playlists.Select(playlist => playlist.ToResponse()).ToList();
+    }
+
+    public async Task<List<PlaylistResponse>> GetLatest(int limit = 0)
+    {
+        var playlists = await _playlistRepository.WithUser()
+                                                 .WithImage()
+                                                 .GetLatest(limit);
 
         return playlists.Select(playlist => playlist.ToResponse()).ToList();
     }

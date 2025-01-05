@@ -22,4 +22,13 @@ public class ProfileController(IProfileService profileService, IUserService user
 
         return profile ?? throw new ApiException(HttpStatusCode.NotFound, $"Could not find a profile named {username}");
     }
+
+    [HttpGet("home/feed")]
+    public async Task<ProfileHomeFeedViewModel> GetHomePageFeed()
+    {
+        var user = await userService.GetUserDetails();
+        var feed = await profileService.GetHomeFeed(user);
+
+        return feed;
+    }
 }
