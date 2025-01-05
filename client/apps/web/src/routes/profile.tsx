@@ -77,12 +77,12 @@ export default function UserProfile() {
                     </Tabs.List>
 
                     <Tabs.Content className="w-full m-5" value="playlists">
-                      {user?.username == profile.username && (
+                      {/* {user?.username == profile.username && (
                         <span className="flex pb-5">
                           Don't worry only you're able to see your private
                           playlists.
                         </span>
-                      )}
+                      )} */}
                       <div className="flex flex-wrap pb-3 bg-center gap-y-5 gap-x-5">
                         {profile.playlists.length > 0 &&
                           profile.playlists.map((playlist) => (

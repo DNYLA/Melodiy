@@ -8,14 +8,14 @@ interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
 //Wrapper around image to handle fallbacks by default
 const Image = forwardRef<HTMLImageElement, ImageProps>(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  ({ src, fallback, alt, style, ...props }, ref) => {
+  ({ src, fallback, alt, style, width, height, ...props }, ref) => {
     const handleError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
       const fallbackSrc = fallback ?? getDefaultImage();
       e.currentTarget.src = fallbackSrc;
     };
 
     return (
-      <div ref={ref}>
+      <div ref={ref} className="" style={{ width: width, height: height }}>
         <img
           // style={{ objectFit: 'cover' }}
           src={src ?? fallback ?? getDefaultImage()}

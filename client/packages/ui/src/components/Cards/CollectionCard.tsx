@@ -26,18 +26,14 @@ function CollectionCard({
 }: CollectionCardProps) {
   return (
     <Link to={'/album/$id'} params={{ id }}>
-      <div
-        className="flex flex-col duration-300 ease-in-out cursor-pointer group gap-y-1 hover:scale-110"
-        style={{ minWidth: size }}
-      >
+      <div className="flex flex-col duration-300 ease-in-out cursor-pointer group gap-y-1 hover:scale-110">
         <Image
           draggable={false}
-          className={'rounded-md'}
-          style={{ maxHeight: size }}
+          className={'flex w-full h-full object-cover rounded-md'}
           src={imageSrc}
           width={size}
           height={size}
-          alt="Artist Picture"
+          alt={`${title} picture`}
         />
         <div className="flex flex-col gap-0 p-0 m-0" style={{ maxWidth: size }}>
           <p className="max-w-[180px] truncate font-bold hover:underline">

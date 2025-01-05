@@ -19,7 +19,7 @@ function ArtistCard({ id, name, imageSrc }: ArtistCardProps) {
           fallback={getDefaultArtistImage()}
           width={160}
           height={160}
-          alt="Artist Avatar"
+          alt={`${name} artist image`}
         />
         <p className="font-bold text-center truncate hover:underline">{name}</p>
       </div>
