@@ -7,18 +7,18 @@ import { FaSpinner } from 'react-icons/fa';
 
 export default function Search() {
   const { title } = useSearch({ from: '/search' });
-  const results = useLoaderData({ from: '/search' });
+  const data = useLoaderData({ from: '/search' });
 
   //TODO: Move Loading & NoResults to seperate file
   return (
     <Suspense
       fallback={
-        <div className="absolute translate-y-1/2 top-50 left-0.5 right-0 w-full items-center gap-y-2 gap-x-0 self-center px-6 pr-5 pt-2 text-center align-middle font-bold h-full">
+        <div className="flex flex-col items-center justify-center w-full h-full font-bold">
           <FaSpinner size={23} className="w-full animate-spin" />
         </div>
       }
     >
-      <Await promise={results.results}>
+      <Await promise={data.results}>
         {(result) => {
           if (
             !result ||
@@ -28,7 +28,7 @@ export default function Search() {
               result.albums?.length === 0)
           )
             return (
-              <div className="absolute translate-y-1/2 top-50 left-0.5 right-0 w-full items-center gap-y-2 self-center px-6 pr-5 pt-2 text-center align-middle font-bold h-full">
+              <div className="flex flex-col items-center self-center justify-center w-full h-full font-bold gap-y-2">
                 <p className="text-xl">
                   No results found for <q>{title}</q>
                 </p>
