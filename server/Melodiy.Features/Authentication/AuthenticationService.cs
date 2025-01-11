@@ -1,7 +1,5 @@
 ﻿namespace Melodiy.Features.Authentication;
 
-using System.Net;
-
 using Melodiy.Features.Authentication.Entities;
 using Melodiy.Features.Authentication.Jwt;
 using Melodiy.Features.Authentication.Models;
@@ -10,37 +8,94 @@ using Melodiy.Features.Common.Exceptions;
 using Melodiy.Features.User;
 using Melodiy.Features.User.Entities;
 using Melodiy.Features.User.Models;
-using Melodiy.Integrations.Common;
+
+using Microsoft.Extensions.Caching.Memory;
+
+using SecureRemotePassword;
+
+using System.Net;
+using System.Security.Cryptography;
 
 public sealed class AuthenticationService(
     IJwtTokenGenerator jwtTokenGenerator,
-    IHashService hashService,
     IUserRepository userRepository,
-    IRefreshTokenRepository refreshTokenRepository) : IAuthenticationService
+    IAuthenticationRepository authenticationRepository,
+    IRefreshTokenRepository refreshTokenRepository,
+    IMemoryCache memoryCache) : IAuthenticationService
 {
-    public async Task<AuthenticationResult> ValidateLogin(LoginRequestModel request)
-    {
-        var user = await userRepository.GetByUsername(request.Username);
+    private const string SessionCachePrefix = "srp-session";
 
-        if (user == null || !hashService.ValidateSecure(request.Password, user.Password))
+    public async Task<AuthenticationInfoResponse> CreateSrpSession(string username)
+    {
+        var srpId = GenerateSessionId();
+        var user = await authenticationRepository.GetByUsername(username);
+
+        if (user == null)
+        {
+            //TODO: Return random server Ephemeral
+            throw new ApiException(HttpStatusCode.Unauthorized, "Invalid Credentials");
+        }
+
+        var server = new SrpServer();
+        var serverEphemeral = server.GenerateEphemeral(user.AuthenticationDetails.Verifier);
+        
+        memoryCache.Set($"{SessionCachePrefix}-{srpId}", serverEphemeral.Secret, TimeSpan.FromMinutes(5));
+
+        return new AuthenticationInfoResponse
+        {
+            ServerEphemeral = serverEphemeral.Public,
+            Salt = user.AuthenticationDetails.Salt,
+            SrpSession = srpId
+        };
+    }
+
+    private static string GenerateSessionId()
+    {
+        byte[] randomBytes = new byte[16]; // 16 bytes = 32 hexadecimal characters
+        using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(randomBytes);
+        }
+
+        // Convert to a hexadecimal string
+        return BitConverter.ToString(randomBytes).Replace("-", "").ToLower();
+    }
+
+    public async Task<AuthenticationResult> ValidateAuth(AuthenticationRequestModel request)
+    {
+        var user = await authenticationRepository.GetByUsername(request.Username);
+
+        if (user == null || !memoryCache.TryGetValue($"{SessionCachePrefix}-{request.SrpSession}", out string? serverEphemeralSecret) || string.IsNullOrWhiteSpace(serverEphemeralSecret))
         {
             throw new ApiException(HttpStatusCode.Unauthorized, "Invalid Credentials");
         }
 
-        var token = jwtTokenGenerator.GenerateAccessToken(user.Id, user.Username);
-        var refreshToken = await CreateRefreshToken(user.Id, request.UserAgent);
-
-        return new AuthenticationResult
+        //server.DeriveSession() will throw an error if the details are incorrect
+        try
         {
-            User = new UserViewModel
+            var server = new SrpServer();
+            var serverSession = server.DeriveSession(serverEphemeralSecret, request.ClientEphemeral, user.AuthenticationDetails.Salt, request.Username, user.AuthenticationDetails.Verifier, request.ClientProof);
+            
+            var token = jwtTokenGenerator.GenerateAccessToken(user.Id, user.Username);
+            var refreshToken = await CreateRefreshToken(user.Id, request.UserAgent);
+
+            return new AuthenticationResult
             {
-                Id = user.Id,
-                Username = user.Username,
-                Avatar = user.Avatar
-            },
-            AccessToken = token,
-            RefreshToken = refreshToken
-        };
+                User = new UserViewModel
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    Avatar = user.Avatar
+                },
+                ServerProof = serverSession.Proof,
+                AccessToken = token,
+                RefreshToken = refreshToken
+            };
+        }
+        catch (Exception)
+        {
+            throw new ApiException(HttpStatusCode.Unauthorized, "Invalid Credentials");
+        }
     }
 
     public async Task<AuthenticationResult> Register(RegisterRequestModel request, Role role)
@@ -50,8 +105,7 @@ public sealed class AuthenticationService(
             throw new ApiException(HttpStatusCode.Conflict, "Username already exists");
         }
 
-        var hashedPassword = hashService.Secure(request.Password);
-        var user = await userRepository.AddAsync(request.Username, hashedPassword, role);
+        var user = await userRepository.AddAsync(request.Username, request.Salt, request.Verifier, role);
         var token = jwtTokenGenerator.GenerateAccessToken(user.Id, user.Username);
         var refreshToken = await CreateRefreshToken(user.Id, request.UserAgent);
 
@@ -91,7 +145,7 @@ public sealed class AuthenticationService(
         tokenDetails.Expires = newRefreshToken.Expires;
         await refreshTokenRepository.SaveAsync(tokenDetails);
 
-        return new AuthenticationResult()
+        return new AuthenticationResult
         {
             User = new UserViewModel
             {
@@ -112,7 +166,8 @@ public sealed class AuthenticationService(
         {
             return;
         }
-        else if (tokenDetails.UserId != userId)
+        
+        if (tokenDetails.UserId != userId)
         {
             throw new ApiException(HttpStatusCode.Unauthorized);
         }

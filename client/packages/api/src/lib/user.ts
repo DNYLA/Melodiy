@@ -26,29 +26,6 @@ export async function updateUser(formData: FormData): Promise<User> {
   }
 }
 
-export async function login(username: string, password: string): Promise<User> {
-  const { data } = await AXIOS.post<AuthResult>('/auth/login', {
-    username,
-    password,
-  });
-
-  setAccessToken(data.accessToken);
-  return data.user;
-}
-
-export async function register(
-  username: string,
-  password: string
-): Promise<User> {
-  const { data } = await AXIOS.post<AuthResult>('/auth/register', {
-    username,
-    password,
-  });
-
-  setAccessToken(data.accessToken);
-  return data.user;
-}
-
 export async function logout() {
   await AXIOS.post('/auth/logout');
   resetAccessToken();

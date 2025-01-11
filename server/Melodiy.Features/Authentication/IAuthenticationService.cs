@@ -5,7 +5,9 @@ using Melodiy.Features.User.Entities;
 
 public interface IAuthenticationService
 {
-    Task<AuthenticationResult> ValidateLogin(LoginRequestModel request);
+    Task<AuthenticationInfoResponse> CreateSrpSession(string username);
+
+    Task<AuthenticationResult> ValidateAuth(AuthenticationRequestModel request);
 
     Task<AuthenticationResult> Register(RegisterRequestModel request, Role role);
 

@@ -6,7 +6,7 @@ public interface IUserRepository
 {
     IQueryable<User> AsQueryable();
 
-    Task<User> AddAsync(string username, string password, Role role);
+    Task<User> AddAsync(string username, string salt, string verifier, Role role);
 
     Task<bool> ExistsAsync(string username);
 

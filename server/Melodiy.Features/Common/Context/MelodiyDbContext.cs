@@ -2,6 +2,7 @@
 
 using Melodiy.Features.Album.Entities;
 using Melodiy.Features.Artist.Entities;
+using Melodiy.Features.Authentication.Entities;
 using Melodiy.Features.Common.Context.Entities;
 using Melodiy.Features.Image.Entities;
 using Melodiy.Features.Playlist.Entities;
@@ -12,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 
 public sealed class MelodiyDbContext(DbContextOptions<MelodiyDbContext> options) : DbContext(options)
 {
+    public DbSet<AuthenticationDetails> AuthenticationDetails => Set<AuthenticationDetails>();
+
     public DbSet<Album> Albums => Set<Album>();
 
     public DbSet<Artist> Artists => Set<Artist>();

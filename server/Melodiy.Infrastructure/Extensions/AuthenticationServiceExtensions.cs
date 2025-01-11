@@ -21,6 +21,7 @@ public static class AuthenticationServiceExtensions
         services.RegisterJwt(configurationManager);
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+        services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
 
         return services;
     }

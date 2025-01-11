@@ -1,5 +1,6 @@
 ﻿namespace Melodiy.Features.User;
 
+using Melodiy.Features.Authentication.Entities;
 using Melodiy.Features.Common.Context;
 using Melodiy.Features.User.Entities;
 
@@ -14,15 +15,20 @@ public sealed class UserRepository(MelodiyDbContext context) : IUserRepository
         return _users.AsQueryable();
     }
 
-    public async Task<User> AddAsync(string username, string password, Role role)
+    public async Task<User> AddAsync(string username, string salt, string verifier, Role role)
     {
         var user = new User
         {
             Username = username,
-            Password = password,
-            Role = role
+            Role = role,
+            AuthenticationDetails = new AuthenticationDetails
+            {
+                Salt = salt,
+                Verifier = verifier
+            }
         };
 
+        
         _users.Add(user);
         await context.SaveChangesAsync();
 

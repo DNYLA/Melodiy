@@ -1,6 +1,7 @@
 export * from './lib/collections/album';
 export * from './lib/collections/playlist';
 
+export * from './lib/auth';
 export * from './lib/admin';
 export * from './lib/artist';
 export * from './lib/player';

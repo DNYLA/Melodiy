@@ -13,3 +13,9 @@ export async function RegisterMasterAdmin(
   setAccessToken(data.accessToken);
   return data.user;
 }
+
+export async function SetupEnabled() {
+  const { status } = await AXIOS.get('/setup');
+
+  return status === 202;
+}
