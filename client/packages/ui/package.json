@@ -55,7 +55,7 @@
     "use-sound": "^4.0.3",
     "vite-plugin-dts": "^4.4.0",
     "zod": "^3.24.1",
-    "zustand": "^5.0.2"
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
