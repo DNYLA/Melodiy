@@ -25,6 +25,10 @@ The official Melodiy.net, which runs on the latest `dev` build (there may be bug
 
 <p align="center">
 
+| Album                                                      |
+| ---------------------------------------------------------- | 
+| <img src="./screenshots/album-page.PNG" alt="Album Page" /> |
+
 | Homepage                                                   | Your Files                                                              |
 | ---------------------------------------------------------- | ----------------------------------------------------------------------- |
 | <img src="./screenshots/homepage.png" alt="Home Page" /> | <img src="./screenshots/your-files.png" alt="Your Files" /> |
@@ -33,9 +37,13 @@ The official Melodiy.net, which runs on the latest `dev` build (there may be bug
 | -----------------------------------------------------------| ----------------------------------------------------------------------- |
 | <img src="./screenshots/create-playlist-modal.png" alt="Create Playlist Modal" /> | <img src="./screenshots/upload-song-modal.png" alt="Upload Song Modal" /> |
 
-| Search                                                              | Artist                                                           |
+| Search                                                              | Search                                                           |
 | ------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| <img src="./screenshots/search-page.png" alt="Search Page" /> | <img src="./screenshots/artist-page.gif" alt="Artist Page" /> |
+| <img src="./screenshots/search-page.png" alt="Search Page" /> | <img src="./screenshots/search-page-2.PNG" alt="Search Page (Alternative)" /> |
+
+| Artist (Top Tracks)                                                 | Artist (Singles)                                                 |
+| ------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| <img src="./screenshots/artist-page.png" alt="Search Page" /> | <img src="./screenshots/artist-page-2.PNG" alt="Artist Page" /> |
 
 | Right Click Menu (Your Files)                                          | Right Click Menu                                              |
 | ---------------------------------------------------------------------- | ------------------------------------------------------------- |
