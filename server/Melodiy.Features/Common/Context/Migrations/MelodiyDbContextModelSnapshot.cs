@@ -165,6 +165,36 @@ namespace Melodiy.Features.Common.Context.Migrations
                     b.ToTable("Artists");
                 });
 
+            modelBuilder.Entity("Melodiy.Features.Authentication.Entities.AuthenticationDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Verifier")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id", "UserId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("AuthenticationDetails");
+                });
+
             modelBuilder.Entity("Melodiy.Features.Authentication.Entities.RefreshToken", b =>
                 {
                     b.Property<int>("Id")
@@ -504,6 +534,17 @@ namespace Melodiy.Features.Common.Context.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Melodiy.Features.Authentication.Entities.AuthenticationDetails", b =>
+                {
+                    b.HasOne("Melodiy.Features.User.Entities.User", "User")
+                        .WithOne("AuthenticationDetails")
+                        .HasForeignKey("Melodiy.Features.Authentication.Entities.AuthenticationDetails", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Melodiy.Features.Authentication.Entities.RefreshToken", b =>
                 {
                     b.HasOne("Melodiy.Features.User.Entities.User", "User")
@@ -633,6 +674,9 @@ namespace Melodiy.Features.Common.Context.Migrations
 
             modelBuilder.Entity("Melodiy.Features.User.Entities.User", b =>
                 {
+                    b.Navigation("AuthenticationDetails")
+                        .IsRequired();
+
                     b.Navigation("RefreshTokens");
                 });
 #pragma warning restore 612, 618

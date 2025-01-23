@@ -4,9 +4,11 @@ using Melodiy.Features.User.Models;
 
 public sealed class AuthenticationResult
 {
-    public UserViewModel User { get; set; } = null!;
+    public required UserViewModel User { get; set; }
 
-    public string AccessToken { get; set; } = null!;
+    public string? ServerProof { get; set; }
 
-    public RefreshTokenModel RefreshToken { get; set; }
+    public required string AccessToken { get; set; }
+
+    public required RefreshTokenModel RefreshToken { get; set; }
 }

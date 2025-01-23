@@ -1,11 +1,10 @@
 /* eslint-disable no-unused-vars */
 import {
-  RegisterMasterAdmin,
   getApiError,
   login,
   logout,
   refreshToken,
-  register,
+  registerUser,
 } from '@melodiy/api';
 import { IContainer, User } from '@melodiy/types';
 import { useNavigate } from '@melodiy/router';
@@ -85,16 +84,13 @@ function SessionProvider({ children }: IContainer) {
     async (username: string, password: string, setup: boolean) => {
       try {
         setLoading(true);
-        console.log(setup);
-        if (setup) {
-          const user = await RegisterMasterAdmin(username, password);
-          toast.success(`Created Admin Account ${user.username}`);
-          setUser({ id: user.id, username: user.username });
-        } else {
-          const user = await register(username, password);
-          toast.success('Successfully regisetered account');
-          setUser({ id: user.id, username: user.username });
-        }
+
+        const user = await registerUser(username, password, setup);
+        const message = setup
+          ? `Created Admin Account ${user.username}`
+          : 'Successfully regisetered account';
+        toast.success(message);
+        setUser({ id: user.id, username: user.username });
 
         return true;
       } catch (err) {

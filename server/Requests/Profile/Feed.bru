@@ -5,7 +5,11 @@ meta {
 }
 
 get {
-  url: 
+  url: {{host}}/profile/home/feed
   body: none
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
 }

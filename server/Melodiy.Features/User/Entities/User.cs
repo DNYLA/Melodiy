@@ -19,4 +19,6 @@ public sealed class User : BaseEntity
     public Role Role { get; set; }
 
     public List<RefreshToken> RefreshTokens { get; set; } = new();
+
+    public AuthenticationDetails AuthenticationDetails { get; set; } = new();
 }

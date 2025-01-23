@@ -12,6 +12,7 @@
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.12" />
 	  <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
 	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
+	  <PackageReference Include="srp" Version="1.0.7" />
 	  <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
 	  <PackageReference Include="z440.atl.core" Version="5.20.0" />
   </ItemGroup>

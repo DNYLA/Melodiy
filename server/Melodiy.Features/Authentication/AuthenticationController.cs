@@ -1,7 +1,5 @@
 ﻿namespace Melodiy.Features.Authentication;
 
-using System.Net;
-
 using Melodiy.Features.Authentication.Models;
 using Melodiy.Features.Common.Exceptions;
 using Melodiy.Features.User;
@@ -11,20 +9,31 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using System.Net;
+
 [ApiController]
 [Route("api/auth")]
 public sealed class AuthenticationController(IAuthenticationService authenticationService, IUserService userService)
     : ControllerBase
 {
-    [HttpPost("login")]
-    public async Task<ActionResult<AuthenticationResultViewModel>> Login(LoginRequestModel loginRequestModel)
+    [HttpPost("info")]
+    public async Task<ActionResult<AuthenticationInfoResponse>> GetLoginInfo(AuthenticationInfoRequest authInfoRequest)
     {
-        var response = await authenticationService.ValidateLogin(loginRequestModel);
+        var response = await authenticationService.CreateSrpSession(authInfoRequest.Username);
+
+        return response;
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<AuthenticationResultViewModel>> ValidateAuth(AuthenticationRequestModel authRequestModel)
+    {
+        var response = await authenticationService.ValidateAuth(authRequestModel);
         SetRefreshToken(response.RefreshToken);
 
         return new AuthenticationResultViewModel
         {
             User = response.User,
+            ServerProof = response.ServerProof,
             AccessToken = response.AccessToken
         };
     }
