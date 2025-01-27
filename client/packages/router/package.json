@@ -18,7 +18,7 @@
     "@melodiy/types": "workspace:*",
     "@tanstack/react-query": "^5.64.2",
     "@tanstack/react-router": "^1.95.1",
-    "@tanstack/router-plugin": "^1.95.5",
+    "@tanstack/router-plugin": "^1.97.23",
     "axios": "^1.7.9",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
