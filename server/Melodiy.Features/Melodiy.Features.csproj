@@ -9,7 +9,7 @@
   <ItemGroup>
 	  <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
 	  <PackageReference Include="MediatR" Version="12.4.1" />
-	  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.12" />
+	  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.13" />
 	  <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
 	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
 	  <PackageReference Include="srp" Version="1.0.7" />
