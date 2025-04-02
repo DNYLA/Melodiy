@@ -31,6 +31,8 @@ public sealed class Track : BaseEntity
 
     public bool Public { get; set; }
 
+    public bool Encrypted { get; set; }
+
     public SourceType Source { get; set; }
 
     public int Duration { get; set; }

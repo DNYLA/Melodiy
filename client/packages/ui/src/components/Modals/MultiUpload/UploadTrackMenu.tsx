@@ -15,6 +15,8 @@ import { ImagePreview } from '../../Data/ImagePreview';
 import { ActionButton, Button, Input, Switch } from '../../Inputs';
 import { ComboBoxItem, SearchComboBox } from '../../Inputs/SearchComboBox';
 import { useUploadModal } from './useUploadModal';
+import * as openpgp from 'openpgp';
+import { useKeys } from '../../../providers/useKeys';
 
 const schema = z.object({
   title: z
@@ -38,6 +40,7 @@ const schema = z.object({
     })
     .optional(),
   public: z.boolean().default(true),
+  encrypted: z.boolean().default(false),
   track:
     typeof window === 'undefined'
       ? z.any()
@@ -62,6 +65,7 @@ export interface UploadTrackForm {
   cover?: FileList;
   track: FileList;
   public: boolean;
+  encrypted: boolean;
 }
 
 function UploadTrackMenu() {
@@ -89,12 +93,14 @@ function UploadTrackMenu() {
   const artist = watch('artist');
   const album = watch('album');
   const isPublic = watch('public');
+  const isEncrypted = watch('encrypted');
   const { tags, isLoading: isReadingTags } = useTrackTags(trackFile);
   const {
     query: artistQuery,
     term: artistTerm,
     loading: loadingArtist,
   } = useArtistSearch(artist.name);
+  const { items: keys } = useKeys();
 
   const { query: albumQuery, loading: loadingAlbum } = useAlbumSearch(
     album?.name,
@@ -130,12 +136,37 @@ function UploadTrackMenu() {
   const { setImgSrc: setCoverSrc, imgSrc: coverSrc } =
     useFilePreview(coverFile);
 
+  const encryptFile = async (fileList: FileList) => {
+    if (fileList.length < 0) throw new Error('No file found to encrypt');
+    const file = await fileList[0];
+    const fileBuffer = await file.arrayBuffer();
+
+    // Encrypt the file using OpenPGP
+    const publicKey = await openpgp.readKey({ armoredKey: keys[0].publicKey });
+
+    const encryptedFile = await openpgp.encrypt({
+      message: await openpgp.createMessage({
+        binary: new Uint8Array(fileBuffer),
+      }),
+      encryptionKeys: publicKey,
+    });
+
+    return new File([encryptedFile], `${file.name}.pgp`, { type: file.type });
+  };
+
   const onSubmit = async (data: UploadTrackForm) => {
     if (!user) return;
 
     const formData = new FormData();
     addFormFile(formData, 'image', coverFile);
-    addFormFile(formData, 'audio', trackFile);
+
+    if (data.encrypted) {
+      const encryptedFile = await encryptFile(trackFile);
+      formData.append('audio', encryptedFile, encryptFile.name);
+    } else {
+      addFormFile(formData, 'audio', trackFile);
+    }
+
     formData.append('title', data.title);
 
     if (!data.artist || !data.artist.id) {
@@ -152,7 +183,11 @@ function UploadTrackMenu() {
     }
 
     try {
-      const createdTrack = await UpoloadTrack(formData, data.public);
+      const createdTrack = await UpoloadTrack(
+        formData,
+        data.public,
+        data.encrypted
+      );
       if (createdTrack.album != null) {
         const updatedComboItem: ComboBoxItem = {
           id: createdTrack.album.id,
@@ -258,6 +293,16 @@ function UploadTrackMenu() {
             // {...register('public')}
           >
             Public
+          </Switch>
+        </div>
+
+        <div className="flex flex-col">
+          <Switch
+            value={isEncrypted}
+            onChange={(value) => setValue('encrypted', value)}
+            // {...register('public')}
+          >
+            Encrypted
           </Switch>
         </div>
 

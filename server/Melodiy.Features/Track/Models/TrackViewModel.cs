@@ -25,4 +25,6 @@ public class TrackViewModel
     public UserViewModel? User { get; set; }
 
     public string? Image { get; set; }
+
+    public bool Encrypted { get; set; }
 }

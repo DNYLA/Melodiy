@@ -65,6 +65,7 @@ public class CreateTrackCommandHandler(
             UserId = request.UserId,
             ReleaseDate = _dateTimeProvider.UtcNow,
             Public = request.Public,
+            Encrypted = request.Encrypted
         };
 
         if (!string.IsNullOrWhiteSpace(request.AlbumId))

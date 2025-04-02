@@ -31,6 +31,8 @@ public sealed class MelodiyDbContext(DbContextOptions<MelodiyDbContext> options)
 
     public DbSet<User> Users => Set<User>();
 
+    public DbSet<UserKey> UserKeys => Set<UserKey>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         #region Images
