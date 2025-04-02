@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@melodiy/types": "workspace:*",
-    "axios": "^1.7.9",
+    "axios": "^1.8.2",
     "bcryptjs": "^2.4.3",
     "browser-crypto": "^2.1.0",
     "openpgp": "^6.0.1",
