@@ -18,6 +18,8 @@ public sealed class TrackResponse
 
     public bool Public { get; set; }
 
+    public bool Encrypted { get; set; }
+
     public int Duration { get; set; }
 
     public SourceType Source { get; set; }

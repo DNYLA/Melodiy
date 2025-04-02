@@ -1,9 +1,17 @@
 import { Playlist } from './collections';
+import * as openpgp from 'openpgp';
 
 export type User = {
   id: number;
   username: string;
   avatar?: string;
+};
+
+export type UserKey = {
+  publicKey: string;
+  privateKey: string;
+  privateKeyDecoded: openpgp.PrivateKey;
+  salt: string;
 };
 
 export type UserProfile = {

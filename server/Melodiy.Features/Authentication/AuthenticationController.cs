@@ -1,5 +1,7 @@
 ﻿namespace Melodiy.Features.Authentication;
 
+using System.Net;
+
 using Melodiy.Features.Authentication.Models;
 using Melodiy.Features.Common.Exceptions;
 using Melodiy.Features.User;
@@ -8,8 +10,6 @@ using Melodiy.Features.User.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
-using System.Net;
 
 [ApiController]
 [Route("api/auth")]
@@ -25,7 +25,8 @@ public sealed class AuthenticationController(IAuthenticationService authenticati
     }
 
     [HttpPost]
-    public async Task<ActionResult<AuthenticationResultViewModel>> ValidateAuth(AuthenticationRequestModel authRequestModel)
+    public async Task<ActionResult<AuthenticationResultViewModel>> ValidateAuth(
+        AuthenticationRequestModel authRequestModel)
     {
         var response = await authenticationService.ValidateAuth(authRequestModel);
         SetRefreshToken(response.RefreshToken);
@@ -49,6 +50,36 @@ public sealed class AuthenticationController(IAuthenticationService authenticati
             User = response.User,
             AccessToken = response.AccessToken
         });
+    }
+
+    [Authorize]
+    [HttpPost("key")]
+    public async Task<ActionResult> CreateKey(CreateKeyRequestModel createKeyRequestModel)
+    {
+
+        var user = await userService.GetUserDetails();
+
+        if (user == null)
+        {
+            return Ok(); //Bad JWT Token? don't want the potential hacker to know it wasn't created?
+        }
+
+        await authenticationService.CreateKey(createKeyRequestModel, user);
+        return Ok();
+
+    }
+
+    [Authorize]
+    [HttpGet("keys")]
+    public async Task<ActionResult<List<UserKeyModel>>> GetKeys()
+    {
+        var user = await userService.GetUserDetails();
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        return await authenticationService.GetKeys(user.Id);
     }
 
     [Authorize]

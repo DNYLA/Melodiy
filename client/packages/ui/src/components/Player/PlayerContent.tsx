@@ -14,7 +14,7 @@ import {
 } from '@melodiy/icons';
 import { FullTrack, PlayerMode } from '@melodiy/types';
 import { useEffect, useState } from 'react';
-import { BsRepeat, BsRepeat1 } from 'react-icons/bs';
+//import { BsRepeat, BsRepeat1 } from 'react-icons/bs';
 import { HiSpeakerWave, HiSpeakerXMark } from 'react-icons/hi2';
 import useSound from 'use-sound';
 import { msToMinuteSeconds } from '../../utils';
@@ -26,6 +26,7 @@ import { useOnPrevious } from './hooks/useOnPrevious';
 import { usePlayer } from './hooks/usePlayer';
 import { useShuffle } from './hooks/useShuffle';
 import { useVolume } from './hooks/useVolume';
+import { useKeys } from '../../providers/useKeys';
 
 interface PlayerContentProps {
   track: FullTrack;
@@ -42,18 +43,22 @@ function PlayerContent({ track, trackPath }: PlayerContentProps) {
   const [curSecond, setCurSecond] = useState(0);
   // const [duration, setDuration] = useState(0);
   const { isPlaying, setIsPlaying } = player;
+  const keys = useKeys();
+
+  console.log('keys ', keys.items);
 
   const PlayerActionIcon = isPlaying ? PauseIcon : PlayIcon;
-  const getPlayerModeIcon = (mode: PlayerMode) => {
-    switch (mode) {
-      case PlayerMode.NoRepeat:
-      case PlayerMode.Repeat:
-        return BsRepeat;
-      case PlayerMode.RepeatTrack:
-        return BsRepeat1;
-    }
-  };
-  const PlayerModeIcon = getPlayerModeIcon(player.mode);
+  // const getPlayerModeIcon = (mode: PlayerMode) => {
+  //   switch (mode) {
+  //     case PlayerMode.NoRepeat:
+  //     case PlayerMode.Repeat:
+  //       return BsRepeat;
+  //     case PlayerMode.RepeatTrack:
+  //       return BsRepeat1;
+  //   }
+  // };
+  //@ts-except-error WIP
+  //const PlayerModeIcon = getPlayerModeIcon(player.mode);
 
   const getVolumeIcon = () => {
     if (volume === 0) return HiSpeakerXMark;

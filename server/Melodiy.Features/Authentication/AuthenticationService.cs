@@ -19,6 +19,7 @@ using System.Security.Cryptography;
 public sealed class AuthenticationService(
     IJwtTokenGenerator jwtTokenGenerator,
     IUserRepository userRepository,
+    IUserKeyRepository userKeyRepository,
     IAuthenticationRepository authenticationRepository,
     IRefreshTokenRepository refreshTokenRepository,
     IMemoryCache memoryCache) : IAuthenticationService
@@ -74,7 +75,7 @@ public sealed class AuthenticationService(
         try
         {
             var server = new SrpServer();
-            var serverSession = server.DeriveSession(serverEphemeralSecret, request.ClientEphemeral, user.AuthenticationDetails.Salt, request.Username, user.AuthenticationDetails.Verifier, request.ClientProof);
+            var serverSession = server.DeriveSession(serverEphemeralSecret, request.ClientEphemeral, user.AuthenticationDetails.Salt, request.Username.ToLower(), user.AuthenticationDetails.Verifier, request.ClientProof);
             
             var token = jwtTokenGenerator.GenerateAccessToken(user.Id, user.Username);
             var refreshToken = await CreateRefreshToken(user.Id, request.UserAgent);
@@ -120,6 +121,23 @@ public sealed class AuthenticationService(
             AccessToken = token,
             RefreshToken = refreshToken
         };
+    }
+
+    public async Task CreateKey(CreateKeyRequestModel request, UserResponse user)
+    {
+        await userKeyRepository.Create(user.Id, request.PublicKey, request.PrivateKey, request.Salt);
+    }
+
+    public async Task<List<UserKeyModel>> GetKeys(int userId)
+    {
+        var keys = await userKeyRepository.GetByUser(userId);
+
+        return keys.Select(key => new UserKeyModel
+        {
+            PublicKey = key.PublicKey,
+            PrivateKey = key.PrivateKey,
+            Salt = key.Salt
+        }).ToList();
     }
 
     public async Task<AuthenticationResult> RefreshToken(string refreshToken)

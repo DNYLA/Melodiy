@@ -10,6 +10,7 @@ import { IContainer, User } from '@melodiy/types';
 import { useNavigate } from '@melodiy/router';
 import { createContext, useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useKeys } from './useKeys';
 
 type SessionContextType = {
   user?: User;
@@ -37,6 +38,7 @@ const SessionContext = createContext<SessionContextType>({
 function SessionProvider({ children }: IContainer) {
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(true);
+  const keys = useKeys();
   const navigate = useNavigate();
 
   const getUser = useCallback(async () => {
@@ -66,9 +68,10 @@ function SessionProvider({ children }: IContainer) {
     async (username: string, password: string) => {
       try {
         setLoading(true);
-        const user = await login(username, password);
+        const response = await login(username, password);
         toast.success(`Welcome back, ${username}!`);
-        setUser({ id: user.id, username: user.username });
+        setUser({ id: response.user.id, username: response.user.username });
+        keys.setKeys(response.keys);
         return true;
       } catch (err) {
         toast.error(getApiError(err).message);

@@ -124,6 +124,7 @@ public static class ResponseConverterExtensions
             Title = track.Title,
             Views = track.Views,
             Public = track.Public,
+            Encrypted = track.Encrypted,
             Duration = track.Duration,
             ReleaseDate = track.ReleaseDate,
             CreatedAt = track.CreatedAt,

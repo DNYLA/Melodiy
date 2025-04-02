@@ -18,6 +18,8 @@ public sealed class CreateTrackCommand : IRequest<TrackResponse>
 
     public bool Public { get; set; }
 
+    public bool Encrypted { get; set; }
+
     public string ArtistId { get; set; }
 
     public string? AlbumId { get; set; }

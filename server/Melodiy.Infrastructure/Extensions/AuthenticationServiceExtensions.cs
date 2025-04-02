@@ -22,6 +22,7 @@ public static class AuthenticationServiceExtensions
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
+        services.AddScoped<IUserKeyRepository, UserKeyRepository>();
 
         return services;
     }

@@ -26,7 +26,7 @@ public class TrackController(IUserService userService, IMediator mediator) : Con
 
     [Authorize]
     [HttpPost]
-    public async Task<ActionResult<TrackViewModel>> Create([FromForm] CreateTrackRequest request, [FromQuery(Name = "public")] bool isPublic)
+    public async Task<ActionResult<TrackViewModel>> Create([FromForm] CreateTrackRequest request, [FromQuery(Name = "public")] bool isPublic, [FromQuery(Name = "encrypted")] bool isEncrypted)
     {
         var user = await _userService.GetUserDetails();
         request.Public = isPublic;
@@ -85,6 +85,7 @@ public class TrackController(IUserService userService, IMediator mediator) : Con
             Audio = request.Audio,
             Image = request.Image,
             Public = request.Public,
+            Encrypted = isEncrypted,
             ArtistId = request.ArtistId!,
             AlbumId = request.AlbumId,
             UserId = user.Id

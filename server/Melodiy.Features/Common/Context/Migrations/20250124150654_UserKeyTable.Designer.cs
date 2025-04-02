@@ -3,6 +3,7 @@ using System;
 using Melodiy.Features.Common.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Melodiy.Features.Common.Context.Migrations
 {
     [DbContext(typeof(MelodiyDbContext))]
-    partial class MelodiyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250124150654_UserKeyTable")]
+    partial class UserKeyTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -387,9 +390,6 @@ namespace Melodiy.Features.Common.Context.Migrations
 
                     b.Property<int>("Duration")
                         .HasColumnType("integer");
-
-                    b.Property<bool>("Encrypted")
-                        .HasColumnType("boolean");
 
                     b.Property<bool>("Explicit")
                         .HasColumnType("boolean");

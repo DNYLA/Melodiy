@@ -110,6 +110,7 @@ public static class ViewModelConverterExtensions
             Title = track.Title,
             Views = track.Views,
             //Public = track.Public,
+            Encrypted = track.Encrypted,
             Duration = track.Duration,
             ReleaseDate = track.ReleaseDate,
             CreatedAt = track.CreatedAt,
@@ -141,6 +142,7 @@ public static class ViewModelConverterExtensions
             LocalCdnRequestRequired = track is { Public: false, Source: SourceType.Local },
             //TODO: surely a better way to handle this
             YoutubeStreamId = requiresClientYoutubeStream ? track.ExternalDetails.YoutubeId : null,
+            Encrypted = track.Encrypted
         };
     }
 

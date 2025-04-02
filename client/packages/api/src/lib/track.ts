@@ -24,11 +24,12 @@ export async function fetchUserTracks(): Promise<Track[]> {
 
 export async function UpoloadTrack(
   formData: FormData,
-  isPublic: boolean
+  isPublic: boolean,
+  isEncrypted: boolean
 ): Promise<Track> {
   try {
     const response = await AXIOS.post<Track>(
-      `track?public=${isPublic}`,
+      `track?public=${isPublic}&encrypted=${isEncrypted}`,
       formData
     );
     if (response.data == null) throw new Error('Unable to create track');

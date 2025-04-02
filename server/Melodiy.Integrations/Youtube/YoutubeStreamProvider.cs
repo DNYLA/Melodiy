@@ -50,7 +50,6 @@ public partial class YoutubeStreamProvider(IMemoryCache memoryCache) : IStreamPr
             }
 
             var youtube = new YoutubeClient();
-
             var streamManifest = await youtube.Videos.Streams.GetManifestAsync(id);
 
             var url = streamManifest
