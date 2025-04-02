@@ -10,7 +10,7 @@
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^22.10.6",
-    "typescript": "~5.7.3"
+    "typescript": "~5.8.2"
   },
   "dependencies": {
     "@melodiy/types": "workspace:*",
