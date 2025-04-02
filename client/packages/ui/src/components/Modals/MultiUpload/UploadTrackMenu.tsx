@@ -93,7 +93,7 @@ function UploadTrackMenu() {
   const artist = watch('artist');
   const album = watch('album');
   const isPublic = watch('public');
-  const isEncrypted = watch('encrypted');
+  // const isEncrypted = watch('encrypted');
   const { tags, isLoading: isReadingTags } = useTrackTags(trackFile);
   const {
     query: artistQuery,
@@ -296,7 +296,7 @@ function UploadTrackMenu() {
           </Switch>
         </div>
 
-        <div className="flex flex-col">
+        {/* <div className="flex flex-col">
           <Switch
             value={isEncrypted}
             onChange={(value) => setValue('encrypted', value)}
@@ -304,7 +304,7 @@ function UploadTrackMenu() {
           >
             Encrypted
           </Switch>
-        </div>
+        </div> */}
 
         <div className="flex flex-col">
           <p className="text-xs opacity-80">{errors.track?.message}</p>
