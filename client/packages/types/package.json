@@ -8,7 +8,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "openpgp": "^6.0.1",
+    "openpgp": "^6.1.0",
     "typescript": "~5.8.2"
   },
   "devDependencies": {
