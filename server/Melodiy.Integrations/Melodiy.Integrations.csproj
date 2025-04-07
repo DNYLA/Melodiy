@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -8,7 +8,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="SpotifyAPI.Web" Version="7.2.1" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.0" />
 		<PackageReference Include="supabase-csharp" Version="0.16.2" />
 		<PackageReference Include="YoutubeExplode" Version="6.5.4" />
 		<PackageReference Include="YoutubeSearchApi.Net" Version="1.1.1" />
