@@ -44,7 +44,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
-    "framer-motion": "^11.17.0",
+    "framer-motion": "^12.11.0",
     "openpgp": "^6.0.1",
     "query-string": "^9.1.1",
     "react": "^19.1.0",
