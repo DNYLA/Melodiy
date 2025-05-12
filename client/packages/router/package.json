@@ -16,7 +16,7 @@
   "dependencies": {
     "@melodiy/api": "workspace:*",
     "@melodiy/types": "workspace:*",
-    "@tanstack/react-query": "^5.71.3",
+    "@tanstack/react-query": "^5.76.0",
     "@tanstack/react-router": "^1.114.33",
     "@tanstack/router-plugin": "^1.114.33",
     "axios": "^1.8.2",
