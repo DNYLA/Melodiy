@@ -23,7 +23,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@headlessui/react": "^2.2.0",
+    "@headlessui/react": "^2.2.3",
     "@hookform/resolvers": "^3.9.1",
     "@melodiy/api": "workspace:*",
     "@melodiy/icons": "workspace:*",
