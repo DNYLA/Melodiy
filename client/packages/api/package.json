@@ -17,7 +17,7 @@
     "axios": "^1.8.2",
     "bcryptjs": "^2.4.3",
     "browser-crypto": "^2.1.0",
-    "openpgp": "^6.0.1",
+    "openpgp": "^6.1.1",
     "secure-remote-password": "https://github.com/LinusU/secure-remote-password.git#73e5f732b6ca0cdbdc19da1a0c5f48cdbad2cbf0"
   }
 }
