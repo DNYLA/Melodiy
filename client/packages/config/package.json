@@ -1,0 +1,12 @@
+{
+  "name": "@melodiy/config",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "files": [
+    "tsconfig.react.json"
+  ],
+  "exports": {
+    "./tsconfig.react.json": "./tsconfig.react.json"
+  }
+}
