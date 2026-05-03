@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Melodiy.AppHost/Melodiy.AppHost.csproj" />
+  <Project Path="Melodiy.Features/Melodiy.Features.csproj" />
+  <Project Path="Melodiy.ServiceDefaults/Melodiy.ServiceDefaults.csproj" />
+  <Project Path="Melodiy.Web/Melodiy.Web.csproj" />
+</Solution>
