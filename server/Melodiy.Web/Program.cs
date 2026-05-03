@@ -1,3 +1,5 @@
+using Melodiy.Web.Middleware;
+
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,8 +19,13 @@ app.MapDefaultEndpoints();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    // Could make this available in any environment (depends on Orval setup in the frontend)
     app.MapScalarApiReference();
 }
+
+// Custom Middleware
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
