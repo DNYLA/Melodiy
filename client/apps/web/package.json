@@ -15,6 +15,8 @@
     "check": "biome check"
   },
   "dependencies": {
+    "@melodiy/router": "workspace:*",
+    "@melodiy/ui": "workspace:*",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-devtools": "latest",
     "@tanstack/react-router": "latest",

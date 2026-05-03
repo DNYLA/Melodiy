@@ -15,3 +15,93 @@ body {
   margin: 0;
 }
 
+
+@import "tailwindcss";
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&display=swap");
+
+@theme {
+
+  /* ── Font families ── */
+  --font-serif: "Fraunces", Georgia, serif;
+  --font-sans:  Inter, system-ui, sans-serif;
+  --font-mono:  "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+
+  /* ── Colors: Surfaces (warm dark) ── */
+  --color-bg:       #0e0d0c;
+  --color-panel:    #161513;
+  --color-panel-2:  #1c1b18;
+  --color-panel-3:  #222019;
+
+  /* ── Colors: Ink ── */
+  --color-ink:    #f3efe6;
+  --color-ink-2:  #cdc7ba;
+  --color-muted:  #8a857c;
+  --color-dim:    #5a544c;
+
+  /* ── Colors: Lines ── */
+  --color-line:   rgba(255,255,255,.07);
+  --color-line-2: rgba(255,255,255,.12);
+  --color-line-3: rgba(255,255,255,.18);
+
+  /* ── Colors: Accent (warm cream/parchment) ── */
+  --color-accent:     #c9b894;
+  --color-accent-2:   #a89977;
+  --color-accent-ink: #0e0d0c;
+
+  /* ── Colors: Semantic ── */
+  --color-green:  #7fb069;
+  --color-red:    #d97064;
+  --color-amber:  #d6a45a;
+  --color-blue:   #6e9bbf;
+  --color-tint:   #3a2a26;
+
+  /* ── Border radius ── */
+  --radius-xs:   2px;
+  --radius-s:    3px;
+  --radius-m:    4px;
+  --radius-l:    6px;
+  --radius-xl:   10px;
+  --radius-2xl:  14px;
+  --radius-pill: 9999px;
+
+  /* ── Font sizes ── */
+  --text-display: 64px;
+  --text-h1:      48px;
+  --text-h2:      28px;
+  --text-h3:      20px;
+  --text-body-l:  14px;
+  --text-body:    13px;
+  --text-body-s:  12px;
+  --text-caption: 11px;
+  --text-meta:    10px;
+  --text-meta-xs: 9px;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 9999px; }
+
+/* Art placeholder — striped pattern, can't be done with Tailwind utilities */
+.ph-art {
+  background:
+    repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 6px, rgba(255,255,255,.015) 6px 12px),
+    var(--ph-bg, #2a2a2b);
+  color: rgba(255,255,255,.4);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  letter-spacing: .04em;
+  overflow: hidden;
+  flex-shrink: 0;
+}
