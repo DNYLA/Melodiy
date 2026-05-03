@@ -12,31 +12,26 @@ export default defineConfig({
   plugins: [
     dts({
       entryRoot: 'src',
-      tsconfigPath: path.join(__dirname, 'tsconfig.json'),
+      tsconfigPath: path.join(__dirname, 'tsconfig.json')
     }),
     react(),
-    tanstackRouter(),
+    tanstackRouter()
   ],
   build: {
     outDir: './dist',
     emptyOutDir: true,
     commonjsOptions: {
-      transformMixedEsModules: true,
+      transformMixedEsModules: true
     },
     lib: {
       entry: 'src/index.ts',
       name: 'router',
       fileName: 'index',
-      formats: ['es'],
+      formats: ['es']
     },
     rolldownOptions: {
       // External packages that should not be bundled into your library.
-      external: [
-        'react',
-        'react-dom',
-        'react/jsx-runtime',
-        '@tanstack/react-router',
-      ],
-    },
-  },
+      external: ['react', 'react-dom', 'react/jsx-runtime', '@tanstack/react-router']
+    }
+  }
 });

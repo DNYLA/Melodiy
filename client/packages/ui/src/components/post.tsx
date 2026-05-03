@@ -11,6 +11,7 @@ function PostIdComponent() {
       <h4 className="text-xl font-bold underline">Your post ID is {post.postId}</h4>
       <div className="text-sm">{data.title}</div>
       <div className="text-sm">{data.body}</div>
+      <div>Test</div>
     </div>
   );
 }

@@ -1,2 +1,2 @@
-export * from "./components/homepage"
-export * from "./components/post"
+export * from './components/homepage';
+export * from './components/post';

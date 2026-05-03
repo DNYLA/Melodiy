@@ -19,6 +19,6 @@ export {
   Outlet,
   RouterProvider,
   useRouteContext,
-  useRouter,
+  useRouter
 } from '@tanstack/react-router';
 export { router };
