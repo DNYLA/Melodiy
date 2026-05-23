@@ -10,7 +10,7 @@ public static class MelodiyDbContextServiceExtensions
     {
         var connectionString = configurationManager.GetConnectionString("melodiydb");
         if (string.IsNullOrWhiteSpace(connectionString))
-            throw new ArgumentNullException($"MelodiyDb {nameof(connectionString)} has not been provided");
+            throw new InvalidOperationException($"MelodiyDb {nameof(connectionString)} has not been provided");
 
         services.AddDbContext<MelodiyDbContext>(options => options.UseNpgsql(connectionString));
 
