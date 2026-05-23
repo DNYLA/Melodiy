@@ -29,8 +29,7 @@ public static class ContainerResourceExtensions
         where T : ContainerResource
     {
         return builder.WithContainerRuntimeArgs(
-            "--label", $"com.docker.compose.project={ProjectName}",
-            "--label", "com.docker.compose.service=cache"
+            "--label", $"com.docker.compose.project={ProjectName}"
         );
     }
 }
