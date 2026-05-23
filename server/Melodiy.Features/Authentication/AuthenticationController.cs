@@ -1,4 +1,4 @@
-﻿namespace Melodiy.Features.Authentication;
+namespace Melodiy.Features.Authentication;
 
 using Melodiy.Features.Authentication.Contracts.Requests;
 using Melodiy.Features.Authentication.Contracts.Responses;
@@ -24,6 +24,11 @@ public class AuthenticationController(
     TimeProvider timeProvider,
     ILogger<AuthenticationController> logger) : BaseController
 {
+    /// <summary>
+    /// Authenticates the user using the provided credentials, issues an access token, and sets the refresh-token HTTP cookie.
+    /// </summary>
+    /// <param name="loginRequestModel">The login request containing user credentials (for example, email/username and password).</param>
+    /// <returns>An <see cref="AuthenticationResponse"/> containing the authenticated user and a new access token.</returns>
     [HttpPost("login")]
     public async Task<ActionResult<AuthenticationResponse>> Login(LoginRequest loginRequestModel)
     {
@@ -37,6 +42,11 @@ public class AuthenticationController(
         };
     }
 
+    /// <summary>
+    /// Registers a new user, stores a refresh token in an HTTP cookie, and returns authentication data.
+    /// </summary>
+    /// <param name="registerRequestModel">The registration request containing user credentials and profile details.</param>
+    /// <returns>An AuthenticationResponse containing the created user and an access token.</returns>
     [HttpPost("register")]
     public async Task<ActionResult<AuthenticationResponse>> Register(RegisterRequest registerRequestModel)
     {
@@ -50,6 +60,12 @@ public class AuthenticationController(
         };
     }
 
+    /// <summary>
+    /// Logs out the current user by expiring the refresh-token cookie and removing the refresh token from the server if present.
+    /// </summary>
+    /// <remarks>
+    /// Expires the "refreshToken" HTTP cookie on the client and, when a cookie value exists, requests the authentication service to remove that refresh token for the current user.
+    /// </remarks>
     [Authorize]
     [HttpPost("logout")]
     public async Task Logout()
@@ -64,6 +80,11 @@ public class AuthenticationController(
         }
     }
 
+    /// <summary>
+    /// Exchanges the refresh token from the request cookie for a new access token and refresh token, updates the refresh token cookie, and returns authentication data.
+    /// </summary>
+    /// <returns>An <see cref="AuthenticationResponse"/> containing the authenticated user and a new access token.</returns>
+    /// <exception cref="ApiException">Thrown with status 401 (Unauthorized) when the refresh token is missing, invalid, or the exchange fails.</exception>
     [HttpPost("refresh_token")]
     public async Task<ActionResult<AuthenticationResponse>> RefreshToken()
     {
@@ -98,12 +119,26 @@ public class AuthenticationController(
         }
     }
 
-    private void SetRefreshToken(RefreshTokenResponse token) =>
+    /// <summary>
+        /// Sets the "refreshToken" cookie on the HTTP response using the provided token and its expiration.
+        /// </summary>
+        /// <param name="token">Refresh token value and expiration used to set the cookie.</param>
+        private void SetRefreshToken(RefreshTokenResponse token) =>
         Response.Cookies.Append("refreshToken", token.Token, CreateRefreshCookieOptions(token.Expires));
 
-    private void ExpireCookie() =>
+    /// <summary>
+        /// Expires the "refreshToken" HTTP cookie so the client will discard it.
+        /// </summary>
+        private void ExpireCookie() =>
         Response.Cookies.Append("refreshToken", string.Empty, CreateRefreshCookieOptions(timeProvider.UtcNow().AddDays(-1)));
 
+    /// <summary>
+    /// Create CookieOptions configured for the refresh-token cookie.
+    /// </summary>
+    /// <param name="expires">The expiration timestamp to assign to the cookie.</param>
+    /// <returns>
+    /// A CookieOptions instance with HttpOnly enabled, SameSite set to Strict, Path set to "/", a Secure flag that is true unless running in development without HTTPS, and the provided expiration.
+    /// </returns>
     private CookieOptions CreateRefreshCookieOptions(DateTimeOffset expires) => new()
     {
         HttpOnly = true,

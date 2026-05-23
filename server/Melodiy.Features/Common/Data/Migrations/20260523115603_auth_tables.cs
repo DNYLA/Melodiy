@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -9,7 +9,14 @@ namespace Melodiy.Features.Common.Data.Migrations
     /// <inheritdoc />
     public partial class auth_tables : Migration
     {
-        /// <inheritdoc />
+        /// <summary>
+        /// Applies schema changes for authentication: creates Users, AuthenticationDetails, and RefreshTokens tables and their indexes/constraints.
+        /// </summary>
+        /// <remarks>
+        /// - Creates Users with columns: Id (PK, identity), Username (unique), Avatar, Role, CreatedAt, UpdatedAt.
+        /// - Creates AuthenticationDetails with UserId as PK and FK to Users.Id (cascade delete), PasswordHash, CreatedAt, UpdatedAt.
+        /// - Creates RefreshTokens with Id (PK, identity), Token (unique), Expires, UserAgent, UserId (FK to Users.Id, cascade delete), CreatedAt, UpdatedAt, and an index on UserId.
+        /// </remarks>
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(

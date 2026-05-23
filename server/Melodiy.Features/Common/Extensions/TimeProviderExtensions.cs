@@ -1,9 +1,13 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 
 namespace Melodiy.Features.Common.Extensions;
 
 public static class TimeProviderExtensions
 {
+    /// <summary>
+    /// Gets the current UTC time as a DateTimeOffset with an offset of +00:00.
+    /// </summary>
+    /// <returns>A DateTimeOffset representing the current UTC time with an offset of +00:00.</returns>
     extension(TimeProvider timeProvider)
     {
         /// <summary>

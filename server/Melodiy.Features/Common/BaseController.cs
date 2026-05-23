@@ -1,4 +1,4 @@
-﻿using Melodiy.Features.Common.Exceptions;
+using Melodiy.Features.Common.Exceptions;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +23,11 @@ public abstract class BaseController : ControllerBase
     /// <summary>
     /// Gets the current authenticated user's ID from the JWT token claims.
     /// </summary>
-    /// <returns>User ID if authenticated, null otherwise.</returns>
+    /// <summary>
+    /// Retrieves the authenticated user's ID from the JWT NameIdentifier claim.
+    /// </summary>
+    /// <returns>The authenticated user's ID.</returns>
+    /// <exception cref="ApiException">Thrown with HTTP 401 Unauthorized when the user ID claim is missing or empty.</exception>
     protected int GetCurrentUserId()
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -41,7 +45,10 @@ public abstract class BaseController : ControllerBase
     /// <summary>
     /// Gets the current authenticated user's ID from the JWT token claims.
     /// </summary>
-    /// <returns>User ID if authenticated, null otherwise.</returns>
+    /// <summary>
+    /// Retrieves the current authenticated user's ID, or null if the ID cannot be determined.
+    /// </summary>
+    /// <returns>The user's ID when authenticated; otherwise null.</returns>
     protected int? GetCurrentUserIdOrNull()
     {
         try
@@ -57,12 +64,22 @@ public abstract class BaseController : ControllerBase
     /// <summary>
     /// Creates a standardized NotFound response.
     /// </summary>
-    /// <param name="message">The error message.</param>
+    /// <summary>
+/// Signal a 404 Not Found API error using the provided message or the default message.
+/// </summary>
+/// <param name="message">Optional error message; if null, the default not-found message is used.</param>
+/// <returns>An <see cref="ActionResult"/> that represents a 404 Not Found error.</returns>
+/// <exception cref="ApiException">Thrown with HTTP status 404 and the provided or default message.</exception>
     protected static ActionResult NotFound(string? message = null) => throw new ApiException(HttpStatusCode.NotFound, message ?? DefaultNotFoundMessage);
 
     /// <summary>
     /// Creates a standardized BadRequest response.
     /// </summary>
-    /// <param name="message">The error message.</param>
+    /// <summary>
+/// Produces a standardized 400 Bad Request response by throwing an <see cref="ApiException"/> with the provided message.
+/// </summary>
+/// <param name="message">The error message to include in the response; if null, the default bad request message is used.</param>
+/// <returns>An <see cref="ActionResult"/> representing a 400 Bad Request (this method always throws).</returns>
+/// <exception cref="ApiException">Thrown with HTTP status 400 and the provided or default message.</exception>
     protected static ActionResult BadRequest(string? message = null) => throw new ApiException(HttpStatusCode.BadRequest, message ?? DefaultBadRequestMessage);
 }

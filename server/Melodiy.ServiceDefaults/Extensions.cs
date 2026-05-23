@@ -18,6 +18,10 @@ public static class Extensions
     private const string HealthEndpointPath = "/health";
     private const string AlivenessEndpointPath = "/alive";
 
+    /// <summary>
+    /// Applies a set of opinionated service defaults to the host builder: configures OpenTelemetry, registers default health checks, enables service discovery, and configures HTTP client defaults (resilience and service discovery handlers).
+    /// </summary>
+    /// <returns>The same host builder instance with the defaults applied.</returns>
     public static TBuilder AddServiceDefaults<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
     {
         builder.ConfigureOpenTelemetry();
@@ -44,6 +48,12 @@ public static class Extensions
         return builder;
     }
 
+    /// <summary>
+    /// Configures OpenTelemetry for the application's logging, metrics, and tracing and sets up exporters based on configuration.
+    /// </summary>
+    /// <param name="builder">The host application builder to configure.</param>
+    /// <typeparam name="TBuilder">An <see cref="IHostApplicationBuilder"/> implementation.</typeparam>
+    /// <returns>The same <paramref name="builder"/> instance with OpenTelemetry configured.</returns>
     public static TBuilder ConfigureOpenTelemetry<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
     {
         builder.Logging.AddOpenTelemetry(logging =>
@@ -78,6 +88,11 @@ public static class Extensions
         return builder;
     }
 
+    /// <summary>
+    /// Configures OpenTelemetry exporters on the host builder based on configuration values.
+    /// </summary>
+    /// <typeparam name="TBuilder">Type of the host application builder.</typeparam>
+    /// <returns>The same <typeparamref name="TBuilder"/> instance with any detected exporters configured (enables OTLP exporter when `OTEL_EXPORTER_OTLP_ENDPOINT` is set).</returns>
     private static TBuilder AddOpenTelemetryExporters<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
     {
         var useOtlpExporter = !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
@@ -97,6 +112,10 @@ public static class Extensions
         return builder;
     }
 
+    /// <summary>
+    /// Registers default health checks on the host builder and adds a liveness check named "self" tagged "live" that always reports healthy.
+    /// </summary>
+    /// <returns>The same builder instance for chaining.</returns>
     public static TBuilder AddDefaultHealthChecks<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
     {
         builder.Services.AddHealthChecks()
@@ -106,6 +125,17 @@ public static class Extensions
         return builder;
     }
 
+    /// <summary>
+    /// Maps standard readiness and liveness health endpoints for the application when running in the Development environment.
+    /// </summary>
+    /// <remarks>
+    /// When in Development:
+    /// - Maps readiness checks at "/health" (all registered checks are evaluated).
+    /// - Maps liveness checks at "/alive" (only checks tagged with "live" are evaluated).
+    /// In non-Development environments no endpoints are mapped.
+    /// </remarks>
+    /// <param name="app">The web application to configure.</param>
+    /// <returns>The same <see cref="WebApplication"/> instance after mapping endpoints.</returns>
     public static WebApplication MapDefaultEndpoints(this WebApplication app)
     {
         // Adding health checks endpoints to applications in non-development environments has security implications.

@@ -1,4 +1,4 @@
-﻿namespace Melodiy.Features.Authentication.Services;
+namespace Melodiy.Features.Authentication.Services;
 
 using Melodiy.Features.Authentication.Contracts.Responses;
 using Melodiy.Features.Authentication.Options;
@@ -16,6 +16,12 @@ public sealed class JwtTokenGenerator(TimeProvider timeProvider, IOptions<Authen
 {
     private readonly AuthenticationSettings _authenticationSettings = jwtOptions.Value;
 
+    /// <summary>
+    /// Creates a signed JWT access token containing subject, name, and jti claims and an expiration.
+    /// </summary>
+    /// <param name="id">User identifier emitted as the token's `sub` claim.</param>
+    /// <param name="username">User name emitted as the token's `name` claim.</param>
+    /// <returns>The serialized JWT access token.</returns>
     public string GenerateAccessToken(int id, string username)
     {
         var signingCredentials = new SigningCredentials(
@@ -39,6 +45,13 @@ public sealed class JwtTokenGenerator(TimeProvider timeProvider, IOptions<Authen
         return new JwtSecurityTokenHandler().WriteToken(securityToken);
     }
 
+    /// <summary>
+    /// Creates a new refresh token with a cryptographically secure random value and an expiration timestamp.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="RefreshTokenResponse"/> whose <c>Token</c> is the Base64-encoded representation of 64 cryptographically secure random bytes,
+    /// and whose <c>Expires</c> is the UTC expiration time computed from the current time plus the configured refresh token lifetime.
+    /// </returns>
     public RefreshTokenResponse GenerateRefreshToken()
     {
         return new RefreshTokenResponse

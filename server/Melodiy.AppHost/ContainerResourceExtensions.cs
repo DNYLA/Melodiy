@@ -1,4 +1,4 @@
-﻿namespace Melodiy.AppHost;
+namespace Melodiy.AppHost;
 
 /// <summary>
 /// Extension methods for container resource configuration.
@@ -24,7 +24,10 @@ public static class ContainerResourceExtensions
     /// </remarks>
     /// <typeparam name="T">The container resource type.</typeparam>
     /// <param name="builder">The container resource builder.</param>
-    /// <returns>The resource builder for chaining.</returns>
+    /// <summary>
+    /// Adds Docker Compose labels to the container runtime arguments so the container is grouped under the "melodiy-aspire" project and the "cache" service.
+    /// </summary>
+    /// <returns>The updated resource builder with the added runtime arguments for container grouping.</returns>
     public static IResourceBuilder<T> WithContainerGrouping<T>(this IResourceBuilder<T> builder)
         where T : ContainerResource
     {

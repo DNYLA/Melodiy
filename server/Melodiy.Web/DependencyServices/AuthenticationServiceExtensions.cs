@@ -1,4 +1,4 @@
-﻿namespace Melodiy.Web.DependencyServices;
+namespace Melodiy.Web.DependencyServices;
 
 using Melodiy.Features.Authentication.Options;
 using Melodiy.Features.Authentication.Services;
@@ -10,6 +10,19 @@ using System.Text;
 
 public static class AuthenticationServiceExtensions
 {
+    /// <summary>
+    /// Registers authentication services and configures JWT authentication on the provided service collection.
+    /// </summary>
+    /// <param name="configuration">Application configuration containing the "Authentication" settings section.</param>
+    /// <returns>The modified <see cref="IServiceCollection"/> with authentication services registered.</returns>
+    ///
+    /// <summary>
+    /// Adds JWT-related services and configures JWT bearer authentication using values from configuration.
+    /// Validates presence and minimum length of the authentication secret and binds <see cref="AuthenticationSettings"/>.
+    /// </summary>
+    /// <param name="configuration">Application configuration containing the "Authentication" settings section.</param>
+    /// <exception cref="ArgumentNullException">Thrown when the configured <see cref="AuthenticationSettings"/> section is missing.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the configured authentication secret is null, empty, or shorter than 32 characters.</exception>
     extension(IServiceCollection services)
     {
         public IServiceCollection AddAuthenticationServices(ConfigurationManager configuration)

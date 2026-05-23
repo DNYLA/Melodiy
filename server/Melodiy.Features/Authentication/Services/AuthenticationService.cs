@@ -1,4 +1,4 @@
-﻿namespace Melodiy.Features.Authentication.Services;
+namespace Melodiy.Features.Authentication.Services;
 
 using BCrypt.Net;
 
@@ -22,6 +22,12 @@ public sealed class AuthenticationService(
     IUserService userService,
     IJwtTokenGenerator jwtTokenGenerator) : IAuthenticationService
 {
+    /// <summary>
+    /// Validates user credentials and issues authentication tokens.
+    /// </summary>
+    /// <param name="request">Login request containing the username, password, and optional user-agent used for the refresh token.</param>
+    /// <returns>An AuthenticationModel containing the authenticated user's data, an access token, and a refresh token.</returns>
+    /// <exception cref="ApiException">Thrown with <see cref="HttpStatusCode.Unauthorized"/> when the username or password is invalid.</exception>
     public async Task<AuthenticationModel> ValidateLogin(LoginRequest request)
     {
         var user = await dbContext.Users
@@ -44,6 +50,13 @@ public sealed class AuthenticationService(
         };
     }
 
+    /// <summary>
+    /// Registers a new user with the specified role, persists their credentials, and returns authentication tokens.
+    /// </summary>
+    /// <param name="request">Registration details including username, password, and optional user agent for the refresh token.</param>
+    /// <param name="role">Role to assign to the newly created user.</param>
+    /// <returns>An AuthenticationModel containing the created user's public data, an access token, and a refresh token.</returns>
+    /// <exception cref="ApiException">Thrown with HTTP 409 Conflict when the requested username is already in use.</exception>
     public async Task<AuthenticationModel> Register(RegisterRequest request, UserRole role)
     {
         if (await dbContext.Users.FirstOrDefaultAsync(u => u.Username == request.Username) != null)
@@ -68,6 +81,12 @@ public sealed class AuthenticationService(
         };
     }
 
+    /// <summary>
+    /// Exchanges a valid refresh token for a new access token and a newly issued refresh token.
+    /// </summary>
+    /// <param name="refreshToken">The refresh token string to validate and rotate.</param>
+    /// <returns>An AuthenticationModel containing the mapped user, a new access token, and the newly issued refresh token.</returns>
+    /// <exception cref="ApiException">Thrown with HttpStatusCode.Unauthorized when the refresh token is missing, invalid, or expired.</exception>
     public async Task<AuthenticationModel> RefreshToken(string refreshToken)
     {
         if (string.IsNullOrWhiteSpace(refreshToken))
@@ -107,6 +126,11 @@ public sealed class AuthenticationService(
         };
     }
 
+    /// <summary>
+    /// Deletes the specified refresh token if it exists and is owned by the given user.
+    /// </summary>
+    /// <param name="refreshToken">The refresh token string to remove.</param>
+    /// <param name="userId">The identifier of the user who must own the token.</param>
     public async Task RemoveRefreshToken(string refreshToken, int userId)
     {
         var tokenDetails = await dbContext.RefreshTokens.Include(x => x.User).FirstOrDefaultAsync(x => x.Token == refreshToken);
@@ -119,6 +143,12 @@ public sealed class AuthenticationService(
         await dbContext.SaveChangesAsync();
     }
 
+    /// <summary>
+    /// Creates and persists a refresh token associated with the specified user and returns its details.
+    /// </summary>
+    /// <param name="userId">The identifier of the user the refresh token will be associated with.</param>
+    /// <param name="userAgent">An optional user-agent string to record with the refresh token.</param>
+    /// <returns>A <see cref="RefreshTokenResponse"/> containing the refresh token value and its expiration.</returns>
     private async Task<RefreshTokenResponse> CreateRefreshToken(int userId, string? userAgent)
     {
         //TODO: Should we verify previously created refresh tokens and prune any old ones?
