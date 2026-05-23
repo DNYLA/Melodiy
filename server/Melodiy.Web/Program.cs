@@ -27,12 +27,12 @@ builder.Services.AddControllers(options =>
 });
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services
-       .AddOpenApi();
+builder.Services.AddOpenApi();
 
 builder.Services
        .AddProblemDetails()
        .AddExceptionHandler<GlobalExceptionHandler>()
+       .AddAuthorization()
        .AddValidatorsFromAssemblyContaining<LoginRequestValidator>() // Register all request validators
        .AddFluentValidationAutoValidation() 
        .AddMelodiyDbContext(builder.Configuration)
