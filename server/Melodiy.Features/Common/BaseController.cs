@@ -15,7 +15,6 @@ namespace Melodiy.Features.Common;
 /// Base controller providing common functionality for all API controllers.
 /// </summary>
 [ApiController]
-[Route("api/[controller]")]
 public abstract class BaseController : ControllerBase
 {
     private const string DefaultNotFoundMessage = "The requested resource was not found.";

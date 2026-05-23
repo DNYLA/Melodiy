@@ -8,7 +8,7 @@ import { routeTree } from './routeTree.gen';
 export const router = createRouter({
   routeTree,
   defaultPreload: 'intent',
-  defaultPendingComponent: () => <div>Loading form global pending component...</div>,
+  defaultPendingComponent: () => <div>Loading from global pending component...</div>,
   scrollRestoration: true
 });
 

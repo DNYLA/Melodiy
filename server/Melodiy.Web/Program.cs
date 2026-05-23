@@ -1,18 +1,44 @@
+using FluentValidation;
+
+using Melodiy.Features.Authentication.Validators;
+using Melodiy.Features.Common.Filters;
+using Melodiy.Web.DependencyServices;
 using Melodiy.Web.Middleware;
 
+using Microsoft.AspNetCore.Mvc;
+
 using Scalar.AspNetCore;
+
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-builder.Services.AddControllers();
+// Force validation using FluentValidation
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
+
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ModelStateValidationFilter>();
+});
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services
+       .AddOpenApi();
+
+builder.Services
+       .AddValidatorsFromAssemblyContaining<LoginRequestValidator>() // Register all request validators
+       .AddFluentValidationAutoValidation() 
+       .AddMelodiyDbContext(builder.Configuration)
+       .AddAuthenticationServices(builder.Configuration)
+       .AddUserServices();
 
 var app = builder.Build();
-
+app.UseExceptionHandler();
 app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
@@ -26,6 +52,9 @@ if (app.Environment.IsDevelopment())
 
 // Custom Middleware
 app.UseMiddleware<ErrorHandlingMiddleware>();
+
+// App Initialisation Checks
+app.RegisterMigrations();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
