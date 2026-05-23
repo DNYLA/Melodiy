@@ -31,6 +31,8 @@ builder.Services
        .AddOpenApi();
 
 builder.Services
+       .AddProblemDetails()
+       .AddExceptionHandler<GlobalExceptionHandler>()
        .AddValidatorsFromAssemblyContaining<LoginRequestValidator>() // Register all request validators
        .AddFluentValidationAutoValidation() 
        .AddMelodiyDbContext(builder.Configuration)
@@ -51,7 +53,6 @@ if (app.Environment.IsDevelopment())
 }
 
 // Custom Middleware
-app.UseMiddleware<ErrorHandlingMiddleware>();
 
 // App Initialisation Checks
 app.RegisterMigrations();
