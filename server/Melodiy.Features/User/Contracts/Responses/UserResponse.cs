@@ -10,5 +10,5 @@ public sealed record UserResponse
 
     public string? Avatar { get; init; }
 
-    public UserRole Role { get; init; }
+    public required UserRole Role { get; init; }
 }

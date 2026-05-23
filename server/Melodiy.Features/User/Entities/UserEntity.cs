@@ -16,7 +16,7 @@ public sealed class UserEntity : BaseEntity
 
     [MaxLength(30)]
     [Required]
-    public string? Username { get; init; }
+    public string Username { get; init; } = null!;
 
     [MaxLength(500)]
     public string? Avatar { get; set; }

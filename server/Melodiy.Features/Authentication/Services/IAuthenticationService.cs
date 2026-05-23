@@ -2,19 +2,18 @@
 
 using Melodiy.Features.Authentication.Contracts.Models;
 using Melodiy.Features.Authentication.Contracts.Requests;
-using Melodiy.Features.User.Enums;
 
 public interface IAuthenticationService
 {
     /// <summary>
     /// Validates user login credentials and generates authentication tokens.
     /// </summary>
-    Task<AuthenticationModel> ValidateLogin(LoginRequest request);
+    Task<AuthenticationModel> ValidateLogin(LoginRequest request, string? userAgent);
 
     /// <summary>
     /// Registers a new user and generates authentication tokens.
     /// </summary>
-    Task<AuthenticationModel> Register(RegisterRequest request, UserRole role);
+    Task<AuthenticationModel> Register(RegisterRequest request, string? userAgent);
 
     /// <summary>
     /// Refreshes the access token using a valid refresh token.

@@ -2,12 +2,8 @@
 
 using Microsoft.AspNetCore.Mvc;
 
-using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Security.Claims;
-using System.Text;
 
 namespace Melodiy.Features.Common;
 
@@ -17,6 +13,8 @@ namespace Melodiy.Features.Common;
 [ApiController]
 public abstract class BaseController : ControllerBase
 {
+    protected string? UserAgent => HttpContext.Request.Headers.UserAgent.ToString();
+
     private const string DefaultNotFoundMessage = "The requested resource was not found.";
     private const string DefaultBadRequestMessage = "The request was invalid.";
 
@@ -35,7 +33,12 @@ public abstract class BaseController : ControllerBase
 
         //TODO: Fetch user from DB Cache and return cached data.
 
-        return int.Parse(userIdClaim);
+        if (!int.TryParse(userIdClaim, out var userId))
+        {
+            throw new ApiException(HttpStatusCode.Unauthorized, "Invalid user identifier claim");
+        }
+
+        return userId;
     }
 
     /// <summary>

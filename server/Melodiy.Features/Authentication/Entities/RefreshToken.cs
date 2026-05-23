@@ -15,7 +15,7 @@ public class RefreshToken : BaseEntity
     public int Id { get; init; }
 
     [MaxLength(500)]
-    public string Token { get; init; } = string.Empty;
+    public string Token { get; init; } = null!;
 
     public DateTimeOffset Expires { get; init; }
 
@@ -24,5 +24,5 @@ public class RefreshToken : BaseEntity
 
     public int UserId { get; init; }
 
-    public UserEntity? User { get; set; }
+    public UserEntity User { get; set; } = null!;
 }

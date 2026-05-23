@@ -22,19 +22,19 @@ public sealed class AuthenticationService(
     IUserService userService,
     IJwtTokenGenerator jwtTokenGenerator) : IAuthenticationService
 {
-    public async Task<AuthenticationModel> ValidateLogin(LoginRequest request)
+    public async Task<AuthenticationModel> ValidateLogin(LoginRequest request, string? userAgent)
     {
         var user = await dbContext.Users
             .Include(u => u.AuthenticationDetails)
             .FirstOrDefaultAsync(u => u.Username == request.Username);
 
-        if (user == null || !BCrypt.Verify(request.Password, user.AuthenticationDetails!.PasswordHash))
+        if (user == null || !BCrypt.Verify(request.Password, user.AuthenticationDetails.PasswordHash))
         {
             throw new ApiException(HttpStatusCode.Unauthorized, "Invalid username or password");
         }
 
         var accessToken = jwtTokenGenerator.GenerateAccessToken(user.Id, user.Username!);
-        var refreshToken = await CreateRefreshToken(user.Id, request.UserAgent);
+        var refreshToken = await CreateRefreshToken(user.Id, userAgent);
 
         return new AuthenticationModel
         {
@@ -44,21 +44,18 @@ public sealed class AuthenticationService(
         };
     }
 
-    public async Task<AuthenticationModel> Register(RegisterRequest request, UserRole role)
+    public async Task<AuthenticationModel> Register(RegisterRequest request, string? userAgent)
     {
         if (await dbContext.Users.FirstOrDefaultAsync(u => u.Username == request.Username) != null)
         {
             throw new ApiException(HttpStatusCode.Conflict, "Username already exists");
         }
 
-        // Hash password using BCrypt
-        var passwordHash = BCrypt.HashPassword(request.Password);
-
         // Create user
-        var user = await userService.CreateUser(request.Username, passwordHash, role);
+        var user = await userService.CreateUser(request.Username, request.Password, UserRole.Default);
 
         var accessToken = jwtTokenGenerator.GenerateAccessToken(user.Id, user.Username!);
-        var refreshToken = await CreateRefreshToken(user.Id, request.UserAgent);
+        var refreshToken = await CreateRefreshToken(user.Id, userAgent);
 
         return new AuthenticationModel
         {
@@ -92,11 +89,19 @@ public sealed class AuthenticationService(
             throw new ApiException(HttpStatusCode.Unauthorized, "Refresh token has expired");
         }
 
-        var accessToken = jwtTokenGenerator.GenerateAccessToken(token.User!.Id, token.User.Username!);
+        await using var transaction = await dbContext.Database.BeginTransactionAsync();
+        var affected = await dbContext.RefreshTokens
+                                      .Where(rt => rt.Token == refreshToken)
+                                      .ExecuteDeleteAsync();
+
+        if (affected == 0)
+        {
+            throw new ApiException(HttpStatusCode.Unauthorized, "Invalid refresh token");
+        }
+
+        var accessToken = jwtTokenGenerator.GenerateAccessToken(token.User.Id, token.User.Username);
         var newRefreshToken = await CreateRefreshToken(token.User.Id, token.UserAgent);
 
-        // Remove old refresh token
-        dbContext.RefreshTokens.Remove(token);
         await dbContext.SaveChangesAsync();
 
         return new AuthenticationModel

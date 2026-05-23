@@ -27,7 +27,7 @@ public class AuthenticationController(
     [HttpPost("login")]
     public async Task<ActionResult<AuthenticationResponse>> Login(LoginRequest loginRequestModel)
     {
-        var response = await authenticationService.ValidateLogin(loginRequestModel);
+        var response = await authenticationService.ValidateLogin(loginRequestModel, UserAgent);
         SetRefreshToken(response.RefreshToken);
 
         return new AuthenticationResponse
@@ -40,7 +40,7 @@ public class AuthenticationController(
     [HttpPost("register")]
     public async Task<ActionResult<AuthenticationResponse>> Register(RegisterRequest registerRequestModel)
     {
-        var response = await authenticationService.Register(registerRequestModel, UserRole.Default);
+        var response = await authenticationService.Register(registerRequestModel, UserAgent);
         SetRefreshToken(response.RefreshToken);
 
         return new AuthenticationResponse
@@ -88,6 +88,7 @@ public class AuthenticationController(
         }
         catch (ApiException)
         {
+            ExpireCookie();
             throw;
         }
         catch (Exception ex)
