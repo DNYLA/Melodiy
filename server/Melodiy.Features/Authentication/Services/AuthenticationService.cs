@@ -16,6 +16,8 @@ using Microsoft.EntityFrameworkCore;
 
 using System;
 using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 
 public sealed class AuthenticationService(
     MelodiyDbContext dbContext,
@@ -74,8 +76,7 @@ public sealed class AuthenticationService(
 
         var token = await dbContext.RefreshTokens
             .Include(rt => rt.User)
-            .FirstOrDefaultAsync(rt => rt.Token == refreshToken);
-
+            .FirstOrDefaultAsync(rt => rt.Token == ComputeRefreshTokenHash(refreshToken));
         if (token == null)
         {
             throw new ApiException(HttpStatusCode.Unauthorized, "Invalid refresh token");
@@ -91,7 +92,7 @@ public sealed class AuthenticationService(
 
         await using var transaction = await dbContext.Database.BeginTransactionAsync();
         var affected = await dbContext.RefreshTokens
-                                      .Where(rt => rt.Token == refreshToken)
+                                      .Where(rt => rt.Id == token.Id)
                                       .ExecuteDeleteAsync();
 
         if (affected == 0)
@@ -114,7 +115,9 @@ public sealed class AuthenticationService(
 
     public async Task RemoveRefreshToken(string refreshToken, int userId)
     {
-        var tokenDetails = await dbContext.RefreshTokens.Include(x => x.User).FirstOrDefaultAsync(x => x.Token == refreshToken);
+        var tokenDetails = await dbContext.RefreshTokens
+                                          .Include(x => x.User)
+                                          .FirstOrDefaultAsync(x => x.Token == ComputeRefreshTokenHash(refreshToken));
         if (tokenDetails == null || tokenDetails.UserId != userId)
         {
             return;
@@ -124,6 +127,12 @@ public sealed class AuthenticationService(
         await dbContext.SaveChangesAsync();
     }
 
+    private static string ComputeRefreshTokenHash(string token)
+    {
+        var hashBytes = SHA256.HashData(Encoding.UTF8.GetBytes(token));
+        return Convert.ToHexString(hashBytes).ToLowerInvariant();
+    }
+
     private async Task<RefreshTokenResponse> CreateRefreshToken(int userId, string? userAgent)
     {
         //TODO: Should we verify previously created refresh tokens and prune any old ones?
@@ -131,7 +140,7 @@ public sealed class AuthenticationService(
 
         await dbContext.RefreshTokens.AddAsync(new RefreshToken
         {
-            Token = tokenDetails.Token,
+            Token = ComputeRefreshTokenHash(tokenDetails.Token),
             Expires = tokenDetails.Expires,
             UserId = userId,
             UserAgent = userAgent
