@@ -8,7 +8,11 @@ public static class MelodiyDbContextServiceExtensions
 {
     public static IServiceCollection AddMelodiyDbContext(this IServiceCollection services, ConfigurationManager configurationManager)
     {
-        services.AddDbContext<MelodiyDbContext>(options => options.UseNpgsql(configurationManager.GetConnectionString("melodiydb")));
+        var connectionString = configurationManager.GetConnectionString("melodiydb");
+        if (string.IsNullOrWhiteSpace(connectionString))
+            throw new ArgumentNullException($"MelodiyDb {nameof(connectionString)} has not been provided");
+
+        services.AddDbContext<MelodiyDbContext>(options => options.UseNpgsql(connectionString));
 
         return services;
     }
