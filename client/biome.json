@@ -12,8 +12,7 @@
       "**/.vscode/**/*",
       "**/index.html",
       "**/vite.config.ts",
-      "!**/src/routeTree.gen.ts",
-      "!**/src/styles.css"
+      "!**/src/routeTree.gen.ts"
     ]
   },
   "formatter": {
@@ -45,6 +44,11 @@
       "semicolons": "always",
       "trailingCommas": "none",
       "arrowParentheses": "always"
+    }
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
     }
   },
   "json": {
