@@ -1,0 +1,8 @@
+name: local
+variables:
+  - name: baseUrl
+    value: https://localhost:7266
+  - secret: true
+    name: username
+  - secret: true
+    name: password

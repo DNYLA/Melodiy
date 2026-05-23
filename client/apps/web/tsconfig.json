@@ -1,0 +1,13 @@
+{
+  "extends": "../../packages/config/tsconfig.react.json",
+  "include": ["**/*.ts", "**/*.tsx"],
+  "compilerOptions": {
+    "paths": {
+      "#/*": ["./src/*"],
+      "@/*": ["./src/*"]
+    },
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "noUncheckedSideEffectImports": true
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "name": "@melodiy/web",
+  "private": true,
+  "type": "module",
+  "imports": {
+    "#/*": "./src/*"
+  },
+  "scripts": {
+    "dev": "vite dev --port 3000",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "format": "biome format",
+    "lint": "biome lint",
+    "check": "biome check"
+  },
+  "dependencies": {
+    "@melodiy/router": "workspace:*",
+    "@melodiy/ui": "workspace:*",
+    "@tanstack/react-router": "catalog:",
+    "lucide-react": "^0.545.0",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "tailwindcss": "catalog:"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "@tailwindcss/typography": "^0.5.16",
+    "@tailwindcss/vite": "catalog:",
+    "@tanstack/devtools-vite": "catalog:",
+    "@tanstack/react-devtools": "catalog:",
+    "@tanstack/react-router-devtools": "catalog:",
+    "@tanstack/router-plugin": "catalog:",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/react": "^16.3.0",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "jsdom": "^28.1.0",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-tsconfig-paths": "^5.1.0",
+    "vitest": "catalog:"
+  }
+}

@@ -1,0 +1,16 @@
+import type { RouteIds } from '@tanstack/react-router';
+import { createRouter } from '@tanstack/react-router';
+
+// Import the generated route tree
+import { routeTree } from './routeTree.gen';
+
+// Set up a Router instance
+export const router = createRouter({
+  routeTree,
+  defaultPreload: 'intent',
+  defaultPendingComponent: () => <div>Loading from global pending component...</div>,
+  scrollRestoration: true
+});
+
+export type RouterType = typeof router;
+export type RouterIds = RouteIds<RouterType['routeTree']>;
