@@ -62,6 +62,9 @@ app.RegisterMigrations();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.MapFallbackToFile("index.html");
+app.MapWhen(
+    context => !context.Request.Path.StartsWithSegments("/api"),
+    spa => spa.UseRouting().UseEndpoints(e => e.MapFallbackToFile("index.html"))
+);
 
 app.Run();
