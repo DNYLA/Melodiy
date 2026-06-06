@@ -42,10 +42,12 @@ builder.Services
 var app = builder.Build();
 app.UseExceptionHandler();
 app.MapDefaultEndpoints();
+app.UseStaticFiles();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseHttpsRedirection();
     app.MapOpenApi();
 
     // Could make this available in any environment (depends on Orval setup in the frontend)
@@ -57,9 +59,12 @@ if (app.Environment.IsDevelopment())
 // App Initialisation Checks
 app.RegisterMigrations();
 
-app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapWhen(
+    context => !context.Request.Path.StartsWithSegments("/api"),
+    spa => spa.UseRouting().UseEndpoints(e => e.MapFallbackToFile("index.html"))
+);
 
 app.Run();
