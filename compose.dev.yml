@@ -1,3 +1,5 @@
+name: melodiy-dev
+
 services:
   postgres:
     image: postgres:17-alpine
@@ -6,8 +8,13 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-melodiy}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB:-melodiydb}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB:-melodiydb}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     volumes:
-      - ./data/dev/postgres:/var/lib/postgresql/data
+      - ./data/dev/postgres:/var/lib/postgresql/18/docker
 
   melodiy:
     build:
