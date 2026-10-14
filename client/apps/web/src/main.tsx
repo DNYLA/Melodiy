@@ -1,7 +1,8 @@
 import { Outlet, type RouterIds, router } from '@melodiy/router';
-import { Homepage, PostIdComponent } from '@melodiy/ui';
+import { Homepage } from '@melodiy/ui';
 import { RouterProvider } from '@tanstack/react-router';
 import ReactDOM from 'react-dom/client';
+import { LoginPage } from './pages/LoginPage';
 import { RootComponent } from './rootComponent';
 
 // Not lazy loaded for simplicity, but you could expose from your library component
@@ -9,7 +10,7 @@ import { RootComponent } from './rootComponent';
 // so that you have code splitting
 const routerMap = {
   '/': Homepage,
-  '/posts/$postId': PostIdComponent,
+  '/login': LoginPage,
   __root__: RootComponent
 } as const satisfies Record<RouterIds, (() => React.ReactElement) | null>;
 
@@ -29,7 +30,7 @@ Object.entries(routerMap).forEach(([path, component]) => {
 // And you can do the same logic with custom error pages, and any other properties
 const errorComponentMap = {
   '/': null,
-  '/posts/$postId': null,
+  '/login': null,
   __root__: null
 } as const satisfies Record<RouterIds, React.ComponentType<unknown> | null>;
 

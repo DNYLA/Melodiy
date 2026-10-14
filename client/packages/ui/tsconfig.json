@@ -3,6 +3,9 @@
   "include": ["src/**/*"],
   "compilerOptions": {
     "lib": ["ES2022", "DOM"],
-    "noEmit": true
+    "noEmit": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   }
 }

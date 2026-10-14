@@ -1,5 +1,6 @@
 import { Link, Outlet } from '@melodiy/router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import './styles.css';
 
 export function RootComponent() {
   return (
